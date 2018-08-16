@@ -1,0 +1,3 @@
+[MESSAGES CONTROL]
+
+disable=consider-using-ternary,duplicate-code,inconsistent-return-statements,useless-object-inheritance

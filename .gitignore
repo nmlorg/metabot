@@ -1,0 +1,13 @@
+/.pytest_cache/
+/.tox/
+/bin/
+/build/
+/config/
+/dist/
+/htmlcov/
+/include/
+/lib/
+/metabot.egg-info/
+/share/
+/.coverage
+__pycache__/

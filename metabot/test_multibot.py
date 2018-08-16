@@ -23,19 +23,12 @@ def test_save_load(monkeypatch, tmpdir):
 
     conffile = tmpdir.join('multibot.json')
 
-    class MockMultiBot(multibot.MultiBot):  # pylint: disable=missing-docstring
-        fname = conffile.strpath
-
     monkeypatch.setattr('ntelebot.bot.Bot', MockBot)
 
-    mybot = MockMultiBot({
-        'dummymod': lambda ctx: 'DUMMYMOD',
-    })
+    mybot = multibot.MultiBot({'dummymod': lambda ctx: 'DUMMYMOD'}, fname=conffile.strpath)
     mybot.add_bot({'token': '1234:goodbot', 'modules': {'dummymod': {}}})
     mybot.save()
     assert json.loads(conffile.read()) == mybot.bots
 
-    newbot = MockMultiBot({
-        'dummymod': lambda ctx: 'DUMMYMOD',
-    })
+    newbot = multibot.MultiBot({'dummymod': lambda ctx: 'DUMMYMOD'}, fname=conffile.strpath)
     assert newbot.bots == mybot.bots

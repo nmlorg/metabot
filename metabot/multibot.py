@@ -14,8 +14,10 @@ class MultiBot(object):
 
     fname = 'config/multibot.json'
 
-    def __init__(self, modules):
+    def __init__(self, modules, fname=None):
         self.modules = modules
+        if fname:
+            self.fname = fname
         self.loop = ntelebot.loop.Loop()
         self.bots = []
 

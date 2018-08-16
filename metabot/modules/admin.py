@@ -3,7 +3,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 
-def validate(ctx):
+def _validate(ctx):
     """Verify the user is in the target bot's admin list."""
 
     mod_config = ctx.bot.config['modules']['admin']
@@ -13,12 +13,13 @@ def validate(ctx):
 
     ctx.reply_html(
         "Hi! You aren't one of my admins. If you should be, ask a current admin to add you by "
-        'opening a chat with me (@%s) and typing <code>/%s admins</code>.', ctx.bot.username,
-        ctx.command)
+        'opening a chat with me (@%s) and typing:\n'
+        '\n'
+        '<pre>/%s admins add %s</pre>', ctx.bot.config['username'], ctx.command, ctx.user['id'])
 
 
 def default(ctx):  # pylint: disable=missing-docstring
-    if not validate(ctx):
+    if not _validate(ctx):
         return
 
     message = [
@@ -35,7 +36,7 @@ def default(ctx):  # pylint: disable=missing-docstring
 
 
 def admins(ctx):  # pylint: disable=missing-docstring,too-many-branches
-    if not validate(ctx):
+    if not _validate(ctx):
         return
 
     mod_config = ctx.bot.config['modules']['admin']

@@ -38,7 +38,7 @@ def default(ctx):  # pylint: disable=missing-docstring
         return ctx.reply_html(
             'Bot Admin \u203a Add a bot: <b>Paste a bot API Token</b>\n'
             '\n'
-            'Woops, Telegram told me <code>%r</code> is unauthorized, meaning the code is either '
+            'Woops, Telegram told me <code>%s</code> is unauthorized, meaning the code is either '
             'incomplete or out of date. If you generated it yourself, open a private chat with '
             "@BotFather, type <code>/mybots</code>, select the bot account you're trying to use, "
             'select <code>API Token</code>, then copy the code and paste it here. If you got the '
@@ -50,8 +50,8 @@ def default(ctx):  # pylint: disable=missing-docstring
         return ctx.reply_html(
             'Bot Admin \u203a Add a bot: <b>Paste a bot API Token</b>\n'
             '\n'
-            'Woops, while trying to use <code>%r</code> I got the error:\n\n<pre>%s</pre>', token,
-            exc)
+            'Woops, while trying to use <code>%s</code> I got error %i (<code>%s</code>).', token,
+            exc.error_code, exc.description)
 
     ctx.reply_html('Cool, that API Token is for <code>%s</code>. Give me another moment...',
                    bot_info['username'])
@@ -72,8 +72,8 @@ def default(ctx):  # pylint: disable=missing-docstring
         return ctx.reply_html(
             'Bot Admin \u203a Add a bot: <b>Paste a bot API Token</b>\n'
             '\n'
-            'Woops, while trying to use <code>%r</code> I got the error:\n\n<pre>%s</pre>', token,
-            exc)
+            'Woops, while trying to use <code>%s</code> I got error %i (<code>%s</code>).', token,
+            exc.error_code, exc.description)
 
     ctx.bot.multibot.add_bot({'token': token, 'modules': {'admin': {'admins': [ctx.user['id']]}}})
     ctx.bot.multibot.save()
@@ -82,5 +82,5 @@ def default(ctx):  # pylint: disable=missing-docstring
         'Bot Admin \u203a Add a bot: <b>Configure your new bot</b>\n'
         '\n'
         'Yay, I am now running <code>%s</code> (<code>%s</code>). Open a private chat with @%s and '
-        'type <code>/%s</code> to continue setup.', bot_info['username'], bot_info['first_name'],
-        bot_info['username'], ctx.command)
+        'type <code>/admin</code> to continue setup.', bot_info['username'], bot_info['first_name'],
+        bot_info['username'])

@@ -11,6 +11,12 @@ import pytest
 class MockMultiBot(object):
     # pylint: disable=missing-docstring,too-few-public-methods
 
+    def __init__(self):
+        self.bots = []
+
+    def add_bot(self, bot_config):
+        self.bots.append(bot_config)
+
     @staticmethod
     def save():
         pass

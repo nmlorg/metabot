@@ -54,7 +54,7 @@ def admins(ctx):  # pylint: disable=missing-docstring,too-many-branches
 
     if command == 'add':
         if not target.isdigit():
-            message.append("I'm not sure what %r is--it's not a user id!" % target)
+            message.append("I'm not sure what <code>%s</code> is--it's not a user id!" % target)
         else:
             target = int(target)
             if target in mod_config['admins']:
@@ -66,7 +66,7 @@ def admins(ctx):  # pylint: disable=missing-docstring,too-many-branches
                 message.append('Added %s to the admin list.' % target)
     elif command == 'remove':
         if not target.isdigit():
-            message.append("I'm not sure what %r is--it's not an admin!" % target)
+            message.append("I'm not sure what <code>%s</code> is--it's not an admin!" % target)
         else:
             target = int(target)
             if target not in mod_config['admins']:

@@ -3,29 +3,22 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import json
+import time
+
+import ntelebot
 
 from metabot import multibot
 
 
-class MockBot(object):
-    # pylint: disable=missing-docstring,too-few-public-methods
-
-    def __init__(self, token):
-        self.token = token
-
-    def get_me(self):
-        bot_id, username = self.token.split(':', 1)
-        return {'id': int(bot_id), 'username': username}
-
-
-def test_save_load(monkeypatch, tmpdir):
+def test_save_load(tmpdir):
     """Verify MultiBot can start with no config, can have a bot added, and can restart."""
 
     conffile = tmpdir.join('multibot.json')
 
-    monkeypatch.setattr('ntelebot.bot.Bot', MockBot)
-
     mybot = multibot.MultiBot({'dummymod': lambda ctx: 'DUMMYMOD'}, fname=conffile.strpath)
+    mockbot = ntelebot.bot.Bot('1234:goodbot')
+    mockbot.getme.respond(json={'ok': True, 'result': {'id': 1234, 'username': 'goodbot'}})
+    mockbot.getupdates.respond(json=lambda request, context: time.sleep(1))
     mybot.add_bot({'token': '1234:goodbot', 'modules': {'dummymod': {}}})
     mybot.save()
     assert json.loads(conffile.read()) == mybot.bots

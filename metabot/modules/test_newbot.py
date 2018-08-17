@@ -18,7 +18,7 @@ def conversation(build_conversation):  # pylint: disable=missing-docstring
 # pylint: disable=line-too-long
 
 
-def test_default(conversation, requests_mock):  # pylint: disable=redefined-outer-name
+def test_default(conversation):  # pylint: disable=redefined-outer-name
     """Verify the bot doesn't respond to the /admin command from non-admins."""
 
     assert conversation('/newbot') == [
@@ -38,13 +38,11 @@ def test_default(conversation, requests_mock):  # pylint: disable=redefined-oute
         },
     ]  # yapf: disable
 
-    requests_mock.post(
-        'https://api.telegram.org/botbogus/getme',
-        json={
-            'description': 'Not Found',
-            'error_code': 404,
-            'ok': False
-        })
+    ntelebot.bot.Bot('bogus').getme.respond(json={
+        'description': 'Not Found',
+        'error_code': 404,
+        'ok': False,
+    })
 
     assert conversation('bogus') == [
         {
@@ -56,13 +54,11 @@ def test_default(conversation, requests_mock):  # pylint: disable=redefined-oute
         },
     ]  # yapf: disable
 
-    requests_mock.post(
-        'https://api.telegram.org/bot1234:invalid/getme',
-        json={
-            'description': 'Unauthorized',
-            'error_code': 401,
-            'ok': False,
-        })
+    ntelebot.bot.Bot('1234:invalid').getme.respond(json={
+        'description': 'Unauthorized',
+        'error_code': 401,
+        'ok': False,
+    })
 
     assert conversation('1234:invalid') == [
         {
@@ -74,23 +70,16 @@ def test_default(conversation, requests_mock):  # pylint: disable=redefined-oute
         },
     ]  # yapf: disable
 
-    requests_mock.post(
-        'https://api.telegram.org/bot1234:valid/getme',
-        json={
-            'ok': True,
-            'result': {
-                'first_name': 'Valid Bot',
-                'id': 1234,
-                'username': 'validbot'
-            }
-        })
-    requests_mock.post(
-        'https://api.telegram.org/bot1234:valid/getupdates',
-        json={
-            'description': 'Conflict',
-            'error_code': 409,
-            'ok': False,
-        })
+    mockbot = ntelebot.bot.Bot('1234:valid')
+    mockbot.getme.respond(json={
+        'ok': True,
+        'result': {
+            'first_name': 'Valid Bot',
+            'id': 1234,
+            'username': 'validbot',
+        }
+    })
+    mockbot.getupdates.respond(json={'description': 'Conflict', 'error_code': 409, 'ok': False})
 
     assert conversation('1234:valid') == [
         {
@@ -107,23 +96,15 @@ def test_default(conversation, requests_mock):  # pylint: disable=redefined-oute
         },
     ]  # yapf: disable
 
-    requests_mock.post(
-        'https://api.telegram.org/bot1234:valid/getme',
-        json={
-            'ok': True,
-            'result': {
-                'first_name': 'Valid Bot',
-                'id': 1234,
-                'username': 'validbot'
-            }
-        })
-    requests_mock.post(
-        'https://api.telegram.org/bot1234:valid/getupdates',
-        json={
-            'description': 'Not Found',
-            'error_code': 404,
-            'ok': False,
-        })
+    mockbot.getme.respond(json={
+        'ok': True,
+        'result': {
+            'first_name': 'Valid Bot',
+            'id': 1234,
+            'username': 'validbot',
+        },
+    })
+    mockbot.getupdates.respond(json={'description': 'Not Found', 'error_code': 404, 'ok': False})
 
     assert conversation('1234:valid') == [
         {
@@ -140,21 +121,15 @@ def test_default(conversation, requests_mock):  # pylint: disable=redefined-oute
         },
     ]  # yapf: disable
 
-    requests_mock.post(
-        'https://api.telegram.org/bot1234:valid/getme',
-        json={
-            'ok': True,
-            'result': {
-                'first_name': 'Valid Bot',
-                'id': 1234,
-                'username': 'validbot'
-            }
-        })
-    requests_mock.post(
-        'https://api.telegram.org/bot1234:valid/getupdates', json={
-            'ok': True,
-            'result': []
-        })
+    mockbot.getme.respond(json={
+        'ok': True,
+        'result': {
+            'first_name': 'Valid Bot',
+            'id': 1234,
+            'username': 'validbot',
+        },
+    })
+    mockbot.getupdates.respond(json={'ok': True, 'result': []})
 
     assert conversation('1234:valid') == [
         {

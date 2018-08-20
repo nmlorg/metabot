@@ -164,7 +164,7 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
                     'commands': ['admin'],
                 },
             },
-            'running': False,
+            'running': True,
             'token': '1234:valid',
         },
     }

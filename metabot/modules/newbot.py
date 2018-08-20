@@ -78,7 +78,7 @@ def default(ctx):  # pylint: disable=missing-docstring
     username = ctx.bot.multibot.add_bot(token)
     ctx.bot.multibot.enable_module(username, 'admin')
     ctx.bot.multibot.bots[username]['modules']['admin']['admins'] = [ctx.user['id']]
-    ctx.bot.multibot.save()
+    ctx.bot.multibot.run_bot(username)
 
     ctx.reply_html(
         'Bot Admin \u203a Add a bot: <b>Configure your new bot</b>\n'

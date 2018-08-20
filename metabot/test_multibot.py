@@ -3,11 +3,24 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import json
+import threading
 import time
 
 import ntelebot
+import pytest
 
 from metabot import multibot
+
+
+def test_add_bot(tmpdir):
+    """Verify the basic behavior of add_bot."""
+
+    conffile = tmpdir.join('multibot.json')
+    mybot = multibot.MultiBot((), fname=conffile.strpath)
+    mockbot = ntelebot.bot.Bot('1234:badbot')
+    mockbot.getme.respond(json={'description': 'Unauthorized', 'error_code': 401, 'ok': False})
+    with pytest.raises(ntelebot.errors.Unauthorized):
+        mybot.add_bot('1234:badbot')
 
 
 def test_save_load(tmpdir):
@@ -15,13 +28,69 @@ def test_save_load(tmpdir):
 
     conffile = tmpdir.join('multibot.json')
 
-    mybot = multibot.MultiBot({'dummymod': lambda ctx: 'DUMMYMOD'}, fname=conffile.strpath)
+    mybot = multibot.MultiBot((), fname=conffile.strpath)
     mockbot = ntelebot.bot.Bot('1234:goodbot')
     mockbot.getme.respond(json={'ok': True, 'result': {'id': 1234, 'username': 'goodbot'}})
-    mockbot.getupdates.respond(json=lambda request, context: time.sleep(1))
-    mybot.add_bot({'token': '1234:goodbot', 'modules': {'dummymod': {}}})
-    mybot.save()
-    assert json.loads(conffile.read()) == mybot.bots
+    mockbot.getupdates.respond(json={'ok': True, 'result': []})
+    mybot.add_bot('1234:goodbot')
+    mybot.run_bot('goodbot')
+    assert json.loads(conffile.read()) == {
+        'goodbot': {
+            'modules': {},
+            'running': True,
+            'token': '1234:goodbot',
+        },
+    }
 
-    newbot = multibot.MultiBot({'dummymod': lambda ctx: 'DUMMYMOD'}, fname=conffile.strpath)
+    newbot = multibot.MultiBot((), fname=conffile.strpath)
     assert newbot.bots == mybot.bots
+
+    mybot.stop_bot('goodbot')
+    newbot.stop_bot('goodbot')
+
+
+def test_module(tmpdir):
+    """Verify the configurable module dispatcher."""
+
+    conffile = tmpdir.join('multibot.json')
+    results = []
+
+    def dummymod(ctx):  # pylint: disable=missing-docstring
+        _ = ctx
+        results.append(ctx.text)
+        time.sleep(.5)
+
+    mybot = multibot.MultiBot({dummymod}, fname=conffile.strpath)
+    mockbot = ntelebot.bot.Bot('1234:modbot')
+    mockbot.getme.respond(json={'ok': True, 'result': {'id': 1234, 'username': 'modbot'}})
+    user = {'id': 1000}
+    chat = {'id': 1000, 'type': 'private'}
+    message = {'message_id': 2000, 'chat': chat, 'from': user, 'text': '/dummymod test'}
+    update = {'message': message, 'update_id': 3000}
+    mockbot.getupdates.respond(json={'ok': True, 'result': [update]})
+    mybot.add_bot('1234:modbot')
+    mybot.enable_module('modbot', 'dummymod')
+    mybot.run_bot('modbot')
+    assert mybot.bots == {
+        'modbot': {
+            'modules': {
+                'dummymod': {
+                    'commands': ['dummymod']
+                }
+            },
+            'running': True,
+            'token': '1234:modbot',
+        },
+    }
+    threading.Timer(.1, mybot.stop).start()
+    mybot.run()
+    assert results == ['test']
+
+    mybot.disable_module('modbot', 'dummymod')
+    assert mybot.bots == {
+        'modbot': {
+            'modules': {},
+            'running': True,
+            'token': '1234:modbot',
+        },
+    }

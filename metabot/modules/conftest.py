@@ -13,6 +13,7 @@ class MockMultiBot(object):
 
     def __init__(self):
         self.bots = []
+        self.modules = ['dummymod']
 
     def add_bot(self, bot_config):
         self.bots.append(bot_config)

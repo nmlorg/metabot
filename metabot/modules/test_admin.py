@@ -47,7 +47,8 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
             'chat_id': 1000,
             'parse_mode': 'HTML',
             'text': 'Bot Admin: <b>Select a command</b>\n',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Admin List', 'callback_data': '/admin admins'}]]},
+            'reply_markup': {'inline_keyboard': [[{'text': 'Admin List', 'callback_data': '/admin admins'}],
+                                                 [{'text': 'Modules', 'callback_data': '/admin modules'}]]},
         },
     ]  # yapf: disable
 
@@ -160,3 +161,31 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin'}]]},
         },
     ]  # yapf: disable
+
+
+def test_modules(conversation):  # pylint: disable=redefined-outer-name
+    """Verify the /admin modules subcommand."""
+
+    assert conversation('/admin modules') == [
+        {
+            'chat_id': 1000,
+            'parse_mode': 'HTML',
+            'text': 'Bot Admin \u203a Modules: <b>Choose a module</b>\n',
+            'reply_markup': {'inline_keyboard': [[{'text': 'Enable /dummymod', 'callback_data': '/admin modules enable dummymod dummymod'}],
+                                                 [{'text': 'Back', 'callback_data': '/admin'}]]},
+        },
+    ]  # yapf: disable
+
+    """
+    assert conversation('/admin modules enable dummymod dummymod') == [
+        {
+            'chat_id': 1000,
+            'parse_mode': 'HTML',
+            'text': 'Bot Admin \u203a Modules: <b>Choose a module</b>\n'
+                    '\n'
+                    '/dummymode enabled.',
+            'reply_markup': {'inline_keyboard': [[{'text': 'Disable /dummymod', 'callback_data': '/admin modules disable dummymod dummymod'}],
+                                                 [{'text': 'Back', 'callback_data': '/admin'}]]},
+        },
+    ]  # yapf: disable
+    """

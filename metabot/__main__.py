@@ -18,11 +18,7 @@ def main():  # pylint: disable=missing-docstring
     logging.basicConfig(
         format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s] %(message)s', level=logging.INFO)
 
-    modules = {
-        'admin': admin,
-        'newbot': newbot,
-    }
-    mybot = multibot.MultiBot(modules)
+    mybot = multibot.MultiBot({admin, newbot})
     if not mybot.bots:
         print()
         print("Hi! Before I can start, I need at least one bot's Telegram token. If you don't have "
@@ -43,8 +39,14 @@ def main():  # pylint: disable=missing-docstring
                       'full line starting with the number and paste it here:')
                 print()
             else:
-                mybot.add_bot({'token': initial_token, 'modules': {'newbot': {}}})
-                mybot.save()
+                try:
+                    username = mybot.add_bot(initial_token)
+                except Exception as exc:  # pylint: disable=broad-except
+                    print()
+                    print('Woops, that generated: %r', exc)
+                else:
+                    mybot.enable_module(username, 'newbot')
+                    mybot.run_bot(username)
     mybot.run()
 
 

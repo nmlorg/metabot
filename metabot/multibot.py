@@ -43,16 +43,20 @@ class MultiBot(object):
         self.save()
         return bot_info['username']
 
-    def run_bot(self, username):
-        """Begin polling for updates for the previously configured bot."""
-
+    def _build_bot(self, username):
         bot_config = self.bots[username]
         bot = ntelebot.bot.Bot(bot_config['token'])
         bot.username = username
         bot.config = bot_config
         bot.multibot = self
+        return bot
+
+    def run_bot(self, username):
+        """Begin polling for updates for the previously configured bot."""
+
+        bot = self._build_bot(username)
         self.loop.add(bot, self.dispatcher)
-        bot_config['running'] = True
+        bot.config['running'] = True
         self.save()
 
     def stop_bot(self, username):

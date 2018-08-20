@@ -7,31 +7,27 @@ import json
 import ntelebot
 import pytest
 
-
-class MockMultiBot(object):
-    # pylint: disable=missing-docstring,too-few-public-methods
-
-    def __init__(self):
-        self.bots = []
-        self.modules = ['dummymod']
-
-    def add_bot(self, bot_config):
-        self.bots.append(bot_config)
-
-    @staticmethod
-    def save():
-        pass
+from metabot import multibot
 
 
 class BotConversation(object):  # pylint: disable=missing-docstring,too-few-public-methods
 
-    def __init__(self, dispatcher):
-        self.bot = ntelebot.bot.Bot('modules:test')
-        self.bot.config = {'modules': {}, 'username': 'modulestestbot'}
-        self.bot.multibot = MockMultiBot()
-        self.preprocessor = ntelebot.preprocess.Preprocessor()
-        self.preprocessor.bots[self.bot.token] = {'username': 'modulestestbot'}
-        self.dispatcher = dispatcher
+    def __init__(self, module):
+
+        def dummymod(ctx):  # pylint: disable=missing-docstring,unused-argument
+            ctx.reply_text('DUMMYMOD')
+
+        self.multibot = multibot.MultiBot({dummymod, module})
+        ntelebot.bot.Bot('modules:test').getme.respond(json={
+            'ok': True,
+            'result': {
+                'username': 'modulestestbot'
+            },
+        })
+        username = self.multibot.add_bot('modules:test')
+        for modname in self.multibot.modules:
+            self.multibot.enable_module(username, modname)
+        self.bot = self.multibot._build_bot(username)  # pylint: disable=protected-access
 
     def __call__(self, text, user_id=1000, chat_type='private'):
         user = {'id': user_id}
@@ -41,7 +37,6 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
             chat = {'id': -user_id, 'type': 'supergroup'}
         message = {'from': user, 'chat': chat, 'message_id': user_id * 2, 'text': text}
         update = {'message': message}
-        ctx = self.preprocessor(self.bot, update)
         responses = []
 
         def _handler(request, unused_context):
@@ -49,7 +44,7 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
             return {'ok': True, 'result': {}}
 
         self.bot.send_message.respond(json=_handler)
-        self.dispatcher(ctx)
+        self.multibot.dispatcher(self.bot, update)
         return responses
 
 

@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import ntelebot
 import pytest
 
 from metabot.modules import admin
@@ -10,10 +9,8 @@ from metabot.modules import admin
 
 @pytest.fixture
 def conversation(build_conversation):  # pylint: disable=missing-docstring
-    dispatcher = ntelebot.dispatch.Dispatcher()
-    dispatcher.add_command('admin', admin)
-    conv = build_conversation(dispatcher)
-    conv.bot.config['modules']['admin'] = {'admins': [1000]}
+    conv = build_conversation(admin)
+    conv.bot.config['modules']['admin']['admins'] = [1000]
     return conv
 
 
@@ -171,21 +168,53 @@ def test_modules(conversation):  # pylint: disable=redefined-outer-name
             'chat_id': 1000,
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a Modules: <b>Choose a module</b>\n',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Enable /dummymod', 'callback_data': '/admin modules enable dummymod dummymod'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'Disable /admin', 'callback_data': '/admin modules disable admin admin'}],
+                                                 [{'text': 'Disable /dummymod', 'callback_data': '/admin modules disable dummymod dummymod'}],
                                                  [{'text': 'Back', 'callback_data': '/admin'}]]},
         },
     ]  # yapf: disable
 
-    """
-    assert conversation('/admin modules enable dummymod dummymod') == [
+    assert conversation('/blah') == []
+    assert conversation('/dummymod') == [
+        {
+            'chat_id': 1000,
+            'text': 'DUMMYMOD',
+        },
+    ]  # yapf: disable
+
+    assert conversation('/admin modules disable dummymod dummymod') == [
         {
             'chat_id': 1000,
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a Modules: <b>Choose a module</b>\n'
                     '\n'
-                    '/dummymode enabled.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Disable /dummymod', 'callback_data': '/admin modules disable dummymod dummymod'}],
+                    '<code>/dummymod</code> has been disabled.',
+            'reply_markup': {'inline_keyboard': [[{'text': 'Disable /admin', 'callback_data': '/admin modules disable admin admin'}],
+                                                 [{'text': 'Enable /dummymod', 'callback_data': '/admin modules enable dummymod dummymod'}],
                                                  [{'text': 'Back', 'callback_data': '/admin'}]]},
         },
     ]  # yapf: disable
-    """
+
+    assert conversation('/blah') == []
+    assert conversation('/dummymod') == []
+
+    assert conversation('/admin modules enable dummymod blah') == [
+        {
+            'chat_id': 1000,
+            'parse_mode': 'HTML',
+            'text': 'Bot Admin \u203a Modules: <b>Choose a module</b>\n'
+                    '\n'
+                    'Module <code>dummymod</code> is now available as <code>/blah</code>.',
+            'reply_markup': {'inline_keyboard': [[{'text': 'Disable /admin', 'callback_data': '/admin modules disable admin admin'}],
+                                                 [{'text': 'Disable /blah (dummymod)', 'callback_data': '/admin modules disable dummymod blah'}],
+                                                 [{'text': 'Back', 'callback_data': '/admin'}]]},
+        },
+    ]  # yapf: disable
+
+    assert conversation('/blah') == [
+        {
+            'chat_id': 1000,
+            'text': 'DUMMYMOD',
+        },
+    ]  # yapf: disable
+    assert conversation('/dummymod') == []

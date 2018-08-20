@@ -15,7 +15,7 @@ def _validate(ctx):
         "Hi! You aren't one of my admins. If you should be, ask a current admin to add you by "
         'opening a chat with me (@%s) and typing:\n'
         '\n'
-        '<pre>/%s admins add %s</pre>', ctx.bot.config['username'], ctx.command, ctx.user['id'])
+        '<pre>/%s admins add %s</pre>', ctx.bot.username, ctx.command, ctx.user['id'])
 
 
 def default(ctx):  # pylint: disable=missing-docstring

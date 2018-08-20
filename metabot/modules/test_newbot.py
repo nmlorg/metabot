@@ -10,9 +10,7 @@ from metabot.modules import newbot
 
 @pytest.fixture
 def conversation(build_conversation):  # pylint: disable=missing-docstring
-    dispatcher = ntelebot.dispatch.Dispatcher()
-    dispatcher.add_command('newbot', newbot)
-    return build_conversation(dispatcher)
+    return build_conversation(newbot)
 
 
 # pylint: disable=line-too-long
@@ -146,13 +144,27 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation.bot.multibot.bots == [
-        {
+    assert conversation.bot.multibot.bots == {
+        'modulestestbot': {
+            'modules': {
+                'dummymod': {
+                    'commands': ['dummymod'],
+                },
+                'newbot': {
+                    'commands': ['newbot'],
+                },
+            },
+            'running': False,
+            'token': 'modules:test',
+        },
+        'validbot': {
             'modules': {
                 'admin': {
                     'admins': [1000],
+                    'commands': ['admin'],
                 },
             },
+            'running': False,
             'token': '1234:valid',
         },
-    ]
+    }

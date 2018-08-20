@@ -10,8 +10,6 @@ from metabot import util
 class MultiBot(object):
     """An ntelebot.loop.Loop that manages multiple bots."""
 
-    fname = 'config/multibot.json'
-
     def __init__(self, modules, fname=None):
         self.modules = []
         self.dispatcher = ntelebot.dispatch.LoopDispatcher()
@@ -20,11 +18,10 @@ class MultiBot(object):
             self.modules.append(modname)
             self.dispatcher.add(build_dispatcher(modname, module))
         self.modules.sort()
-        if fname:
-            self.fname = fname
+        self.fname = fname
         self.loop = ntelebot.loop.Loop()
 
-        bots = util.json.load(self.fname)
+        bots = fname and util.json.load(fname)
         if bots and isinstance(bots, dict):
             self.bots = bots
         else:
@@ -101,7 +98,8 @@ class MultiBot(object):
     def save(self):
         """Save the list of bots currently being managed to disk."""
 
-        self.bots = util.json.dump(self.fname, self.bots)
+        if self.fname:
+            self.bots = util.json.dump(self.fname, self.bots)
 
     def run(self):
         """Begin waiting for and dispatching updates sent to any bot currently running."""

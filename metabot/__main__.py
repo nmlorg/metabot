@@ -18,7 +18,7 @@ def main():  # pylint: disable=missing-docstring
     logging.basicConfig(
         format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s] %(message)s', level=logging.INFO)
 
-    mybot = multibot.MultiBot({admin, newbot})
+    mybot = multibot.MultiBot({admin, newbot}, fname='config/multibot.json')
     if not mybot.bots:
         print()
         print("Hi! Before I can start, I need at least one bot's Telegram token. If you don't have "

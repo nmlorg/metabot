@@ -12,11 +12,10 @@ import pytest
 from metabot import multibot
 
 
-def test_add_bot(tmpdir):
+def test_add_bot():
     """Verify the basic behavior of add_bot."""
 
-    conffile = tmpdir.join('multibot.json')
-    mybot = multibot.MultiBot((), fname=conffile.strpath)
+    mybot = multibot.MultiBot(())
     mockbot = ntelebot.bot.Bot('1234:badbot')
     mockbot.getme.respond(json={'description': 'Unauthorized', 'error_code': 401, 'ok': False})
     with pytest.raises(ntelebot.errors.Unauthorized):
@@ -49,10 +48,9 @@ def test_save_load(tmpdir):
     newbot.stop_bot('goodbot')
 
 
-def test_module(tmpdir):
+def test_module():
     """Verify the configurable module dispatcher."""
 
-    conffile = tmpdir.join('multibot.json')
     results = []
 
     def dummymod(ctx):  # pylint: disable=missing-docstring
@@ -60,7 +58,7 @@ def test_module(tmpdir):
         results.append(ctx.text)
         time.sleep(.5)
 
-    mybot = multibot.MultiBot({dummymod}, fname=conffile.strpath)
+    mybot = multibot.MultiBot({dummymod})
     mockbot = ntelebot.bot.Bot('1234:modbot')
     mockbot.getme.respond(json={'ok': True, 'result': {'id': 1234, 'username': 'modbot'}})
     user = {'id': 1000}

@@ -45,7 +45,6 @@ def main():  # pylint: disable=missing-docstring
                     print()
                     print('Woops, that generated: %r', exc)
                 else:
-                    mybot.enable_module(username, 'newbot')
                     mybot.run_bot(username)
     mybot.run()
 

@@ -7,6 +7,18 @@ import logging
 import ntelebot
 
 
+def dispatch(ctx):
+    """Check and dispatch relevant contexts."""
+
+    callback = {
+        'newbot': default,
+    }.get(ctx.command)
+    if not callback:
+        return False
+
+    return callback(ctx)
+
+
 def default(ctx):  # pylint: disable=missing-docstring
     token = ctx.text.partition(' ')[0]
     if not token:
@@ -76,8 +88,7 @@ def default(ctx):  # pylint: disable=missing-docstring
             exc.error_code, exc.description)
 
     username = ctx.bot.multibot.add_bot(token)
-    ctx.bot.multibot.enable_module(username, 'admin')
-    ctx.bot.multibot.bots[username]['modules']['admin']['admins'] = [ctx.user['id']]
+    ctx.bot.multibot.get_modconf(username, 'admin')['admins'] = [ctx.user['id']]
     ctx.bot.multibot.run_bot(username)
 
     ctx.reply_html(

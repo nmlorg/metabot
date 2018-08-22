@@ -16,7 +16,7 @@ class MultiBot(object):
         for module in modules:
             modname = module.__name__.rsplit('.', 1)[-1]
             self.modules.append(modname)
-            self.dispatcher.add(build_dispatcher(modname, module))
+            self.dispatcher.add(module)
         self.modules.sort()
         self.fname = fname
         self.loop = ntelebot.loop.Loop()
@@ -46,9 +46,10 @@ class MultiBot(object):
     def _build_bot(self, username):
         bot_config = self.bots[username]
         bot = ntelebot.bot.Bot(bot_config['token'])
-        bot.username = username
         bot.config = bot_config
+        bot.get_modconf = lambda modname: self.get_modconf(username, modname)
         bot.multibot = self
+        bot.username = username
         return bot
 
     def run_bot(self, username):
@@ -67,37 +68,12 @@ class MultiBot(object):
         bot_config['running'] = False
         self.save()
 
-    def enable_module(self, username, modname, command=None):
-        """Enable the modname module under /command (or /modname)."""
+    def get_modconf(self, username, modname):
+        """Get or create a module config dict."""
 
-        bot_config = self.bots[username]
-        if modname not in bot_config['modules']:
-            bot_config['modules'][modname] = {}
-        if 'commands' not in bot_config['modules'][modname]:
-            bot_config['modules'][modname]['commands'] = []
-        bot_config['modules'][modname]['commands'].append(command or modname)
-        bot_config['modules'][modname]['commands'].sort()
-        self.save()
-
-    def disable_module(self, username, modname, command=None):
-        """Disable the modname module under /command (or /modname)."""
-
-        bot_config = self.bots[username]
-        if modname not in bot_config['modules']:
-            return
-        if 'commands' not in bot_config['modules'][modname]:
-            return
-        if not command:
-            command = modname
-        if command not in bot_config['modules'][modname]['commands']:
-            return
-        if len(bot_config['modules'][modname]['commands']) == 1:
-            bot_config['modules'][modname].pop('commands')
-            if not bot_config['modules'][modname]:
-                bot_config['modules'].pop(modname)
-        else:
-            bot_config['modules'][modname]['commands'].remove(command)
-        self.save()
+        if modname not in self.bots[username]['modules']:
+            self.bots[username]['modules'][modname] = {}
+        return self.bots[username]['modules'][modname]
 
     def save(self):
         """Save the list of bots currently being managed to disk."""
@@ -114,20 +90,3 @@ class MultiBot(object):
         """Stop waiting for and dispatching updates sent to any bot currently running."""
 
         return self.loop.stop()
-
-
-def build_dispatcher(modname, module):
-    """Build a dispatcher that checks incoming commands against the per-bot module config."""
-
-    callback = ntelebot.dispatch.get_callback(module)
-
-    def _dispatch(ctx):
-        if ctx.type not in ('message', 'callback_query') or not ctx.command:
-            return False
-        mod_config = ctx.bot.config['modules'].get(modname)
-        if (not mod_config or not mod_config.get('commands') or
-                ctx.command not in mod_config['commands']):
-            return False
-        return callback(ctx)
-
-    return _dispatch

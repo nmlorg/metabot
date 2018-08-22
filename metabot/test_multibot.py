@@ -67,28 +67,7 @@ def test_module():
     update = {'message': message, 'update_id': 3000}
     mockbot.getupdates.respond(json={'ok': True, 'result': [update]})
     mybot.add_bot('1234:modbot')
-    mybot.enable_module('modbot', 'dummymod')
     mybot.run_bot('modbot')
-    assert mybot.bots == {
-        'modbot': {
-            'modules': {
-                'dummymod': {
-                    'commands': ['dummymod']
-                }
-            },
-            'running': True,
-            'token': '1234:modbot',
-        },
-    }
     threading.Timer(.1, mybot.stop).start()
     mybot.run()
     assert results == ['test']
-
-    mybot.disable_module('modbot', 'dummymod')
-    assert mybot.bots == {
-        'modbot': {
-            'modules': {},
-            'running': True,
-            'token': '1234:modbot',
-        },
-    }

@@ -15,7 +15,7 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
     def __init__(self, module):
 
         def dummymod(ctx):  # pylint: disable=missing-docstring,unused-argument
-            ctx.reply_text('DUMMYMOD')
+            return ctx.command == 'dummymod' and ctx.reply_text('DUMMYMOD')
 
         self.multibot = multibot.MultiBot({dummymod, module})
         ntelebot.bot.Bot('modules:test').getme.respond(json={
@@ -25,8 +25,6 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
             },
         })
         username = self.multibot.add_bot('modules:test')
-        for modname in self.multibot.modules:
-            self.multibot.enable_module(username, modname)
         self.bot = self.multibot._build_bot(username)  # pylint: disable=protected-access
 
     def __call__(self, text, user_id=1000, chat_type='private'):

@@ -19,6 +19,7 @@ def conversation(build_conversation):  # pylint: disable=missing-docstring
 def test_default(conversation):  # pylint: disable=redefined-outer-name
     """Verify the bot doesn't respond to the /admin command from non-admins."""
 
+    assert conversation('/notnewbot') == []
     assert conversation('/newbot') == [
         {
             'chat_id': 1000,
@@ -146,14 +147,7 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.bot.multibot.bots == {
         'modulestestbot': {
-            'modules': {
-                'dummymod': {
-                    'commands': ['dummymod'],
-                },
-                'newbot': {
-                    'commands': ['newbot'],
-                },
-            },
+            'modules': {},
             'running': False,
             'token': 'modules:test',
         },
@@ -161,7 +155,6 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
             'modules': {
                 'admin': {
                     'admins': [1000],
-                    'commands': ['admin'],
                 },
             },
             'running': True,

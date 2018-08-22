@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import logging
 
 from metabot.modules import admin
+from metabot.modules import countdown
 from metabot.modules import newbot
 from metabot import multibot
 
@@ -18,7 +19,7 @@ def main():  # pylint: disable=missing-docstring
     logging.basicConfig(
         format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s] %(message)s', level=logging.INFO)
 
-    mybot = multibot.MultiBot({admin, newbot}, fname='config/multibot.json')
+    mybot = multibot.MultiBot({admin, countdown, newbot}, fname='config/multibot.json')
     if not mybot.bots:
         print()
         print("Hi! Before I can start, I need at least one bot's Telegram token. If you don't have "

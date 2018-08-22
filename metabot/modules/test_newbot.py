@@ -17,7 +17,7 @@ def conversation(build_conversation):  # pylint: disable=missing-docstring
 
 
 def test_default(conversation):  # pylint: disable=redefined-outer-name
-    """Verify the bot doesn't respond to the /admin command from non-admins."""
+    """Verify the bot's /newbot command."""
 
     assert conversation('/notnewbot') == []
     assert conversation('/newbot') == [

@@ -16,9 +16,8 @@ def dispatch(ctx):
 
 def default(ctx):  # pylint: disable=missing-docstring
     bots = [
-        username for username, modconf in ctx.bot.multibot.bots.items()
-        if 'admin' in modconf['modules'] and 'admins' in modconf['modules']['admin'] and
-        ctx.user['id'] in modconf['modules']['admin']['admins']
+        username for username, modconf in ctx.bot.multibot.bots.items() if 'admin' in modconf and
+        'admins' in modconf['admin'] and ctx.user['id'] in modconf['admin']['admins']
     ]
 
     if not bots:

@@ -27,7 +27,7 @@ class MultiBot(object):
             self.bots = {}
 
         for username, bot_config in self.bots.items():
-            if bot_config['running']:
+            if bot_config['telegram']['running']:
                 self.run_bot(username)
 
     def add_bot(self, token):
@@ -35,16 +35,17 @@ class MultiBot(object):
 
         bot_info = ntelebot.bot.Bot(token).get_me()
         self.bots[bot_info['username']] = {
-            'modules': {},
-            'running': False,
-            'token': token,
+            'telegram': {
+                'running': False,
+                'token': token,
+            },
         }
         self.save()
         return bot_info['username']
 
     def _build_bot(self, username):
         bot_config = self.bots[username]
-        bot = ntelebot.bot.Bot(bot_config['token'])
+        bot = ntelebot.bot.Bot(bot_config['telegram']['token'])
         bot.config = bot_config
         bot.get_modconf = lambda modname: self.get_modconf(username, modname)
         bot.multibot = self
@@ -56,23 +57,23 @@ class MultiBot(object):
 
         bot = self._build_bot(username)
         self.loop.add(bot, self.dispatcher)
-        bot.config['running'] = True
+        bot.config['telegram']['running'] = True
         self.save()
 
     def stop_bot(self, username):
         """Stop polling for updates for the referenced bot."""
 
         bot_config = self.bots[username]
-        self.loop.remove(bot_config['token'])
-        bot_config['running'] = False
+        self.loop.remove(bot_config['telegram']['token'])
+        bot_config['telegram']['running'] = False
         self.save()
 
     def get_modconf(self, username, modname):
         """Get or create a module config dict."""
 
-        if modname not in self.bots[username]['modules']:
-            self.bots[username]['modules'][modname] = {}
-        return self.bots[username]['modules'][modname]
+        if modname not in self.bots[username]:
+            self.bots[username][modname] = {}
+        return self.bots[username][modname]
 
     def save(self):
         """Save the list of bots currently being managed to disk."""

@@ -35,9 +35,10 @@ def test_save_load(tmpdir):
     mybot.run_bot('goodbot')
     assert json.loads(conffile.read()) == {
         'goodbot': {
-            'modules': {},
-            'running': True,
-            'token': '1234:goodbot',
+            'telegram': {
+                'running': True,
+                'token': '1234:goodbot',
+            },
         },
     }
 

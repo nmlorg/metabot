@@ -2,91 +2,120 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from metabot import util
+
 
 def dispatch(ctx):
     """Verify the user is in the target bot's admin list and dispatch relevant contexts."""
 
-    if ctx.type not in ('message', 'callback_query'):
-        return False
-    callback = {
-        'admin': default,
-        'admin_admins': admins,
-    }.get(ctx.command)
-    if not callback:
+    if ctx.type not in ('message', 'callback_query') or ctx.command != 'admin':
         return False
 
-    ctx.mod_config = ctx.bot.get_modconf('admin')
-    if 'admins' not in ctx.mod_config:
-        ctx.mod_config['admins'] = []
+    return default(ctx)
 
-    if ctx.user['id'] not in ctx.mod_config['admins']:
+
+def default(ctx):  # pylint: disable=missing-docstring
+    bots = [
+        username for username, modconf in ctx.bot.multibot.bots.items()
+        if 'admin' in modconf['modules'] and 'admins' in modconf['modules']['admin'] and
+        ctx.user['id'] in modconf['modules']['admin']['admins']
+    ]
+
+    if not bots:
         return ctx.reply_html(
             "Hi! You aren't one of my admins. If you should be, ask a current admin to add you by "
             'opening a chat with me (@%s) and typing:\n'
             '\n'
-            '<pre>/admin_admins add %s</pre>', ctx.bot.username, ctx.user['id'])
+            '<pre>/admin %s admin add %s</pre>', ctx.bot.username, ctx.bot.username, ctx.user['id'])
 
-    return callback(ctx)
+    msg = util.msgbuilder.MessageBuilder()
+    msg.title.append('Bot Admin')
+
+    username, _, text = ctx.text.partition(' ')
+    #if not username and len(bots) == 1:
+    #    username = bots[0]
+
+    if username not in bots:
+        msg.action = 'Choose a bot'
+        for username in bots:
+            msg.button(username, '/admin ' + username)
+        return msg.reply(ctx)
+
+    msg.title.append(username)
+
+    modules = {
+        modname: getattr(module, 'admin', None)
+        for modname, module in ctx.bot.multibot.modules.items()
+        if hasattr(module, 'admin')
+    }
+
+    if not modules:
+        return ctx.reply_html(
+            "Hi! There aren't any configurable modules installed. Contact a metabot admin to "
+            'install one.')
+
+    modname, _, text = text.lstrip().partition(' ')
+    #if not modname and len(modules) == 1:
+    #    modname = list(modules)[0]
+
+    if modname not in modules:
+        msg.action = 'Choose a module'
+        for modname in sorted(modules):
+            msg.button(modname, '/admin %s %s' % (username, modname))
+        msg.button('Back', '/admin')
+        return msg.reply(ctx)
+
+    msg.title.append(modname)
+
+    admin_callback = modules[modname]
+    assert admin_callback
+    ctx.command = 'admin %s %s' % (username, modname)
+    ctx.text = text.lstrip()
+    return admin_callback(ctx, msg, ctx.bot.multibot.get_modconf(username, modname))
 
 
-def default(ctx):  # pylint: disable=missing-docstring
-    message = [
-        'Bot Admin: <b>Select a command</b>',
-        '',
-    ]
-    keyboard = [
-        [{
-            'text': 'Admin List',
-            'callback_data': '/admin_admins',
-        }],
-    ]
-    ctx.reply_html('\n'.join(message), reply_markup={'inline_keyboard': keyboard})
+def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
+    """Configure the admin module itself."""
 
-
-def admins(ctx):  # pylint: disable=missing-docstring,too-many-branches
     action, _, target = ctx.text.partition(' ')
 
-    message = [
-        'Bot Admin \u203a Admin List: <b>Choose an admin</b>',
-        '',
-        ('Type the user id (a number like <code>431603199</code>) of the user to add as an admin, '
-         'or select an existing admin to remove.'),
-        '',
-    ]
+    msg.action = 'Choose an admin'
+    msg.add(
+        'Type the user id (a number like <code>431603199</code>) of the user to add as an admin, '
+        'or select an existing admin to remove.')
+
+    if 'admins' not in modconf:
+        modconf['admins'] = []
 
     if action == 'add':
         if not target.isdigit():
-            message.append("I'm not sure what <code>%s</code> is--it's not a user id!" % target)
+            msg.add("I'm not sure what <code>%s</code> is--it's not a user id!", target)
         else:
             target = int(target)
-            if target in ctx.mod_config['admins']:
-                message.append('%s is already an admin.' % target)
+            if target in modconf['admins']:
+                msg.add('%s is already an admin.', target)
             else:
-                ctx.mod_config['admins'].append(target)
-                ctx.mod_config['admins'].sort()
+                modconf['admins'].append(target)
+                modconf['admins'].sort()
                 ctx.bot.multibot.save()
-                message.append('Added %s to the admin list.' % target)
+                msg.add('Added %s to the admin list.', target)
     elif action == 'remove':
         if not target.isdigit():
-            message.append("I'm not sure what <code>%s</code> is--it's not an admin!" % target)
+            msg.add("I'm not sure what <code>%s</code> is--it's not an admin!", target)
         else:
             target = int(target)
-            if target not in ctx.mod_config['admins']:
-                message.append("Oops, looks like %s isn't an admin [any more?]." % target)
+            if target not in modconf['admins']:
+                msg.add("Oops, looks like %s isn't an admin [any more?].", target)
             elif target == ctx.user['id']:
-                message.append("You can't remove yourself from the admin list.")
+                msg.add("You can't remove yourself from the admin list.")
             else:
-                ctx.mod_config['admins'].remove(target)
+                modconf['admins'].remove(target)
                 ctx.bot.multibot.save()
-                message.append('Removed %s from the admin list.' % target)
+                msg.add('Removed %s from the admin list.', target)
 
-    keyboard = []
-    for admin in sorted(ctx.mod_config['admins']):
-        if admin != ctx.user['id']:
-            keyboard.append([{
-                'text': 'Remove %s' % admin,
-                'callback_data': '/admin_admins remove %s' % admin,
-            }])
-    keyboard.append([{'text': 'Back', 'callback_data': '/admin'}])
+    for admin_id in sorted(modconf['admins']):
+        if admin_id != ctx.user['id']:
+            msg.button('Remove %s' % admin_id, '/%s remove %s' % (ctx.command, admin_id))
+    msg.button('Back', '/' + ctx.command.rsplit(None, 1)[0])
     ctx.set_conversation('add')
-    ctx.reply_html('\n'.join(message), reply_markup={'inline_keyboard': keyboard})
+    return msg.reply(ctx)

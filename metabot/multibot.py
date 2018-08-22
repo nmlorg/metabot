@@ -11,13 +11,12 @@ class MultiBot(object):
     """An ntelebot.loop.Loop that manages multiple bots."""
 
     def __init__(self, modules, fname=None):
-        self.modules = []
+        self.modules = {}
         self.dispatcher = ntelebot.dispatch.LoopDispatcher()
         for module in modules:
             modname = module.__name__.rsplit('.', 1)[-1]
-            self.modules.append(modname)
+            self.modules[modname] = module
             self.dispatcher.add(module)
-        self.modules.sort()
         self.fname = fname
         self.loop = ntelebot.loop.Loop()
 

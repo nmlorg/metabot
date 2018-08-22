@@ -11,8 +11,8 @@ def dispatch(ctx):
     if ctx.type not in ('message', 'callback_query'):
         return False
 
-    mod_config = ctx.bot.get_modconf('countdown')
-    for command, timestamp in mod_config.items():
+    modconf = ctx.bot.get_modconf('countdown')
+    for command, timestamp in modconf.items():
         if command == ctx.command:
             return countdown(ctx, timestamp)
 
@@ -53,3 +53,57 @@ def plural(num, noun, fmtstr='%s %s'):
     if num == 1:
         return fmtstr % (num, noun)
     return fmtstr % (num, noun + 's')
+
+
+def admin(ctx, msg, modconf):
+    """Handle /admin BOTNAME countdown."""
+
+    command, _, timestamp = ctx.text.partition(' ')
+
+    if command and timestamp:
+        if timestamp.isdigit():
+            timestamp = int(timestamp)
+            if modconf.get(command):
+                msg.add('Changed /%s from <code>%s</code> to <code>%s</code>.', command,
+                        modconf[command], timestamp)
+            else:
+                msg.add('/%s is now counting down to <code>%s</code>.', command, timestamp)
+            modconf[command] = timestamp
+            ctx.bot.multibot.save()
+            command = timestamp = None
+        elif timestamp == 'remove':
+            if command not in modconf:
+                msg.add('/%s is not currently counting down to anything.', command)
+            else:
+                msg.add('Removed /%s (which was counting down to <code>%s</code>).', command,
+                        modconf[command])
+                modconf.pop(command)
+                ctx.bot.multibot.save()
+            command = timestamp = None
+        else:
+            msg.add("I'm not sure how to count down to <code>%s</code>!", timestamp)
+            timestamp = None
+
+    if not command:
+        msg.action = 'Choose a command'
+        msg.add(
+            "Type the name of a command to add (like <code>days</code>--don't include a slash at "
+            'the beginning!), or select an existing countdown to remove.')
+        for command, timestamp in sorted(modconf.items()):
+            msg.button('/%s (%s)' % (command, timestamp), '/%s %s remove' % (ctx.command, command))
+        msg.button('Back', '/' + ctx.command.rsplit(None, 1)[0])
+        ctx.set_conversation('')
+        return msg.reply(ctx)
+
+    if not timestamp:
+        msg.action = 'Type the time for /' + command
+        msg.add(
+            'This is a little technical (it will be made simpler in the future), but type the unix '
+            'timestamp to count down to.')
+        msg.add('(Go to https://www.epochconverter.com/, fill out the section "Human date to '
+                'Timestamp", then use the number listed next to "Epoch timestamp".)')
+        msg.button('Back', '/' + ctx.command)
+        ctx.set_conversation(command)
+        return msg.reply(ctx)
+
+    return msg.reply(ctx)

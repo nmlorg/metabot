@@ -13,7 +13,9 @@ def dispatch(ctx):
     if not callback:
         return False
 
-    ctx.mod_config = ctx.bot.config['modules']['admin']
+    ctx.mod_config = ctx.bot.get_modconf('admin')
+    if 'admins' not in ctx.mod_config:
+        ctx.mod_config['admins'] = []
 
     if ctx.user['id'] not in ctx.mod_config['admins']:
         return ctx.reply_html(

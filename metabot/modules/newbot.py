@@ -10,6 +10,8 @@ import ntelebot
 def dispatch(ctx):
     """Check and dispatch relevant contexts."""
 
+    if ctx.type not in ('message', 'callback_query'):
+        return False
     callback = {
         'newbot': default,
     }.get(ctx.command)

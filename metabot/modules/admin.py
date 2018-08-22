@@ -6,6 +6,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 def dispatch(ctx):
     """Verify the user is in the target bot's admin list and dispatch relevant contexts."""
 
+    if ctx.type not in ('message', 'callback_query'):
+        return False
     callback = {
         'admin': default,
         'admin_admins': admins,

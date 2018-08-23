@@ -11,6 +11,7 @@ def dispatch(ctx):
     if ctx.type not in ('message', 'callback_query') or ctx.command != 'admin':
         return False
 
+    ctx.private = True
     return default(ctx)
 
 

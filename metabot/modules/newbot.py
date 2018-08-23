@@ -20,6 +20,7 @@ def dispatch(ctx):
     if not callback:
         return False
 
+    ctx.private = True
     return callback(ctx)
 
 

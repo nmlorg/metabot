@@ -8,7 +8,7 @@ def dispatch(ctx):  # pylint: disable=missing-docstring,unused-argument
 
 
 def admin(ctx, msg, modconf):
-    """Manage the bot's Telegram state."""
+    """Handle /admin BOTNAME telegram (manage the bot's Telegram state)."""
 
     username = ctx.command.split()[1]
     msg.action = 'Choose an action'

@@ -75,7 +75,7 @@ def default(ctx):  # pylint: disable=missing-docstring
 
 
 def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
-    """Configure the admin module itself."""
+    """Handle /admin BOTNAME admin (configure the admin module itself)."""
 
     action, _, target = ctx.text.partition(' ')
 

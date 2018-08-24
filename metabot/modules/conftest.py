@@ -7,6 +7,7 @@ import json
 import ntelebot
 import pytest
 
+from metabot.modules import admin
 from metabot import multibot
 
 
@@ -17,7 +18,7 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         def dummymod(ctx):  # pylint: disable=missing-docstring,unused-argument
             return ctx.command == 'dummymod' and ctx.reply_text('DUMMYMOD')
 
-        self.multibot = multibot.MultiBot({dummymod, module})
+        self.multibot = multibot.MultiBot({admin, dummymod, module})
         ntelebot.bot.Bot('modules:test').getme.respond(json={
             'ok': True,
             'result': {
@@ -26,6 +27,7 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         })
         username = self.multibot.add_bot('modules:test')
         self.bot = self.multibot._build_bot(username)  # pylint: disable=protected-access
+        self.bot.get_modconf('admin')['admins'] = [1000]
 
     def __call__(self, text, user_id=1000, chat_type='private'):
         user = {'id': user_id}

@@ -158,6 +158,9 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.bot.multibot.bots == {
         'modulestestbot': {
+            'admin': {
+                'admins': [1000],
+            },
             'telegram': {
                 'running': False,
                 'token': 'modules:test',

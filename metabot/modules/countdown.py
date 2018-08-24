@@ -95,15 +95,11 @@ def admin(ctx, msg, modconf):
         ctx.set_conversation('')
         return msg.reply(ctx)
 
-    if not timestamp:
-        msg.action = 'Type the time for /' + command
-        msg.add(
-            'This is a little technical (it will be made simpler in the future), but type the unix '
+    msg.action = 'Type the time for /' + command
+    msg.add('This is a little technical (it will be made simpler in the future), but type the unix '
             'timestamp to count down to.')
-        msg.add('(Go to https://www.epochconverter.com/, fill out the section "Human date to '
-                'Timestamp", then use the number listed next to "Epoch timestamp".)')
-        msg.button('Back', '/' + ctx.command)
-        ctx.set_conversation(command)
-        return msg.reply(ctx)
-
+    msg.add('(Go to https://www.epochconverter.com/, fill out the section "Human date to '
+            'Timestamp", then use the number listed next to "Epoch timestamp".)')
+    msg.button('Back', '/' + ctx.command)
+    ctx.set_conversation(command)
     return msg.reply(ctx)

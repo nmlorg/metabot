@@ -9,9 +9,7 @@ from metabot.modules import admin
 
 @pytest.fixture
 def conversation(build_conversation):  # pylint: disable=missing-docstring
-    conv = build_conversation(admin)
-    conv.bot.get_modconf('admin')['admins'] = [1000]
-    return conv
+    return build_conversation(admin)
 
 
 # pylint: disable=line-too-long

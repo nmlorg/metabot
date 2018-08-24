@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 
 def dispatch(ctx):  # pylint: disable=missing-docstring,unused-argument
-    return False
+    return False  # pragma: no cover
 
 
 def admin(ctx, msg, modconf):

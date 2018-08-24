@@ -8,7 +8,7 @@ import datetime
 def dispatch(ctx):
     """Check and dispatch relevant contexts."""
 
-    if ctx.type not in ('message', 'callback_query'):
+    if ctx.type not in ('message', 'callback_query'):  # pragma: no cover
         return False
 
     modconf = ctx.bot.get_modconf('countdown')

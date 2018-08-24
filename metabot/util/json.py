@@ -6,7 +6,7 @@ import json
 
 try:
     JSONDecodeError = json.decoder.JSONDecodeError  # pylint: disable=invalid-name
-except AttributeError:  # Python 2
+except AttributeError:  # pragma: no cover (Python 2)
     JSONDecodeError = ValueError
 
 

@@ -28,6 +28,12 @@ def test_countdown(conversation):  # pylint: disable=redefined-outer-name
     assert len(ret) == 1
     assert ret[0]['text'].endswith(' ago')
 
+    conversation.bot.get_modconf('countdown')['mycountdown'] = 15349068000
+
+    ret = conversation('/mycountdown')
+    assert len(ret) == 1
+    assert not ret[0]['text'].endswith(' ago')
+
 
 def test_format_delta():
     """Verify the time delta formatter."""

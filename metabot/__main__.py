@@ -37,20 +37,19 @@ def main():  # pylint: disable=missing-docstring
         print()
         while not mybot.bots:
             initial_token = raw_input('Telegram token: ')
-            if initial_token.count(':') != 1 or not initial_token.split(':')[0].isdigit():
+            try:
+                username = mybot.add_bot(initial_token)
+            except AssertionError:
                 print()
                 print("That doesn't look quite right. Look for a message from BotFather starting "
                       'with "Use this token" followed by a line starting with a number. Copy the '
                       'full line starting with the number and paste it here:')
                 print()
+            except Exception as exc:  # pylint: disable=broad-except
+                print()
+                print('Woops, that generated: %r', exc)
             else:
-                try:
-                    username = mybot.add_bot(initial_token)
-                except Exception as exc:  # pylint: disable=broad-except
-                    print()
-                    print('Woops, that generated: %r', exc)
-                else:
-                    mybot.run_bot(username)
+                mybot.run_bot(username)
     mybot.run()
 
 

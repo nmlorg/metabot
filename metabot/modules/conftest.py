@@ -19,13 +19,13 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
             return ctx.command == 'dummymod' and ctx.reply_text('DUMMYMOD')
 
         self.multibot = multibot.MultiBot({admin, dummymod, module})
-        ntelebot.bot.Bot('modules:test').getme.respond(json={
+        ntelebot.bot.Bot('1234:test').getme.respond(json={
             'ok': True,
             'result': {
                 'username': 'modulestestbot'
             },
         })
-        username = self.multibot.add_bot('modules:test')
+        username = self.multibot.add_bot('1234:test')
         self.bot = self.multibot._build_bot(username)  # pylint: disable=protected-access
         self.bot.get_modconf('admin')['admins'] = [1000]
 

@@ -38,12 +38,6 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    ntelebot.bot.Bot('bogus').getme.respond(json={
-        'description': 'Not Found',
-        'error_code': 404,
-        'ok': False,
-    })
-
     assert conversation('bogus') == [
         {
             'chat_id': 1000,
@@ -51,7 +45,15 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Add a bot: <b>Paste a bot API Token</b>\n'
                     '\n'
-                    'Woops, while trying to use <code>bogus</code> I got error 404 (<code>Not Found</code>).',
+                    "Oops, <code>bogus</code> doesn't look like an API Token.\n"
+                    '\n'
+                    "To create a new bot, let me know your bot account's API Token. This is a code that looks like:\n"
+                    '\n'
+                    '<pre>123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11</pre>\n'
+                    '\n'
+                    'If you are creating a bot entirely from scratch, open a private chat with @BotFather and follow the process at https://core.telegram.org/bots#creating-a-new-bot to create a new bot account. At the end of that process, you will receive an API Token that you can paste here.\n'
+                    '\n'
+                    'Otherwise, open a private chat with @BotFather, type <code>/mybots</code>, select the bot account you want to use, select <code>API Token</code>, then copy the code and paste it here:',
             'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
@@ -163,7 +165,7 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
             },
             'telegram': {
                 'running': False,
-                'token': 'modules:test',
+                'token': '1234:test',
             },
         },
         'validbot': {

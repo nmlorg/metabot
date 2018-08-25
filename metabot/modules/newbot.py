@@ -30,6 +30,14 @@ def default(ctx):  # pylint: disable=missing-docstring
     msg.action = 'Paste a bot API Token'
 
     token = ctx.text.partition(' ')[0]
+
+    if token:
+        try:
+            bot = ntelebot.bot.Bot(token)
+        except AssertionError:
+            msg.add("Oops, <code>%s</code> doesn't look like an API Token.", token)
+            token = None
+
     if not token:
         msg.add("To create a new bot, let me know your bot account's API Token. This is a code "
                 'that looks like:')
@@ -44,7 +52,6 @@ def default(ctx):  # pylint: disable=missing-docstring
         ctx.set_conversation('')
         return msg.reply(ctx)
 
-    bot = ntelebot.bot.Bot(token)
     try:
         bot_info = bot.get_me()
     except ntelebot.errors.Unauthorized:

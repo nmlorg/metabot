@@ -26,7 +26,7 @@ def dispatch(ctx):
 
 def default(ctx):  # pylint: disable=missing-docstring
     msg = util.msgbuilder.MessageBuilder()
-    msg.title.append('Add a bot')
+    msg.path('/newbot', 'Add a bot')
     msg.action = 'Paste a bot API Token'
 
     token = ctx.text.partition(' ')[0]

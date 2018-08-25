@@ -90,16 +90,15 @@ def admin(ctx, msg, modconf):
             "Type the name of a command to add (like <code>days</code>--don't include a slash at "
             'the beginning!), or select an existing countdown to remove.')
         for command, timestamp in sorted(modconf.items()):
-            msg.button('/%s (%s)' % (command, timestamp), '/%s %s remove' % (ctx.command, command))
-        msg.button('Back', '/' + ctx.command.rsplit(None, 1)[0])
+            msg.button('/%s (%s)' % (command, timestamp), '%s remove' % command)
         ctx.set_conversation('')
         return msg.reply(ctx)
 
+    msg.path(command)
     msg.action = 'Type the time for /' + command
     msg.add('This is a little technical (it will be made simpler in the future), but type the unix '
             'timestamp to count down to.')
     msg.add('(Go to https://www.epochconverter.com/, fill out the section "Human date to '
             'Timestamp", then use the number listed next to "Epoch timestamp".)')
-    msg.button('Back', '/' + ctx.command)
     ctx.set_conversation(command)
     return msg.reply(ctx)

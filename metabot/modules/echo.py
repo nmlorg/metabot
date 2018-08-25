@@ -49,13 +49,12 @@ def admin(ctx, msg, modconf):
             "Type the name of a command to add (like <code>rules</code>--don't include a slash at "
             'the beginning!), or select an existing echo to remove.')
         for command, message in sorted(modconf.items()):
-            msg.button('/%s (%s)' % (command, message), '/%s %s remove' % (ctx.command, command))
-        msg.button('Back', '/' + ctx.command.rsplit(None, 1)[0])
+            msg.button('/%s (%s)' % (command, message), '%s remove' % command)
         ctx.set_conversation('')
         return msg.reply(ctx)
 
+    msg.path(command)
     msg.action = 'Type the message for /' + command
     msg.add('Type the text you want me to send in response to <code>/%s</code>:', command)
-    msg.button('Back', '/' + ctx.command)
     ctx.set_conversation(command)
     return msg.reply(ctx)

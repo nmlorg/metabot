@@ -29,7 +29,7 @@ def default(ctx):  # pylint: disable=missing-docstring
             '<pre>/admin %s admin add %s</pre>', ctx.bot.username, ctx.bot.username, ctx.user['id'])
 
     msg = util.msgbuilder.MessageBuilder()
-    msg.title.append('Bot Admin')
+    msg.path('/admin', 'Bot Admin')
 
     username, _, text = ctx.text.partition(' ')
     #if not username and len(bots) == 1:
@@ -41,7 +41,7 @@ def default(ctx):  # pylint: disable=missing-docstring
             msg.button(username, '/admin ' + username)
         return msg.reply(ctx)
 
-    msg.title.append(username)
+    msg.path(username)
 
     modules = {
         modname: module
@@ -65,10 +65,9 @@ def default(ctx):  # pylint: disable=missing-docstring
             if getattr(module, '__doc__', None):
                 label = '%s \u2022 %s' % (label, module.__doc__.splitlines()[0].rstrip('.'))
             msg.button(label, '/admin %s %s' % (username, modname))
-        msg.button('Back', '/admin')
         return msg.reply(ctx)
 
-    msg.title.append(modname)
+    msg.path(modname)
 
     admin_callback = modules[modname].admin
     ctx.command = 'admin %s %s' % (username, modname)
@@ -117,7 +116,6 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
 
     for admin_id in sorted(modconf['admins']):
         if admin_id != ctx.user['id']:
-            msg.button('Remove %s' % admin_id, '/%s remove %s' % (ctx.command, admin_id))
-    msg.button('Back', '/' + ctx.command.rsplit(None, 1)[0])
+            msg.button('Remove %s' % admin_id, 'remove %s' % admin_id)
     ctx.set_conversation('add')
     return msg.reply(ctx)

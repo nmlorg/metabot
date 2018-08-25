@@ -38,10 +38,10 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
     if group_id not in modconf:
         msg.action = 'Choose a group'
         for group_id, groupconf in sorted(modconf.items()):
-            msg.button('%s (%s)' % (group_id, groupconf['title']),
-                       '/%s %s' % (ctx.command, group_id))
-        msg.button('Back', '/' + ctx.command.rsplit(None, 1)[0])
+            msg.button('%s (%s)' % (group_id, groupconf['title']), group_id)
         return msg.reply(ctx)
+
+    msg.path(group_id)
 
     fields = {'greeting'}
 
@@ -68,17 +68,16 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
             modconf[group_id].pop(field, None)
         ctx.bot.multibot.save()
     else:
+        msg.path(field)
         msg.action = 'Type a new value for ' + field
         if modconf[group_id].get(field):
             msg.add('<code>%s</code> is currently <code>%s</code>.', field,
                     modconf[group_id][field])
         msg.add('Type your new value, or type "off" to disable/reset to default.')
-        msg.button('Back', '/%s %s' % (ctx.command, group_id))
         ctx.set_conversation('%s %s' % (group_id, field))
         return msg.reply(ctx)
 
     msg.action = 'Choose a field'
     for field in sorted(fields):
-        msg.button(field, '/%s %s %s' % (ctx.command, group_id, field))
-    msg.button('Back', '/' + ctx.command)
+        msg.button(field, field)
     return msg.reply(ctx)

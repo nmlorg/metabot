@@ -56,7 +56,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator: <b>Choose a field</b>',
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -4000: <b>Choose a field</b>',
             'reply_markup': {'inline_keyboard': [[{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
@@ -67,7 +67,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator: <b>Choose a field</b>\n'
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -4000: <b>Choose a field</b>\n'
                     '\n'
                     "I can't set <code>bogus</code>.",
             'reply_markup': {'inline_keyboard': [[{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
@@ -80,7 +80,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator: <b>Type a new value for greeting</b>\n'
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -4000 \u203a greeting: <b>Type a new value for greeting</b>\n'
                     '\n'
                     'Type your new value, or type "off" to disable/reset to default.',
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -4000'}]]},
@@ -92,7 +92,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator: <b>Choose a field</b>\n'
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -4000: <b>Choose a field</b>\n'
                     '\n'
                     'Set <code>greeting</code> to <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; message.</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
@@ -117,7 +117,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator: <b>Type a new value for greeting</b>\n'
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -4000 \u203a greeting: <b>Type a new value for greeting</b>\n'
                     '\n'
                     '<code>greeting</code> is currently <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; message.</code>.\n'
                     '\n'
@@ -131,7 +131,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator: <b>Choose a field</b>\n'
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -4000: <b>Choose a field</b>\n'
                     '\n'
                     'Changed <code>greeting</code> from <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; message.</code> to <code>Welcome! New message.</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
@@ -144,7 +144,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator: <b>Type a new value for greeting</b>\n'
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -4000 \u203a greeting: <b>Type a new value for greeting</b>\n'
                     '\n'
                     '<code>greeting</code> is currently <code>Welcome! New message.</code>.\n'
                     '\n'
@@ -158,7 +158,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator: <b>Choose a field</b>\n'
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -4000: <b>Choose a field</b>\n'
                     '\n'
                     'Unset <code>greeting</code> (was <code>Welcome! New message.</code>).',
             'reply_markup': {'inline_keyboard': [[{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
@@ -171,7 +171,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator: <b>Choose a field</b>\n'
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -4000: <b>Choose a field</b>\n'
                     '\n'
                     'Unset <code>greeting</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],

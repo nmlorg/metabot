@@ -27,9 +27,8 @@ def admin(ctx, msg, modconf):
             msg.add('@%s is now running.', username)
 
     if modconf['running']:
-        msg.button('Stop bot', '/%s stop' % ctx.command)
+        msg.button('Stop bot', 'stop')
     else:
-        msg.button('Start bot', '/%s start' % ctx.command)
+        msg.button('Start bot', 'start')
 
-    msg.button('Back', '/' + ctx.command.rsplit(None, 1)[0])
     return msg.reply(ctx)

@@ -50,7 +50,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a echo: <b>Type the message for /echotest</b>\n'
+            'text': 'Bot Admin \u203a modulestestbot \u203a echo \u203a echotest: <b>Type the message for /echotest</b>\n'
                     '\n'
                     'Type the text you want me to send in response to <code>/echotest</code>:',
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot echo'}]]},

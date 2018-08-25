@@ -70,7 +70,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a countdown: <b>Type the time for /countdowntest</b>\n'
+            'text': 'Bot Admin \u203a modulestestbot \u203a countdown \u203a countdowntest: <b>Type the time for /countdowntest</b>\n'
                     '\n'
                     'This is a little technical (it will be made simpler in the future), but type the unix timestamp to count down to.\n'
                     '\n'
@@ -114,7 +114,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a countdown: <b>Type the time for /countdowntest</b>\n'
+            'text': 'Bot Admin \u203a modulestestbot \u203a countdown \u203a countdowntest: <b>Type the time for /countdowntest</b>\n'
                     '\n'
                     "I'm not sure how to count down to <code>bogus&lt;&gt;</code>!\n"
                     '\n'

@@ -53,7 +53,7 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot: <b>Choose a module</b>',
-            'reply_markup': {'inline_keyboard': [[{'text': 'admin', 'callback_data': '/admin modulestestbot admin'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'admin \u2022 Manage the admin list', 'callback_data': '/admin modulestestbot admin'}],
                                                  [{'text': 'Back', 'callback_data': '/admin'}]]},
         },
     ]  # yapf: disable

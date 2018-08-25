@@ -44,7 +44,7 @@ def default(ctx):  # pylint: disable=missing-docstring
     msg.title.append(username)
 
     modules = {
-        modname: getattr(module, 'admin', None)
+        modname: module
         for modname, module in ctx.bot.multibot.modules.items()
         if hasattr(module, 'admin')
     }
@@ -60,15 +60,17 @@ def default(ctx):  # pylint: disable=missing-docstring
 
     if modname not in modules:
         msg.action = 'Choose a module'
-        for modname in sorted(modules):
-            msg.button(modname, '/admin %s %s' % (username, modname))
+        for modname, module in sorted(modules.items()):
+            label = modname
+            if getattr(module, '__doc__', None):
+                label = '%s \u2022 %s' % (label, module.__doc__.splitlines()[0].rstrip('.'))
+            msg.button(label, '/admin %s %s' % (username, modname))
         msg.button('Back', '/admin')
         return msg.reply(ctx)
 
     msg.title.append(modname)
 
-    admin_callback = modules[modname]
-    assert admin_callback
+    admin_callback = modules[modname].admin
     ctx.command = 'admin %s %s' % (username, modname)
     ctx.text = text.lstrip()
     return admin_callback(ctx, msg, ctx.bot.multibot.get_modconf(username, modname))

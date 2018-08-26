@@ -29,12 +29,27 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         self.bot = self.multibot._build_bot(username)  # pylint: disable=protected-access
         self.bot.get_modconf('admin')['admins'] = [1000]
 
-    def __call__(self, text, user_id=1000, chat_type='private'):
+    def inline(self, text, user_id=1000):
+        """Simulate an inline query (@BOTNAME text)."""
+
         user = {'id': user_id}
-        if chat_type == 'private':
-            chat = {'id': user_id, 'type': chat_type}
-        else:
-            chat = {'id': -user_id, 'type': 'supergroup'}
+        inline_query = {'offset': '', 'from': user, 'query': text, 'id': user_id * 2}
+        update = {'inline_query': inline_query}
+        responses = []
+
+        def _handler(request, unused_context):
+            responses.append(json.loads(request.body))
+            return {'ok': True, 'result': {}}
+
+        self.bot.answer_inline_query.respond(json=_handler)
+        self.multibot.dispatcher(self.bot, update)
+        return responses
+
+    def message(self, text, user_id=1000):
+        """Simulate a private message."""
+
+        user = {'id': user_id}
+        chat = {'id': user_id, 'type': 'private'}
         message = {'from': user, 'chat': chat, 'message_id': user_id * 2, 'text': text}
         update = {'message': message}
         responses = []

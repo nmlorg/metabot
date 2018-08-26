@@ -18,7 +18,7 @@ def conversation(build_conversation):  # pylint: disable=missing-docstring
 def test_admin(conversation):  # pylint: disable=redefined-outer-name
     """Test /admin BOTNAME telegram."""
 
-    assert conversation('/admin modulestestbot telegram') == [
+    assert conversation.message('/admin modulestestbot telegram') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -29,7 +29,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin modulestestbot telegram start') == [
+    assert conversation.message('/admin modulestestbot telegram start') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -42,7 +42,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin modulestestbot telegram start') == [
+    assert conversation.message('/admin modulestestbot telegram start') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -55,7 +55,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin modulestestbot telegram stop') == [
+    assert conversation.message('/admin modulestestbot telegram stop') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -68,7 +68,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin modulestestbot telegram stop') == [
+    assert conversation.message('/admin modulestestbot telegram stop') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,

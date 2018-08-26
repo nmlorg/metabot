@@ -18,11 +18,11 @@ def conversation(build_conversation):  # pylint: disable=missing-docstring
 def test_echo(conversation):  # pylint: disable=redefined-outer-name
     """Verify the echo module (which uses dynamic commands)."""
 
-    assert conversation('/myecho') == []
+    assert conversation.message('/myecho') == []
 
     conversation.bot.get_modconf('echo')['myecho'] = 'These are the rules: Have fun!'
 
-    assert conversation('/myecho') == [
+    assert conversation.message('/myecho') == [
         {
             'chat_id': 1000,
             'text': 'These are the rules: Have fun!',
@@ -33,7 +33,7 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
 def test_admin(conversation):  # pylint: disable=redefined-outer-name
     """Test /admin BOTNAME echo."""
 
-    assert conversation('/admin modulestestbot echo') == [
+    assert conversation.message('/admin modulestestbot echo') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -45,7 +45,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('echotest') == [
+    assert conversation.message('echotest') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -57,7 +57,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('my message') == [
+    assert conversation.message('my message') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -72,7 +72,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin modulestestbot echo echotest new message') == [
+    assert conversation.message('/admin modulestestbot echo echotest new message') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -87,7 +87,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin modulestestbot echo echotest remove') == [
+    assert conversation.message('/admin modulestestbot echo echotest remove') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -101,7 +101,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin modulestestbot echo bogus remove') == [
+    assert conversation.message('/admin modulestestbot echo bogus remove') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,

@@ -19,8 +19,8 @@ def conversation(build_conversation):  # pylint: disable=missing-docstring
 def test_default(conversation):  # pylint: disable=redefined-outer-name
     """Verify the bot's /newbot command."""
 
-    assert conversation('/notnewbot') == []
-    assert conversation('/newbot') == [
+    assert conversation.message('/notnewbot') == []
+    assert conversation.message('/newbot') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -38,7 +38,7 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('bogus') == [
+    assert conversation.message('bogus') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -64,7 +64,7 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
         'ok': False,
     })
 
-    assert conversation('1234:invalid') == [
+    assert conversation.message('1234:invalid') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -87,7 +87,7 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
     })
     mockbot.getupdates.respond(json={'description': 'Conflict', 'error_code': 409, 'ok': False})
 
-    assert conversation('1234:valid') == [
+    assert conversation.message('1234:valid') == [
         {
             'chat_id': 1000,
             'parse_mode': 'HTML',
@@ -114,7 +114,7 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
     })
     mockbot.getupdates.respond(json={'description': 'Not Found', 'error_code': 404, 'ok': False})
 
-    assert conversation('1234:valid') == [
+    assert conversation.message('1234:valid') == [
         {
             'chat_id': 1000,
             'parse_mode': 'HTML',
@@ -141,7 +141,7 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
     })
     mockbot.getupdates.respond(json={'ok': True, 'result': []})
 
-    assert conversation('1234:valid') == [
+    assert conversation.message('1234:valid') == [
         {
             'chat_id': 1000,
             'parse_mode': 'HTML',

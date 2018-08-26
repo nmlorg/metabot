@@ -28,16 +28,17 @@ def test_invalid_user(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin', user_id=2000) == error_message
-    assert conversation('/admin dummy', user_id=2000) == error_message
-    assert conversation('/admin modulestestbot admin add 2000', user_id=2000) == error_message
+    assert conversation.message('/admin', user_id=2000) == error_message
+    assert conversation.message('/admin dummy', user_id=2000) == error_message
+    assert conversation.message(
+        '/admin modulestestbot admin add 2000', user_id=2000) == error_message
 
 
 def test_default(conversation):  # pylint: disable=redefined-outer-name
     """Verify the /admin command gives its lovely menu of subcommands."""
 
-    assert conversation('/notadmin') == []
-    assert conversation('/admin') == [
+    assert conversation.message('/notadmin') == []
+    assert conversation.message('/admin') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -47,7 +48,7 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin modulestestbot') == [
+    assert conversation.message('/admin modulestestbot') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -62,7 +63,7 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
 def test_admins(conversation):  # pylint: disable=redefined-outer-name
     """Verify /admin's own configurator."""
 
-    assert conversation('/admin modulestestbot admin') == [
+    assert conversation.message('/admin modulestestbot admin') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -74,7 +75,7 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('bogus value') == [
+    assert conversation.message('bogus value') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -88,7 +89,7 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('1000') == [
+    assert conversation.message('1000') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -102,7 +103,7 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('2000') == [
+    assert conversation.message('2000') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -117,7 +118,7 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin modulestestbot admin remove bogus value') == [
+    assert conversation.message('/admin modulestestbot admin remove bogus value') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -132,7 +133,7 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin modulestestbot admin remove 3000') == [
+    assert conversation.message('/admin modulestestbot admin remove 3000') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -147,7 +148,7 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin modulestestbot admin remove 1000') == [
+    assert conversation.message('/admin modulestestbot admin remove 1000') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -162,7 +163,7 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin modulestestbot admin remove 2000') == [
+    assert conversation.message('/admin modulestestbot admin remove 2000') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,

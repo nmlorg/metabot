@@ -20,17 +20,17 @@ def conversation(build_conversation):  # pylint: disable=missing-docstring
 def test_countdown(conversation):  # pylint: disable=redefined-outer-name
     """Verify the countdown module (which uses dynamic commands)."""
 
-    assert conversation('/mycountdown') == []
+    assert conversation.message('/mycountdown') == []
 
     conversation.bot.get_modconf('countdown')['mycountdown'] = 1534906800
 
-    ret = conversation('/mycountdown')
+    ret = conversation.message('/mycountdown')
     assert len(ret) == 1
     assert ret[0]['text'].endswith(' ago')
 
     conversation.bot.get_modconf('countdown')['mycountdown'] = 15349068000
 
-    ret = conversation('/mycountdown')
+    ret = conversation.message('/mycountdown')
     assert len(ret) == 1
     assert not ret[0]['text'].endswith(' ago')
 
@@ -53,7 +53,7 @@ def test_format_delta():
 def test_admin(conversation):  # pylint: disable=redefined-outer-name
     """Test /admin BOTNAME countdown."""
 
-    assert conversation('/admin modulestestbot countdown') == [
+    assert conversation.message('/admin modulestestbot countdown') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -65,7 +65,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('countdowntest') == [
+    assert conversation.message('countdowntest') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -79,7 +79,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('1534906800') == [
+    assert conversation.message('1534906800') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -94,7 +94,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin modulestestbot countdown countdowntest 1000') == [
+    assert conversation.message('/admin modulestestbot countdown countdowntest 1000') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -109,7 +109,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin modulestestbot countdown countdowntest bogus<>') == [
+    assert conversation.message('/admin modulestestbot countdown countdowntest bogus<>') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -125,7 +125,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('remove') == [
+    assert conversation.message('remove') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -139,7 +139,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation('/admin modulestestbot countdown bogus remove') == [
+    assert conversation.message('/admin modulestestbot countdown bogus remove') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,

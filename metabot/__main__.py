@@ -7,6 +7,7 @@ import logging
 from metabot.modules import admin
 from metabot.modules import countdown
 from metabot.modules import echo
+from metabot.modules import groups
 from metabot.modules import moderator
 from metabot.modules import newbot
 from metabot.modules import telegram
@@ -22,7 +23,7 @@ def main():  # pylint: disable=missing-docstring
     logging.basicConfig(
         format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s] %(message)s', level=logging.INFO)
 
-    modules = {admin, countdown, echo, moderator, newbot, telegram}
+    modules = {admin, countdown, echo, groups, moderator, newbot, telegram}
     mybot = multibot.MultiBot(modules, fname='config/multibot.json')
     if not mybot.bots:
         print()

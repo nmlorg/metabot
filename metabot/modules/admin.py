@@ -17,8 +17,8 @@ def dispatch(ctx):
 
 def default(ctx):  # pylint: disable=missing-docstring
     bots = [
-        username for username, modconf in ctx.bot.multibot.bots.items() if 'admin' in modconf and
-        'admins' in modconf['admin'] and ctx.user['id'] in modconf['admin']['admins']
+        username for username, botconf in ctx.bot.multibot.bots.items()
+        if ctx.user['id'] in botconf['admin']['admins']
     ]
 
     if not bots:
@@ -98,7 +98,6 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
             else:
                 modconf['admins'].append(target)
                 modconf['admins'].sort()
-                ctx.bot.multibot.save()
                 msg.add('Added %s to the admin list.', target)
     elif action == 'remove':
         if not target.isdigit():
@@ -111,7 +110,6 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
                 msg.add("You can't remove yourself from the admin list.")
             else:
                 modconf['admins'].remove(target)
-                ctx.bot.multibot.save()
                 msg.add('Removed %s from the admin list.', target)
 
     for admin_id in sorted(modconf['admins']):

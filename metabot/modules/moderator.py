@@ -5,11 +5,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 def dispatch(ctx):  # pylint: disable=missing-docstring
     if ctx.chat and ctx.chat['type'] in ('channel', 'group', 'supergroup'):
-        group_id = str(ctx.chat['id'])
+        group_id = '%s' % ctx.chat['id']
         modconf = ctx.bot.get_modconf('moderator')
-        groupconf = modconf.get(group_id)
-        if groupconf is None:
-            groupconf = modconf[group_id] = {}
+        groupconf = modconf[group_id]
         groupconf['title'] = ctx.chat.get('title')
         groupconf['type'] = ctx.chat.get('type')
         groupconf['username'] = ctx.chat.get('username')
@@ -24,7 +22,7 @@ def join(ctx):
     """Respond to new users joining a group chat."""
 
     modconf = ctx.bot.get_modconf('moderator')
-    groupconf = modconf.get(str(ctx.chat['id'])) or {}
+    groupconf = modconf['%s' % ctx.chat['id']]
     if groupconf.get('greeting') and not ctx.user.get('is_bot'):
         return ctx.reply_html(groupconf['greeting'])
 
@@ -65,8 +63,7 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
         if text:
             modconf[group_id][field] = text
         else:
-            modconf[group_id].pop(field, None)
-        ctx.bot.multibot.save()
+            modconf[group_id].pop(field)
     else:
         msg.path(field)
         msg.action = 'Type a new value for ' + field

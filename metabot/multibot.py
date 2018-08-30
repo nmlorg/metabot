@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import ntelebot
 
-from metabot import util
+from metabot import botconf
 
 
 class MultiBot(object):
@@ -12,19 +12,15 @@ class MultiBot(object):
 
     def __init__(self, modules, fname=None):
         self.modules = {}
-        self.dispatcher = ntelebot.dispatch.LoopDispatcher()
+        self.dispatcher = _MultiBotLoopDispatcher(self)
         for module in modules:
             modname = module.__name__.rsplit('.', 1)[-1]
             self.modules[modname] = module
             self.dispatcher.add(module)
         self.fname = fname
         self.loop = ntelebot.loop.Loop()
-
-        bots = fname and util.json.load(fname)
-        if bots and isinstance(bots, dict):
-            self.bots = bots
-        else:
-            self.bots = {}
+        self.bots = botconf.BotConf(fname)
+        self.bots.finalize()
 
         for username, bot_config in self.bots.items():
             if bot_config['telegram']['running']:
@@ -40,7 +36,7 @@ class MultiBot(object):
                 'token': token,
             },
         }
-        self.save()
+        self.bots.save()
         return bot_info['username']
 
     def _build_bot(self, username):
@@ -58,7 +54,7 @@ class MultiBot(object):
         bot = self._build_bot(username)
         self.loop.add(bot, self.dispatcher)
         bot.config['telegram']['running'] = True
-        self.save()
+        self.bots.save()
 
     def stop_bot(self, username):
         """Stop polling for updates for the referenced bot."""
@@ -66,20 +62,12 @@ class MultiBot(object):
         bot_config = self.bots[username]
         self.loop.remove(bot_config['telegram']['token'])
         bot_config['telegram']['running'] = False
-        self.save()
+        self.bots.save()
 
     def get_modconf(self, username, modname):
         """Get or create a module config dict."""
 
-        if modname not in self.bots[username]:
-            self.bots[username][modname] = {}
         return self.bots[username][modname]
-
-    def save(self):
-        """Save the list of bots currently being managed to disk."""
-
-        if self.fname:
-            self.bots = util.json.dump(self.fname, self.bots)
 
     def run(self):
         """Begin waiting for and dispatching updates sent to any bot currently running."""
@@ -90,3 +78,14 @@ class MultiBot(object):
         """Stop waiting for and dispatching updates sent to any bot currently running."""
 
         return self.loop.stop()
+
+
+class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
+
+    def __init__(self, multibot):
+        super(_MultiBotLoopDispatcher, self).__init__()
+        self.multibot = multibot
+
+    def __call__(self, bot, update):
+        with self.multibot.bots:
+            return super(_MultiBotLoopDispatcher, self).__call__(bot, update)

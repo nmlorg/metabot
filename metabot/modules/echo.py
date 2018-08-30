@@ -8,9 +8,8 @@ def dispatch(ctx):  # pylint: disable=missing-docstring
         return False
 
     modconf = ctx.bot.get_modconf('echo')
-    for command, message in modconf.items():
-        if command == ctx.command:
-            return echo(ctx, message)
+    if ctx.command in modconf:
+        return echo(ctx, modconf[ctx.command])
 
     return False
 
@@ -31,16 +30,14 @@ def admin(ctx, msg, modconf):
             else:
                 msg.add('Removed /%s (<code>%s</code>).', command, modconf[command])
                 modconf.pop(command)
-                ctx.bot.multibot.save()
             command = message = None
         else:
-            if modconf.get(command):
+            if command in modconf:
                 msg.add('Changed /%s from <code>%s</code> to <code>%s</code>.', command,
                         modconf[command], message)
             else:
                 msg.add('/%s now echoes <code>%s</code>.', command, message)
             modconf[command] = message
-            ctx.bot.multibot.save()
             command = message = None
 
     if not command:

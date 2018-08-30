@@ -12,9 +12,8 @@ def dispatch(ctx):
         return False
 
     modconf = ctx.bot.get_modconf('countdown')
-    for command, timestamp in modconf.items():
-        if command == ctx.command:
-            return countdown(ctx, timestamp)
+    if ctx.command in modconf:
+        return countdown(ctx, modconf[ctx.command])
 
     return False
 
@@ -63,13 +62,12 @@ def admin(ctx, msg, modconf):
     if command and timestamp:
         if timestamp.isdigit():
             timestamp = int(timestamp)
-            if modconf.get(command):
+            if command in modconf:
                 msg.add('Changed /%s from <code>%s</code> to <code>%s</code>.', command,
                         modconf[command], timestamp)
             else:
                 msg.add('/%s is now counting down to <code>%s</code>.', command, timestamp)
             modconf[command] = timestamp
-            ctx.bot.multibot.save()
             command = timestamp = None
         elif timestamp == 'remove':
             if command not in modconf:
@@ -78,7 +76,6 @@ def admin(ctx, msg, modconf):
                 msg.add('Removed /%s (which was counting down to <code>%s</code>).', command,
                         modconf[command])
                 modconf.pop(command)
-                ctx.bot.multibot.save()
             command = timestamp = None
         else:
             msg.add("I'm not sure how to count down to <code>%s</code>!", timestamp)

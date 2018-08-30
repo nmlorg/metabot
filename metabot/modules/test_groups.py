@@ -74,7 +74,7 @@ def test_conversation(conversation, requests_mock):  # pylint: disable=redefined
                     'Added <b>Dummy Public Group!</b>.\n'
                     '\n'
                     'Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Dummy Public Group! \u2022 DummyGroup', 'callback_data': '/admin modulestestbot groups remove 0 6cd107'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'Dummy Public Group! \u2022 DummyGroup', 'callback_data': '/admin modulestestbot groups remove c00d83'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
@@ -105,8 +105,8 @@ def test_conversation(conversation, requests_mock):  # pylint: disable=redefined
                     'Added <b>Dummy Private Group!</b>.\n'
                     '\n'
                     'Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Dummy Public Group! \u2022 DummyGroup', 'callback_data': '/admin modulestestbot groups remove 0 6cd107'}],
-                                                 [{'text': 'Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK', 'callback_data': '/admin modulestestbot groups remove 1 32f8df'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK', 'callback_data': '/admin modulestestbot groups remove 97855c'}],
+                                                 [{'text': 'Dummy Public Group! \u2022 DummyGroup', 'callback_data': '/admin modulestestbot groups remove c00d83'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
@@ -144,18 +144,6 @@ def test_conversation(conversation, requests_mock):  # pylint: disable=redefined
             'inline_query_id': 2000,
             'results': [
                 {
-                    'description': 'Dummy public group',
-                    'id': 'https://t.me/DummyGroup',
-                    'input_message_content': {
-                        'disable_web_page_preview': True,
-                        'message_text': '<a href="https://t.me/DummyGroup">Dummy Public Group!</a>\n'
-                                        'Dummy public group',
-                        'parse_mode': 'HTML',
-                    },
-                    'title': 'Dummy Public Group! \u2022 DummyGroup',
-                    'type': 'article',
-                },
-                {
                     'description': 'Dummy private group',
                     'id': 'https://t.me/joinchat/DUMMY_INVITE_LINK',
                     'input_message_content': {
@@ -165,6 +153,18 @@ def test_conversation(conversation, requests_mock):  # pylint: disable=redefined
                         'parse_mode': 'HTML',
                     },
                     'title': 'Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK',
+                    'type': 'article',
+                },
+                {
+                    'description': 'Dummy public group',
+                    'id': 'https://t.me/DummyGroup',
+                    'input_message_content': {
+                        'disable_web_page_preview': True,
+                        'message_text': '<a href="https://t.me/DummyGroup">Dummy Public Group!</a>\n'
+                                        'Dummy public group',
+                        'parse_mode': 'HTML',
+                    },
+                    'title': 'Dummy Public Group! \u2022 DummyGroup',
                     'type': 'article',
                 },
             ],
@@ -202,13 +202,13 @@ def test_conversation(conversation, requests_mock):  # pylint: disable=redefined
                     'Oops, the groups list changed since you loaded that screen, try again.\n'
                     '\n'
                     'Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Dummy Public Group! \u2022 DummyGroup', 'callback_data': '/admin modulestestbot groups remove 0 6cd107'}],
-                                                 [{'text': 'Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK', 'callback_data': '/admin modulestestbot groups remove 1 32f8df'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK', 'callback_data': '/admin modulestestbot groups remove 97855c'}],
+                                                 [{'text': 'Dummy Public Group! \u2022 DummyGroup', 'callback_data': '/admin modulestestbot groups remove c00d83'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
 
-    assert conversation.message('/admin modulestestbot groups remove 0 6cd107') == [
+    assert conversation.message('/admin modulestestbot groups remove c00d83') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -218,7 +218,7 @@ def test_conversation(conversation, requests_mock):  # pylint: disable=redefined
                     'Removed <b>Dummy Public Group!</b>.\n'
                     '\n'
                     'Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK', 'callback_data': '/admin modulestestbot groups remove 0 32f8df'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK', 'callback_data': '/admin modulestestbot groups remove 97855c'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable

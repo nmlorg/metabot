@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import cgi
 import collections
 import hashlib
+import json
 import re
 
 import ntelebot
@@ -31,22 +32,13 @@ ALIASES = ('channel', 'group', 'room')
 
 def dispatch(ctx):  # pylint: disable=missing-docstring
     if (ctx.type in ('message', 'callback_query') and ctx.command and
-        ctx.command.rstrip('s') in ALIASES):
+            ctx.command.rstrip('s') in ALIASES):
         return default(ctx)
 
     if ctx.type == 'inline_query' and ctx.prefix.lstrip('/').rstrip('s') in ALIASES:
         return inline(ctx)
 
     return False
-
-
-def get_groups(ctx):
-    """Get the list of groups this bot knows about."""
-
-    modconf = ctx.bot.get_modconf('groups')
-    if not isinstance(modconf.get('groups'), list):
-        modconf['groups'] = []
-    return modconf['groups']
 
 
 def default(ctx):
@@ -58,7 +50,7 @@ def default(ctx):
     msg.path('/groups', 'Group List')
 
     groups_by_location = collections.defaultdict(list)
-    for group in get_groups(ctx):
+    for group in ctx.bot.get_modconf('groups')['groups'].values():
         if group['invite_link'] or group['username']:
             groups_by_location[group['location'] or 'Worldwide'].append(group)
 
@@ -91,7 +83,8 @@ def inline(ctx):
 
     terms = ctx.text.lower().split()[1:]
     results = []
-    for group in get_groups(ctx):
+    for group in sorted(
+            ctx.bot.get_modconf('groups')['groups'].values(), key=lambda group: group['name']):
         if len(results) >= 25:
             break
         if group['invite_link'] or group['username']:
@@ -126,9 +119,6 @@ def inline(ctx):
 def admin(ctx, msg, modconf):
     """Handle /admin BOTNAME groups."""
 
-    if not isinstance(modconf.get('groups'), list):
-        modconf['groups'] = []
-
     action, _, text = ctx.text.partition(' ')
 
     if action == 'add' and text:
@@ -142,33 +132,31 @@ def admin(ctx, msg, modconf):
                 "description screen, otherwise you'll need to dig around or ask someone for it. "
                 'Once you find it, paste it here:', text)
         else:
-            for i, group in enumerate(modconf['groups']):
+            for key, group in modconf['groups'].items():
                 if (group['username'] and newgroup['username'] == group['username'] or
                         group['invite_link'] and newgroup['invite_link'] == group['invite_link']):
-                    modconf['groups'][i] = newgroup
-                    msg.add('Updated <b>%s/b>.', newgroup['name'])
+                    modconf['groups'][key] = newgroup
+                    msg.add('Updated <b>%s</b>.', newgroup['name'])
                     break
             else:
-                modconf['groups'].append(newgroup)
+                tmp = hashlib.sha1(json.dumps(newgroup, sort_keys=True).encode('ascii'))
+                while tmp.hexdigest()[:6] in modconf['groups']:
+                    tmp.update('.')
+                modconf['groups'][tmp.hexdigest()[:6]] = newgroup
                 msg.add('Added <b>%s</b>.', newgroup['name'])
-            ctx.bot.multibot.save()
-    elif action == 'remove' and ' ' in text:
-        i, _, name = text.partition(' ')
-        i = int(i)
-        if (i < len(modconf['groups']) and
-                hashlib.md5(modconf['groups'][i]['name'].encode('utf8')).hexdigest()[:6] == name):
-            group = modconf['groups'].pop(i)
+    elif action == 'remove':
+        group = modconf['groups'].pop(text)
+        if group:
             msg.add('Removed <b>%s</b>.', group['name'])
-            ctx.bot.multibot.save()
         else:
             msg.add('Oops, the groups list changed since you loaded that screen, try again.')
 
     msg.action = 'Type a group username or invite link'
     msg.add('Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for '
             'the group you want to add, or select an existing group to remove:')
-    for i, group in enumerate(modconf['groups']):
+    for key, group in sorted(modconf['groups'].items(), key=lambda ent: ent[1]['name']):
         msg.button('%s \u2022 %s' % (group['name'], group['username'] or group['invite_link']),
-                   'remove %s %s' % (i, hashlib.md5(group['name'].encode('utf8')).hexdigest()[:6]))
+                   'remove %s' % key)
     ctx.set_conversation('add')
     return msg.reply(ctx)
 

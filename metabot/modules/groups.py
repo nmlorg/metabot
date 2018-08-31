@@ -30,18 +30,18 @@ def cgi_escape(string):  # pylint: disable=missing-docstring
 ALIASES = ('channel', 'group', 'room')
 
 
-def dispatch(ctx):  # pylint: disable=missing-docstring
+def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
     if (ctx.type in ('message', 'callback_query') and ctx.command and
             ctx.command.rstrip('s') in ALIASES):
-        return default(ctx)
+        return default(ctx, modconf)
 
     if ctx.type == 'inline_query' and ctx.prefix.lstrip('/').rstrip('s') in ALIASES:
-        return inline(ctx)
+        return inline(ctx, modconf)
 
     return False
 
 
-def default(ctx):
+def default(ctx, modconf):
     """Handle /groups."""
 
     ctx.private = True
@@ -50,7 +50,7 @@ def default(ctx):
     msg.path('/groups', 'Group List')
 
     groups_by_location = collections.defaultdict(list)
-    for group in ctx.bot.get_modconf('groups')['groups'].values():
+    for group in modconf['groups'].values():
         if group['invite_link'] or group['username']:
             groups_by_location[group['location'] or 'Worldwide'].append(group)
 
@@ -78,13 +78,12 @@ def default(ctx):
     return msg.reply(ctx)
 
 
-def inline(ctx):
+def inline(ctx, modconf):
     """Handle @BOTNAME groups."""
 
     terms = ctx.text.lower().split()[1:]
     results = []
-    for group in sorted(
-            ctx.bot.get_modconf('groups')['groups'].values(), key=lambda group: group['name']):
+    for group in sorted(modconf['groups'].values(), key=lambda group: group['name']):
         if len(results) >= 25:
             break
         if group['invite_link'] or group['username']:

@@ -3,10 +3,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 
-def dispatch(ctx):  # pylint: disable=missing-docstring,unused-argument
-    return False  # pragma: no cover
-
-
 def admin(ctx, msg, modconf):
     """Handle /admin BOTNAME telegram (manage the bot's Telegram state)."""
 

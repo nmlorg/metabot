@@ -3,25 +3,25 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 
-def dispatch(ctx):  # pylint: disable=missing-docstring
+def modpredispatch(ctx, modconf):  # pylint: disable=missing-docstring
     if ctx.chat and ctx.chat['type'] in ('channel', 'group', 'supergroup'):
         group_id = '%s' % ctx.chat['id']
-        modconf = ctx.bot.get_modconf('moderator')
         groupconf = modconf[group_id]
         groupconf['title'] = ctx.chat.get('title')
         groupconf['type'] = ctx.chat.get('type')
         groupconf['username'] = ctx.chat.get('username')
 
+
+def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
     if ctx.type == 'join':
-        return join(ctx)
+        return join(ctx, modconf)
 
     return False
 
 
-def join(ctx):
+def join(ctx, modconf):
     """Respond to new users joining a group chat."""
 
-    modconf = ctx.bot.get_modconf('moderator')
     groupconf = modconf['%s' % ctx.chat['id']]
     if groupconf.get('greeting') and not ctx.user.get('is_bot'):
         return ctx.reply_html(groupconf['greeting'])

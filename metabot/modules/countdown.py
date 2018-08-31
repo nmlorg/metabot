@@ -5,14 +5,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import datetime
 
 
-def dispatch(ctx):
-    """Check and dispatch relevant contexts."""
-
-    if ctx.type not in ('message', 'callback_query'):  # pragma: no cover
-        return False
-
-    modconf = ctx.bot.get_modconf('countdown')
-    if ctx.command in modconf:
+def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
+    if ctx.type in ('message', 'callback_query') and ctx.command in modconf:
         return countdown(ctx, modconf[ctx.command])
 
     return False

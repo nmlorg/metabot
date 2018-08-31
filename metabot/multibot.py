@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import logging
+
 import ntelebot
 
 from metabot import botconf
@@ -12,12 +14,10 @@ class MultiBot(object):
 
     def __init__(self, modules, fname=None):
         self.modules = {}
-        self.dispatcher = _MultiBotLoopDispatcher(self)
+        self.dispatcher = _MultiBotLoopDispatcher()
         for module in modules:
             modname = module.__name__.rsplit('.', 1)[-1]
             self.modules[modname] = module
-            self.dispatcher.add(module)
-        self.fname = fname
         self.loop = ntelebot.loop.Loop()
         self.bots = botconf.BotConf(fname)
         self.bots.finalize()
@@ -43,7 +43,6 @@ class MultiBot(object):
         bot_config = self.bots[username]
         bot = ntelebot.bot.Bot(bot_config['telegram']['token'])
         bot.config = bot_config
-        bot.get_modconf = lambda modname: self.get_modconf(username, modname)
         bot.multibot = self
         bot.username = username
         return bot
@@ -64,11 +63,6 @@ class MultiBot(object):
         bot_config['telegram']['running'] = False
         self.bots.save()
 
-    def get_modconf(self, username, modname):
-        """Get or create a module config dict."""
-
-        return self.bots[username][modname]
-
     def run(self):
         """Begin waiting for and dispatching updates sent to any bot currently running."""
 
@@ -82,10 +76,37 @@ class MultiBot(object):
 
 class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
 
-    def __init__(self, multibot):
-        super(_MultiBotLoopDispatcher, self).__init__()
-        self.multibot = multibot
-
     def __call__(self, bot, update):
-        with self.multibot.bots:
-            return super(_MultiBotLoopDispatcher, self).__call__(bot, update)
+        logging.info('%s', update)
+
+        multibot = bot.multibot
+        ctx = self.preprocessor(bot, update)
+
+        with multibot.bots.record_mutations(ctx):
+            botconfig = multibot.bots[bot.username]
+
+            for modname, module in multibot.modules.items():
+                modpredispatch = getattr(module, 'modpredispatch', None)
+                if modpredispatch:
+                    modpredispatch(ctx, botconfig[modname])
+
+            ret = False
+            for modname, module in multibot.modules.items():
+                dispatch = ntelebot.dispatch.get_callback(module)
+                if dispatch:
+                    ret = dispatch(ctx)
+                    if ret is not False:
+                        break
+
+                moddispatch = getattr(module, 'moddispatch', None)
+                if moddispatch:
+                    ret = moddispatch(ctx, botconfig[modname])
+                    if ret is not False:
+                        break
+
+            for modname, module in multibot.modules.items():
+                modpostdispatch = getattr(module, 'modpostdispatch', None)
+                if modpostdispatch:
+                    modpostdispatch(ctx, botconfig[modname])
+
+            return ret

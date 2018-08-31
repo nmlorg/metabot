@@ -5,9 +5,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from metabot import util
 
 
-def dispatch(ctx):
-    """Verify the user is in the target bot's admin list and dispatch relevant contexts."""
-
+def dispatch(ctx):  # pylint: disable=missing-docstring
     if ctx.type not in ('message', 'callback_query') or ctx.command != 'admin':
         return False
 
@@ -72,7 +70,7 @@ def default(ctx):  # pylint: disable=missing-docstring
     admin_callback = modules[modname].admin
     ctx.command = 'admin %s %s' % (username, modname)
     ctx.text = text.lstrip()
-    return admin_callback(ctx, msg, ctx.bot.multibot.get_modconf(username, modname))
+    return admin_callback(ctx, msg, ctx.bot.multibot.bots[username][modname])
 
 
 def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches

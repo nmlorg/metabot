@@ -3,12 +3,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 
-def dispatch(ctx):  # pylint: disable=missing-docstring
-    if ctx.type not in ('message', 'callback_query'):  # pragma: no cover
-        return False
-
-    modconf = ctx.bot.get_modconf('echo')
-    if ctx.command in modconf:
+def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
+    if ctx.type in ('message', 'callback_query') and ctx.command in modconf:
         return echo(ctx, modconf[ctx.command])
 
     return False

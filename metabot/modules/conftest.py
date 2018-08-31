@@ -27,7 +27,7 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         })
         username = self.multibot.add_bot('1234:test')
         self.bot = self.multibot._build_bot(username)  # pylint: disable=protected-access
-        self.bot.get_modconf('admin')['admins'] = [1000]
+        self.multibot.bots['modulestestbot']['admin']['admins'] = [1000]
 
     def inline(self, text, user_id=1000):
         """Simulate an inline query (@BOTNAME text)."""
@@ -48,7 +48,7 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
     def message(self, text, user_id=1000):
         """Simulate a private message."""
 
-        user = {'id': user_id}
+        user = {'id': user_id, 'username': 'user%s' % user_id, 'first_name': 'User%s' % user_id}
         chat = {'id': user_id, 'type': 'private'}
         message = {'from': user, 'chat': chat, 'message_id': user_id * 2, 'text': text}
         update = {'message': message}

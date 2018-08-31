@@ -9,19 +9,12 @@ import ntelebot
 from metabot import util
 
 
-def dispatch(ctx):
-    """Check and dispatch relevant contexts."""
+def dispatch(ctx):  # pylint: disable=missing-docstring
+    if ctx.type in ('message', 'callback_query') and ctx.command == 'newbot':
+        ctx.private = True
+        return default(ctx)
 
-    if ctx.type not in ('message', 'callback_query'):  # pragma: no cover
-        return False
-    callback = {
-        'newbot': default,
-    }.get(ctx.command)
-    if not callback:
-        return False
-
-    ctx.private = True
-    return callback(ctx)
+    return False
 
 
 def default(ctx):  # pylint: disable=missing-docstring
@@ -90,7 +83,7 @@ def default(ctx):  # pylint: disable=missing-docstring
         return msg.reply(ctx)
 
     username = ctx.bot.multibot.add_bot(token)
-    ctx.bot.multibot.get_modconf(username, 'admin')['admins'] = [ctx.user['id']]
+    ctx.bot.multibot.bots[username]['admin']['admins'] = [ctx.user['id']]
     ctx.bot.multibot.run_bot(username)
 
     msg.action = 'Configure your new bot'

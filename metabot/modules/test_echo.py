@@ -20,7 +20,8 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('/myecho') == []
 
-    conversation.bot.get_modconf('echo')['myecho'] = 'These are the rules: Have fun!'
+    conversation.bot.multibot.bots['modulestestbot']['echo']['myecho'] = (
+        'These are the rules: Have fun!')
 
     assert conversation.message('/myecho') == [
         {

@@ -81,6 +81,8 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
 
         multibot = bot.multibot
         ctx = self.preprocessor(bot, update)
+        if not ctx:
+            return False
 
         with multibot.bots.record_mutations(ctx):
             botconfig = multibot.bots[bot.username]

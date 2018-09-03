@@ -2,15 +2,10 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import importlib
 import logging
+import pkgutil
 
-from metabot.modules import admin
-from metabot.modules import countdown
-from metabot.modules import echo
-from metabot.modules import groups
-from metabot.modules import moderator
-from metabot.modules import newbot
-from metabot.modules import telegram
 from metabot import multibot
 
 try:
@@ -23,7 +18,11 @@ def main():  # pylint: disable=missing-docstring
     logging.basicConfig(
         format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s] %(message)s', level=logging.INFO)
 
-    modules = {admin, countdown, echo, groups, moderator, newbot, telegram}
+    modules = set()
+    for _, name, _ in pkgutil.iter_modules(['metabot/modules']):
+        if name != 'conftest' and not name.startswith('test_'):
+            modules.add(importlib.import_module('metabot.modules.' + name))
+
     mybot = multibot.MultiBot(modules, fname='config/multibot.json')
     if not mybot.bots:
         print()

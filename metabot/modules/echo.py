@@ -18,6 +18,7 @@ def admin(ctx, msg, modconf):
     """Handle /admin BOTNAME echo."""
 
     command, _, message = ctx.text.partition(' ')
+    command = command.lower()
 
     if command and message:
         if message == 'remove':

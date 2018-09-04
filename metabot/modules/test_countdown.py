@@ -65,7 +65,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation.message('countdowntest') == [
+    assert conversation.message('CountDownTest') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,

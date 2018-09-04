@@ -52,6 +52,7 @@ def admin(ctx, msg, modconf):
     """Handle /admin BOTNAME countdown."""
 
     command, _, timestamp = ctx.text.partition(' ')
+    command = command.lower()
 
     if command and timestamp:
         if timestamp.isdigit():

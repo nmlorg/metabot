@@ -10,9 +10,9 @@ from metabot import botconf
 def test_save_load(tmpdir):
     """Verify MultiBot can start with no config, can have a bot added, and can restart."""
 
-    conffile = tmpdir.join('botconf.json')
+    conffile = tmpdir.join('multibot.json')
 
-    conf = botconf.BotConf(fname=conffile.strpath)
+    conf = botconf.BotConf(confdir=tmpdir.strpath)
     conf['alpha']['bravo'] = {'charlie': 'delta'}
     conf['alpha']['echo'] = [2, 4, 6]
     conf.save()

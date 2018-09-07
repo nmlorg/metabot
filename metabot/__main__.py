@@ -23,7 +23,7 @@ def main():  # pylint: disable=missing-docstring
         if name != 'conftest' and not name.startswith('test_'):
             modules.add(importlib.import_module('metabot.modules.' + name))
 
-    mybot = multibot.MultiBot(modules, fname='config/multibot.json')
+    mybot = multibot.MultiBot(modules, confdir='config')
     if not mybot.bots:
         print()
         print("Hi! Before I can start, I need at least one bot's Telegram token. If you don't have "

@@ -2,6 +2,7 @@
 /.tox/
 /bin/
 /build/
+/calendars/
 /config/
 /dist/
 /htmlcov/

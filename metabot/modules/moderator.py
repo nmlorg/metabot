@@ -40,8 +40,9 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
         return msg.reply(ctx)
 
     msg.path(group_id)
+    groupconf = modconf[group_id]
 
-    fields = {'greeting'}
+    fields = {'calendars', 'greeting'}
 
     if field not in fields:
         if field:
@@ -49,27 +50,25 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
     elif text:
         if text.lower() in ('-', 'none', 'off'):
             text = ''
-        if modconf[group_id].get(field):
+        if groupconf.get(field):
             if text:
                 msg.add('Changed <code>%s</code> from <code>%s</code> to <code>%s</code>.', field,
-                        modconf[group_id][field], text)
+                        groupconf[field], text)
             else:
-                msg.add('Unset <code>%s</code> (was <code>%s</code>).', field,
-                        modconf[group_id][field])
+                msg.add('Unset <code>%s</code> (was <code>%s</code>).', field, groupconf[field])
         elif text:
             msg.add('Set <code>%s</code> to <code>%s</code>.', field, text)
         else:
             msg.add('Unset <code>%s</code>.', field)
         if text:
-            modconf[group_id][field] = text
+            groupconf[field] = text
         else:
-            modconf[group_id].pop(field)
+            groupconf.pop(field)
     else:
         msg.path(field)
         msg.action = 'Type a new value for ' + field
-        if modconf[group_id].get(field):
-            msg.add('<code>%s</code> is currently <code>%s</code>.', field,
-                    modconf[group_id][field])
+        if groupconf.get(field):
+            msg.add('<code>%s</code> is currently <code>%s</code>.', field, groupconf[field])
         msg.add('Type your new value, or type "off" to disable/reset to default.')
         ctx.set_conversation('%s %s' % (group_id, field))
         return msg.reply(ctx)

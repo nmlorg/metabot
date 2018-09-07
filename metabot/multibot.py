@@ -7,20 +7,28 @@ import logging
 import ntelebot
 
 from metabot import botconf
+from metabot import calendars
+from metabot import util
 
 
 class MultiBot(object):
     """An ntelebot.loop.Loop that manages multiple bots."""
 
-    def __init__(self, modules, fname=None):
+    def __init__(self, modules, confdir=None):
         self.modules = {}
         self.dispatcher = _MultiBotLoopDispatcher()
         for module in modules:
             modname = module.__name__.rsplit('.', 1)[-1]
             self.modules[modname] = module
         self.loop = ntelebot.loop.Loop()
-        self.bots = botconf.BotConf(fname)
+        self.bots = botconf.BotConf(confdir)
         self.bots.finalize()
+        self.multical = calendars.MultiCalendar()
+        self.calendars = {}
+        if confdir:
+            for calendar_info in util.json.load(confdir + '/calendars.json') or ():
+                calcode = self.multical.add(calendar_info['calid']).calcode
+                self.calendars[calcode] = calendar_info
 
         for username, bot_config in self.bots.items():
             if bot_config['telegram']['running']:

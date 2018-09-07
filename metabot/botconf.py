@@ -11,9 +11,9 @@ from metabot import util
 class BotConf(util.dicttools.ImplicitTrackingDict):
     """Self-managing bot/module configuration store."""
 
-    def __init__(self, fname=None):
-        self.fname = fname
-        data = fname and util.json.load(fname)
+    def __init__(self, confdir=None):
+        self.fname = confdir and confdir + '/multibot.json'
+        data = self.fname and util.json.load(self.fname)
         super(BotConf, self).__init__(isinstance(data, dict) and data or {})
 
     @contextlib.contextmanager
@@ -38,7 +38,7 @@ class BotConf(util.dicttools.ImplicitTrackingDict):
                 self.save()
 
     def save(self):
-        """Serialize the store to disk (if fname was provided at creation)."""
+        """Serialize the store to disk (if confdir was provided at creation)."""
 
         if self.fname:
             util.json.dump(self.fname, self)

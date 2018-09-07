@@ -57,7 +57,8 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -4000: <b>Choose a field</b>',
-            'reply_markup': {'inline_keyboard': [[{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -4000 calendars'}],
+                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -70,7 +71,8 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -4000: <b>Choose a field</b>\n'
                     '\n'
                     "I can't set <code>bogus</code>.",
-            'reply_markup': {'inline_keyboard': [[{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -4000 calendars'}],
+                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -95,7 +97,8 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -4000: <b>Choose a field</b>\n'
                     '\n'
                     'Set <code>greeting</code> to <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; message.</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -4000 calendars'}],
+                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -134,7 +137,8 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -4000: <b>Choose a field</b>\n'
                     '\n'
                     'Changed <code>greeting</code> from <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; message.</code> to <code>Welcome! New message.</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -4000 calendars'}],
+                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -161,7 +165,8 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -4000: <b>Choose a field</b>\n'
                     '\n'
                     'Unset <code>greeting</code> (was <code>Welcome! New message.</code>).',
-            'reply_markup': {'inline_keyboard': [[{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -4000 calendars'}],
+                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -174,7 +179,8 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -4000: <b>Choose a field</b>\n'
                     '\n'
                     'Unset <code>greeting</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -4000 calendars'}],
+                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -4000 greeting'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable

@@ -158,7 +158,7 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation.bot.multibot.bots == {
+    assert conversation.multibot.bots == {
         'modulestestbot': {
             'admin': {
                 'admins': [1000],

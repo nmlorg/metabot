@@ -27,7 +27,7 @@ def test_save_load(tmpdir):
 
     conffile = tmpdir.join('multibot.json')
 
-    mybot = multibot.MultiBot((), fname=conffile.strpath)
+    mybot = multibot.MultiBot((), confdir=tmpdir.strpath)
     mockbot = ntelebot.bot.Bot('1234:goodbot')
     mockbot.getme.respond(json={'ok': True, 'result': {'id': 1234, 'username': 'goodbot'}})
     mockbot.getupdates.respond(json={'ok': True, 'result': []})
@@ -42,8 +42,22 @@ def test_save_load(tmpdir):
         },
     }
 
-    newbot = multibot.MultiBot((), fname=conffile.strpath)
+    tmpdir.join('calendars.json').write(
+        json.dumps([
+            {
+                'calid': 'static:test_multibot',
+                'name': 'MultiBot Test Calendar',
+            },
+        ]))
+
+    newbot = multibot.MultiBot((), confdir=tmpdir.strpath)
     assert newbot.bots == mybot.bots
+    assert newbot.calendars == {
+        'c9328778': {
+            'calid': 'static:test_multibot',
+            'name': 'MultiBot Test Calendar',
+        },
+    }
 
     mybot.stop_bot('goodbot')
     newbot.stop_bot('goodbot')

@@ -27,8 +27,9 @@ class MultiBot(object):
         self.calendars = {}
         if confdir:
             for calendar_info in util.json.load(confdir + '/calendars.json') or ():
-                calcode = self.multical.add(calendar_info['calid']).calcode
-                self.calendars[calcode] = calendar_info
+                cal = self.multical.add(calendar_info['calid'])
+                self.calendars[cal.calcode] = calendar_info
+        self.multical.poll()
 
         for username, bot_config in self.bots.items():
             if bot_config['telegram']['running']:

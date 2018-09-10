@@ -83,10 +83,10 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'parse_mode': 'HTML',
             'reply_to_message_id': 2000,
             'text': '<b>Alpha Summary</b>\n'
-                    '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">1000 - 2000</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>\n'
+                    '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>\n'
                     '\n'
                     '<b>Bravo Summary</b>\n'
-                    '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">520400 - 524000</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
+                    '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">Tue, Jan (1970) 6, 4:33\u20135:33 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
             'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
@@ -138,7 +138,7 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': '<b>Alpha Summary</b>\n'
-                    '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">1000 - 2000</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>\n'
+                    '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>\n'
                     '\n'
                     'Alpha Description',
             'reply_markup': {'inline_keyboard': [[{'text': 'Settings', 'callback_data': '/events set'}],
@@ -152,7 +152,7 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': '<b>Bravo Summary</b>\n'
-                    '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">520400 - 524000</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>\n'
+                    '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">Tue, Jan (1970) 6, 4:33\u20135:33 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>\n'
                     '\n'
                     'Bravo Description',
             'reply_markup': {'inline_keyboard': [[{'text': 'Prev', 'callback_data': '/events 6fc2c510:alpha'}],
@@ -212,36 +212,36 @@ def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
             'switch_pm_parameter': 'L2V2ZW50cyBzZXQ',
             'results': [
                 {
-                    'description': '1000 - 2000 @ Alpha Venue',
+                    'description': 'Wed 31, 4:16\u20134:33 pm @ Alpha Venue',
                     'id': '6fc2c510:alpha',
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Alpha Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">1000 - 2000</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Alpha Summary',
                     'type': 'article',
                 },
                 {
-                    'description': '520400 - 524000 @ Bravo Venue',
+                    'description': 'Tue, Jan (1970) 6, 4:33\u20135:33 pm @ Bravo Venue',
                     'id': '6fc2c510:bravo',
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Bravo Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">520400 - 524000</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">Tue, Jan (1970) 6, 4:33\u20135:33 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Bravo Summary',
                     'type': 'article',
                 },
                 {
-                    'description': '520401 - 524001 @ Charlie Venue',
+                    'description': 'Tue, Jan (1970) 6, 4:33\u20135:33 pm @ Charlie Venue',
                     'id': '6fc2c510:charlie',
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Charlie Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGll">520401 - 524001</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGll">Tue, Jan (1970) 6, 4:33\u20135:33 pm</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Charlie Summary',
@@ -260,12 +260,12 @@ def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
             'switch_pm_parameter': 'L2V2ZW50cyBzZXQ',
             'results': [
                 {
-                    'description': '520400 - 524000 @ Bravo Venue',
+                    'description': 'Tue, Jan (1970) 6, 4:33\u20135:33 pm @ Bravo Venue',
                     'id': '6fc2c510:bravo',
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Bravo Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">520400 - 524000</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">Tue, Jan (1970) 6, 4:33\u20135:33 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Bravo Summary',
@@ -289,12 +289,12 @@ def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Bravo Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">520400 - 524000</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>\n'
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">Tue, Jan (1970) 6, 4:33\u20135:33 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>\n'
                                         '\n'
                                         'Bravo Description',
                         'parse_mode': 'HTML',
                     },
-                    'title': 'Bravo Summary \u2022 520400 - 524000 @ Bravo Venue',
+                    'title': 'Bravo Summary \u2022 Tue, Jan (1970) 6, 4:33\u20135:33 pm @ Bravo Venue',
                     'type': 'article',
                 },
             ],

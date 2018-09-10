@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import datetime
 import time
 
 from metabot import util
@@ -191,8 +192,9 @@ def format_event(ctx, event, full=True):
 def humanize_range(start, end):
     """Return the range between start and end as human-friendly text."""
 
-    # TODO: This needs to be reimplemented.
-    return '%s - %s' % (start, end)
+    # TODO: This uses the time zone of the system where the bot is running.
+    return util.humanize.range(
+        datetime.datetime.fromtimestamp(start), datetime.datetime.fromtimestamp(end))
 
 
 def sanitize_html(html, strip=False):

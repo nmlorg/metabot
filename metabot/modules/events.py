@@ -146,7 +146,7 @@ def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
                 subtitle = '%s @ %s' % (subtitle, event['location'].split(',', 1)[0])
             if full and event['description']:
                 title = u'%s \u2022 %s' % (event['summary'], subtitle)
-                description = sanitize_html(event['description'], strip=True)
+                description = util.html.sanitize(event['description'], strip=True)
             else:
                 title = event['summary']
                 description = subtitle
@@ -185,7 +185,7 @@ def format_event(ctx, event, full=True):
         })  # yapf: disable
         message = '%s @ <a href="%s">%s</a>' % (message, location_url, location_name)
     if full and event['description']:
-        message = '%s\n\n%s' % (message, sanitize_html(event['description']))
+        message = '%s\n\n%s' % (message, util.html.sanitize(event['description']))
     return message
 
 
@@ -195,14 +195,6 @@ def humanize_range(start, end):
     # TODO: This uses the time zone of the system where the bot is running.
     return util.humanize.range(
         datetime.datetime.fromtimestamp(start), datetime.datetime.fromtimestamp(end))
-
-
-def sanitize_html(html, strip=False):
-    """Convert free-form HTML into Telegram-friendly HTML (or plaintext)."""
-
-    # TODO: This needs to be reimplemented.
-    _ = strip
-    return html
 
 
 def settings(ctx, modconf):

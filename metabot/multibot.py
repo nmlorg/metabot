@@ -125,7 +125,8 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
 
 def _pretty_repr(obj):
     if isinstance(obj, dict):
-        return '{%s}' % ', '.join('\033[31m%s\033[0m=%s' % (k, _pretty_repr(v)) for k, v in sorted(obj.items()))
+        return '{%s}' % ', '.join(
+            '\033[31m%s\033[0m=%s' % (k, _pretty_repr(v)) for k, v in sorted(obj.items()))
     if isinstance(obj, (list, tuple)):
         return '[%s]' % ', '.join(map(_pretty_repr, obj))
     return '\033[32;1m%s\033[0m' % repr(obj)

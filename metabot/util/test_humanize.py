@@ -1,5 +1,7 @@
 """Tests for metabot.util.humanize."""
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 import datetime
 from metabot import util
 
@@ -18,7 +20,7 @@ def test_humanize_range(monkeypatch):
     class _MockDate(datetime.date):
 
         @staticmethod
-        def today():
+        def today():  # pylint: disable=missing-docstring
             return start
 
     monkeypatch.setattr('datetime.date', _MockDate)

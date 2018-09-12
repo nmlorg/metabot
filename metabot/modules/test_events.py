@@ -141,8 +141,9 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
                     '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>\n'
                     '\n'
                     'Alpha Description',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Settings', 'callback_data': '/events set'}],
-                                                 [{'text': 'Next', 'callback_data': '/events 6fc2c510:bravo'}]]},
+            'reply_markup': {'inline_keyboard': [[{'text': '', 'callback_data': '/stop'},
+                                                  {'text': 'Settings', 'callback_data': '/events set'},
+                                                  {'text': 'Next', 'callback_data': '/events 6fc2c510:bravo'}]]},
         },
     ]  # yapf: disable
 
@@ -155,9 +156,9 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
                     '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">Tue, Jan (1970) 6, 4:33\u20135:33 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>\n'
                     '\n'
                     'Bravo Description',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Prev', 'callback_data': '/events 6fc2c510:alpha'}],
-                                                 [{'text': 'Settings', 'callback_data': '/events set'}],
-                                                 [{'text': 'Next', 'callback_data': '/events 6fc2c510:charlie'}]]},
+            'reply_markup': {'inline_keyboard': [[{'text': 'Prev', 'callback_data': '/events 6fc2c510:alpha'},
+                                                  {'text': 'Current', 'callback_data': '/events'},
+                                                  {'text': 'Next', 'callback_data': '/events 6fc2c510:charlie'}]]},
         },
     ]  # yapf: disable
 
@@ -169,7 +170,9 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': 'No upcoming events!',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Settings', 'callback_data': '/events set'}]]},
+            'reply_markup': {'inline_keyboard': [[{'text': '', 'callback_data': '/stop'},
+                                                  {'text': 'Settings', 'callback_data': '/events set'},
+                                                  {'text': '', 'callback_data': '/stop'}]]},
         },
     ]  # yapf: disable
 

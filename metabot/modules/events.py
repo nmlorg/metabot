@@ -88,11 +88,14 @@ def private(ctx, modconf):
         msg.add('No upcoming events!')
     else:
         msg.add(format_event(ctx, event, full=True))
+    buttons = [None, ('Settings', '/events set'), None]
     if prevev:
-        msg.button('Prev', '/events ' + prevev['local_id'])
-    msg.button('Settings', '/events set')
+        buttons[0] = ('Prev', '/events ' + prevev['local_id'])
+    if event and event['local_id'] != calendar_view.current_local_id:
+        buttons[1] = ('Current', '/events')
     if nextev:
-        msg.button('Next', '/events ' + nextev['local_id'])
+        buttons[2] = ('Next', '/events ' + nextev['local_id'])
+    msg.buttons(buttons)
     return msg.reply(ctx)
 
 

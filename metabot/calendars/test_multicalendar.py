@@ -158,15 +158,17 @@ def test_current_index(monkeypatch):  # pylint: disable=too-many-statements
         monkey.setattr('time.time', lambda: 1000.)
         multical.add('dummy:dummy')
         assert multical.current_index == multical.by_local_id['alpha']
+        assert multical.current_local_id == 'alpha'
         monkey.setattr('time.time', lambda: 3000.)
-        assert multical.current_index == multical.by_local_id['alpha']
+        assert multical.current_local_id == 'alpha'
         monkey.setattr('time.time', lambda: 3000.5)
-        assert multical.current_index == multical.by_local_id['bravo']
+        assert multical.current_local_id == 'bravo'
         monkey.setattr('time.time', lambda: 8000.)
-        assert multical.current_index == multical.by_local_id['charlie']
+        assert multical.current_local_id == 'charlie'
         assert multical.get_event() == (events['bravo'], events['charlie'], None)
         monkey.setattr('time.time', lambda: 8000.5)
         assert multical.current_index is None
+        assert multical.current_local_id is None
         assert multical.get_event() == (None, None, None)
 
 

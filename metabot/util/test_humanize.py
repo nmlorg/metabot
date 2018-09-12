@@ -34,6 +34,7 @@ def test_humanize_range(monkeypatch):
     next_month = datetime.date(2017, 12, 15)
     next_year = datetime.date(2018, 1, 15)
 
+    assert _test(start, start) == 'Wed 15'
     assert _test(start, next_day) == 'Wed 15-16'
     assert _test(start, next_week) == 'Wed 15-22'
     assert _test(start, next_month) == 'Wed 15 - Fri, Dec 15'

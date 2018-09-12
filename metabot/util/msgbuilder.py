@@ -33,9 +33,7 @@ class MessageBuilder(object):
             line %= tuple(cgi_escape(str(arg)) for arg in args)
         self._lines.append(line)
 
-    def button(self, text, callback_data):
-        """Add a row to the keyboard with single callback button."""
-
+    def _make_button(self, text, callback_data):
         path = self._path[:]
         while path and callback_data.startswith('..'):
             path.pop()
@@ -44,7 +42,24 @@ class MessageBuilder(object):
             if callback_data:
                 path.append(callback_data)
             callback_data = ' '.join(path)
-        self._keyboard.append([{'text': cgi_escape(text), 'callback_data': callback_data}])
+        return {'text': cgi_escape(text), 'callback_data': callback_data}
+
+    def button(self, text, callback_data):
+        """Add a row to the keyboard with single callback button."""
+
+        self._keyboard.append([self._make_button(text, callback_data)])
+
+    def buttons(self, buttons):
+        """Add a row to the keyboard with one or more callback buttons."""
+
+        row = []
+        for button in buttons:
+            if not button:
+                row.append(self._make_button('', '/stop'))
+            else:
+                text, callback_data = button
+                row.append(self._make_button(text, callback_data))
+        self._keyboard.append(row)
 
     def reply(self, ctx):
         """Build the message and pipe it through ctx.reply_html."""

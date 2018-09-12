@@ -55,6 +55,14 @@ class MultiCalendar(object):
             self._current_index += 1
         return self._current_index
 
+    @property
+    def current_local_id(self):
+        """The local_id of the current event."""
+
+        cur = self.current_index
+        if cur is not None:
+            return self.ordered[cur]['local_id']
+
     def add(self, calid):
         """Add a new calendar to the manager (if it's not already installed)."""
 
@@ -127,6 +135,14 @@ class View(object):
                 return
             cur += 1
         return cur
+
+    @property
+    def current_local_id(self):
+        """The local_id of the current event."""
+
+        cur = self.current_index
+        if cur is not None:
+            return self.multical.ordered[cur]['local_id']
 
     def get_event(self, local_id=None):
         """Retrieve a specific event, plus the event immediately before and after it."""

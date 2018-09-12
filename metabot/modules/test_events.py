@@ -63,7 +63,7 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
         },
     ]  # yapf: disable
 
-    conversation.message('/admin modulestestbot moderator -1000 calendars 6fc2c510')
+    conversation.message('/admin modulestestbot moderator -1000 calendars add 6fc2c510')
 
     assert conversation.message('/events', chat_type='supergroup') == [
         {

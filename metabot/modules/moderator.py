@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from metabot import util
+
 
 def modpredispatch(ctx, modconf):  # pylint: disable=missing-docstring
     if ctx.chat and ctx.chat['type'] in ('channel', 'group', 'supergroup'):
@@ -41,6 +43,10 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
 
     msg.path(group_id)
     groupconf = modconf[group_id]
+
+    if field == 'calendars':
+        msg.path(field)
+        return util.adminui.calendars(ctx, msg, groupconf, 'calendars', text)
 
     fields = {'calendars', 'greeting'}
 

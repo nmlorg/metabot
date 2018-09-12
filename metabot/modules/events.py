@@ -203,43 +203,13 @@ def humanize_range(start, end):
 def settings(ctx, modconf):
     """Handle /events set."""
 
+    text = ctx.text.partition(' ')[2].lstrip()
+
     msg = util.msgbuilder.MessageBuilder()
     msg.path('/events', 'Events')
     msg.path('set', 'Settings')
 
-    _, _, action = ctx.text.partition(' ')
-    action, _, target = action.lstrip().partition(' ')
-
     user_id = '%s' % ctx.user['id']
     userconf = modconf['users'][user_id]
-    calcodes = set(userconf.get('calendars', '').split())
 
-    #if target and target not in ctx.bot.multibot.calendars:
-    if len(target) not in (0, 8):
-        msg.add('<code>%s</code> is not a calendar!', target)
-    elif action == 'add' and target:
-        if target in calcodes:
-            msg.add('<code>%s</code> is already in your calendar view!', target)
-        else:
-            msg.add('Added <code>%s</code> to your calendar view.', target)
-            calcodes.add(target)
-    elif action == 'remove' and target:
-        if target not in calcodes:
-            msg.add('<code>%s</code> is not in your calendar view!', target)
-        else:
-            msg.add('Removed <code>%s</code> from your calendar view.', target)
-            calcodes.remove(target)
-
-    if calcodes:
-        userconf['calendars'] = ' '.join(sorted(calcodes))
-    else:
-        userconf.pop('calendars')
-
-    msg.action = 'Select a calendar'
-    msg.add('Select a calendar to add or remove from the list below:')
-    for calcode, calendar_info in sorted(ctx.bot.multibot.calendars.items()):
-        if calcode not in calcodes:
-            msg.button('Add %s' % calendar_info['name'], 'add %s' % calcode)
-        else:
-            msg.button('Remove %s' % calendar_info['name'], 'remove %s' % calcode)
-    return msg.reply(ctx)
+    return util.adminui.calendars(ctx, msg, userconf, 'calendars', text)

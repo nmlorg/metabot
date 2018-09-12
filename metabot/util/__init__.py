@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from metabot.util import adminui
 from metabot.util import dicttools
 from metabot.util import html
 from metabot.util import humanize

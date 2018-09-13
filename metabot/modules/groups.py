@@ -1,4 +1,4 @@
-"""Display group chats."""
+"""Find other group chats."""
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
@@ -26,15 +26,18 @@ def cgi_escape(string):  # pylint: disable=missing-docstring
     return cgi.escape(string, True)  # pylint: disable=deprecated-method
 
 
-ALIASES = ('channel', 'group', 'room')
+ALIASES = ('channel', 'channels', 'group', 'groups', 'room', 'rooms')
+
+
+def modhelp(unused_ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
+    sections['commands'].add('/groups \u2013 Find other group chats')
 
 
 def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
-    if (ctx.type in ('message', 'callback_query') and ctx.command and
-            ctx.command.rstrip('s') in ALIASES):
+    if ctx.type in ('message', 'callback_query') and ctx.command in ALIASES:
         return default(ctx, modconf)
 
-    if ctx.type == 'inline_query' and ctx.prefix.lstrip('/').rstrip('s') in ALIASES:
+    if ctx.type == 'inline_query' and ctx.prefix.lstrip('/') in ALIASES:
         return inline(ctx, modconf)
 
     return False

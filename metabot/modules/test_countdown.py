@@ -2,8 +2,6 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import datetime
-
 import pytest
 
 from metabot.modules import countdown
@@ -38,16 +36,33 @@ def test_countdown(conversation):  # pylint: disable=redefined-outer-name
 def test_format_delta():
     """Verify the time delta formatter."""
 
-    when = datetime.datetime(2018, 8, 21, 20)
-    assert countdown.format_delta(when - datetime.datetime(2018, 8, 21, 20)) == '<b>NOW</b>'
-    assert (countdown.format_delta(when - datetime.datetime(2018, 8, 21, 19, 59, 59, 500000)) ==
-            '<b>0.5</b> seconds')
-    assert (countdown.format_delta(when - datetime.datetime(2018, 8, 21, 19, 59, 58, 500000)) ==
-            '<b>1.5</b> seconds')
-    assert (countdown.format_delta(when - datetime.datetime(2018, 8, 21, 19, 58, 59)) ==
-            '<b>1</b> minute, <b>1.0</b> second')
-    assert (countdown.format_delta(when - datetime.datetime(2017, 8, 21, 18, 58)) ==
-            '<b>365</b> days, <b>1</b> hour, <b>2</b> minutes')
+    assert countdown.format_delta(0.) == '<b>NOW</b>'
+    assert countdown.format_delta(1 / 9) == '<b>0.11</b> seconds'
+    assert countdown.format_delta(1.5) == '<b>1.5</b> seconds'
+    assert countdown.format_delta(61.) == '<b>1</b> minute, <b>1</b> second'
+    assert countdown.format_delta(
+        ((365 * 24 + 1) * 60 + 2) * 60.) == '<b>365</b> days, <b>1</b> hour, <b>2</b> minutes'
+
+
+def test_help(conversation):  # pylint: disable=redefined-outer-name
+    """Test /help."""
+
+    conversation.multibot.bots['modulestestbot']['countdown']['count1'] = 1534906800
+    conversation.multibot.bots['modulestestbot']['countdown']['count2'] = 15349068000
+
+    assert conversation.message('/help', user_id=2000) == [
+        {
+            'chat_id': 2000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': '<b>Commands</b>\n'
+                    '\n'
+                    '/count1 \u2013 Count up from 1534906800\n'
+                    '\n'
+                    '/count2 \u2013 Count down to 15349068000',
+            'reply_markup': {'inline_keyboard': []},
+        },
+    ]  # yapf: disable
 
 
 def test_admin(conversation):  # pylint: disable=redefined-outer-name
@@ -60,7 +75,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a countdown: <b>Choose a command</b>\n'
                     '\n'
-                    "Type the name of a command to add (like <code>days</code>--don't include a slash at the beginning!), or select an existing countdown to remove.",
+                    "Type the name of a command to add (like <code>days</code>\u2014don't include a slash at the beginning!), or select an existing countdown to remove.",
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
@@ -88,7 +103,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     '/countdowntest is now counting down to <code>1534906800</code>.\n'
                     '\n'
-                    "Type the name of a command to add (like <code>days</code>--don't include a slash at the beginning!), or select an existing countdown to remove.",
+                    "Type the name of a command to add (like <code>days</code>\u2014don't include a slash at the beginning!), or select an existing countdown to remove.",
             'reply_markup': {'inline_keyboard': [[{'text': '/countdowntest (1534906800)', 'callback_data': '/admin modulestestbot countdown countdowntest remove'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
@@ -103,7 +118,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     'Changed /countdowntest from <code>1534906800</code> to <code>1000</code>.\n'
                     '\n'
-                    "Type the name of a command to add (like <code>days</code>--don't include a slash at the beginning!), or select an existing countdown to remove.",
+                    "Type the name of a command to add (like <code>days</code>\u2014don't include a slash at the beginning!), or select an existing countdown to remove.",
             'reply_markup': {'inline_keyboard': [[{'text': '/countdowntest (1000)', 'callback_data': '/admin modulestestbot countdown countdowntest remove'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
@@ -134,7 +149,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     'Removed /countdowntest (which was counting down to <code>1000</code>).\n'
                     '\n'
-                    "Type the name of a command to add (like <code>days</code>--don't include a slash at the beginning!), or select an existing countdown to remove.",
+                    "Type the name of a command to add (like <code>days</code>\u2014don't include a slash at the beginning!), or select an existing countdown to remove.",
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
@@ -148,7 +163,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     '/bogus is not currently counting down to anything.\n'
                     '\n'
-                    "Type the name of a command to add (like <code>days</code>--don't include a slash at the beginning!), or select an existing countdown to remove.",
+                    "Type the name of a command to add (like <code>days</code>\u2014don't include a slash at the beginning!), or select an existing countdown to remove.",
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable

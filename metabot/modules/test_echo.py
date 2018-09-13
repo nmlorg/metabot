@@ -31,6 +31,29 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
     ]  # yapf: disable
 
 
+def test_help(conversation):  # pylint: disable=redefined-outer-name
+    """Test /help."""
+
+    conversation.multibot.bots['modulestestbot']['echo']['rules1'] = (
+        'These are the rules: Have fun!')
+    conversation.multibot.bots['modulestestbot']['echo']['rules2'] = (
+        'These are the rules: Have fun!!')
+
+    assert conversation.message('/help', user_id=2000) == [
+        {
+            'chat_id': 2000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': '<b>Commands</b>\n'
+                    '\n'
+                    '/rules1 \u2013 &quot;These are the rules: Have fun!&quot;\n'
+                    '\n'
+                    '/rules2 \u2013 &quot;These are the rules: Have fun\u2026&quot;',
+            'reply_markup': {'inline_keyboard': []},
+        },
+    ]  # yapf: disable
+
+
 def test_admin(conversation):  # pylint: disable=redefined-outer-name
     """Test /admin BOTNAME echo."""
 
@@ -41,7 +64,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a echo: <b>Choose a command</b>\n'
                     '\n'
-                    "Type the name of a command to add (like <code>rules</code>--don't include a slash at the beginning!), or select an existing echo to remove.",
+                    "Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo to remove.",
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
@@ -67,7 +90,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     '/echotest now echoes <code>my message</code>.\n'
                     '\n'
-                    "Type the name of a command to add (like <code>rules</code>--don't include a slash at the beginning!), or select an existing echo to remove.",
+                    "Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo to remove.",
             'reply_markup': {'inline_keyboard': [[{'text': '/echotest (my message)', 'callback_data': '/admin modulestestbot echo echotest remove'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
@@ -82,7 +105,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     'Changed /echotest from <code>my message</code> to <code>new message</code>.\n'
                     '\n'
-                    "Type the name of a command to add (like <code>rules</code>--don't include a slash at the beginning!), or select an existing echo to remove.",
+                    "Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo to remove.",
             'reply_markup': {'inline_keyboard': [[{'text': '/echotest (new message)', 'callback_data': '/admin modulestestbot echo echotest remove'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
@@ -97,7 +120,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     'Removed /echotest (<code>new message</code>).\n'
                     '\n'
-                    "Type the name of a command to add (like <code>rules</code>--don't include a slash at the beginning!), or select an existing echo to remove.",
+                    "Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo to remove.",
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
@@ -111,7 +134,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     '/bogus is not echoing anything.\n'
                     '\n'
-                    "Type the name of a command to add (like <code>rules</code>--don't include a slash at the beginning!), or select an existing echo to remove.",
+                    "Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo to remove.",
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable

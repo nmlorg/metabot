@@ -9,6 +9,10 @@ import ntelebot
 from metabot import util
 
 
+def modhelp(unused_ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
+    sections['commands'].add('/newbot \u2013 Set up a new bot')
+
+
 def dispatch(ctx):  # pylint: disable=missing-docstring
     if ctx.type in ('message', 'callback_query') and ctx.command == 'newbot':
         ctx.private = True

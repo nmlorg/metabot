@@ -178,3 +178,19 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
             },
         },
     }
+
+
+def test_help(conversation):  # pylint: disable=redefined-outer-name
+    """Test /help."""
+
+    assert conversation.message('/help', user_id=2000) == [
+        {
+            'chat_id': 2000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': '<b>Commands</b>\n'
+                    '\n'
+                    '/newbot \u2013 Set up a new bot',
+            'reply_markup': {'inline_keyboard': []},
+        },
+    ]  # yapf: disable

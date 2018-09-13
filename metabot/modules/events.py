@@ -12,19 +12,22 @@ try:
 except ImportError:
     from urllib.parse import urlencode
 
-ALIASES = ('calendar', 'event')
+ALIASES = ('calendar', 'event', 'events')
+
+
+def modhelp(unused_ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
+    sections['commands'].add('/events \u2013 Display recent and upcoming events')
 
 
 def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
-    if (ctx.type in ('message', 'callback_query') and ctx.command and
-            ctx.command.rstrip('s') in ALIASES):
+    if ctx.type in ('message', 'callback_query') and ctx.command in ALIASES:
         if ctx.chat['type'] != 'private':
             return group(ctx)
         if ctx.prefix == 'set':
             return settings(ctx, modconf)
         return private(ctx, modconf)
 
-    if ctx.type == 'inline_query' and ctx.prefix.lstrip('/').rstrip('s') in ALIASES:
+    if ctx.type == 'inline_query' and ctx.prefix.lstrip('/') in ALIASES:
         return inline(ctx, modconf)
 
     return False

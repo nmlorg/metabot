@@ -2,7 +2,16 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import datetime
+import time
+
+
+def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
+    now = time.time()
+    for command, timestamp in modconf.items():
+        if now > timestamp:
+            sections['commands'].add('/%s \u2013 Count up from %s' % (command, timestamp))
+        else:
+            sections['commands'].add('/%s \u2013 Count down to %s' % (command, timestamp))
 
 
 def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
@@ -13,22 +22,24 @@ def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
 
 
 def countdown(ctx, timestamp):  # pylint: disable=missing-docstring
-    now = datetime.datetime.utcnow()
-    when = datetime.datetime.utcfromtimestamp(timestamp)
-    if now > when:
-        return ctx.reply_html(format_delta(now - when) + ' ago')
-    return ctx.reply_html(format_delta(when - now))
+    now = time.time()
+    if now > timestamp:
+        return ctx.reply_html(format_delta(now - timestamp) + ' ago')
+    return ctx.reply_html(format_delta(timestamp - now))
 
 
-def format_delta(delta):
-    """Format a datetime.timedelta into "5 days, 1 hour, 13.4 seconds", etc."""
+def format_delta(seconds):
+    """Format a number of seconds into "5 days, 1 hour, 13.4 seconds", etc."""
 
-    hours = delta.seconds // (60 * 60)
-    minutes = delta.seconds // 60 % 60
-    seconds = delta.seconds % 60 + delta.microseconds // 10000 / 100
+    days, seconds = divmod(seconds, 60 * 60 * 24)
+    hours, seconds = divmod(seconds, 60 * 60)
+    minutes, seconds = divmod(seconds, 60)
+    seconds = round(seconds, 2)
+    if seconds == round(seconds):
+        seconds = int(seconds)
     message = []
-    if delta.days:
-        message.append(plural(delta.days, 'day', '<b>%i</b> %s'))
+    if days:
+        message.append(plural(days, 'day', '<b>%i</b> %s'))
     if hours:
         message.append(plural(hours, 'hour', '<b>%i</b> %s'))
     if minutes:
@@ -79,8 +90,8 @@ def admin(ctx, msg, modconf):
     if not command:
         msg.action = 'Choose a command'
         msg.add(
-            "Type the name of a command to add (like <code>days</code>--don't include a slash at "
-            'the beginning!), or select an existing countdown to remove.')
+            "Type the name of a command to add (like <code>days</code>\u2014don't include a slash "
+            'at the beginning!), or select an existing countdown to remove.')
         for command, timestamp in sorted(modconf.items()):
             msg.button('/%s (%s)' % (command, timestamp), '%s remove' % command)
         ctx.set_conversation('')

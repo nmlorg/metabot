@@ -8,6 +8,7 @@ import ntelebot
 import pytest
 
 from metabot.modules import admin
+from metabot.modules import help  # pylint: disable=redefined-builtin
 from metabot import multibot
 
 
@@ -18,7 +19,7 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         def dummymod(ctx):  # pylint: disable=missing-docstring,unused-argument
             return ctx.command == 'dummymod' and ctx.reply_text('DUMMYMOD')
 
-        self.multibot = multibot.MultiBot(set(modules) | {admin, dummymod})
+        self.multibot = multibot.MultiBot(set(modules) | {admin, dummymod, help})
         ntelebot.bot.Bot('1234:test').getme.respond(json={
             'ok': True,
             'result': {

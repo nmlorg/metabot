@@ -3,6 +3,13 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 
+def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
+    for command, message in modconf.items():
+        if len(message) > 30:
+            message = message[:29] + '\u2026'
+        sections['commands'].add('/%s \u2013 "%s"' % (command, message))
+
+
 def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
     if ctx.type in ('message', 'callback_query') and ctx.command in modconf:
         return echo(ctx, modconf[ctx.command])
@@ -40,8 +47,8 @@ def admin(ctx, msg, modconf):
     if not command:
         msg.action = 'Choose a command'
         msg.add(
-            "Type the name of a command to add (like <code>rules</code>--don't include a slash at "
-            'the beginning!), or select an existing echo to remove.')
+            "Type the name of a command to add (like <code>rules</code>\u2014don't include a slash "
+            'at the beginning!), or select an existing echo to remove.')
         for command, message in sorted(modconf.items()):
             msg.button('/%s (%s)' % (command, message), '%s remove' % command)
         ctx.set_conversation('')

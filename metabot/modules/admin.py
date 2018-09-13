@@ -1,8 +1,16 @@
-"""Manage the admin list."""
+"""Manage the bot's state and settings."""
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from metabot import util
+
+
+def modhelp(ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
+    bots = sorted(username for username, botconf in ctx.bot.multibot.bots.items()
+                  if ctx.user['id'] in botconf['admin']['admins'])
+
+    if bots:
+        sections['commands'].add("/admin \u2013 Manage the bot's state and settings")
 
 
 def dispatch(ctx):  # pylint: disable=missing-docstring
@@ -86,7 +94,7 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
 
     if action == 'add':
         if not target.isdigit():
-            msg.add("I'm not sure what <code>%s</code> is--it's not a user id!", target)
+            msg.add("I'm not sure what <code>%s</code> is\u2014it's not a user id!", target)
         else:
             target = int(target)
             if target in modconf['admins']:
@@ -97,7 +105,7 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
                 msg.add('Added %s to the admin list.', target)
     elif action == 'remove':
         if not target.isdigit():
-            msg.add("I'm not sure what <code>%s</code> is--it's not an admin!", target)
+            msg.add("I'm not sure what <code>%s</code> is\u2014it's not an admin!", target)
         else:
             target = int(target)
             if target not in modconf['admins']:

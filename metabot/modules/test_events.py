@@ -422,3 +422,19 @@ def test_settings(conversation):  # pylint: disable=redefined-outer-name
                                                  [{'text': 'Back', 'callback_data': '/events'}]]},
         },
     ]  # yapf: disable
+
+
+def test_help(conversation):  # pylint: disable=redefined-outer-name
+    """Test /help."""
+
+    assert conversation.message('/help', user_id=2000) == [
+        {
+            'chat_id': 2000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': '<b>Commands</b>\n'
+                    '\n'
+                    '/events \u2013 Display recent and upcoming events',
+            'reply_markup': {'inline_keyboard': []},
+        },
+    ]  # yapf: disable

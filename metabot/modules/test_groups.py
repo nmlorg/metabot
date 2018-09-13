@@ -222,3 +222,19 @@ def test_conversation(conversation, requests_mock):  # pylint: disable=redefined
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
+
+
+def test_help(conversation):  # pylint: disable=redefined-outer-name
+    """Test /help."""
+
+    assert conversation.message('/help', user_id=2000) == [
+        {
+            'chat_id': 2000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': '<b>Commands</b>\n'
+                    '\n'
+                    '/groups \u2013 Find other group chats',
+            'reply_markup': {'inline_keyboard': []},
+        },
+    ]  # yapf: disable

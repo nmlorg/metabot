@@ -4,6 +4,11 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import cgi
 
+try:
+    unicode
+except NameError:
+    unicode = str  # pylint: disable=invalid-name,redefined-builtin
+
 
 def cgi_escape(string):  # pylint: disable=missing-docstring
     return cgi.escape(string, True)  # pylint: disable=deprecated-method
@@ -30,7 +35,7 @@ class MessageBuilder(object):
         """Add line to the message body, interpolating HTML-escaped args if provided."""
 
         if args:
-            line %= tuple(cgi_escape(str(arg)) for arg in args)
+            line %= tuple(cgi_escape(unicode(arg)) for arg in args)
         self._lines.append(line)
 
     def _make_button(self, text, callback_data):

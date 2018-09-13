@@ -26,7 +26,75 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
     assert conversation.message('/myecho') == [
         {
             'chat_id': 1000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
             'text': 'These are the rules: Have fun!',
+            'reply_markup': {'inline_keyboard': []},
+        },
+    ]  # yapf: disable
+
+    conversation.multibot.bots['modulestestbot']['echo']['about'] = (
+        'First line.\n'
+        'Second line.\n'
+        'Last line.')
+
+    assert conversation.message('/about') == [
+        {
+            'chat_id': 1000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': 'First line.',
+            'reply_markup': {'inline_keyboard': [[{'text': 'More (1/3)', 'callback_data': '/about 2'}]]},
+        },
+    ]  # yapf: disable
+
+    assert conversation.message('/about 2') == [
+        {
+            'chat_id': 1000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': 'First line.\n'
+                    '\n'
+                    'Second line.',
+            'reply_markup': {'inline_keyboard': [[{'text': 'More (2/3)', 'callback_data': '/about 3'}]]},
+        },
+    ]  # yapf: disable
+
+    assert conversation.message('/about 3') == [
+        {
+            'chat_id': 1000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': 'First line.\n'
+                    '\n'
+                    'Second line.\n'
+                    '\n'
+                    'Last line.',
+            'reply_markup': {'inline_keyboard': []},
+        },
+    ]  # yapf: disable
+
+    assert conversation.message('/about 1000') == [
+        {
+            'chat_id': 1000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': 'First line.\n'
+                    '\n'
+                    'Second line.\n'
+                    '\n'
+                    'Last line.',
+            'reply_markup': {'inline_keyboard': []},
+        },
+    ]  # yapf: disable
+
+    assert conversation.message('/about bogus') == [
+        {
+            'chat_id': 1000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': 'First line.',
+            'reply_markup': {'inline_keyboard': [[{'text': 'More (1/3)', 'callback_data': '/about 2'}]]},
         },
     ]  # yapf: disable
 

@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from metabot import util
+
 
 def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
     for command, message in modconf.items():
@@ -18,7 +20,15 @@ def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
 
 
 def echo(ctx, message):  # pylint: disable=missing-docstring
-    return ctx.reply_text(message)
+    msg = util.msgbuilder.MessageBuilder()
+    lines = message.splitlines()
+    page = ctx.text.isdigit() and int(ctx.text) or 1
+    for line in lines[:page]:
+        msg.add('%s', line)
+    if page < len(lines):
+        ctx.private = True
+        msg.button('More (%i/%i)' % (page, len(lines)), '/%s %i' % (ctx.command, page + 1))
+    return msg.reply(ctx)
 
 
 def admin(ctx, msg, modconf):

@@ -5,7 +5,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import cgi
 import collections
 import hashlib
-import json
 import re
 
 import ntelebot
@@ -138,7 +137,7 @@ def admin(ctx, msg, modconf):
                     msg.add('Updated <b>%s</b>.', newgroup['name'])
                     break
             else:
-                tmp = hashlib.sha1(json.dumps(newgroup, sort_keys=True).encode('ascii'))
+                tmp = hashlib.sha1(newgroup['name'].encode('utf-8'))
                 while tmp.hexdigest()[:6] in modconf['groups']:
                     tmp.update('.')
                 modconf['groups'][tmp.hexdigest()[:6]] = newgroup
@@ -183,7 +182,6 @@ def get_public_group(bot, username):
         return
 
     group = {
-        'admins': [],
         'desc': info.get('description', ''),
         'id': info['id'],
         'invite_link': '',
@@ -192,12 +190,6 @@ def get_public_group(bot, username):
         'type': info['type'],
         'username': info['username'],
     }
-
-    try:
-        group['admins'] = sorted(
-            member['user']['id'] for member in bot.get_chat_administrators(chat_id='@' + username))
-    except ntelebot.errors.Error:
-        pass
 
     return group
 
@@ -210,7 +202,6 @@ def get_private_group(invite_link):
         return
 
     return {
-        'admins': [],
         'desc': info['description'],
         'id': '',
         'invite_link': invite_link,

@@ -6,18 +6,16 @@ from metabot import util
 
 
 def dispatch(ctx):  # pylint: disable=missing-docstring
-    if ctx.type not in ('message', 'callback_query') or ctx.command != 'admin':
-        return False
+    if ctx.type in ('message', 'callback_query') and ctx.command == 'admin':
+        ctx.private = True
+        return default(ctx)
 
-    ctx.private = True
-    return default(ctx)
+    return False
 
 
 def default(ctx):  # pylint: disable=missing-docstring
-    bots = [
-        username for username, botconf in ctx.bot.multibot.bots.items()
-        if ctx.user['id'] in botconf['admin']['admins']
-    ]
+    bots = sorted(username for username, botconf in ctx.bot.multibot.bots.items()
+                  if ctx.user['id'] in botconf['admin']['admins'])
 
     if not bots:
         return ctx.reply_html(

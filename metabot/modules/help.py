@@ -4,22 +4,18 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import collections
 
-from metabot import util
-
 ALIASES = ('command', 'commands', 'help', 'start')
 
 
-def dispatch(ctx):  # pylint: disable=missing-docstring
+def moddispatch(ctx, msg, unused_modconf):  # pylint: disable=missing-docstring
     if ctx.type in ('message', 'callback_query') and ctx.command in ALIASES:
-        ctx.private = True
-        return default(ctx)
+        return default(ctx, msg)
 
     return False
 
 
-def default(ctx):  # pylint: disable=missing-docstring
-    msg = util.msgbuilder.MessageBuilder()
-
+def default(ctx, msg):  # pylint: disable=missing-docstring
+    ctx.private = True
     sections = collections.defaultdict(set)
 
     for modname, module in ctx.bot.multibot.modules.items():
@@ -34,5 +30,3 @@ def default(ctx):  # pylint: disable=missing-docstring
             msg.add('<b>%s</b>', name.title())
             for line in sorted(lines):
                 msg.add('%s', line)
-
-    return msg.reply(ctx)

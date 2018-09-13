@@ -14,18 +14,19 @@ def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
             sections['commands'].add('/%s \u2013 Count down to %s' % (command, timestamp))
 
 
-def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
+def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
     if ctx.type in ('message', 'callback_query') and ctx.command in modconf:
-        return countdown(ctx, modconf[ctx.command])
+        return countdown(msg, modconf[ctx.command])
 
     return False
 
 
-def countdown(ctx, timestamp):  # pylint: disable=missing-docstring
+def countdown(msg, timestamp):  # pylint: disable=missing-docstring
     now = time.time()
     if now > timestamp:
-        return ctx.reply_html(format_delta(now - timestamp) + ' ago')
-    return ctx.reply_html(format_delta(timestamp - now))
+        msg.add(format_delta(now - timestamp) + ' ago')
+    else:
+        msg.add(format_delta(timestamp - now))
 
 
 def format_delta(seconds):
@@ -94,8 +95,7 @@ def admin(ctx, msg, modconf):
             'at the beginning!), or select an existing countdown to remove.')
         for command, timestamp in sorted(modconf.items()):
             msg.button('/%s (%s)' % (command, timestamp), '%s remove' % command)
-        ctx.set_conversation('')
-        return msg.reply(ctx)
+        return ctx.set_conversation('')
 
     msg.path(command)
     msg.action = 'Type the time for /' + command
@@ -104,4 +104,3 @@ def admin(ctx, msg, modconf):
     msg.add('(Go to https://www.epochconverter.com/, fill out the section "Human date to '
             'Timestamp", then use the number listed next to "Epoch timestamp".)')
     ctx.set_conversation(command)
-    return msg.reply(ctx)

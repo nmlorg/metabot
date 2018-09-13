@@ -109,9 +109,11 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
     assert replies == [
         {
             'chat_id': -4000,
+            'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'reply_to_message_id': 5000,
             'text': 'Welcome! <b>Initial</b> message.',
+            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 

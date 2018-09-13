@@ -2,8 +2,6 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from metabot import util
-
 
 def modhelp(ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
     bots = sorted(username for username, botconf in ctx.bot.multibot.bots.items()
@@ -13,26 +11,25 @@ def modhelp(ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
         sections['commands'].add("/admin \u2013 Manage the bot's state and settings")
 
 
-def dispatch(ctx):  # pylint: disable=missing-docstring
+def moddispatch(ctx, msg, unused_modconf):  # pylint: disable=missing-docstring
     if ctx.type in ('message', 'callback_query') and ctx.command == 'admin':
-        ctx.private = True
-        return default(ctx)
+        return default(ctx, msg)
 
     return False
 
 
-def default(ctx):  # pylint: disable=missing-docstring
+def default(ctx, msg):  # pylint: disable=missing-docstring
+    ctx.private = True
     bots = sorted(username for username, botconf in ctx.bot.multibot.bots.items()
                   if ctx.user['id'] in botconf['admin']['admins'])
 
     if not bots:
-        return ctx.reply_html(
+        return msg.add(
             "Hi! You aren't one of my admins. If you should be, ask a current admin to add you by "
             'opening a chat with me (@%s) and typing:\n'
             '\n'
             '<pre>/admin %s admin add %s</pre>', ctx.bot.username, ctx.bot.username, ctx.user['id'])
 
-    msg = util.msgbuilder.MessageBuilder()
     msg.path('/admin', 'Bot Admin')
 
     username, _, text = ctx.text.partition(' ')
@@ -43,7 +40,7 @@ def default(ctx):  # pylint: disable=missing-docstring
         msg.action = 'Choose a bot'
         for username in bots:
             msg.button(username, '/admin ' + username)
-        return msg.reply(ctx)
+        return
 
     msg.path(username)
 
@@ -54,7 +51,7 @@ def default(ctx):  # pylint: disable=missing-docstring
     }
 
     if not modules:
-        return ctx.reply_html(
+        return msg.add(
             "Hi! There aren't any configurable modules installed. Contact a metabot admin to "
             'install one.')
 
@@ -69,7 +66,7 @@ def default(ctx):  # pylint: disable=missing-docstring
             if getattr(module, '__doc__', None):
                 label = '%s \u2022 %s' % (label, module.__doc__.splitlines()[0].rstrip('.'))
             msg.button(label, '/admin %s %s' % (username, modname))
-        return msg.reply(ctx)
+        return
 
     msg.path(modname)
 
@@ -120,4 +117,3 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
         if admin_id != ctx.user['id']:
             msg.button('Remove %s' % admin_id, 'remove %s' % admin_id)
     ctx.set_conversation('add')
-    return msg.reply(ctx)

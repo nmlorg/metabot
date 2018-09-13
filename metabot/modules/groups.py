@@ -10,8 +10,6 @@ import re
 import ntelebot
 import requests
 
-from metabot import util
-
 try:
     import html
 except ImportError:  # pragma: no cover
@@ -33,9 +31,9 @@ def modhelp(unused_ctx, unused_modconf, sections):  # pylint: disable=missing-do
     sections['commands'].add('/groups \u2013 Find other group chats')
 
 
-def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
+def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
     if ctx.type in ('message', 'callback_query') and ctx.command in ALIASES:
-        return default(ctx, modconf)
+        return default(ctx, msg, modconf)
 
     if ctx.type == 'inline_query' and ctx.prefix.lstrip('/') in ALIASES:
         return inline(ctx, modconf)
@@ -43,12 +41,10 @@ def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
     return False
 
 
-def default(ctx, modconf):
+def default(ctx, msg, modconf):
     """Handle /groups."""
 
     ctx.private = True
-
-    msg = util.msgbuilder.MessageBuilder()
     msg.path('/groups', 'Group List')
 
     groups_by_location = collections.defaultdict(list)
@@ -57,15 +53,14 @@ def default(ctx, modconf):
             groups_by_location[group['location'] or 'Worldwide'].append(group)
 
     if not groups_by_location:
-        msg.add("I don't know about any public groups yet, sorry!")
-        return msg.reply(ctx)
+        return msg.add("I don't know about any public groups yet, sorry!")
 
     location = ctx.text
     if location not in groups_by_location:
         msg.action = 'Choose a location'
         for location in sorted(groups_by_location, key=lambda name: tuple(reversed(name.split()))):
             msg.button(location, '/groups ' + location)
-        return msg.reply(ctx)
+        return
 
     msg.path(location)
 
@@ -76,8 +71,6 @@ def default(ctx, modconf):
             message = '%s\n%s' % (message,
                                   re.sub('\\s*\n\\s*', ' \u2022 ', cgi_escape(group['desc'])))
         msg.add(message)
-
-    return msg.reply(ctx)
 
 
 def inline(ctx, modconf):
@@ -159,7 +152,6 @@ def admin(ctx, msg, modconf):
         msg.button('%s \u2022 %s' % (group['name'], group['username'] or group['invite_link']),
                    'remove %s' % key)
     ctx.set_conversation('add')
-    return msg.reply(ctx)
 
 
 def get_group(bot, identifier):

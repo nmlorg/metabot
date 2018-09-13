@@ -26,5 +26,3 @@ def admin(ctx, msg, modconf):
         msg.button('Stop bot', 'stop')
     else:
         msg.button('Start bot', 'start')
-
-    return msg.reply(ctx)

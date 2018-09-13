@@ -95,11 +95,12 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
 
         with multibot.bots.record_mutations(ctx):
             botconfig = multibot.bots[bot.username]
+            msg = util.msgbuilder.MessageBuilder()
 
             for modname, module in multibot.modules.items():
                 modpredispatch = getattr(module, 'modpredispatch', None)
                 if modpredispatch:
-                    modpredispatch(ctx, botconfig[modname])
+                    modpredispatch(ctx, msg, botconfig[modname])
 
             ret = False
             for modname, module in multibot.modules.items():
@@ -111,14 +112,17 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
 
                 moddispatch = getattr(module, 'moddispatch', None)
                 if moddispatch:
-                    ret = moddispatch(ctx, botconfig[modname])
+                    ret = moddispatch(ctx, msg, botconfig[modname])
                     if ret is not False:
                         break
 
             for modname, module in multibot.modules.items():
                 modpostdispatch = getattr(module, 'modpostdispatch', None)
                 if modpostdispatch:
-                    modpostdispatch(ctx, botconfig[modname])
+                    modpostdispatch(ctx, msg, botconfig[modname])
+
+            if msg:
+                msg.reply(ctx)
 
             return ret
 

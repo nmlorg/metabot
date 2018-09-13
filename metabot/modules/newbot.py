@@ -6,23 +6,20 @@ import logging
 
 import ntelebot
 
-from metabot import util
-
 
 def modhelp(unused_ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
     sections['commands'].add('/newbot \u2013 Set up a new bot')
 
 
-def dispatch(ctx):  # pylint: disable=missing-docstring
+def moddispatch(ctx, msg, unused_modconf):  # pylint: disable=missing-docstring
     if ctx.type in ('message', 'callback_query') and ctx.command == 'newbot':
-        ctx.private = True
-        return default(ctx)
+        return default(ctx, msg)
 
     return False
 
 
-def default(ctx):  # pylint: disable=missing-docstring
-    msg = util.msgbuilder.MessageBuilder()
+def default(ctx, msg):  # pylint: disable=missing-docstring
+    ctx.private = True
     msg.path('/newbot', 'Add a bot')
     msg.action = 'Paste a bot API Token'
 
@@ -46,8 +43,7 @@ def default(ctx):  # pylint: disable=missing-docstring
         msg.add('Otherwise, open a private chat with @BotFather, type <code>/mybots</code>, select '
                 'the bot account you want to use, select <code>API Token</code>, then copy the '
                 'code and paste it here:')
-        ctx.set_conversation('')
-        return msg.reply(ctx)
+        return ctx.set_conversation('')
 
     try:
         bot_info = bot.get_me()
@@ -60,13 +56,11 @@ def default(ctx):  # pylint: disable=missing-docstring
             'code from someone else, send them these instructions (including the token I used). If '
             "the code you got from BotFather isn't working, select <code>Revoke current "
             'token</code> to generate a new one, then paste that new one here:', token)
-        ctx.set_conversation('')
-        return msg.reply(ctx)
+        return ctx.set_conversation('')
     except ntelebot.errors.Error as exc:
         msg.add('Woops, while trying to use <code>%s</code> I got error %s (<code>%s</code>).',
                 token, exc.error_code, exc.description)
-        ctx.set_conversation('')
-        return msg.reply(ctx)
+        return ctx.set_conversation('')
 
     ctx.reply_html('Cool, that API Token is for <code>%s</code>. Give me another moment...',
                    bot_info['username'])
@@ -77,14 +71,12 @@ def default(ctx):  # pylint: disable=missing-docstring
         msg.add('Woops, it looks like this bot account is already in use. Make sure no other bot '
                 'programs are running using this API Token and paste the token again, or use '
                 'another one:')
-        ctx.set_conversation('')
-        return msg.reply(ctx)
+        return ctx.set_conversation('')
     except ntelebot.errors.Error as exc:
         logging.exception('While polling %r:', token)
         msg.add('Woops, while trying to use <code>%s</code> I got error %s (<code>%s</code>).',
                 token, exc.error_code, exc.description)
-        ctx.set_conversation('')
-        return msg.reply(ctx)
+        return ctx.set_conversation('')
 
     username = ctx.bot.multibot.add_bot(token)
     ctx.bot.multibot.bots[username]['admin']['admins'] = [ctx.user['id']]
@@ -95,4 +87,3 @@ def default(ctx):  # pylint: disable=missing-docstring
         'Yay, I am now running <code>%s</code> (<code>%s</code>). Open a private chat with @%s and '
         'type <code>/admin</code> to continue setup.', bot_info['username'], bot_info['first_name'],
         bot_info['username'])
-    return msg.reply(ctx)

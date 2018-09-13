@@ -25,6 +25,11 @@ class MessageBuilder(object):
         self._lines = []
         self._keyboard = []
 
+    def __bool__(self):
+        return bool(self._title or self._lines)
+
+    __nonzero__ = __bool__
+
     def path(self, path, title=None):
         """Add path to the visible title and to the path used to calculate button callbacks."""
 

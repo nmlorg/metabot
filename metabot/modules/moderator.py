@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from metabot import util
 
 
-def modpredispatch(ctx, modconf):  # pylint: disable=missing-docstring
+def modpredispatch(ctx, unused_msg, modconf):  # pylint: disable=missing-docstring
     if ctx.chat and ctx.chat['type'] in ('channel', 'group', 'supergroup'):
         group_id = '%s' % ctx.chat['id']
         groupconf = modconf[group_id]
@@ -14,19 +14,19 @@ def modpredispatch(ctx, modconf):  # pylint: disable=missing-docstring
         groupconf['username'] = ctx.chat.get('username')
 
 
-def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
+def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
     if ctx.type == 'join':
-        return join(ctx, modconf)
+        return join(ctx, msg, modconf)
 
     return False
 
 
-def join(ctx, modconf):
+def join(ctx, msg, modconf):
     """Respond to new users joining a group chat."""
 
     groupconf = modconf['%s' % ctx.chat['id']]
     if groupconf.get('greeting') and not ctx.user.get('is_bot'):
-        return ctx.reply_html(groupconf['greeting'])
+        msg.add(groupconf['greeting'])
 
 
 def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
@@ -39,7 +39,7 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
         msg.action = 'Choose a group'
         for group_id, groupconf in sorted(modconf.items()):
             msg.button('%s (%s)' % (group_id, groupconf['title']), group_id)
-        return msg.reply(ctx)
+        return
 
     msg.path(group_id)
     groupconf = modconf[group_id]
@@ -76,10 +76,8 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
         if groupconf.get(field):
             msg.add('<code>%s</code> is currently <code>%s</code>.', field, groupconf[field])
         msg.add('Type your new value, or type "off" to disable/reset to default.')
-        ctx.set_conversation('%s %s' % (group_id, field))
-        return msg.reply(ctx)
+        return ctx.set_conversation('%s %s' % (group_id, field))
 
     msg.action = 'Choose a field'
     for field in sorted(fields):
         msg.button(field, field)
-    return msg.reply(ctx)

@@ -33,10 +33,9 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    conversation.multibot.bots['modulestestbot']['echo']['about'] = (
-        'First line.\n'
-        'Second line.\n'
-        'Last line.')
+    conversation.multibot.bots['modulestestbot']['echo']['about'] = ('First line.\n'
+                                                                     'Second line.\n'
+                                                                     'Last line.')
 
     assert conversation.message('/about') == [
         {

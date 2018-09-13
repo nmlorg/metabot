@@ -57,9 +57,11 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
     assert conversation.message('/events', chat_type='supergroup') == [
         {
             'chat_id': -1000,
+            'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'reply_to_message_id': 2000,
             'text': "I'm not configured for this group! Ask a bot admin to go into the <code>moderator</code> module settings, group <code>-1000</code>, and set <code>calendars</code> to this group's calendars.",
+            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -68,9 +70,11 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
     assert conversation.message('/events', chat_type='supergroup') == [
         {
             'chat_id': -1000,
+            'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'reply_to_message_id': 2000,
             'text': "Woops, I don't know how to view calendar <code>6fc2c510</code>. Ask a bot admin to go into the <code>events</code> module settings and make sure this calendar is configured!",
+            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -125,8 +129,10 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
     assert conversation.message('/events') == [
         {
             'chat_id': 1000,
+            'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': "Woops, I don't know how to view calendar <code>6fc2c510</code>. Ask a bot admin to go into the <code>events</code> module settings and make sure this calendar is configured!",
+            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 

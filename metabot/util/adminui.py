@@ -39,4 +39,3 @@ def calendars(ctx, msg, subconf, field, text):
             msg.button('Add %s' % calendar_info['name'], 'add %s' % calcode)
         else:
             msg.button('Remove %s' % calendar_info['name'], 'remove %s' % calcode)
-    return msg.reply(ctx)

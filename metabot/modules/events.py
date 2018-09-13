@@ -19,13 +19,13 @@ def modhelp(unused_ctx, unused_modconf, sections):  # pylint: disable=missing-do
     sections['commands'].add('/events \u2013 Display recent and upcoming events')
 
 
-def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
+def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
     if ctx.type in ('message', 'callback_query') and ctx.command in ALIASES:
         if ctx.chat['type'] != 'private':
-            return group(ctx)
+            return group(ctx, msg)
         if ctx.prefix == 'set':
-            return settings(ctx, modconf)
-        return private(ctx, modconf)
+            return settings(ctx, msg, modconf)
+        return private(ctx, msg, modconf)
 
     if ctx.type == 'inline_query' and ctx.prefix.lstrip('/') in ALIASES:
         return inline(ctx, modconf)
@@ -33,14 +33,14 @@ def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
     return False
 
 
-def group(ctx):
+def group(ctx, msg):
     """Handle /events in a group chat."""
 
     group_id = '%s' % ctx.chat['id']
     groupconf = ctx.bot.multibot.bots[ctx.bot.username]['moderator'][group_id]
     calcodes = groupconf.get('calendars')
     if not calcodes:
-        return ctx.reply_html(
+        return msg.add(
             "I'm not configured for this group! Ask a bot admin to go into the "
             '<code>moderator</code> module settings, group <code>%s</code>, and set '
             "<code>calendars</code> to this group's calendars.", group_id)
@@ -48,7 +48,7 @@ def group(ctx):
     calcodes = set(calcodes.split())
     for calcode in calcodes:
         if not ctx.bot.multibot.calendars.get(calcode):
-            return ctx.reply_html(
+            return msg.add(
                 "Woops, I don't know how to view calendar <code>%s</code>. Ask a bot admin to go "
                 'into the <code>events</code> module settings and make sure this calendar is '
                 'configured!', calcode)
@@ -56,28 +56,26 @@ def group(ctx):
 
     now = time.time()
     events = list(calendar_view.get_overlap(now, now + 60 * 60 * 24 * 6))
-    msg = util.msgbuilder.MessageBuilder()
     if not events:
         msg.add('No upcoming events!')
     else:
         for event in events:
             msg.add(format_event(ctx, event, full=False))
-    return msg.reply(ctx)
 
 
-def private(ctx, modconf):
+def private(ctx, msg, modconf):
     """Handle /events in a private chat."""
 
     user_id = '%s' % ctx.user['id']
     userconf = modconf['users'][user_id]
     calcodes = userconf.get('calendars')
     if not calcodes:
-        return settings(ctx, modconf)
+        return settings(ctx, msg, modconf)
 
     calcodes = set(calcodes.split())
     for calcode in calcodes:
         if not ctx.bot.multibot.calendars.get(calcode):
-            return ctx.reply_html(
+            return msg.add(
                 "Woops, I don't know how to view calendar <code>%s</code>. Ask a bot admin to go "
                 'into the <code>events</code> module settings and make sure this calendar is '
                 'configured!', calcode)
@@ -86,7 +84,6 @@ def private(ctx, modconf):
     prevev, event, nextev = calendar_view.get_event(ctx.text)
     if not event:
         prevev, event, nextev = calendar_view.get_event()
-    msg = util.msgbuilder.MessageBuilder()
     if not event:
         msg.add('No upcoming events!')
     else:
@@ -99,7 +96,6 @@ def private(ctx, modconf):
     if nextev:
         buttons[2] = ('Next', '/events ' + nextev['local_id'])
     msg.buttons(buttons)
-    return msg.reply(ctx)
 
 
 def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
@@ -203,12 +199,11 @@ def humanize_range(start, end):
         datetime.datetime.fromtimestamp(start), datetime.datetime.fromtimestamp(end))
 
 
-def settings(ctx, modconf):
+def settings(ctx, msg, modconf):
     """Handle /events set."""
 
     text = ctx.text.partition(' ')[2].lstrip()
 
-    msg = util.msgbuilder.MessageBuilder()
     msg.path('/events', 'Events')
     msg.path('set', 'Settings')
 

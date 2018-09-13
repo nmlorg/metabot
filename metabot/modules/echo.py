@@ -2,8 +2,6 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from metabot import util
-
 
 def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
     for command, message in modconf.items():
@@ -12,15 +10,14 @@ def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
         sections['commands'].add('/%s \u2013 "%s"' % (command, message))
 
 
-def moddispatch(ctx, modconf):  # pylint: disable=missing-docstring
+def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
     if ctx.type in ('message', 'callback_query') and ctx.command in modconf:
-        return echo(ctx, modconf[ctx.command])
+        return echo(ctx, msg, modconf[ctx.command])
 
     return False
 
 
-def echo(ctx, message):  # pylint: disable=missing-docstring
-    msg = util.msgbuilder.MessageBuilder()
+def echo(ctx, msg, message):  # pylint: disable=missing-docstring
     lines = message.splitlines()
     page = ctx.text.isdigit() and int(ctx.text) or 1
     for line in lines[:page]:
@@ -28,7 +25,6 @@ def echo(ctx, message):  # pylint: disable=missing-docstring
     if page < len(lines):
         ctx.private = True
         msg.button('More (%i/%i)' % (page, len(lines)), '/%s %i' % (ctx.command, page + 1))
-    return msg.reply(ctx)
 
 
 def admin(ctx, msg, modconf):
@@ -61,11 +57,9 @@ def admin(ctx, msg, modconf):
             'at the beginning!), or select an existing echo to remove.')
         for command, message in sorted(modconf.items()):
             msg.button('/%s (%s)' % (command, message), '%s remove' % command)
-        ctx.set_conversation('')
-        return msg.reply(ctx)
+        return ctx.set_conversation('')
 
     msg.path(command)
     msg.action = 'Type the message for /' + command
     msg.add('Type the text you want me to send in response to <code>/%s</code>:', command)
     ctx.set_conversation(command)
-    return msg.reply(ctx)

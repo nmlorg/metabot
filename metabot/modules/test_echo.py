@@ -29,7 +29,6 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': 'These are the rules: Have fun!',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -69,7 +68,6 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
                     'Second line.\n'
                     '\n'
                     'Last line.',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -83,7 +81,6 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
                     'Second line.\n'
                     '\n'
                     'Last line.',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -116,7 +113,6 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
                     '/rules1 \u2013 &quot;These are the rules: Have fun!&quot;\n'
                     '\n'
                     '/rules2 \u2013 &quot;These are the rules: Have fun\u2026&quot;',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 

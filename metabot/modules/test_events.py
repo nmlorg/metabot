@@ -61,7 +61,6 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'parse_mode': 'HTML',
             'reply_to_message_id': 2000,
             'text': "I'm not configured for this group! Ask a bot admin to go into the <code>moderator</code> module settings, group <code>-1000</code>, and set <code>calendars</code> to this group's calendars.",
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -74,7 +73,6 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'parse_mode': 'HTML',
             'reply_to_message_id': 2000,
             'text': "Woops, I don't know how to view calendar <code>6fc2c510</code>. Ask a bot admin to go into the <code>events</code> module settings and make sure this calendar is configured!",
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -91,7 +89,6 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
                     '\n'
                     '<b>Bravo Summary</b>\n'
                     '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">Tue, Jan (1970) 6, 4:33\u20135:33 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -104,7 +101,6 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'parse_mode': 'HTML',
             'reply_to_message_id': 2000,
             'text': 'No upcoming events!',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -132,7 +128,6 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': "Woops, I don't know how to view calendar <code>6fc2c510</code>. Ask a bot admin to go into the <code>events</code> module settings and make sure this calendar is configured!",
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -441,6 +436,5 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
             'text': '<b>Commands</b>\n'
                     '\n'
                     '/events \u2013 Display recent and upcoming events',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable

@@ -26,7 +26,6 @@ def test_conversation(conversation, requests_mock):  # pylint: disable=redefined
             'text': 'Group List\n'
                     '\n'
                     "I don't know about any public groups yet, sorry!",
-            'reply_markup': {'inline_keyboard': []},
         }
     ]  # yapf: disable
 
@@ -235,6 +234,5 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
             'text': '<b>Commands</b>\n'
                     '\n'
                     '/groups \u2013 Find other group chats',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable

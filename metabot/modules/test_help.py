@@ -24,7 +24,6 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
             'text': '<b>Commands</b>\n'
                     '\n'
                     "/admin \u2013 Manage the bot's state and settings",
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -34,6 +33,5 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': "I don't have much documentation\u2014check with a bot admin!",
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable

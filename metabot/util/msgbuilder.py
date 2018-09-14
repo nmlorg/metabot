@@ -82,7 +82,7 @@ class MessageBuilder(object):
         lines = first_line and [first_line] + self._lines or self._lines
         if len(self._path) > 1:
             self.button('Back', '..')
-        return ctx.reply_html(
-            '\n\n'.join(lines),
-            reply_markup={'inline_keyboard': self._keyboard},
-            disable_web_page_preview=True)
+        kwargs = {}
+        if self._keyboard:
+            kwargs['reply_markup'] = {'inline_keyboard': self._keyboard}
+        return ctx.reply_html('\n\n'.join(lines), disable_web_page_preview=True, **kwargs)

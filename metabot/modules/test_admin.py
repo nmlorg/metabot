@@ -26,7 +26,6 @@ def test_invalid_user(conversation):  # pylint: disable=redefined-outer-name
             'text': "Hi! You aren't one of my admins. If you should be, ask a current admin to add you by opening a chat with me (@modulestestbot) and typing:\n"
                     '\n'
                     '<pre>/admin modulestestbot admin add 2000</pre>',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 

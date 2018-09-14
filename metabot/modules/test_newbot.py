@@ -34,7 +34,6 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
                     'If you are creating a bot entirely from scratch, open a private chat with @BotFather and follow the process at https://core.telegram.org/bots#creating-a-new-bot to create a new bot account. At the end of that process, you will receive an API Token that you can paste here.\n'
                     '\n'
                     'Otherwise, open a private chat with @BotFather, type <code>/mybots</code>, select the bot account you want to use, select <code>API Token</code>, then copy the code and paste it here:',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -54,7 +53,6 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
                     'If you are creating a bot entirely from scratch, open a private chat with @BotFather and follow the process at https://core.telegram.org/bots#creating-a-new-bot to create a new bot account. At the end of that process, you will receive an API Token that you can paste here.\n'
                     '\n'
                     'Otherwise, open a private chat with @BotFather, type <code>/mybots</code>, select the bot account you want to use, select <code>API Token</code>, then copy the code and paste it here:',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -72,7 +70,6 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Add a bot: <b>Paste a bot API Token</b>\n'
                     '\n'
                     "Woops, Telegram told me <code>1234:invalid</code> is unauthorized, meaning the code is either incomplete or out of date. If you generated it yourself, open a private chat with @BotFather, type <code>/mybots</code>, select the bot account you're trying to use, select <code>API Token</code>, then copy the code and paste it here. If you got the code from someone else, send them these instructions (including the token I used). If the code you got from BotFather isn't working, select <code>Revoke current token</code> to generate a new one, then paste that new one here:",
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -100,7 +97,6 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Add a bot: <b>Paste a bot API Token</b>\n'
                     '\n'
                     'Woops, it looks like this bot account is already in use. Make sure no other bot programs are running using this API Token and paste the token again, or use another one:',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -127,7 +123,6 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Add a bot: <b>Paste a bot API Token</b>\n'
                     '\n'
                     'Woops, while trying to use <code>1234:valid</code> I got error 404 (<code>Not Found</code>).',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -154,7 +149,6 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Add a bot: <b>Configure your new bot</b>\n'
                     '\n'
                     'Yay, I am now running <code>validbot</code> (<code>Valid Bot</code>). Open a private chat with @validbot and type <code>/admin</code> to continue setup.',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 
@@ -191,6 +185,5 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
             'text': '<b>Commands</b>\n'
                     '\n'
                     '/newbot \u2013 Set up a new bot',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable

@@ -60,7 +60,6 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
                     '/count1 \u2013 Count up from 1534906800\n'
                     '\n'
                     '/count2 \u2013 Count down to 15349068000',
-            'reply_markup': {'inline_keyboard': []},
         },
     ]  # yapf: disable
 

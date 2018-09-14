@@ -32,7 +32,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
 
     msg.path('/admin', 'Bot Admin')
 
-    username, _, text = ctx.text.partition(' ')
+    username, modname, text = ctx.split(3)
     #if not username and len(bots) == 1:
     #    username = bots[0]
 
@@ -55,7 +55,6 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
             "Hi! There aren't any configurable modules installed. Contact a metabot admin to "
             'install one.')
 
-    modname, _, text = text.lstrip().partition(' ')
     #if not modname and len(modules) == 1:
     #    modname = list(modules)[0]
 
@@ -72,14 +71,14 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
 
     admin_callback = modules[modname].admin
     ctx.command = 'admin %s %s' % (username, modname)
-    ctx.text = text.lstrip()
+    ctx.text = text
     return admin_callback(ctx, msg, ctx.bot.multibot.bots[username][modname])
 
 
 def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
     """Handle /admin BOTNAME admin (configure the admin module itself)."""
 
-    action, _, target = ctx.text.partition(' ')
+    action, target = ctx.split(2)
 
     msg.action = 'Choose an admin'
     msg.add(

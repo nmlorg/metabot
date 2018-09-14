@@ -32,8 +32,7 @@ def join(ctx, msg, modconf):
 def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
     """Handle /admin BOTNAME moderator."""
 
-    group_id, _, field = ctx.text.partition(' ')
-    field, _, text = field.lstrip().partition(' ')
+    group_id, field, text = ctx.split(3)
 
     if group_id not in modconf:
         msg.action = 'Choose a group'

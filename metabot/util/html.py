@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import cgi
 try:
     import htmlentitydefs
     import HTMLParser  # pragma: no cover
@@ -16,8 +15,9 @@ except NameError:
     unichr = chr  # pylint: disable=invalid-name,redefined-builtin
 
 
-def cgi_escape(string):  # pylint: disable=missing-docstring
-    return cgi.escape(string, True)  # pylint: disable=deprecated-method
+def cgi_escape(text):  # pylint: disable=missing-docstring
+    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace(
+        '"', '&quot;')
 
 
 class _HTMLSanitizer(HTMLParser.HTMLParser):

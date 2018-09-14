@@ -30,7 +30,7 @@ def echo(ctx, msg, message):  # pylint: disable=missing-docstring
 def admin(ctx, msg, modconf):
     """Handle /admin BOTNAME echo."""
 
-    command, _, message = ctx.text.partition(' ')
+    command, message = ctx.split(2)
     command = command.lower()
 
     if command and message:

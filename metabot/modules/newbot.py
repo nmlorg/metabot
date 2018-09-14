@@ -23,7 +23,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
     msg.path('/newbot', 'Add a bot')
     msg.action = 'Paste a bot API Token'
 
-    token = ctx.text.partition(' ')[0]
+    token, _ = ctx.split(2)
 
     if token:
         try:

@@ -105,22 +105,20 @@ def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
     userconf = modconf['users'][user_id]
     calcodes = userconf.get('calendars')
     if not calcodes:
-        return ctx.reply_inline(
-            [],
-            is_personal=True,
-            cache_time=30,
-            switch_pm_text='Setup',
-            switch_pm_parameter='L2V2ZW50cw')
+        return ctx.reply_inline([],
+                                is_personal=True,
+                                cache_time=30,
+                                switch_pm_text='Setup',
+                                switch_pm_parameter='L2V2ZW50cw')
 
     calcodes = set(calcodes.split())
     for calcode in calcodes:
         if not ctx.bot.multibot.calendars.get(calcode):
-            return ctx.reply_inline(
-                [],
-                is_personal=True,
-                cache_time=30,
-                switch_pm_text='Setup',
-                switch_pm_parameter='L2V2ZW50cw')
+            return ctx.reply_inline([],
+                                    is_personal=True,
+                                    cache_time=30,
+                                    switch_pm_text='Setup',
+                                    switch_pm_parameter='L2V2ZW50cw')
     calendar_view = ctx.bot.multibot.multical.view(calcodes)
 
     terms = ctx.text.lower().split()[1:]
@@ -202,7 +200,7 @@ def humanize_range(start, end):
 def settings(ctx, msg, modconf):
     """Handle /events set."""
 
-    text = ctx.text.partition(' ')[2].lstrip()
+    _, text = ctx.split(2)
 
     msg.path('/events', 'Events')
     msg.path('set', 'Settings')

@@ -63,7 +63,7 @@ def plural(num, noun, fmtstr='%s %s'):
 def admin(ctx, msg, modconf):
     """Handle /admin BOTNAME countdown."""
 
-    command, _, timestamp = ctx.text.partition(' ')
+    command, timestamp = ctx.split(2)
     command = command.lower()
 
     if command and timestamp:

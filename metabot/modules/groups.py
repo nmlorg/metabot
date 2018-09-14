@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import cgi
 import collections
 import hashlib
 import re
@@ -20,8 +19,9 @@ else:
     html_unescape = html.unescape  # pylint: disable=invalid-name
 
 
-def cgi_escape(string):  # pylint: disable=missing-docstring
-    return cgi.escape(string, True)  # pylint: disable=deprecated-method
+def cgi_escape(text):  # pylint: disable=missing-docstring
+    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace(
+        '"', '&quot;')
 
 
 ALIASES = ('channel', 'channels', 'group', 'groups', 'room', 'rooms')
@@ -113,7 +113,7 @@ def inline(ctx, modconf):
 def admin(ctx, msg, modconf):
     """Handle /admin BOTNAME groups."""
 
-    action, _, text = ctx.text.partition(' ')
+    action, text = ctx.split(2)
 
     if action == 'add' and text:
         newgroup = get_group(ctx.bot, text)

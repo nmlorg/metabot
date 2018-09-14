@@ -53,7 +53,7 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         if chat_type == 'private':
             chat = {'id': user_id, 'type': 'private'}
         else:
-            chat = {'id': -user_id, 'type': chat_type, 'title': 'Group Chat'}
+            chat = {'id': -1001000000000 - user_id, 'type': chat_type, 'title': 'Group Chat'}
         message = {'from': user, 'chat': chat, 'message_id': user_id * 2, 'text': text}
         update = {'message': message}
         responses = []

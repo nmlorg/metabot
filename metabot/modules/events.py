@@ -45,14 +45,7 @@ def group(ctx, msg):
             '<code>moderator</code> module settings, group <code>%s</code>, and set '
             "<code>calendars</code> to this group's calendars.", group_id)
 
-    calcodes = set(calcodes.split())
-    for calcode in calcodes:
-        if not ctx.bot.multibot.calendars.get(calcode):
-            return msg.add(
-                "Woops, I don't know how to view calendar <code>%s</code>. Ask a bot admin to go "
-                'into the <code>events</code> module settings and make sure this calendar is '
-                'configured!', calcode)
-    calendar_view = ctx.bot.multibot.multical.view(calcodes)
+    calendar_view = ctx.bot.multibot.multical.view(calcodes.split())
 
     now = time.time()
     events = list(calendar_view.get_overlap(now, now + 60 * 60 * 24 * 6))
@@ -72,14 +65,7 @@ def private(ctx, msg, modconf):
     if not calcodes:
         return settings(ctx, msg, modconf)
 
-    calcodes = set(calcodes.split())
-    for calcode in calcodes:
-        if not ctx.bot.multibot.calendars.get(calcode):
-            return msg.add(
-                "Woops, I don't know how to view calendar <code>%s</code>. Ask a bot admin to go "
-                'into the <code>events</code> module settings and make sure this calendar is '
-                'configured!', calcode)
-    calendar_view = ctx.bot.multibot.multical.view(calcodes)
+    calendar_view = ctx.bot.multibot.multical.view(calcodes.split())
 
     prevev, event, nextev = calendar_view.get_event(ctx.text)
     if not event:
@@ -111,15 +97,7 @@ def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
                                 switch_pm_text='Setup',
                                 switch_pm_parameter='L2V2ZW50cw')
 
-    calcodes = set(calcodes.split())
-    for calcode in calcodes:
-        if not ctx.bot.multibot.calendars.get(calcode):
-            return ctx.reply_inline([],
-                                    is_personal=True,
-                                    cache_time=30,
-                                    switch_pm_text='Setup',
-                                    switch_pm_parameter='L2V2ZW50cw')
-    calendar_view = ctx.bot.multibot.multical.view(calcodes)
+    calendar_view = ctx.bot.multibot.multical.view(calcodes.split())
 
     terms = ctx.text.lower().split()[1:]
     full = False

@@ -45,7 +45,7 @@ def test_conversation(conversation, requests_mock):  # pylint: disable=redefined
         json={
             'ok': True,
             'result': {
-                'id': -10000,
+                'id': -1001000001000,
                 'title': 'Dummy Public Group!',
                 'username': 'DummyGroup',
                 'type': 'supergroup',

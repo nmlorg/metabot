@@ -44,6 +44,7 @@ def conversation(build_conversation, monkeypatch):  # pylint: disable=missing-do
 
     conv = build_conversation(events, moderator)
     conv.multibot.multical.add('static:test_events')
+    conv.multibot.calendars['6fc2c510'] = {'name': 'Test Calendar'}
     return conv
 
 
@@ -56,31 +57,32 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
     assert conversation.message('/notevents') == []
     assert conversation.message('/events', chat_type='supergroup') == [
         {
-            'chat_id': -1000,
+            'chat_id': -1001000001000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'reply_to_message_id': 2000,
-            'text': "I'm not configured for this group! Ask a bot admin to go into the <code>moderator</code> module settings, group <code>-1000</code>, and set <code>calendars</code> to this group's calendars.",
+            'text': "I'm not configured for this group! Ask a bot admin to go into the <code>moderator</code> module settings, group <code>-1001000001000</code>, and set <code>calendars</code> to this group's calendars.",
         },
     ]  # yapf: disable
 
-    conversation.message('/admin modulestestbot moderator -1000 calendars add 6fc2c510')
-
-    assert conversation.message('/events', chat_type='supergroup') == [
+    assert conversation.message('/admin modulestestbot moderator -1001000001000 calendars add 6fc2c510') == [
         {
-            'chat_id': -1000,
+            'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'reply_to_message_id': 2000,
-            'text': "Woops, I don't know how to view calendar <code>6fc2c510</code>. Ask a bot admin to go into the <code>events</code> module settings and make sure this calendar is configured!",
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a calendars: <b>Select a calendar</b>\n'
+                    '\n'
+                    'Added <code>6fc2c510</code> to your calendar view.\n'
+                    '\n'
+                    'Select a calendar to add or remove from the list below:',
+            'reply_markup': {'inline_keyboard': [[{'text': 'Remove Test Calendar', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars remove 6fc2c510'}],
+                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
         },
     ]  # yapf: disable
 
-    conversation.multibot.calendars['6fc2c510'] = {'name': 'Test Calendar'}
-
     assert conversation.message('/events', chat_type='supergroup') == [
         {
-            'chat_id': -1000,
+            'chat_id': -1001000001000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'reply_to_message_id': 2000,
@@ -96,7 +98,7 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
 
     assert conversation.message('/events', chat_type='supergroup') == [
         {
-            'chat_id': -1000,
+            'chat_id': -1001000001000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'reply_to_message_id': 2000,
@@ -116,22 +118,25 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
             'text': 'Events \u203a Settings: <b>Select a calendar</b>\n'
                     '\n'
                     'Select a calendar to add or remove from the list below:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/events'}]]},
+            'reply_markup': {'inline_keyboard': [[{'text': 'Add Test Calendar', 'callback_data': '/events set add 6fc2c510'}],
+                                                 [{'text': 'Back', 'callback_data': '/events'}]]},
         },
     ]  # yapf: disable
 
-    conversation.message('/events set add 6fc2c510')
-
-    assert conversation.message('/events') == [
+    assert conversation.message('/events set add 6fc2c510') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': "Woops, I don't know how to view calendar <code>6fc2c510</code>. Ask a bot admin to go into the <code>events</code> module settings and make sure this calendar is configured!",
+            'text': 'Events \u203a Settings: <b>Select a calendar</b>\n'
+                    '\n'
+                    'Added <code>6fc2c510</code> to your calendar view.\n'
+                    '\n'
+                    'Select a calendar to add or remove from the list below:',
+            'reply_markup': {'inline_keyboard': [[{'text': 'Remove Test Calendar', 'callback_data': '/events set remove 6fc2c510'}],
+                                                 [{'text': 'Back', 'callback_data': '/events'}]]},
         },
     ]  # yapf: disable
-
-    conversation.multibot.calendars['6fc2c510'] = {'name': 'Test Calendar'}
 
     assert conversation.message('/events') == [
         {
@@ -192,20 +197,20 @@ def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
         },
     ]  # yapf: disable
 
-    conversation.message('/events set add 6fc2c510')
-
-    assert conversation.inline('events') == [
+    assert conversation.message('/events set add 6fc2c510') == [
         {
-            'cache_time': 30,
-            'inline_query_id': 2000,
-            'is_personal': True,
-            'switch_pm_text': 'Setup',
-            'switch_pm_parameter': 'L2V2ZW50cw',
-            'results': [],
+            'chat_id': 1000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': 'Events \u203a Settings: <b>Select a calendar</b>\n'
+                    '\n'
+                    'Added <code>6fc2c510</code> to your calendar view.\n'
+                    '\n'
+                    'Select a calendar to add or remove from the list below:',
+            'reply_markup': {'inline_keyboard': [[{'text': 'Remove Test Calendar', 'callback_data': '/events set remove 6fc2c510'}],
+                                                 [{'text': 'Back', 'callback_data': '/events'}]]},
         },
     ]  # yapf: disable
-
-    conversation.multibot.calendars['6fc2c510'] = {'name': 'Test Calendar'}
 
     assert conversation.inline('events') == [
         {
@@ -321,20 +326,6 @@ def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
 
 def test_settings(conversation):  # pylint: disable=redefined-outer-name
     """Test /events set."""
-
-    assert conversation.message('/events set') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings: <b>Select a calendar</b>\n'
-                    '\n'
-                    'Select a calendar to add or remove from the list below:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/events'}]]},
-        },
-    ]  # yapf: disable
-
-    conversation.multibot.calendars['6fc2c510'] = {'name': 'Test Calendar'}
 
     assert conversation.message('/events set') == [
         {

@@ -10,8 +10,7 @@ def calendars(ctx, msg, subconf, field, text):
 
     calcodes = set(subconf.get(field, '').split())
 
-    #if target and target not in ctx.bot.multibot.calendars:
-    if len(target) not in (0, 8):
+    if target and target not in ctx.bot.multibot.calendars:
         msg.add('<code>%s</code> is not a calendar!', target)
     elif action == 'add' and target:
         if target in calcodes:

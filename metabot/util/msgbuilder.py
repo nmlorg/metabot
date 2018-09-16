@@ -51,7 +51,9 @@ class MessageBuilder(object):
             if callback_data:
                 path.append(callback_data)
             callback_data = ' '.join(path)
-        assert len(callback_data) <= 64, callback_data
+        if len(callback_data) > 64:
+            text = 'BROKEN: ' + text
+            callback_data = '/stop'
         return {'text': cgi_escape(text), 'callback_data': callback_data}
 
     def button(self, text, callback_data):

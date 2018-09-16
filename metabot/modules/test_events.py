@@ -61,7 +61,7 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'reply_to_message_id': 2000,
-            'text': "I'm not configured for this group! Ask a bot admin to go into the <code>moderator</code> module settings, group <code>-1001000001000</code>, and set <code>calendars</code> and <code>timezone</code>.",
+            'text': "I'm not configured for this group! Ask a bot admin to go into the <b>moderator</b> module settings, group <b>-1001000001000</b>, and choose one or more calendars and set the time zone.",
         },
     ]  # yapf: disable
 
@@ -220,7 +220,7 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
             'parse_mode': 'HTML',
             'text': 'Events \u203a Settings: <b>Choose a field</b>\n'
                     '\n'
-                    'Please choose one or more calendars, and set your time zone!',
+                    'Please choose one or more calendars and set your time zone!',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/events set calendars'}],
                                                  [{'text': 'timezone', 'callback_data': '/events set timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/events'}]]},
@@ -320,7 +320,7 @@ def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
             'cache_time': 30,
             'inline_query_id': 2000,
             'is_personal': True,
-            'switch_pm_text': 'Configure me first!',
+            'switch_pm_text': 'Click to choose one or more calendars and set your time zone!',
             'switch_pm_parameter': 'L2V2ZW50cw',
             'results': [],
         },

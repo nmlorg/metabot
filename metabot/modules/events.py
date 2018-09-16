@@ -43,10 +43,14 @@ def group(ctx, msg):
     calcodes = groupconf.get('calendars')
     timezone = groupconf.get('timezone')
     if not calcodes or not timezone:
+        missing = []
+        if not calcodes:
+            missing.append('choose one or more calendars')
+        if not timezone:
+            missing.append('set the time zone')
         return msg.add(
-            "I'm not configured for this group! Ask a bot admin to go into the "
-            '<code>moderator</code> module settings, group <code>%s</code>, and set '
-            "<code>calendars</code> and <code>timezone</code>.", group_id)
+            "I'm not configured for this group! Ask a bot admin to go into the <b>moderator</b> "
+            'module settings, group <b>%s</b>, and %s.', group_id, util.humanize.list(missing))
 
     calendar_view = ctx.bot.multibot.multical.view(calcodes.split())
     tzinfo = pytz.timezone(timezone)
@@ -68,7 +72,12 @@ def private(ctx, msg, modconf):
     calcodes = userconf.get('calendars')
     timezone = userconf.get('timezone')
     if not calcodes or not timezone:
-        msg.add('Please choose one or more calendars, and set your time zone!')
+        missing = []
+        if not calcodes:
+            missing.append('choose one or more calendars')
+        if not timezone:
+            missing.append('set your time zone')
+        msg.add('Please %s!', util.humanize.list(missing))
         return settings(ctx, msg, modconf)
 
     calendar_view = ctx.bot.multibot.multical.view(calcodes.split())
@@ -99,10 +108,15 @@ def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
     calcodes = userconf.get('calendars')
     timezone = userconf.get('timezone')
     if not calcodes or not timezone:
+        missing = []
+        if not calcodes:
+            missing.append('choose one or more calendars')
+        if not timezone:
+            missing.append('set your time zone')
         return ctx.reply_inline([],
                                 is_personal=True,
                                 cache_time=30,
-                                switch_pm_text='Configure me first!',
+                                switch_pm_text='Click to %s!' % util.humanize.list(missing),
                                 switch_pm_parameter='L2V2ZW50cw')
 
     calendar_view = ctx.bot.multibot.multical.view(calcodes.split())

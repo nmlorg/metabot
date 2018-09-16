@@ -59,6 +59,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
                                                  [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -73,6 +74,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     "I can't set <code>bogus</code>.",
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
                                                  [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -99,6 +101,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     'Set <code>greeting</code> to <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; message.</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
                                                  [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -140,6 +143,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     'Changed <code>greeting</code> from <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; message.</code> to <code>Welcome! New message.</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
                                                  [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -168,6 +172,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     'Unset <code>greeting</code> (was <code>Welcome! New message.</code>).',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
                                                  [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -182,6 +187,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     'Unset <code>greeting</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
                                                  [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable

@@ -17,18 +17,12 @@ def test_humanize_list():
 def test_humanize_range(monkeypatch):
     """Quick tests for humanize.range (and humanize.date/humanize.time)."""
 
-    class _MockDate(datetime.date):
-
-        @staticmethod
-        def today():  # pylint: disable=missing-docstring
-            return start
-
-    monkeypatch.setattr('datetime.date', _MockDate)
-
     def _test(start, end):
         return util.humanize.range(start, end).replace(u'\u2013', '-')
 
     start = datetime.date(2017, 11, 15)
+    start_ts = float(start.strftime('%s'))
+    monkeypatch.setattr('time.time', lambda: start_ts)
     next_day = datetime.date(2017, 11, 16)
     next_week = datetime.date(2017, 11, 22)
     next_month = datetime.date(2017, 12, 15)
@@ -41,6 +35,8 @@ def test_humanize_range(monkeypatch):
     assert _test(start, next_year) == 'Wed 15 - Mon, Jan (2018) 15'
 
     start = datetime.datetime(2017, 11, 15, 6)
+    start_ts = float(start.strftime('%s'))
+    monkeypatch.setattr('time.time', lambda: start_ts)
     next_min = datetime.datetime(2017, 11, 15, 6, 1)
     next_hour = datetime.datetime(2017, 11, 15, 7)
     next_pm = datetime.datetime(2017, 11, 15, 18)

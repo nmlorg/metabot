@@ -3,13 +3,14 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import datetime
+import time as _time
 
 
 def date(dtime, today=None):
     """Convert the given datetime.date/datetime.datetime into a human-friendly string."""
 
     if not today:
-        today = datetime.date.today()
+        today = datetime.datetime.fromtimestamp(_time.time(), getattr(dtime, 'tzinfo', None)).date()
     day = dtime.strftime('%a')
     mon = dtime.strftime('%b')
     if dtime.year != today.year:

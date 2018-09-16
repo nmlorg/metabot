@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import pytz
+
 
 def calendars(ctx, msg, subconf, field, text):
     """Configure a selection of calendars."""
@@ -38,3 +40,26 @@ def calendars(ctx, msg, subconf, field, text):
             msg.button('Add %s' % calendar_info['name'], 'add %s' % calcode)
         else:
             msg.button('Remove %s' % calendar_info['name'], 'remove %s' % calcode)
+
+
+def timezone(unused_ctx, msg, subconf, field, text):
+    """Configure a time zone."""
+
+    if text in pytz.common_timezones_set:
+        subconf[field] = text
+        return msg.add('Set timezone to <code>%s</code>.', text)
+
+    numslashes = text.count('/')
+    if text:
+        numslashes += 1
+
+    timezones = {
+        tzname.replace('/', '^', numslashes).split('/', 1)[0].replace('^', '/')
+        for tzname in pytz.common_timezones_set
+        if tzname.startswith(text)
+    }
+
+    msg.action = 'Choose a time zone'
+    msg.add('Choose a time zone:')
+    for tzname in sorted(timezones):
+        msg.button(tzname, tzname)

@@ -46,8 +46,11 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
     if field == 'calendars':
         msg.path(field)
         return util.adminui.calendars(ctx, msg, groupconf, 'calendars', text)
+    if field == 'timezone':
+        msg.path(field)
+        return util.adminui.timezone(ctx, msg, groupconf, 'timezone', text)
 
-    fields = {'calendars', 'greeting'}
+    fields = {'calendars', 'greeting', 'timezone'}
 
     if field not in fields:
         if field:

@@ -29,7 +29,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
     ]  # yapf: disable
 
     adding_user = {'id': 2000}
-    joined_user = {'id': 3000}
+    joined_user = {'id': 3000, 'is_bot': False}
     chat = {'id': -1001000001000, 'type': 'supergroup', 'title': 'My Group'}
     message = {
         'from': adding_user,

@@ -71,7 +71,7 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>\n'
                     '\n'
-                    'Type the user id (a number like <code>431603199</code>) of the user to add as an admin, or select an existing admin to remove.',
+                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
@@ -83,9 +83,9 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>\n'
                     '\n'
-                    'Type the user id (a number like <code>431603199</code>) of the user to add as an admin, or select an existing admin to remove.\n'
+                    "I'm not sure what <code>bogus value</code> is\u2014it's not a user id!\n"
                     '\n'
-                    "I'm not sure what <code>bogus value</code> is\u2014it's not a user id!",
+                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
@@ -97,9 +97,9 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>\n'
                     '\n'
-                    'Type the user id (a number like <code>431603199</code>) of the user to add as an admin, or select an existing admin to remove.\n'
+                    '1000 is already an admin.\n'
                     '\n'
-                    '1000 is already an admin.',
+                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
@@ -111,9 +111,9 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>\n'
                     '\n'
-                    'Type the user id (a number like <code>431603199</code>) of the user to add as an admin, or select an existing admin to remove.\n'
+                    'Added 2000 to the admin list.\n'
                     '\n'
-                    'Added 2000 to the admin list.',
+                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
             'reply_markup': {'inline_keyboard': [[{'text': 'Remove 2000', 'callback_data': '/admin modulestestbot admin remove 2000'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
@@ -126,9 +126,9 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>\n'
                     '\n'
-                    'Type the user id (a number like <code>431603199</code>) of the user to add as an admin, or select an existing admin to remove.\n'
+                    "I'm not sure what <code>bogus value</code> is\u2014it's not an admin!\n"
                     '\n'
-                    "I'm not sure what <code>bogus value</code> is\u2014it's not an admin!",
+                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
             'reply_markup': {'inline_keyboard': [[{'text': 'Remove 2000', 'callback_data': '/admin modulestestbot admin remove 2000'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
@@ -141,9 +141,9 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>\n'
                     '\n'
-                    'Type the user id (a number like <code>431603199</code>) of the user to add as an admin, or select an existing admin to remove.\n'
+                    "Oops, looks like 3000 isn't an admin [any more?].\n"
                     '\n'
-                    "Oops, looks like 3000 isn't an admin [any more?].",
+                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
             'reply_markup': {'inline_keyboard': [[{'text': 'Remove 2000', 'callback_data': '/admin modulestestbot admin remove 2000'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
@@ -156,9 +156,9 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>\n'
                     '\n'
-                    'Type the user id (a number like <code>431603199</code>) of the user to add as an admin, or select an existing admin to remove.\n'
+                    "You can't remove yourself from the admin list.\n"
                     '\n'
-                    "You can't remove yourself from the admin list.",
+                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
             'reply_markup': {'inline_keyboard': [[{'text': 'Remove 2000', 'callback_data': '/admin modulestestbot admin remove 2000'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
@@ -171,9 +171,9 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>\n'
                     '\n'
-                    'Type the user id (a number like <code>431603199</code>) of the user to add as an admin, or select an existing admin to remove.\n'
+                    'Removed 2000 from the admin list.\n'
                     '\n'
-                    'Removed 2000 from the admin list.',
+                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable

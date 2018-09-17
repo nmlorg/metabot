@@ -25,8 +25,10 @@ def join(ctx, msg, modconf):
     """Respond to new users joining a group chat."""
 
     groupconf = modconf['%s' % ctx.chat['id']]
-    if groupconf.get('greeting') and not ctx.user.get('is_bot'):
-        msg.add(groupconf['greeting'])
+    if groupconf.get('greeting'):
+        for user in ctx.data:
+            if not user['is_bot']:
+                return msg.add(groupconf['greeting'])
 
 
 def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches

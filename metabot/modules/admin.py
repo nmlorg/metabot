@@ -80,11 +80,6 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
 
     action, target = ctx.split(2)
 
-    msg.action = 'Choose an admin'
-    msg.add(
-        'Type the user id (a number like <code>431603199</code>) of the user to add as an admin, '
-        'or select an existing admin to remove.')
-
     if 'admins' not in modconf:
         modconf['admins'] = []
 
@@ -111,6 +106,10 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
             else:
                 modconf['admins'].remove(target)
                 msg.add('Removed %s from the admin list.', target)
+
+    msg.action = 'Choose an admin'
+    msg.add(
+        'Forward a message from a user to add as an admin, or select an existing admin to remove.')
 
     for admin_id in sorted(modconf['admins']):
         if admin_id != ctx.user['id']:

@@ -30,15 +30,15 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
 
     adding_user = {'id': 2000}
     joined_user = {'id': 3000, 'is_bot': False}
-    chat = {'id': -1001000001000, 'type': 'supergroup', 'title': 'My Group'}
+    chat = {'id': -1001000001000, 'type': 'supergroup', 'title': 'My Group', 'username': 'mygroup'}
     message = {
         'from': adding_user,
         'chat': chat,
         'message_id': 5000,
         'new_chat_members': [joined_user],
     }
-    update = {'message': message}
-    conversation.multibot.dispatcher(conversation.bot, update)
+    join_update = {'message': message}
+    conversation.multibot.dispatcher(conversation.bot, join_update)
 
     assert conversation.message('/admin modulestestbot moderator') == [
         {
@@ -91,14 +91,14 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    assert conversation.message('Welcome! <b>Initial</b> message.') == [
+    assert conversation.message('Welcome! <b>Initial</b> pinned message.') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
                     '\n'
-                    'Set <code>greeting</code> to <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; message.</code>.',
+                    'Set <code>greeting</code> to <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
                                                  [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
                                                  [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
@@ -108,14 +108,38 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
 
     replies = conversation.message('/dummy')
     assert replies == []
-    conversation.multibot.dispatcher(conversation.bot, update)
+    conversation.multibot.dispatcher(conversation.bot, join_update)
     assert replies == [
         {
             'chat_id': -1001000001000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'reply_to_message_id': 5000,
-            'text': 'Welcome! <b>Initial</b> message.',
+            'text': 'Welcome! <b>Initial</b> pinned message.',
+        },
+    ]  # yapf: disable
+
+    message = {
+        'from': adding_user,
+        'chat': chat,
+        'message_id': 5000,
+        'pinned_message': {
+            'message_id': 6000,
+        },
+    }
+    pin_update = {'message': message}
+    conversation.multibot.dispatcher(conversation.bot, pin_update)
+
+    replies = conversation.message('/dummy')
+    assert replies == []
+    conversation.multibot.dispatcher(conversation.bot, join_update)
+    assert replies == [
+        {
+            'chat_id': -1001000001000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'reply_to_message_id': 5000,
+            'text': 'Welcome! <b>Initial</b> <a href="https://t.me/mygroup/6000">pinned message</a>.',
         },
     ]  # yapf: disable
 
@@ -126,7 +150,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a greeting: <b>Type a new value for greeting</b>\n'
                     '\n'
-                    '<code>greeting</code> is currently <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; message.</code>.\n'
+                    '<code>greeting</code> is currently <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code>.\n'
                     '\n'
                     'Type your new value, or type "off" to disable/reset to default.',
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
@@ -140,7 +164,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
                     '\n'
-                    'Changed <code>greeting</code> from <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; message.</code> to <code>Welcome! New message.</code>.',
+                    'Changed <code>greeting</code> from <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code> to <code>Welcome! New message.</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
                                                  [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
                                                  [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],

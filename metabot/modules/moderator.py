@@ -17,6 +17,8 @@ def modpredispatch(ctx, unused_msg, modconf):  # pylint: disable=missing-docstri
 def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
     if ctx.type == 'join':
         return join(ctx, msg, modconf)
+    if ctx.type == 'pin':
+        return pin(ctx, msg, modconf)
 
     return False
 
@@ -25,10 +27,23 @@ def join(ctx, msg, modconf):
     """Respond to new users joining a group chat."""
 
     groupconf = modconf['%s' % ctx.chat['id']]
-    if groupconf.get('greeting'):
+    greeting = groupconf.get('greeting')
+    if greeting:
         for user in ctx.data:
             if not user['is_bot']:
-                return msg.add(groupconf['greeting'])
+                if ('pinned message' in greeting and groupconf.get('username') and
+                        groupconf.get('pinned_message_id')):
+                    link = '<a href="https://t.me/%s/%s">pinned message</a>' % (
+                        groupconf['username'], groupconf['pinned_message_id'])
+                    greeting = greeting.replace('pinned message', link)
+                return msg.add(greeting)
+
+
+def pin(ctx, unused_msg, modconf):
+    """Record the message id when a group's pinned message changes."""
+
+    groupconf = modconf['%s' % ctx.chat['id']]
+    groupconf['pinned_message_id'] = ctx.data['message_id']
 
 
 def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches

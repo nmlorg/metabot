@@ -42,7 +42,12 @@ class MessageBuilder(object):
             line %= tuple(cgi_escape(unicode(arg)) for arg in args)
         self._lines.append(line)
 
-    def _make_button(self, text, callback_data):
+    def _make_button(self, data):
+        if data:
+            text, callback_data = data
+        else:
+            text = ''
+            callback_data = '/stop'
         path = self._path[:]
         while path and callback_data.startswith('..'):
             path.pop()
@@ -59,19 +64,12 @@ class MessageBuilder(object):
     def button(self, text, callback_data):
         """Add a row to the keyboard with single callback button."""
 
-        self._keyboard.append([self._make_button(text, callback_data)])
+        self.buttons([(text, callback_data)])
 
     def buttons(self, buttons):
         """Add a row to the keyboard with one or more callback buttons."""
 
-        row = []
-        for button in buttons:
-            if not button:
-                row.append(self._make_button('', '/stop'))
-            else:
-                text, callback_data = button
-                row.append(self._make_button(text, callback_data))
-        self._keyboard.append(row)
+        self._keyboard.append(buttons)
 
     def reply(self, ctx):
         """Build the message and pipe it through ctx.reply_html."""
@@ -86,5 +84,7 @@ class MessageBuilder(object):
             self.button('Back', '..')
         kwargs = {}
         if self._keyboard:
-            kwargs['reply_markup'] = {'inline_keyboard': self._keyboard}
+            keyboard = [[self._make_button(data) for data in row] for row in self._keyboard]
+            kwargs['reply_markup'] = {'inline_keyboard': keyboard}
+        ctx.set_conversation(' '.join(self._path))
         return ctx.reply_html('\n\n'.join(lines), disable_web_page_preview=True, **kwargs)

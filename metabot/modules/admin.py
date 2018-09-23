@@ -78,23 +78,13 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
 def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
     """Handle /admin BOTNAME admin (configure the admin module itself)."""
 
-    action, target = ctx.split(2)
+    target = ctx.text
 
     if 'admins' not in modconf:
         modconf['admins'] = []
 
-    if action == 'add':
-        if not target.isdigit():
-            msg.add("I'm not sure what <code>%s</code> is\u2014it's not a user id!", target)
-        else:
-            target = int(target)
-            if target in modconf['admins']:
-                msg.add('%s is already an admin.', target)
-            else:
-                modconf['admins'].append(target)
-                modconf['admins'].sort()
-                msg.add('Added %s to the admin list.', target)
-    elif action == 'remove':
+    if target.startswith('remove '):
+        target = target[len('remove '):]
         if not target.isdigit():
             msg.add("I'm not sure what <code>%s</code> is\u2014it's not an admin!", target)
         else:
@@ -106,6 +96,17 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
             else:
                 modconf['admins'].remove(target)
                 msg.add('Removed %s from the admin list.', target)
+    elif target:
+        if not target.isdigit():
+            msg.add("I'm not sure what <code>%s</code> is\u2014it's not a user id!", target)
+        else:
+            target = int(target)
+            if target in modconf['admins']:
+                msg.add('%s is already an admin.', target)
+            else:
+                modconf['admins'].append(target)
+                modconf['admins'].sort()
+                msg.add('Added %s to the admin list.', target)
 
     msg.action = 'Choose an admin'
     msg.add(
@@ -114,4 +115,3 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
     for admin_id in sorted(modconf['admins']):
         if admin_id != ctx.user['id']:
             msg.button('Remove %s' % admin_id, 'remove %s' % admin_id)
-    ctx.set_conversation('add')

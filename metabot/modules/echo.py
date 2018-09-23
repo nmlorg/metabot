@@ -57,9 +57,8 @@ def admin(ctx, msg, modconf):
             'at the beginning!), or select an existing echo to remove.')
         for command, message in sorted(modconf.items()):
             msg.button('/%s (%s)' % (command, message), '%s remove' % command)
-        return ctx.set_conversation('')
+        return
 
     msg.path(command)
     msg.action = 'Type the message for /' + command
     msg.add('Type the text you want me to send in response to <code>/%s</code>:', command)
-    ctx.set_conversation(command)

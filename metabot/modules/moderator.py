@@ -59,44 +59,5 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
 
     msg.path(group_id)
     groupconf = modconf[group_id]
-
-    if field == 'calendars':
-        msg.path(field)
-        return util.adminui.calendars(ctx, msg, groupconf, 'calendars', text)
-    if field == 'timezone':
-        msg.path(field)
-        return util.adminui.timezone(ctx, msg, groupconf, 'timezone', text)
-
     fields = {'calendars', 'greeting', 'timezone'}
-
-    if field not in fields:
-        if field:
-            msg.add("I can't set <code>%s</code>.", field)
-    elif text:
-        if text.lower() in ('-', 'none', 'off'):
-            text = ''
-        if groupconf.get(field):
-            if text:
-                msg.add('Changed <code>%s</code> from <code>%s</code> to <code>%s</code>.', field,
-                        groupconf[field], text)
-            else:
-                msg.add('Unset <code>%s</code> (was <code>%s</code>).', field, groupconf[field])
-        elif text:
-            msg.add('Set <code>%s</code> to <code>%s</code>.', field, text)
-        else:
-            msg.add('Unset <code>%s</code>.', field)
-        if text:
-            groupconf[field] = text
-        else:
-            groupconf.pop(field)
-    else:
-        msg.path(field)
-        msg.action = 'Type a new value for ' + field
-        if groupconf.get(field):
-            msg.add('<code>%s</code> is currently <code>%s</code>.', field, groupconf[field])
-        msg.add('Type your new value, or type "off" to disable/reset to default.')
-        return ctx.set_conversation('%s %s' % (group_id, field))
-
-    msg.action = 'Choose a field'
-    for field in sorted(fields):
-        msg.button(field, field)
+    return util.adminui.fields(ctx, msg, groupconf, fields, field, text)

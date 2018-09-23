@@ -113,9 +113,16 @@ def inline(ctx, modconf):
 def admin(ctx, msg, modconf):
     """Handle /admin BOTNAME groups."""
 
-    action, text = ctx.split(2)
+    text = ctx.text
 
-    if action == 'add' and text:
+    if text.startswith('remove '):
+        text = text[len('remove '):]
+        group = modconf['groups'].pop(text)
+        if group:
+            msg.add('Removed <b>%s</b>.', group['name'])
+        else:
+            msg.add('Oops, the groups list changed since you loaded that screen, try again.')
+    elif text:
         newgroup = get_group(ctx.bot, text)
         if not newgroup:
             msg.add(
@@ -138,12 +145,6 @@ def admin(ctx, msg, modconf):
                     tmp.update('.')
                 modconf['groups'][tmp.hexdigest()[:6]] = newgroup
                 msg.add('Added <b>%s</b>.', newgroup['name'])
-    elif action == 'remove':
-        group = modconf['groups'].pop(text)
-        if group:
-            msg.add('Removed <b>%s</b>.', group['name'])
-        else:
-            msg.add('Oops, the groups list changed since you loaded that screen, try again.')
 
     msg.action = 'Type a group username or invite link'
     msg.add('Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for '
@@ -151,7 +152,6 @@ def admin(ctx, msg, modconf):
     for key, group in sorted(modconf['groups'].items(), key=lambda ent: ent[1]['name']):
         msg.button('%s \u2022 %s' % (group['name'], group['username'] or group['invite_link']),
                    'remove %s' % key)
-    ctx.set_conversation('add')
 
 
 def get_group(bot, identifier):

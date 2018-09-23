@@ -43,12 +43,12 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
         msg.add('Otherwise, open a private chat with @BotFather, type <code>/mybots</code>, select '
                 'the bot account you want to use, select <code>API Token</code>, then copy the '
                 'code and paste it here:')
-        return ctx.set_conversation('')
+        return
 
     try:
         bot_info = bot.get_me()
     except ntelebot.errors.Unauthorized:
-        msg.add(
+        return msg.add(
             'Woops, Telegram told me <code>%s</code> is unauthorized, meaning the code is either '
             'incomplete or out of date. If you generated it yourself, open a private chat with '
             "@BotFather, type <code>/mybots</code>, select the bot account you're trying to use, "
@@ -56,11 +56,10 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
             'code from someone else, send them these instructions (including the token I used). If '
             "the code you got from BotFather isn't working, select <code>Revoke current "
             'token</code> to generate a new one, then paste that new one here:', token)
-        return ctx.set_conversation('')
     except ntelebot.errors.Error as exc:
-        msg.add('Woops, while trying to use <code>%s</code> I got error %s (<code>%s</code>).',
-                token, exc.error_code, exc.description)
-        return ctx.set_conversation('')
+        return msg.add(
+            'Woops, while trying to use <code>%s</code> I got error %s (<code>%s</code>).', token,
+            exc.error_code, exc.description)
 
     ctx.reply_html('Cool, that API Token is for <code>%s</code>. Give me another moment...',
                    bot_info['username'])
@@ -68,15 +67,15 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
     try:
         bot.get_updates(limit=1, timeout=10)
     except ntelebot.errors.Conflict as exc:
-        msg.add('Woops, it looks like this bot account is already in use. Make sure no other bot '
-                'programs are running using this API Token and paste the token again, or use '
-                'another one:')
-        return ctx.set_conversation('')
+        return msg.add(
+            'Woops, it looks like this bot account is already in use. Make sure no other bot '
+            'programs are running using this API Token and paste the token again, or use another '
+            'one:')
     except ntelebot.errors.Error as exc:
         logging.exception('While polling %r:', token)
-        msg.add('Woops, while trying to use <code>%s</code> I got error %s (<code>%s</code>).',
-                token, exc.error_code, exc.description)
-        return ctx.set_conversation('')
+        return msg.add(
+            'Woops, while trying to use <code>%s</code> I got error %s (<code>%s</code>).', token,
+            exc.error_code, exc.description)
 
     username = ctx.bot.multibot.add_bot(token)
     ctx.bot.multibot.bots[username]['admin']['admins'] = [ctx.user['id']]

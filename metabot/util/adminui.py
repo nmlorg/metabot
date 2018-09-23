@@ -42,6 +42,55 @@ def calendars(ctx, msg, subconf, field, text):
             msg.button('Remove %s' % calendar_info['name'], 'remove %s' % calcode)
 
 
+def fields(ctx, msg, subconf, fieldset, field, text):  # pylint: disable=too-many-arguments
+    """Present a menu of fields to edit."""
+
+    if field in fieldset:
+        if field == 'calendars':
+            uifunc = calendars
+        elif field == 'timezone':
+            uifunc = timezone
+        else:
+            uifunc = freeform
+        uifunc(ctx, msg, subconf, field, text)
+    elif field:
+        msg.add("I can't set <code>%s</code>.", field)
+
+    if msg.action:
+        msg.path(field)
+    else:
+        msg.action = 'Choose a field'
+        for fieldname in sorted(fieldset):
+            msg.button(fieldname, fieldname)
+
+
+def freeform(unused_ctx, msg, subconf, field, text):
+    """Configure a free-form text field."""
+
+    if text:
+        if text.lower() in ('-', 'none', 'off'):
+            text = ''
+        if subconf.get(field):
+            if text:
+                msg.add('Changed <code>%s</code> from <code>%s</code> to <code>%s</code>.', field,
+                        subconf[field], text)
+            else:
+                msg.add('Unset <code>%s</code> (was <code>%s</code>).', field, subconf[field])
+        elif text:
+            msg.add('Set <code>%s</code> to <code>%s</code>.', field, text)
+        else:
+            msg.add('Unset <code>%s</code>.', field)
+        if text:
+            subconf[field] = text
+        else:
+            subconf.pop(field)
+    else:
+        msg.action = 'Type a new value for ' + field
+        if subconf.get(field):
+            msg.add('<code>%s</code> is currently <code>%s</code>.', field, subconf[field])
+        msg.add('Type your new value, or type "off" to disable/reset to default.')
+
+
 def timezone(unused_ctx, msg, subconf, field, text):
     """Configure a time zone."""
 

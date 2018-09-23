@@ -95,7 +95,7 @@ def admin(ctx, msg, modconf):
             'at the beginning!), or select an existing countdown to remove.')
         for command, timestamp in sorted(modconf.items()):
             msg.button('/%s (%s)' % (command, timestamp), '%s remove' % command)
-        return ctx.set_conversation('')
+        return
 
     msg.path(command)
     msg.action = 'Type the time for /' + command
@@ -103,4 +103,3 @@ def admin(ctx, msg, modconf):
             'timestamp to count down to.')
     msg.add('(Go to https://www.epochconverter.com/, fill out the section "Human date to '
             'Timestamp", then use the number listed next to "Epoch timestamp".)')
-    ctx.set_conversation(command)

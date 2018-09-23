@@ -208,19 +208,5 @@ def settings(ctx, msg, modconf):
 
     user_id = '%s' % ctx.user['id']
     userconf = modconf['users'][user_id]
-
-    if field == 'calendars':
-        msg.path(field)
-        return util.adminui.calendars(ctx, msg, userconf, 'calendars', text)
-    if field == 'timezone':
-        msg.path(field)
-        return util.adminui.timezone(ctx, msg, userconf, 'timezone', text)
-
     fields = {'calendars', 'timezone'}
-
-    if field and field not in fields:
-        msg.add("I can't set <code>%s</code>.", field)
-
-    msg.action = 'Choose a field'
-    for field in sorted(fields):
-        msg.button(field, field)
+    return util.adminui.fields(ctx, msg, userconf, fields, field, text)

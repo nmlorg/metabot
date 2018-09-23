@@ -150,10 +150,13 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone\n'
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
                     '\n'
                     'Set timezone to <code>US/Pacific</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
+                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
 
@@ -176,10 +179,13 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone\n'
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
                     '\n'
                     'Set timezone to <code>UTC</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
+                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
 
@@ -260,10 +266,12 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings \u203a timezone\n'
+            'text': 'Events \u203a Settings: <b>Choose a field</b>\n'
                     '\n'
                     'Set timezone to <code>US/Pacific</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/events set'}]]},
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/events set calendars'}],
+                                                 [{'text': 'timezone', 'callback_data': '/events set timezone'}],
+                                                 [{'text': 'Back', 'callback_data': '/events'}]]},
         },
     ]  # yapf: disable
 
@@ -346,10 +354,12 @@ def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings \u203a timezone\n'
+            'text': 'Events \u203a Settings: <b>Choose a field</b>\n'
                     '\n'
                     'Set timezone to <code>US/Pacific</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/events set'}]]},
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/events set calendars'}],
+                                                 [{'text': 'timezone', 'callback_data': '/events set timezone'}],
+                                                 [{'text': 'Back', 'callback_data': '/events'}]]},
         },
     ]  # yapf: disable
 

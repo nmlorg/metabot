@@ -6,8 +6,8 @@ import datetime
 import logging
 import time
 
-from googleapiclient import discovery
-import oauth2client.file
+from googleapiclient import discovery  # pylint: disable=import-error
+import oauth2client.file  # pylint: disable=import-error
 
 from metabot.calendars import base
 from metabot import util

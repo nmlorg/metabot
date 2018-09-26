@@ -18,7 +18,7 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
 
 
 def echo(ctx, msg, message):  # pylint: disable=missing-docstring
-    lines = message.splitlines()
+    lines = [line for line in message.splitlines() if line]
     page = ctx.text.isdigit() and int(ctx.text) or 1
     for line in lines[:page]:
         msg.add('%s', line)

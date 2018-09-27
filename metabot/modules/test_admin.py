@@ -56,6 +56,7 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot: <b>Choose a module</b>',
             'reply_markup': {'inline_keyboard': [[{'text': "admin \u2022 Manage the bot's state and settings", 'callback_data': '/admin modulestestbot admin'}],
+                                                 [{'text': 'help \u2022 Return the list of commands and other bot features', 'callback_data': '/admin modulestestbot help'}],
                                                  [{'text': 'Back', 'callback_data': '/admin'}]]},
         },
     ]  # yapf: disable

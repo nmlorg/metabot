@@ -38,6 +38,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
         'new_chat_members': [joined_user],
     }
     join_update = {'message': message}
+    # Let the bot notice it's in the test group.
     conversation.multibot.dispatcher(conversation.bot, join_update)
 
     assert conversation.message('/admin modulestestbot moderator') == [
@@ -112,6 +113,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
     assert replies == [
         {
             'chat_id': -1001000001000,
+            'disable_notification': True,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'reply_to_message_id': 5000,
@@ -136,6 +138,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
     assert replies == [
         {
             'chat_id': -1001000001000,
+            'disable_notification': True,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'reply_to_message_id': 5000,

@@ -36,6 +36,7 @@ def join(ctx, msg, modconf):
                     link = '<a href="https://t.me/%s/%s">pinned message</a>' % (
                         groupconf['username'], groupconf['pinned_message_id'])
                     greeting = greeting.replace('pinned message', link)
+                msg.quiet = True
                 return msg.add(greeting)
 
 

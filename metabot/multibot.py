@@ -30,11 +30,11 @@ class MultiBot(object):
                 cal = self.multical.add(calendar_info['calid'])
                 self.calendars[cal.calcode] = calendar_info
 
-        def hourly():
+        def _hourly():
             self.multical.poll()
-            self.loop.queue.puthourly(55 * 60, hourly)
+            self.loop.queue.puthourly(55 * 60, _hourly)
 
-        hourly()
+        _hourly()
 
         for username, bot_config in self.bots.items():
             if bot_config['telegram']['running']:

@@ -12,6 +12,9 @@ def conversation(build_conversation):  # pylint: disable=missing-docstring
     return build_conversation(help)
 
 
+# pylint: disable=line-too-long
+
+
 def test_help(conversation):  # pylint: disable=redefined-outer-name
     """Verify the help module."""
 

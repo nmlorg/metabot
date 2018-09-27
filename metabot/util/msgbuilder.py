@@ -17,6 +17,7 @@ class MessageBuilder(object):
     """Quick template for metabot's custom message style."""
 
     action = None
+    quiet = False
 
     def __init__(self):
         self._path = []
@@ -86,5 +87,7 @@ class MessageBuilder(object):
         if self._keyboard:
             keyboard = [[self._make_button(data) for data in row] for row in self._keyboard]
             kwargs['reply_markup'] = {'inline_keyboard': keyboard}
+        if self.quiet:
+            kwargs['disable_notification'] = True
         ctx.set_conversation(' '.join(self._path))
         return ctx.reply_html('\n\n'.join(lines), disable_web_page_preview=True, **kwargs)

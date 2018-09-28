@@ -4,6 +4,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import time
 
+from metabot import util
+
 
 def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
     now = time.time()
@@ -40,24 +42,16 @@ def format_delta(seconds):
         seconds = int(seconds)
     message = []
     if days:
-        message.append(plural(days, 'day', '<b>%i</b> %s'))
+        message.append(util.humanize.plural(days, 'day', '<b>%i</b> %s'))
     if hours:
-        message.append(plural(hours, 'hour', '<b>%i</b> %s'))
+        message.append(util.humanize.plural(hours, 'hour', '<b>%i</b> %s'))
     if minutes:
-        message.append(plural(minutes, 'minute', '<b>%i</b> %s'))
+        message.append(util.humanize.plural(minutes, 'minute', '<b>%i</b> %s'))
     if seconds:
-        message.append(plural(seconds, 'second', '<b>%s</b> %s'))
+        message.append(util.humanize.plural(seconds, 'second', '<b>%s</b> %s'))
     if message:
         return ', '.join(message)
     return '<b>NOW</b>'
-
-
-def plural(num, noun, fmtstr='%s %s'):
-    """Return '1 noun', '2 nouns', etc."""
-
-    if num == 1:
-        return fmtstr % (num, noun)
-    return fmtstr % (num, noun + 's')
 
 
 def admin(ctx, msg, modconf):

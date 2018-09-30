@@ -54,14 +54,15 @@ def group(ctx, msg):
 
     calendar_view = ctx.bot.multibot.multical.view(calcodes.split())
     tzinfo = pytz.timezone(timezone)
+    count = groupconf.get('maxeventscount', 10)
+    days = groupconf.get('maxeventsdays', 6)
 
     now = time.time()
-    events = list(calendar_view.get_overlap(now, now + 60 * 60 * 24 * 6))
+    events = list(calendar_view.get_overlap(now, now + 60 * 60 * 24 * days))[:count]
     if not events:
-        msg.add('No upcoming events!')
+        msg.add('No events in the next %s days!', days)
     else:
-        for event in events:
-            msg.add(format_event(ctx, event, tzinfo, full=False))
+        msg.add('\n'.join(format_event(ctx, event, tzinfo, full=False) for event in events))
 
 
 def private(ctx, msg, modconf):

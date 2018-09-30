@@ -218,6 +218,8 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
                     'Set timezone to <code>US/Pacific</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
                                                  [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'maxeventscount', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
+                                                 [{'text': 'maxeventsdays', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
                                                  [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
@@ -231,7 +233,6 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'reply_to_message_id': 2000,
             'text': '<b>Alpha Summary</b>\n'
                     '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">TODAY, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>\n'
-                    '\n'
                     '<b>Bravo Summary</b>\n'
                     '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">this Tue, Jan (1970) 6, 4:33\u20135:33 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
         },
@@ -247,6 +248,8 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
                     'Set timezone to <code>UTC</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
                                                  [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'maxeventscount', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
+                                                 [{'text': 'maxeventsdays', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
                                                  [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
@@ -260,9 +263,36 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'reply_to_message_id': 2000,
             'text': '<b>Alpha Summary</b>\n'
                     '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">TODAY, Thu 1, 12:16\u201312:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>\n'
-                    '\n'
                     '<b>Bravo Summary</b>\n'
                     '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">this Wed 7, 12:33\u20131:33 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
+        },
+    ]  # yapf: disable
+
+    assert conversation.message('/admin modulestestbot moderator -1001000001000 maxeventscount 1') == [
+        {
+            'chat_id': 1000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
+                    '\n'
+                    'Set <code>maxeventscount</code> to <code>1</code>.',
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'maxeventscount', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
+                                                 [{'text': 'maxeventsdays', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
+                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
+                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
+        },
+    ]  # yapf: disable
+
+    assert conversation.message('/events', chat_type='supergroup') == [
+        {
+            'chat_id': -1001000001000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'reply_to_message_id': 2000,
+            'text': '<b>Alpha Summary</b>\n'
+                    '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">TODAY, Thu 1, 12:16\u201312:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
         },
     ]  # yapf: disable
 
@@ -274,7 +304,7 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'reply_to_message_id': 2000,
-            'text': 'No upcoming events!',
+            'text': 'No events in the next 6 days!',
         },
     ]  # yapf: disable
 

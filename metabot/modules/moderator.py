@@ -60,5 +60,5 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
 
     msg.path(group_id)
     groupconf = modconf[group_id]
-    fields = {'calendars', 'greeting', 'timezone'}
+    fields = {'calendars', 'greeting', 'maxeventscount', 'maxeventsdays', 'timezone'}
     return util.adminui.fields(ctx, msg, groupconf, fields, field, text)

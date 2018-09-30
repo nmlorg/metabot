@@ -52,6 +52,8 @@ def fields(ctx, msg, subconf, fieldset, field, text):  # pylint: disable=too-man
             uifunc = calendars
         elif field == 'timezone':
             uifunc = timezone
+        elif field.startswith('max'):
+            uifunc = integer
         else:
             uifunc = freeform
         uifunc(ctx, msg, subconf, field, text)
@@ -84,6 +86,35 @@ def freeform(unused_ctx, msg, subconf, field, text):
             msg.add('Unset <code>%s</code>.', field)
         if text:
             subconf[field] = text
+        else:
+            subconf.pop(field)
+    else:
+        msg.action = 'Type a new value for ' + field
+        if subconf.get(field):
+            msg.add('<code>%s</code> is currently <code>%s</code>.', field, subconf[field])
+        msg.add('Type your new value, or type "off" to disable/reset to default.')
+
+
+def integer(unused_ctx, msg, subconf, field, text):
+    """Configure an integer field."""
+
+    if text:
+        if text.isdigit():
+            value = int(text)
+        else:
+            value = None
+        if subconf.get(field):
+            if value is not None:
+                msg.add('Changed <code>%s</code> from <code>%s</code> to <code>%s</code>.', field,
+                        subconf[field], text)
+            else:
+                msg.add('Unset <code>%s</code> (was <code>%s</code>).', field, subconf[field])
+        elif value is not None:
+            msg.add('Set <code>%s</code> to <code>%s</code>.', field, value)
+        else:
+            msg.add('Unset <code>%s</code>.', field)
+        if value is not None:
+            subconf[field] = value
         else:
             subconf.pop(field)
     else:

@@ -95,18 +95,34 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
                                                  [{'text': 'Asia', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Asia'}],
                                                  [{'text': 'Atlantic', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Atlantic'}],
                                                  [{'text': 'Australia', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Australia'}],
-                                                 [{'text': 'Canada', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada'}],
+                                                 [{'text': '\xa0', 'callback_data': '/stop'},
+                                                  {'text': 'Next', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone - 1'}],
+                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
+        },
+    ]  # yapf: disable
+
+    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone - 1') == [
+        {
+            'chat_id': 1000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
+                    '\n'
+                    'Choose a time zone:',
+            'reply_markup': {'inline_keyboard': [[{'text': 'Canada', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada'}],
                                                  [{'text': 'Europe', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Europe'}],
                                                  [{'text': 'GMT', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone GMT'}],
                                                  [{'text': 'Indian', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Indian'}],
                                                  [{'text': 'Pacific', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Pacific'}],
                                                  [{'text': 'US', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone US'}],
                                                  [{'text': 'UTC', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone UTC'}],
+                                                 [{'text': 'Prev', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone - 0'},
+                                                  {'text': '\xa0', 'callback_data': '/stop'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
         },
     ]  # yapf: disable
 
-    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone US') == [
+    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone', language_code='en-us') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -121,6 +137,37 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
                                                  [{'text': 'US/Hawaii', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone US/Hawaii'}],
                                                  [{'text': 'US/Mountain', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone US/Mountain'}],
                                                  [{'text': 'US/Pacific', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone US/Pacific'}],
+                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
+        },
+    ]  # yapf: disable
+
+    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone', language_code='en-ca') == [
+        {
+            'chat_id': 1000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
+                    '\n'
+                    'Choose a time zone:',
+            'reply_markup': {'inline_keyboard': [[{'text': 'Canada/Atlantic', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada/Atlantic'}],
+                                                 [{'text': 'Canada/Central', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada/Central'}],
+                                                 [{'text': 'Canada/Eastern', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada/Eastern'}],
+                                                 [{'text': 'Canada/Mountain', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada/Mountain'}],
+                                                 [{'text': 'Canada/Newfoundland', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada/Newfoundland'}],
+                                                 [{'text': 'Canada/Pacific', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada/Pacific'}],
+                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
+        },
+    ]  # yapf: disable
+
+    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone', language_code='en-gb') == [
+        {
+            'chat_id': 1000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
+                    '\n'
+                    'Choose a time zone:',
+            'reply_markup': {'inline_keyboard': [[{'text': 'Europe/London', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Europe/London'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
         },
     ]  # yapf: disable
@@ -140,7 +187,23 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
                                                  [{'text': 'America/Indiana/Tell_City', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana/Tell_City'}],
                                                  [{'text': 'America/Indiana/Vevay', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana/Vevay'}],
                                                  [{'text': 'America/Indiana/Vincennes', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana/Vincennes'}],
-                                                 [{'text': 'America/Indiana/Winamac', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana/Winamac'}],
+                                                 [{'text': '\xa0', 'callback_data': '/stop'},
+                                                  {'text': 'Next', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana 1'}],
+                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
+        },
+    ]  # yapf: disable
+
+    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone America/Indiana 1') == [
+        {
+            'chat_id': 1000,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
+                    '\n'
+                    'Choose a time zone:',
+            'reply_markup': {'inline_keyboard': [[{'text': 'America/Indiana/Winamac', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana/Winamac'}],
+                                                 [{'text': 'Prev', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana 0'},
+                                                  {'text': '\xa0', 'callback_data': '/stop'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
         },
     ]  # yapf: disable
@@ -284,7 +347,7 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
                     '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">TODAY, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>\n'
                     '\n'
                     'Alpha Description',
-            'reply_markup': {'inline_keyboard': [[{'text': '', 'callback_data': '/stop'},
+            'reply_markup': {'inline_keyboard': [[{'text': '\xa0', 'callback_data': '/stop'},
                                                   {'text': 'Settings', 'callback_data': '/events set'},
                                                   {'text': 'Next', 'callback_data': '/events 6fc2c510:bravo'}]]},
         },
@@ -313,9 +376,9 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': 'No upcoming events!',
-            'reply_markup': {'inline_keyboard': [[{'text': '', 'callback_data': '/stop'},
+            'reply_markup': {'inline_keyboard': [[{'text': '\xa0', 'callback_data': '/stop'},
                                                   {'text': 'Settings', 'callback_data': '/events set'},
-                                                  {'text': '', 'callback_data': '/stop'}]]},
+                                                  {'text': '\xa0', 'callback_data': '/stop'}]]},
         },
     ]  # yapf: disable
 

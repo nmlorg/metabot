@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import math
+
 import pytz
 
 
@@ -91,24 +93,50 @@ def freeform(unused_ctx, msg, subconf, field, text):
         msg.add('Type your new value, or type "off" to disable/reset to default.')
 
 
-def timezone(unused_ctx, msg, subconf, field, text):
+def timezone(ctx, msg, subconf, field, text):
     """Configure a time zone."""
+
+    text, _, page = text.partition(' ')
+    if text == '-':
+        text = ''
+    page = page.isdigit() and int(page) or 0
 
     if text in pytz.common_timezones_set:
         subconf[field] = text
         return msg.add('Set timezone to <code>%s</code>.', text)
 
-    numslashes = text.count('/')
-    if text:
-        numslashes += 1
+    timezones = ()
+    if ctx.user.get('language_code', '').count('-') == 1:
+        country = ctx.user['language_code'].split('-')[1].upper()
+        if country == 'US':
+            timezones = {tzname for tzname in pytz.common_timezones if tzname.startswith('US/')}
+        elif country == 'CA':
+            timezones = {tzname for tzname in pytz.common_timezones if tzname.startswith('Canada/')}
+        else:
+            timezones = pytz.country_timezones.get(country)
 
-    timezones = {
-        tzname.replace('/', '^', numslashes).split('/', 1)[0].replace('^', '/')
-        for tzname in pytz.common_timezones_set
-        if tzname.startswith(text)
-    }
+    if not timezones:
+        numslashes = text.count('/')
+        if text:
+            numslashes += 1
+
+        timezones = {
+            tzname.replace('/', '^', numslashes).split('/', 1)[0].replace('^', '/')
+            for tzname in pytz.common_timezones_set
+            if tzname.startswith(text)
+        }
+
+    pages = math.ceil(len(timezones) / 7)
+    timezones = sorted(timezones)[page * 7:(page + 1) * 7]
 
     msg.action = 'Choose a time zone'
     msg.add('Choose a time zone:')
-    for tzname in sorted(timezones):
+    for tzname in timezones:
         msg.button(tzname, tzname)
+    if page or page < pages - 1:
+        buttons = [None, None]
+        if page:
+            buttons[0] = ('Prev', '%s %i' % (text or '-', page - 1))
+        if page < pages - 1:
+            buttons[1] = ('Next', '%s %i' % (text or '-', page + 1))
+        msg.buttons(buttons)

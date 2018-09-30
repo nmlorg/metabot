@@ -47,7 +47,7 @@ class MessageBuilder(object):
         if data:
             text, callback_data = data
         else:
-            text = ''
+            text = '\xa0'
             callback_data = '/stop'
         path = self._path[:]
         while path and callback_data.startswith('..'):

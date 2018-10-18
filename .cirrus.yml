@@ -8,5 +8,5 @@ test_task:
   pip_cache:
     folder: ~/.cache/pip
     fingerprint_script: echo $PYTHON_VERSION && cat requirements-dev.txt
-    populate_script: pip install -r requirements-dev.txt -e git+https://github.com/nmlorg/ntelebot -e .
+    populate_script: pip install -r requirements-dev.txt git+https://github.com/nmlorg/ntelebot -e .
   test_script: pytest && pylint metabot

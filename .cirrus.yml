@@ -7,6 +7,6 @@ test_task:
       image: python:3.7
   pip_cache:
     folder: ~/.cache/pip
-    fingerprint_script: echo $PYTHON_VERSION && echo pylint pytest-cov pytest requests-mock git+https://github.com/nmlorg/ntelebot
-    populate_script: pip install pylint pytest-cov pytest requests-mock git+https://github.com/nmlorg/ntelebot
+    fingerprint_script: echo $PYTHON_VERSION && cat requirements-dev.txt
+    populate_script: pip install -r requirements-dev.txt -e git+https://github.com/nmlorg/ntelebot -e .
   test_script: pytest && pylint metabot

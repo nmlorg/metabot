@@ -14,7 +14,7 @@ def load(fname):
     """Load fname as a JSON file, silently returning None on any error."""
 
     try:
-        data = open(fname, 'rb').read()
+        data = open(fname).read()
     except IOError:
         return
 

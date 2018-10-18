@@ -39,7 +39,7 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         responses = []
 
         def _handler(request, unused_context):
-            responses.append(json.loads(request.body))
+            responses.append(json.loads(request.body.decode('ascii')))
             return {'ok': True, 'result': {}}
 
         self.bot.answer_inline_query.respond(json=_handler)
@@ -61,7 +61,7 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         responses = []
 
         def _handler(request, unused_context):
-            responses.append(json.loads(request.body))
+            responses.append(json.loads(request.body.decode('ascii')))
             return {'ok': True, 'result': {}}
 
         self.bot.send_message.respond(json=_handler)

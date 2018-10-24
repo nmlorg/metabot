@@ -6,6 +6,7 @@ import importlib
 import logging
 import pkgutil
 
+from metabot import modules as modules_package
 from metabot import multibot
 
 try:
@@ -19,7 +20,7 @@ def main():  # pylint: disable=missing-docstring
         format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s] %(message)s', level=logging.INFO)
 
     modules = set()
-    for _, name, _ in pkgutil.iter_modules(['metabot/modules']):
+    for _, name, _ in pkgutil.iter_modules(modules_package.__path__):
         if name != 'conftest' and not name.startswith('test_'):
             modules.add(importlib.import_module('metabot.modules.' + name))
 

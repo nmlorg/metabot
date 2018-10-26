@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import json
+
 from metabot import util
 
 
@@ -19,13 +21,13 @@ def test_optimize_simple():
 def test_optimize_strings():
     """Verify the optimizer normalizes and dedupes strings."""
 
-    bytes_1 = b'str ' + b'test'
-    bytes_2 = b'str ' + b'test'
-    assert bytes_1 is not bytes_2
+    bytes_1 = json.loads('"str test"').encode('ascii')
+    bytes_2 = json.loads('"str test"').encode('ascii')
+    assert bytes_1 == bytes_2 and bytes_1 is not bytes_2
 
-    unicode_1 = u'str ' + u'test'
-    unicode_2 = u'str ' + u'test'
-    assert unicode_1 is not unicode_2
+    unicode_1 = json.loads('"str test"')
+    unicode_2 = json.loads('"str test"')
+    assert unicode_1 == unicode_2 and unicode_1 is not unicode_2
 
     store = {}
 
@@ -38,8 +40,8 @@ def test_optimize_strings():
 def test_optimize_containers():
     """Verify the optimizer doesn't break linkages by recreating containers."""
 
-    key1 = u'key ' + u'test'
-    key2 = u'key ' + u'test'
+    key1 = json.loads('"key test"')
+    key2 = json.loads('"key test"')
     assert key1 == key2 and key1 is not key2
 
     entry = {u'dummy': u'test'}

@@ -7,8 +7,9 @@ import logging
 import ntelebot
 
 from metabot import botconf
-from metabot import calendars
-from metabot import util
+from metabot.calendars import multicalendar
+from metabot.util import jsonutil
+from metabot.util import msgbuilder
 
 
 class MultiBot(object):
@@ -23,10 +24,10 @@ class MultiBot(object):
         self.loop = ntelebot.loop.Loop()
         self.bots = botconf.BotConf(confdir)
         self.bots.finalize()
-        self.multical = calendars.MultiCalendar()
+        self.multical = multicalendar.MultiCalendar()
         self.calendars = {}
         if confdir:
-            for calendar_info in util.json.load(confdir + '/calendars.json') or ():
+            for calendar_info in jsonutil.load(confdir + '/calendars.json') or ():
                 cal = self.multical.add(calendar_info['calid'])
                 self.calendars[cal.calcode] = calendar_info
 
@@ -100,7 +101,7 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
 
         with multibot.bots.record_mutations(ctx):
             botconfig = multibot.bots[bot.username]
-            msg = util.msgbuilder.MessageBuilder()
+            msg = msgbuilder.MessageBuilder()
 
             for modname, module in multibot.modules.items():
                 modpredispatch = getattr(module, 'modpredispatch', None)

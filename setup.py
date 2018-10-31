@@ -9,4 +9,5 @@ setuptools.setup(
     description='Modularized, multi-account bot.',
     url='https://github.com/nmlorg/metabot',
     packages=setuptools.find_packages(include=('metabot', 'metabot.*')),
+    namespace_packages=setuptools.find_packages(include=('metabot', 'metabot.*')),
     install_requires=['ntelebot', 'pytz', 'requests'])

@@ -1,5 +1,3 @@
 # pylint: disable=missing-docstring
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-from metabot.calendars.multicalendar import MultiCalendar
+__import__('pkg_resources').declare_namespace(__name__)

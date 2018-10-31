@@ -3,41 +3,42 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import datetime
-from metabot import util
+
+from metabot.util import humanize
 
 
 def test_humanize_date():
     """Quick tests for humanize.date."""
 
     base = datetime.date(2017, 11, 15)
-    assert util.humanize.date(datetime.date(2017, 11, 15), base=base) == 'TODAY, Wed 15'
+    assert humanize.date(datetime.date(2017, 11, 15), base=base) == 'TODAY, Wed 15'
 
-    assert util.humanize.date(datetime.date(2017, 11, 14), base=base) == 'YESTERDAY, Tue 14'
-    assert util.humanize.date(datetime.date(2017, 11, 13), base=base) == 'last Mon 13'
-    assert util.humanize.date(datetime.date(2017, 11, 9), base=base) == 'last Thu 9'
-    assert util.humanize.date(datetime.date(2017, 11, 8), base=base) == '1 week ago on Wed 8'
-    assert util.humanize.date(datetime.date(2017, 11, 1), base=base) == '2 weeks ago on Wed 1'
+    assert humanize.date(datetime.date(2017, 11, 14), base=base) == 'YESTERDAY, Tue 14'
+    assert humanize.date(datetime.date(2017, 11, 13), base=base) == 'last Mon 13'
+    assert humanize.date(datetime.date(2017, 11, 9), base=base) == 'last Thu 9'
+    assert humanize.date(datetime.date(2017, 11, 8), base=base) == '1 week ago on Wed 8'
+    assert humanize.date(datetime.date(2017, 11, 1), base=base) == '2 weeks ago on Wed 1'
 
-    assert util.humanize.date(datetime.date(2017, 11, 16), base=base) == 'TOMORROW, Thu 16'
-    assert util.humanize.date(datetime.date(2017, 11, 17), base=base) == 'this Fri 17'
-    assert util.humanize.date(datetime.date(2017, 11, 17), base=base) == 'this Fri 17'
-    assert util.humanize.date(datetime.date(2017, 11, 22), base=base) == '1 week on Wed 22'
-    assert util.humanize.date(datetime.date(2017, 11, 29), base=base) == '2 weeks on Wed 29'
+    assert humanize.date(datetime.date(2017, 11, 16), base=base) == 'TOMORROW, Thu 16'
+    assert humanize.date(datetime.date(2017, 11, 17), base=base) == 'this Fri 17'
+    assert humanize.date(datetime.date(2017, 11, 17), base=base) == 'this Fri 17'
+    assert humanize.date(datetime.date(2017, 11, 22), base=base) == '1 week on Wed 22'
+    assert humanize.date(datetime.date(2017, 11, 29), base=base) == '2 weeks on Wed 29'
 
 
 def test_humanize_list():
     """Quick tests for humanize.list."""
 
-    assert util.humanize.list(['one']) == 'one'
-    assert util.humanize.list(['one', 'two']) == 'one and two'
-    assert util.humanize.list(['one', 'two', 'three']) == 'one, two, and three'
+    assert humanize.list(['one']) == 'one'
+    assert humanize.list(['one', 'two']) == 'one and two'
+    assert humanize.list(['one', 'two', 'three']) == 'one, two, and three'
 
 
 def test_humanize_range(monkeypatch):
     """Quick tests for humanize.range (and humanize.date/humanize.time)."""
 
     def _test(start, end):
-        return util.humanize.range(start, end).replace(u'\u2013', '-')
+        return humanize.range(start, end).replace(u'\u2013', '-')
 
     start = datetime.date(2017, 11, 15)
     start_ts = float(start.strftime('%s'))

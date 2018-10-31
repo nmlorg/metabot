@@ -1,21 +1,21 @@
-"""Tests for metabot.util.pickle."""
+"""Tests for metabot.util.pickleutil."""
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import json
 
-from metabot import util
+from metabot.util import pickleutil
 
 
 def test_optimize_simple():
     """Verify the optimizer preserves simple objects."""
 
-    assert util.pickle.optimize(b'str') == b'str'
-    assert util.pickle.optimize(u'str') == u'str'
-    assert util.pickle.optimize({b'a': 1}) == {b'a': 1}
-    assert util.pickle.optimize([1, 2]) == [1, 2]
-    assert util.pickle.optimize((1, 2)) == (1, 2)
-    assert util.pickle.optimize(1) == 1
+    assert pickleutil.optimize(b'str') == b'str'
+    assert pickleutil.optimize(u'str') == u'str'
+    assert pickleutil.optimize({b'a': 1}) == {b'a': 1}
+    assert pickleutil.optimize([1, 2]) == [1, 2]
+    assert pickleutil.optimize((1, 2)) == (1, 2)
+    assert pickleutil.optimize(1) == 1
 
 
 def test_optimize_strings():
@@ -31,10 +31,10 @@ def test_optimize_strings():
 
     store = {}
 
-    optimized_str = util.pickle.optimize(bytes_1, store=store)
-    assert util.pickle.optimize(bytes_2, store=store) is optimized_str
-    optimized_uni = util.pickle.optimize(unicode_1, store=store)
-    assert util.pickle.optimize(unicode_2, store=store) is optimized_uni
+    optimized_str = pickleutil.optimize(bytes_1, store=store)
+    assert pickleutil.optimize(bytes_2, store=store) is optimized_str
+    optimized_uni = pickleutil.optimize(unicode_1, store=store)
+    assert pickleutil.optimize(unicode_2, store=store) is optimized_uni
 
 
 def test_optimize_containers():
@@ -58,7 +58,7 @@ def test_optimize_containers():
     assert key1copy == key2copy and key1copy is not key2copy
     assert cont[u'dummy1'][key1] is cont[u'dummy2'][key2]
 
-    new = util.pickle.optimize(cont)
+    new = pickleutil.optimize(cont)
     assert new == cont
     (key1copy,) = tuple(new[u'dummy1'])
     (key2copy,) = tuple(new[u'dummy2'])
@@ -70,7 +70,7 @@ def test_load_nonexistent(tmpdir):
     """Verify the loader silently ignores nonexistent files."""
 
     tmpfile = tmpdir.join('test.pickle')
-    assert util.pickle.load(tmpfile.strpath) is None
+    assert pickleutil.load(tmpfile.strpath) is None
 
 
 def test_load_empty(tmpdir):
@@ -78,7 +78,7 @@ def test_load_empty(tmpdir):
 
     tmpfile = tmpdir.join('test.pickle')
     tmpfile.write('')
-    assert util.pickle.load(tmpfile.strpath) is None
+    assert pickleutil.load(tmpfile.strpath) is None
 
 
 def test_load_malformed(tmpdir):
@@ -86,7 +86,7 @@ def test_load_malformed(tmpdir):
 
     tmpfile = tmpdir.join('test.pickle')
     tmpfile.write('bogus data')
-    assert util.pickle.load(tmpfile.strpath) is None
+    assert pickleutil.load(tmpfile.strpath) is None
 
 
 def test_dump_simple(tmpdir):
@@ -94,7 +94,7 @@ def test_dump_simple(tmpdir):
 
     tmpfile = tmpdir.join('test.pickle')
     obj = 1
-    assert util.pickle.dump(tmpfile.strpath, obj) == obj
+    assert pickleutil.dump(tmpfile.strpath, obj) == obj
     assert tmpfile.load() == obj
 
 
@@ -103,5 +103,5 @@ def test_dump_load(tmpdir):
 
     tmpfile = tmpdir.join('test.pickle')
     obj = {b'key': [b'value', b'value']}
-    assert util.pickle.dump(tmpfile.strpath, obj) == obj
-    assert util.pickle.load(tmpfile.strpath) == obj
+    assert pickleutil.dump(tmpfile.strpath, obj) == obj
+    assert pickleutil.load(tmpfile.strpath) == obj

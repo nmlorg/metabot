@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import importlib
 import logging
 
-from metabot import util
+from metabot.util import pickleutil
 
 CALENDAR_TYPES = {}
 CALENDARS = {}
@@ -36,13 +36,13 @@ class _CachingCalendarMixin(object):
     def __init__(self, calid):
         super(_CachingCalendarMixin, self).__init__(calid)
         self.__fname = '%s/%s.pickle' % (self._cache_dir, self.calcode)
-        data = util.pickle.load(self.__fname)
+        data = pickleutil.load(self.__fname)
         if data:
             self.__dict__.update(data)
 
     def __save(self):
         logging.info('Rewriting %r.', self.__fname)
-        self.__dict__.update(util.pickle.dump(self.__fname, self.__dict__))
+        self.__dict__.update(pickleutil.dump(self.__fname, self.__dict__))
 
     def poll(self):  # pylint: disable=missing-docstring
         if super(_CachingCalendarMixin, self).poll():

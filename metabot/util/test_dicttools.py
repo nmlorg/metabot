@@ -2,13 +2,13 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from metabot import util
+from metabot.util import dicttools
 
 
 def test_audit():
     """Test the audit logging logic."""
 
-    cont = util.dicttools.ImplicitTrackingDict()
+    cont = dicttools.ImplicitTrackingDict()
     assert cont.finalize() == {}
 
     cont['alpha'] = 5
@@ -36,7 +36,7 @@ def test_audit():
 def test_pop():
     """Test ImplicitTrackingDict.pop."""
 
-    cont = util.dicttools.ImplicitTrackingDict({'alpha': 'bravo'})
+    cont = dicttools.ImplicitTrackingDict({'alpha': 'bravo'})
     assert cont.finalize() == {('alpha',): ('bravo', None)}
 
     assert cont.pop('unset') is None
@@ -52,12 +52,12 @@ def test_pop():
 def test_setitem():
     """Test ImplicitTrackingDict.__setitem__."""
 
-    cont = util.dicttools.ImplicitTrackingDict()
+    cont = dicttools.ImplicitTrackingDict()
     assert cont.log == {}
 
     cont['alpha'] = {}
     assert cont.log == {}
-    assert isinstance(cont['alpha'], util.dicttools.ImplicitTrackingDict)
+    assert isinstance(cont['alpha'], dicttools.ImplicitTrackingDict)
     assert cont['alpha'].log is cont.log
 
     cont['alpha']['bravo'] = {}
@@ -87,7 +87,7 @@ def test_setitem():
 def test_missing():
     """Test ImplicitTrackingDict.__missing__."""
 
-    cont = util.dicttools.ImplicitTrackingDict()
+    cont = dicttools.ImplicitTrackingDict()
 
     assert list(cont.items()) == []
     assert 'unset' not in cont
@@ -97,7 +97,7 @@ def test_missing():
     unset = cont['unset']
     assert cont['unset'] is unset
     assert unset == {}
-    assert isinstance(unset, util.dicttools.ImplicitTrackingDict)
+    assert isinstance(unset, dicttools.ImplicitTrackingDict)
 
     assert cont.finalize() == {}
 
@@ -109,7 +109,7 @@ def test_missing():
 def test_list():
     """Test TrackingList (via ImplicitTrackingDict.__setitem__)."""
 
-    cont = util.dicttools.ImplicitTrackingDict()
+    cont = dicttools.ImplicitTrackingDict()
 
     cont['alpha'] = [2, 4, 6]  # extend
     assert cont.finalize() == {('alpha',): ((2, 4, 6), ())}

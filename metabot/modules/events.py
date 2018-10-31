@@ -7,7 +7,9 @@ import time
 
 import pytz
 
-from metabot import util
+from metabot.util import adminui
+from metabot.util import html
+from metabot.util import humanize
 
 try:
     from urllib import urlencode
@@ -50,7 +52,7 @@ def group(ctx, msg):
             missing.append('set the time zone')
         return msg.add(
             "I'm not configured for this group! Ask a bot admin to go into the <b>moderator</b> "
-            'module settings, group <b>%s</b>, and %s.', group_id, util.humanize.list(missing))
+            'module settings, group <b>%s</b>, and %s.', group_id, humanize.list(missing))
 
     calendar_view = ctx.bot.multibot.multical.view(calcodes.split())
     tzinfo = pytz.timezone(timezone)
@@ -78,7 +80,7 @@ def private(ctx, msg, modconf):
             missing.append('choose one or more calendars')
         if not timezone:
             missing.append('set your time zone')
-        msg.add('Please %s!', util.humanize.list(missing))
+        msg.add('Please %s!', humanize.list(missing))
         return settings(ctx, msg, modconf)
 
     calendar_view = ctx.bot.multibot.multical.view(calcodes.split())
@@ -117,7 +119,7 @@ def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
         return ctx.reply_inline([],
                                 is_personal=True,
                                 cache_time=30,
-                                switch_pm_text='Click to %s!' % util.humanize.list(missing),
+                                switch_pm_text='Click to %s!' % humanize.list(missing),
                                 switch_pm_parameter='L2V2ZW50cw')
 
     calendar_view = ctx.bot.multibot.multical.view(calcodes.split())
@@ -148,7 +150,7 @@ def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
                 subtitle = '%s @ %s' % (subtitle, event['location'].split(',', 1)[0])
             if full and event['description']:
                 title = u'%s \u2022 %s' % (event['summary'], subtitle)
-                description = util.html.sanitize(event['description'], strip=True)
+                description = html.sanitize(event['description'], strip=True)
             else:
                 title = event['summary']
                 description = subtitle
@@ -187,14 +189,14 @@ def format_event(ctx, event, tzinfo, full=True):
         })  # yapf: disable
         message = '%s @ <a href="%s">%s</a>' % (message, location_url, location_name)
     if full and event['description']:
-        message = '%s\n\n%s' % (message, util.html.sanitize(event['description']))
+        message = '%s\n\n%s' % (message, html.sanitize(event['description']))
     return message
 
 
 def humanize_range(start, end, tzinfo):
     """Return the range between start and end as human-friendly text."""
 
-    return util.humanize.range(
+    return humanize.range(
         datetime.datetime.fromtimestamp(start, tzinfo), datetime.datetime.fromtimestamp(
             end, tzinfo))
 
@@ -210,4 +212,4 @@ def settings(ctx, msg, modconf):
     user_id = '%s' % ctx.user['id']
     userconf = modconf['users'][user_id]
     fields = {'calendars', 'timezone'}
-    return util.adminui.fields(ctx, msg, userconf, fields, field, text)
+    return adminui.fields(ctx, msg, userconf, fields, field, text)

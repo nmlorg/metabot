@@ -11,4 +11,5 @@
 /metabot.egg-info/
 /share/
 /.coverage
+*.pyc
 __pycache__/

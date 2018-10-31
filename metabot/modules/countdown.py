@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import time
 
-from metabot import util
+from metabot.util import humanize
 
 
 def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
@@ -42,13 +42,13 @@ def format_delta(seconds):
         seconds = int(seconds)
     message = []
     if days:
-        message.append(util.humanize.plural(days, 'day', '<b>%i</b> %s'))
+        message.append(humanize.plural(days, 'day', '<b>%i</b> %s'))
     if hours:
-        message.append(util.humanize.plural(hours, 'hour', '<b>%i</b> %s'))
+        message.append(humanize.plural(hours, 'hour', '<b>%i</b> %s'))
     if minutes:
-        message.append(util.humanize.plural(minutes, 'minute', '<b>%i</b> %s'))
+        message.append(humanize.plural(minutes, 'minute', '<b>%i</b> %s'))
     if seconds:
-        message.append(util.humanize.plural(seconds, 'second', '<b>%s</b> %s'))
+        message.append(humanize.plural(seconds, 'second', '<b>%s</b> %s'))
     if message:
         return ', '.join(message)
     return '<b>NOW</b>'

@@ -10,7 +10,7 @@ from googleapiclient import discovery  # pylint: disable=import-error
 import oauth2client.file  # pylint: disable=import-error
 
 from metabot.calendars import base
-from metabot import util
+from metabot.util import iso8601
 
 
 class Calendar(base.Calendar):
@@ -94,7 +94,7 @@ class Calendar(base.Calendar):
                 proto = proto['dateTime']
             else:
                 proto = proto['date']
-        return util.iso8601.totimestamp(proto)
+        return iso8601.totimestamp(proto)
 
     @staticmethod
     def datetime_local_to_proto(local):

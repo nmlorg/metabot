@@ -5,15 +5,16 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import contextlib
 import logging
 
-from metabot import util
+from metabot.util import dicttools
+from metabot.util import jsonutil
 
 
-class BotConf(util.dicttools.ImplicitTrackingDict):
+class BotConf(dicttools.ImplicitTrackingDict):
     """Self-managing bot/module configuration store."""
 
     def __init__(self, confdir=None):
         self.fname = confdir and confdir + '/multibot.json'
-        data = self.fname and util.json.load(self.fname)
+        data = self.fname and jsonutil.load(self.fname)
         super(BotConf, self).__init__(isinstance(data, dict) and data or {})
 
     @contextlib.contextmanager
@@ -41,4 +42,4 @@ class BotConf(util.dicttools.ImplicitTrackingDict):
         """Serialize the store to disk (if confdir was provided at creation)."""
 
         if self.fname:
-            util.json.dump(self.fname, self)
+            jsonutil.dump(self.fname, self)

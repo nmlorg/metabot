@@ -1,15 +1,15 @@
-"""Tests for metabot.util.json."""
+"""Tests for metabot.util.jsonutil."""
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from metabot import util
+from metabot.util import jsonutil
 
 
 def test_load_nonexistent(tmpdir):
     """Verify the loader silently ignores nonexistent files."""
 
     tmpfile = tmpdir.join('test.json')
-    assert util.json.load(tmpfile.strpath) is None
+    assert jsonutil.load(tmpfile.strpath) is None
 
 
 def test_load_empty(tmpdir):
@@ -17,7 +17,7 @@ def test_load_empty(tmpdir):
 
     tmpfile = tmpdir.join('test.json')
     tmpfile.write('')
-    assert util.json.load(tmpfile.strpath) is None
+    assert jsonutil.load(tmpfile.strpath) is None
 
 
 def test_load_malformed(tmpdir):
@@ -25,7 +25,7 @@ def test_load_malformed(tmpdir):
 
     tmpfile = tmpdir.join('test.json')
     tmpfile.write('bogus data')
-    assert util.json.load(tmpfile.strpath) is None
+    assert jsonutil.load(tmpfile.strpath) is None
 
 
 def test_dump_simple(tmpdir):
@@ -33,7 +33,7 @@ def test_dump_simple(tmpdir):
 
     tmpfile = tmpdir.join('test.json')
     obj = 123
-    assert util.json.dump(tmpfile.strpath, obj) == obj
+    assert jsonutil.dump(tmpfile.strpath, obj) == obj
     assert tmpfile.read() == '123'
 
 
@@ -42,5 +42,5 @@ def test_dump_load(tmpdir):
 
     tmpfile = tmpdir.join('test.json')
     obj = {'key': ['value', 'value']}
-    assert util.json.dump(tmpfile.strpath, obj) == obj
-    assert util.json.load(tmpfile.strpath) == obj
+    assert jsonutil.dump(tmpfile.strpath, obj) == obj
+    assert jsonutil.load(tmpfile.strpath) == obj

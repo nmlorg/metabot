@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from metabot import util
+from metabot.util import adminui
 
 
 def modpredispatch(ctx, unused_msg, modconf):  # pylint: disable=missing-docstring
@@ -61,4 +61,4 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
     msg.path(group_id)
     groupconf = modconf[group_id]
     fields = {'calendars', 'greeting', 'maxeventscount', 'maxeventsdays', 'timezone'}
-    return util.adminui.fields(ctx, msg, groupconf, fields, field, text)
+    return adminui.fields(ctx, msg, groupconf, fields, field, text)

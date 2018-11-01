@@ -1,3 +1,4 @@
+/*.egg-info/
 /.pytest_cache/
 /.tox/
 /bin/
@@ -8,7 +9,6 @@
 /htmlcov/
 /include/
 /lib/
-/metabot.egg-info/
 /share/
 /.coverage
 *.pyc

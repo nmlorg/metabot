@@ -317,12 +317,8 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings: <b>Choose a field</b>\n'
-                    '\n'
-                    'Please choose one or more calendars and set your time zone!',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/events set calendars'}],
-                                                 [{'text': 'timezone', 'callback_data': '/events set timezone'}],
-                                                 [{'text': 'Back', 'callback_data': '/events'}]]},
+            'text': 'Please choose one or more calendars and set your time zone!',
+            'reply_markup': {'inline_keyboard': [[{'text': 'Settings', 'callback_data': '/events set'}]]},
         },
     ]  # yapf: disable
 

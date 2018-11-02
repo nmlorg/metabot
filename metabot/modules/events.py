@@ -81,7 +81,7 @@ def private(ctx, msg, modconf):
         if not timezone:
             missing.append('set your time zone')
         msg.add('Please %s!', humanize.list(missing))
-        return settings(ctx, msg, modconf)
+        return msg.button('Settings', '/events set')
 
     calendar_view = ctx.bot.multibot.multical.view(calcodes.split())
     tzinfo = pytz.timezone(timezone)

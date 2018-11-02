@@ -18,7 +18,6 @@ class MessageBuilder(object):
 
     action = None
     quiet = False
-    CALLBACK_DATA_MAX = 64
 
     def __init__(self):
         self._path = []
@@ -58,9 +57,6 @@ class MessageBuilder(object):
             if callback_data:
                 path.append(callback_data)
             callback_data = ' '.join(path)
-        if self.CALLBACK_DATA_MAX and len(callback_data) > self.CALLBACK_DATA_MAX:
-            text = 'BROKEN: ' + text
-            callback_data = '/stop'
         return {'text': cgi_escape(text), 'callback_data': callback_data}
 
     def button(self, text, callback_data):

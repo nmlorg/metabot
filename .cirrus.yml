@@ -10,9 +10,8 @@ test_task:
     fingerprint_script:
       - echo $PYTHON_VERSION
       - cat requirements-dev.txt
-      - echo git+https://github.com/nmlorg/ntelebot
-    populate_script: pip install -r requirements-dev.txt git+https://github.com/nmlorg/ntelebot -e .
+    populate_script: pip install -r requirements-dev.txt -e .
   test_script:
-    - pip install -r requirements-dev.txt git+https://github.com/nmlorg/ntelebot -e .
+    - pip install -r requirements-dev.txt -e .
     - pytest
     - pylint metabot

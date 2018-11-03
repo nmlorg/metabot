@@ -103,9 +103,8 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
         msg.add('Added %s to the admin list.', target)
 
     msg.action = 'Choose an admin'
-    msg.add(
-        'Forward a message from a user to add or remove them, or select an existing admin to '
-        'remove.')
+    msg.add('Forward a message from a user to add or remove them, or select an existing admin to '
+            'remove.')
 
     for admin_id in sorted(modconf['admins']):
         if admin_id != ctx.user['id']:

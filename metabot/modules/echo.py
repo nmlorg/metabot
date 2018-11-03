@@ -33,6 +33,11 @@ def admin(ctx, msg, modconf):
     command, message = ctx.split(2)
     command = command.lower()
 
+    if ctx.photo:
+        message = 'photo:%s' % ctx.photo
+    elif ctx.sticker:
+        message = 'sticker:%s' % ctx.sticker
+
     if command and message:
         if message == 'remove':
             if command not in modconf:

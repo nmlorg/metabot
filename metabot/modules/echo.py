@@ -33,7 +33,9 @@ def admin(ctx, msg, modconf):
     command, message = ctx.split(2)
     command = command.lower()
 
-    if ctx.photo:
+    if ctx.document:
+        message = 'document:%s' % ctx.document
+    elif ctx.photo:
         message = 'photo:%s' % ctx.photo
     elif ctx.sticker:
         message = 'sticker:%s' % ctx.sticker

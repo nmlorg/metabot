@@ -72,7 +72,7 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>\n'
                     '\n'
-                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
+                    'Forward a message from a user to add or remove them, or select an existing admin to remove.',
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
@@ -86,7 +86,7 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     "I'm not sure what <code>bogus value</code> is\u2014it's not a user id!\n"
                     '\n'
-                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
+                    'Forward a message from a user to add or remove them, or select an existing admin to remove.',
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
@@ -98,9 +98,9 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>\n'
                     '\n'
-                    '1000 is already an admin.\n'
+                    "You can't remove yourself from the admin list.\n"
                     '\n'
-                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
+                    'Forward a message from a user to add or remove them, or select an existing admin to remove.',
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
@@ -114,58 +114,28 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     'Added 2000 to the admin list.\n'
                     '\n'
-                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Remove 2000', 'callback_data': '/admin modulestestbot admin remove 2000'}],
+                    'Forward a message from a user to add or remove them, or select an existing admin to remove.',
+            'reply_markup': {'inline_keyboard': [[{'text': 'Remove 2000', 'callback_data': '/admin modulestestbot admin 2000'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
 
-    assert conversation.message('/admin modulestestbot admin remove bogus value') == [
+    assert conversation.message('/admin modulestestbot admin bogus value') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>\n'
                     '\n'
-                    "I'm not sure what <code>bogus value</code> is\u2014it's not an admin!\n"
+                    "I'm not sure what <code>bogus value</code> is\u2014it's not a user id!\n"
                     '\n'
-                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Remove 2000', 'callback_data': '/admin modulestestbot admin remove 2000'}],
+                    'Forward a message from a user to add or remove them, or select an existing admin to remove.',
+            'reply_markup': {'inline_keyboard': [[{'text': 'Remove 2000', 'callback_data': '/admin modulestestbot admin 2000'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
 
-    assert conversation.message('/admin modulestestbot admin remove 3000') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>\n'
-                    '\n'
-                    "Oops, looks like 3000 isn't an admin [any more?].\n"
-                    '\n'
-                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Remove 2000', 'callback_data': '/admin modulestestbot admin remove 2000'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
-        },
-    ]  # yapf: disable
-
-    assert conversation.message('/admin modulestestbot admin remove 1000') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>\n'
-                    '\n'
-                    "You can't remove yourself from the admin list.\n"
-                    '\n'
-                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Remove 2000', 'callback_data': '/admin modulestestbot admin remove 2000'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
-        },
-    ]  # yapf: disable
-
-    assert conversation.message('/admin modulestestbot admin remove 2000') == [
+    assert conversation.message('/admin modulestestbot admin 2000') == [
         {
             'chat_id': 1000,
             'disable_web_page_preview': True,
@@ -174,7 +144,7 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     'Removed 2000 from the admin list.\n'
                     '\n'
-                    'Forward a message from a user to add as an admin, or select an existing admin to remove.',
+                    'Forward a message from a user to add or remove them, or select an existing admin to remove.',
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable

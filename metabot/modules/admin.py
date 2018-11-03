@@ -78,40 +78,35 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
 def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
     """Handle /admin BOTNAME admin (configure the admin module itself)."""
 
-    target = ctx.text
-
     if 'admins' not in modconf:
         modconf['admins'] = []
 
-    if target.startswith('remove '):
-        target = target[len('remove '):]
-        if not target.isdigit():
-            msg.add("I'm not sure what <code>%s</code> is\u2014it's not an admin!", target)
-        else:
-            target = int(target)
-            if target not in modconf['admins']:
-                msg.add("Oops, looks like %s isn't an admin [any more?].", target)
-            elif target == ctx.user['id']:
-                msg.add("You can't remove yourself from the admin list.")
-            else:
-                modconf['admins'].remove(target)
-                msg.add('Removed %s from the admin list.', target)
+    target = ctx.text
+    if target.isdigit():
+        target = int(target)
     elif target:
-        if not target.isdigit():
-            msg.add("I'm not sure what <code>%s</code> is\u2014it's not a user id!", target)
+        msg.add("I'm not sure what <code>%s</code> is\u2014it's not a user id!", target)
+        target = None
+
+    if not target:
+        target = ctx.forward_from
+
+    if target in modconf['admins']:
+        if target == ctx.user['id']:
+            msg.add("You can't remove yourself from the admin list.")
         else:
-            target = int(target)
-            if target in modconf['admins']:
-                msg.add('%s is already an admin.', target)
-            else:
-                modconf['admins'].append(target)
-                modconf['admins'].sort()
-                msg.add('Added %s to the admin list.', target)
+            modconf['admins'].remove(target)
+            msg.add('Removed %s from the admin list.', target)
+    elif target:
+        modconf['admins'].append(target)
+        modconf['admins'].sort()
+        msg.add('Added %s to the admin list.', target)
 
     msg.action = 'Choose an admin'
     msg.add(
-        'Forward a message from a user to add as an admin, or select an existing admin to remove.')
+        'Forward a message from a user to add or remove them, or select an existing admin to '
+        'remove.')
 
     for admin_id in sorted(modconf['admins']):
         if admin_id != ctx.user['id']:
-            msg.button('Remove %s' % admin_id, 'remove %s' % admin_id)
+            msg.button('Remove %s' % admin_id, '%s' % admin_id)

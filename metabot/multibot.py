@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import logging
+import random
 
 import ntelebot
 
@@ -31,15 +32,18 @@ class MultiBot(object):
                 cal = self.multical.add(calendar_info['calid'])
                 self.calendars[cal.calcode] = calendar_info
 
-        def _hourly():
-            self.multical.poll()
-            self.loop.queue.puthourly(55 * 60, _hourly)
-
-        _hourly()
+        self._queue_hourly()
 
         for username, bot_config in self.bots.items():
             if bot_config['telegram']['running']:
                 self.run_bot(username)
+
+    def _queue_hourly(self):
+        self.loop.queue.puthourly(0, self._hourly, jitter=random.random() * 5)
+
+    def _hourly(self):
+        self.multical.poll()
+        self._queue_hourly()
 
     def add_bot(self, token):
         """Begin polling bot_config.token, dispatching updates through bot_config.modules."""

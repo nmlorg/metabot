@@ -77,7 +77,7 @@ def group(ctx, msg):
     if not events:
         msg.add('No events in the next %s days!', days)
     else:
-        msg.add('\n'.join(format_event(ctx, event, tzinfo, full=False) for event in events))
+        msg.add('\n'.join(format_event(ctx.bot, event, tzinfo, full=False) for event in events))
 
 
 def private(ctx, msg, modconf):
@@ -105,7 +105,7 @@ def private(ctx, msg, modconf):
     if not event:
         msg.add('No upcoming events!')
     else:
-        msg.add(format_event(ctx, event, tzinfo, full=True))
+        msg.add(format_event(ctx.bot, event, tzinfo, full=True))
     buttons = [None, ('Settings', '/events set'), None]
     if prevev:
         buttons[0] = ('Prev', '/events ' + prevev['local_id'])
@@ -171,7 +171,7 @@ def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
                 'description': description,
                 'input_message_content': {
                     'disable_web_page_preview': True,
-                    'message_text': format_event(ctx, event, tzinfo, full=full),
+                    'message_text': format_event(ctx.bot, event, tzinfo, full=full),
                     'parse_mode': 'HTML',
                 },
                 'id': event['local_id'],
@@ -189,10 +189,10 @@ def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
         switch_pm_parameter='L2V2ZW50cyBzZXQ')
 
 
-def format_event(ctx, event, tzinfo, full=True):
+def format_event(bot, event, tzinfo, full=True):
     """Given a metabot.calendars.base.Calendar event, build a human-friendly representation."""
 
-    url = ctx.encode_url('/events ' + event['local_id'])
+    url = bot.encode_url('/events ' + event['local_id'])
     message = '<b>%s</b>\n<a href="%s">%s</a>' % (
         event['summary'], url, humanize_range(event['start'], event['end'], tzinfo))
     if event['location']:

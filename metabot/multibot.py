@@ -41,22 +41,22 @@ class MultiBot(object):
     def add_bot(self, token):
         """Begin polling bot_config.token, dispatching updates through bot_config.modules."""
 
-        bot_info = ntelebot.bot.Bot(token).get_me()
-        self.bots[bot_info['username']] = {
+        username = ntelebot.bot.Bot(token).username
+        self.bots[username] = {
             'telegram': {
                 'running': False,
                 'token': token,
             },
         }
         self.bots.save()
-        return bot_info['username']
+        return username
 
     def _build_bot(self, username):
         bot_config = self.bots[username]
         bot = ntelebot.bot.Bot(bot_config['telegram']['token'])
         bot.config = bot_config
         bot.multibot = self
-        bot.username = username
+        assert bot.username == username
         return bot
 
     def run_bot(self, username):

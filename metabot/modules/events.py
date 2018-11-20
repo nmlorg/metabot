@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import datetime
+import random
 import time
 
 import pytz
@@ -21,6 +22,18 @@ ALIASES = ('calendar', 'event', 'events')
 
 def modhelp(unused_ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
     sections['commands'].add('/events \u2013 Display recent and upcoming events')
+
+
+def modinit(multibot):  # pylint: disable=missing-docstring
+
+    def _queue():
+        multibot.loop.queue.puthourly(0, _hourly, jitter=random.random() * 5)
+
+    def _hourly():
+        multibot.multical.poll()
+        _queue()
+
+    _queue()
 
 
 def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring

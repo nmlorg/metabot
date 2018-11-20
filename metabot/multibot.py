@@ -3,7 +3,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import logging
-import random
 
 import ntelebot
 
@@ -17,11 +16,7 @@ class MultiBot(object):
     """An ntelebot.loop.Loop that manages multiple bots."""
 
     def __init__(self, modules, confdir=None):
-        self.modules = {}
         self.dispatcher = _MultiBotLoopDispatcher()
-        for module in modules:
-            modname = module.__name__.rsplit('.', 1)[-1]
-            self.modules[modname] = module
         self.loop = ntelebot.loop.Loop()
         self.bots = botconf.BotConf(confdir)
         self.bots.finalize()
@@ -31,19 +26,17 @@ class MultiBot(object):
             for calendar_info in jsonutil.load(confdir + '/calendars.json') or ():
                 cal = self.multical.add(calendar_info['calid'])
                 self.calendars[cal.calcode] = calendar_info
-
-        self._queue_hourly()
+        self.modules = {}
+        for module in modules:
+            modname = module.__name__.rsplit('.', 1)[-1]
+            self.modules[modname] = module
+            modinit = getattr(module, 'modinit', None)
+            if modinit:
+                modinit(self)
 
         for username, bot_config in self.bots.items():
             if bot_config['telegram']['running']:
                 self.run_bot(username)
-
-    def _queue_hourly(self):
-        self.loop.queue.puthourly(0, self._hourly, jitter=random.random() * 5)
-
-    def _hourly(self):
-        self.multical.poll()
-        self._queue_hourly()
 
     def add_bot(self, token):
         """Begin polling bot_config.token, dispatching updates through bot_config.modules."""

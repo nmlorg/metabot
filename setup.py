@@ -3,7 +3,7 @@ import setuptools
 
 setuptools.setup(
     name='metabot',
-    version='0.0.4.1',
+    version='0.0.4.2',
     author='Daniel Reed',
     author_email='nmlorg@gmail.com',
     description='Modularized, multi-account bot.',

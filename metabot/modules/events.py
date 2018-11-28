@@ -6,6 +6,7 @@ import datetime
 import random
 import time
 
+import ntelebot
 import pytz
 
 from metabot.util import adminui
@@ -31,6 +32,24 @@ def modinit(multibot):  # pylint: disable=missing-docstring
 
     def _hourly():
         multibot.multical.poll()
+        for botconf in multibot.bots.values():
+            for groupid, groupconf in botconf['moderator'].items():
+                calcodes, tzinfo, count, days, daily = _get_group_conf(groupconf)
+                if tzinfo and isinstance(daily, int):
+                    now = datetime.datetime.now(tzinfo)
+                    if now.hour == daily:
+                        # TODO: See https://github.com/nmlorg/metabot/issues/26.
+                        bot = ntelebot.bot.Bot(botconf['telegram']['token'])
+                        bot.multibot = multibot
+                        events = _get_group_events(bot, calcodes, tzinfo, count, days)
+                        if events:
+                            text = 'Upcoming events:\n\n' + '\n'.join(events)
+                            bot.send_message(
+                                chat_id=groupid,
+                                text=text,
+                                parse_mode='HTML',
+                                disable_web_page_preview=True,
+                                disable_notification=True)
         _queue()
 
     _queue()
@@ -50,34 +69,43 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
     return False
 
 
+def _get_group_conf(groupconf):
+    timezone = groupconf.get('timezone')
+    tzinfo = timezone and pytz.timezone(timezone)
+    return (groupconf.get('calendars', '').split(), tzinfo, groupconf.get('maxeventscount', 10),
+            groupconf.get('maxeventsdays', 6), groupconf.get('daily'))
+
+
+def _get_group_events(bot, calcodes, tzinfo, count, days):
+    calendar_view = bot.multibot.multical.view(calcodes)
+    now = time.time()
+    return [
+        format_event(bot, event, tzinfo, full=False)
+        for event in list(calendar_view.get_overlap(now, now + 60 * 60 * 24 * days))[:count]
+    ]
+
+
 def group(ctx, msg):
     """Handle /events in a group chat."""
 
     group_id = '%s' % ctx.chat['id']
     groupconf = ctx.bot.multibot.bots[ctx.bot.username]['moderator'][group_id]
-    calcodes = groupconf.get('calendars')
-    timezone = groupconf.get('timezone')
-    if not calcodes or not timezone:
+    calcodes, tzinfo, count, days, unused_daily = _get_group_conf(groupconf)
+    if not calcodes or not tzinfo:
         missing = []
         if not calcodes:
             missing.append('choose one or more calendars')
-        if not timezone:
+        if not tzinfo:
             missing.append('set the time zone')
         return msg.add(
             "I'm not configured for this group! Ask a bot admin to go into the <b>moderator</b> "
             'module settings, group <b>%s</b>, and %s.', group_id, humanize.list(missing))
 
-    calendar_view = ctx.bot.multibot.multical.view(calcodes.split())
-    tzinfo = pytz.timezone(timezone)
-    count = groupconf.get('maxeventscount', 10)
-    days = groupconf.get('maxeventsdays', 6)
-
-    now = time.time()
-    events = list(calendar_view.get_overlap(now, now + 60 * 60 * 24 * days))[:count]
+    events = _get_group_events(ctx.bot, calcodes, tzinfo, count, days)
     if not events:
         msg.add('No events in the next %s days!', days)
     else:
-        msg.add('\n'.join(format_event(ctx.bot, event, tzinfo, full=False) for event in events))
+        msg.add('\n'.join(events))
 
 
 def private(ctx, msg, modconf):

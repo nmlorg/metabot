@@ -59,6 +59,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'daily \u2022 Should I announce upcoming events once a day? If so, at what hour?', 'callback_data': '/admin modulestestbot moderator -1001000001000 daily'}],
                                                  [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
                                                  [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
                                                  [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
@@ -76,6 +77,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     "I can't set <code>bogus</code>.",
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'daily \u2022 Should I announce upcoming events once a day? If so, at what hour?', 'callback_data': '/admin modulestestbot moderator -1001000001000 daily'}],
                                                  [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
                                                  [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
                                                  [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
@@ -107,6 +109,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     'Set <code>greeting</code> to <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'daily \u2022 Should I announce upcoming events once a day? If so, at what hour?', 'callback_data': '/admin modulestestbot moderator -1001000001000 daily'}],
                                                  [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
                                                  [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
                                                  [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
@@ -179,6 +182,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     'Changed <code>greeting</code> from <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code> to <code>Welcome! New message.</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'daily \u2022 Should I announce upcoming events once a day? If so, at what hour?', 'callback_data': '/admin modulestestbot moderator -1001000001000 daily'}],
                                                  [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
                                                  [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
                                                  [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
@@ -212,6 +216,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     'Unset <code>greeting</code> (was <code>Welcome! New message.</code>).',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'daily \u2022 Should I announce upcoming events once a day? If so, at what hour?', 'callback_data': '/admin modulestestbot moderator -1001000001000 daily'}],
                                                  [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
                                                  [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
                                                  [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
@@ -229,6 +234,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     'Unset <code>greeting</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'daily \u2022 Should I announce upcoming events once a day? If so, at what hour?', 'callback_data': '/admin modulestestbot moderator -1001000001000 daily'}],
                                                  [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
                                                  [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
                                                  [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],

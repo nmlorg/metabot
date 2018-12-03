@@ -62,6 +62,8 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
     groupconf = modconf[group_id]
     fields = (
         ('calendars', adminui.calendars, 'Which calendars should be listed in /events?'),
+        ('daily', adminui.integer,
+         'Should I announce upcoming events once a day? If so, at what hour?'),
         ('greeting', adminui.freeform, 'How should I greet people when they join?'),
         ('maxeventscount', adminui.integer, 'How many events should be listed in /events?'),
         ('maxeventsdays', adminui.integer, 'How many days into the future should /events look?'),

@@ -58,11 +58,11 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
-                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
-                                                 [{'text': 'maxeventscount', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
-                                                 [{'text': 'maxeventsdays', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
-                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
+                                                 [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
+                                                 [{'text': 'timezone \u2022 What time zone should be used in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -75,11 +75,11 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
                     '\n'
                     "I can't set <code>bogus</code>.",
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
-                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
-                                                 [{'text': 'maxeventscount', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
-                                                 [{'text': 'maxeventsdays', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
-                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
+                                                 [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
+                                                 [{'text': 'timezone \u2022 What time zone should be used in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -90,6 +90,8 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a greeting: <b>Type a new value for greeting</b>\n'
+                    '\n'
+                    'How should I greet people when they join?\n'
                     '\n'
                     'Type your new value, or type "off" to disable/reset to default.',
             'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
@@ -104,11 +106,11 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
                     '\n'
                     'Set <code>greeting</code> to <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
-                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
-                                                 [{'text': 'maxeventscount', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
-                                                 [{'text': 'maxeventsdays', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
-                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
+                                                 [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
+                                                 [{'text': 'timezone \u2022 What time zone should be used in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -159,6 +161,8 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a greeting: <b>Type a new value for greeting</b>\n'
                     '\n'
+                    'How should I greet people when they join?\n'
+                    '\n'
                     '<code>greeting</code> is currently <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code>.\n'
                     '\n'
                     'Type your new value, or type "off" to disable/reset to default.',
@@ -174,11 +178,11 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
                     '\n'
                     'Changed <code>greeting</code> from <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code> to <code>Welcome! New message.</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
-                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
-                                                 [{'text': 'maxeventscount', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
-                                                 [{'text': 'maxeventsdays', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
-                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
+                                                 [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
+                                                 [{'text': 'timezone \u2022 What time zone should be used in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -189,6 +193,8 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a greeting: <b>Type a new value for greeting</b>\n'
+                    '\n'
+                    'How should I greet people when they join?\n'
                     '\n'
                     '<code>greeting</code> is currently <code>Welcome! New message.</code>.\n'
                     '\n'
@@ -205,11 +211,11 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
                     '\n'
                     'Unset <code>greeting</code> (was <code>Welcome! New message.</code>).',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
-                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
-                                                 [{'text': 'maxeventscount', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
-                                                 [{'text': 'maxeventsdays', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
-                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
+                                                 [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
+                                                 [{'text': 'timezone \u2022 What time zone should be used in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -222,11 +228,11 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
                     '\n'
                     'Unset <code>greeting</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
-                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
-                                                 [{'text': 'maxeventscount', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
-                                                 [{'text': 'maxeventsdays', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
-                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
+                                                 [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
+                                                 [{'text': 'timezone \u2022 What time zone should be used in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable

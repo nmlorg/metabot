@@ -7,7 +7,7 @@ import math
 import pytz
 
 
-def calendars(ctx, msg, subconf, field, text):
+def calendars(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments
     """Configure a selection of calendars."""
 
     action, _, target = text.partition(' ')
@@ -35,6 +35,7 @@ def calendars(ctx, msg, subconf, field, text):
         subconf.pop(field)
 
     msg.action = 'Select a calendar'
+    msg.add(desc)
     msg.add('Select a calendar to add or remove from the list below:')
     for calcode, calendar_info in sorted(
             ctx.bot.multibot.calendars.items(), key=lambda pair: pair[1]['name']):
@@ -47,28 +48,23 @@ def calendars(ctx, msg, subconf, field, text):
 def fields(ctx, msg, subconf, fieldset, field, text):  # pylint: disable=too-many-arguments
     """Present a menu of fields to edit."""
 
-    if field in fieldset:
-        if field == 'calendars':
-            uifunc = calendars
-        elif field == 'timezone':
-            uifunc = timezone
-        elif field.startswith('max'):
-            uifunc = integer
-        else:
-            uifunc = freeform
-        uifunc(ctx, msg, subconf, field, text)
-    elif field:
-        msg.add("I can't set <code>%s</code>.", field)
+    for fieldname, uifunc, fielddesc in fieldset:
+        if fieldname == field:
+            uifunc(ctx, msg, subconf, field, fielddesc, text)
+            break
+    else:
+        if field:
+            msg.add("I can't set <code>%s</code>.", field)
 
     if msg.action:
         msg.path(field)
     else:
         msg.action = 'Choose a field'
-        for fieldname in sorted(fieldset):
-            msg.button(fieldname, fieldname)
+        for fieldname, unused_uifunc, fielddesc in fieldset:
+            msg.button('%s \u2022 %s' % (fieldname, fielddesc), fieldname)
 
 
-def freeform(unused_ctx, msg, subconf, field, text):
+def freeform(unused_ctx, msg, subconf, field, desc, text):
     """Configure a free-form text field."""
 
     if text:
@@ -90,12 +86,13 @@ def freeform(unused_ctx, msg, subconf, field, text):
             subconf.pop(field)
     else:
         msg.action = 'Type a new value for ' + field
+        msg.add(desc)
         if subconf.get(field):
             msg.add('<code>%s</code> is currently <code>%s</code>.', field, subconf[field])
         msg.add('Type your new value, or type "off" to disable/reset to default.')
 
 
-def integer(unused_ctx, msg, subconf, field, text):
+def integer(unused_ctx, msg, subconf, field, desc, text):
     """Configure an integer field."""
 
     if text:
@@ -119,12 +116,13 @@ def integer(unused_ctx, msg, subconf, field, text):
             subconf.pop(field)
     else:
         msg.action = 'Type a new value for ' + field
+        msg.add(desc)
         if subconf.get(field):
             msg.add('<code>%s</code> is currently <code>%s</code>.', field, subconf[field])
         msg.add('Type your new value, or type "off" to disable/reset to default.')
 
 
-def timezone(ctx, msg, subconf, field, text):
+def timezone(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments
     """Configure a time zone."""
 
     text, _, page = text.partition(' ')
@@ -161,6 +159,7 @@ def timezone(ctx, msg, subconf, field, text):
     timezones = sorted(timezones)[page * 7:(page + 1) * 7]
 
     msg.action = 'Choose a time zone'
+    msg.add(desc)
     msg.add('Choose a time zone:')
     for tzname in timezones:
         msg.button(tzname, tzname)

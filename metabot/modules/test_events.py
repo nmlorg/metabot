@@ -74,6 +74,8 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
                     '\n'
                     'Added <code>6fc2c510</code> to your calendar view.\n'
                     '\n'
+                    'Which calendars should be listed in /events?\n'
+                    '\n'
                     'Select a calendar to add or remove from the list below:',
             'reply_markup': {'inline_keyboard': [[{'text': 'Remove Test Calendar', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars remove 6fc2c510'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
@@ -86,6 +88,8 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
+                    '\n'
+                    'What time zone should be used in /events?\n'
                     '\n'
                     'Choose a time zone:',
             'reply_markup': {'inline_keyboard': [[{'text': 'Africa', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Africa'}],
@@ -108,6 +112,8 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
                     '\n'
+                    'What time zone should be used in /events?\n'
+                    '\n'
                     'Choose a time zone:',
             'reply_markup': {'inline_keyboard': [[{'text': 'Canada', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada'}],
                                                  [{'text': 'Europe', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Europe'}],
@@ -129,6 +135,8 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
                     '\n'
+                    'What time zone should be used in /events?\n'
+                    '\n'
                     'Choose a time zone:',
             'reply_markup': {'inline_keyboard': [[{'text': 'US/Alaska', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone US/Alaska'}],
                                                  [{'text': 'US/Arizona', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone US/Arizona'}],
@@ -148,6 +156,8 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
                     '\n'
+                    'What time zone should be used in /events?\n'
+                    '\n'
                     'Choose a time zone:',
             'reply_markup': {'inline_keyboard': [[{'text': 'Canada/Atlantic', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada/Atlantic'}],
                                                  [{'text': 'Canada/Central', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada/Central'}],
@@ -166,6 +176,8 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
                     '\n'
+                    'What time zone should be used in /events?\n'
+                    '\n'
                     'Choose a time zone:',
             'reply_markup': {'inline_keyboard': [[{'text': 'Europe/London', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Europe/London'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
@@ -178,6 +190,8 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
+                    '\n'
+                    'What time zone should be used in /events?\n'
                     '\n'
                     'Choose a time zone:',
             'reply_markup': {'inline_keyboard': [[{'text': 'America/Indiana/Indianapolis', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana/Indianapolis'}],
@@ -200,6 +214,8 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
                     '\n'
+                    'What time zone should be used in /events?\n'
+                    '\n'
                     'Choose a time zone:',
             'reply_markup': {'inline_keyboard': [[{'text': 'America/Indiana/Winamac', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana/Winamac'}],
                                                  [{'text': 'Prev', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana 0'},
@@ -216,11 +232,11 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
                     '\n'
                     'Set timezone to <code>US/Pacific</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
-                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
-                                                 [{'text': 'maxeventscount', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
-                                                 [{'text': 'maxeventsdays', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
-                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
+                                                 [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
+                                                 [{'text': 'timezone \u2022 What time zone should be used in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -246,11 +262,11 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
                     '\n'
                     'Set timezone to <code>UTC</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
-                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
-                                                 [{'text': 'maxeventscount', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
-                                                 [{'text': 'maxeventsdays', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
-                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
+                                                 [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
+                                                 [{'text': 'timezone \u2022 What time zone should be used in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -276,11 +292,11 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
             'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
                     '\n'
                     'Set <code>maxeventscount</code> to <code>1</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
-                                                 [{'text': 'greeting', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
-                                                 [{'text': 'maxeventscount', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
-                                                 [{'text': 'maxeventsdays', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
-                                                 [{'text': 'timezone', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
+                                                 [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
+                                                 [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
+                                                 [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
+                                                 [{'text': 'timezone \u2022 What time zone should be used in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
         },
     ]  # yapf: disable
@@ -329,6 +345,8 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
             'parse_mode': 'HTML',
             'text': 'Events \u203a Settings \u203a calendars: <b>Select a calendar</b>\n'
                     '\n'
+                    'Which calendars do you want to see?\n'
+                    '\n'
                     'Select a calendar to add or remove from the list below:',
             'reply_markup': {'inline_keyboard': [[{'text': 'Add Test Calendar', 'callback_data': '/events set calendars add 6fc2c510'}],
                                                  [{'text': 'Back', 'callback_data': '/events set'}]]},
@@ -344,6 +362,8 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
                     '\n'
                     'Added <code>6fc2c510</code> to your calendar view.\n'
                     '\n'
+                    'Which calendars do you want to see?\n'
+                    '\n'
                     'Select a calendar to add or remove from the list below:',
             'reply_markup': {'inline_keyboard': [[{'text': 'Remove Test Calendar', 'callback_data': '/events set calendars remove 6fc2c510'}],
                                                  [{'text': 'Back', 'callback_data': '/events set'}]]},
@@ -358,8 +378,8 @@ def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-
             'text': 'Events \u203a Settings: <b>Choose a field</b>\n'
                     '\n'
                     'Set timezone to <code>US/Pacific</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/events set calendars'}],
-                                                 [{'text': 'timezone', 'callback_data': '/events set timezone'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars do you want to see?', 'callback_data': '/events set calendars'}],
+                                                 [{'text': 'timezone \u2022 What time zone are you in?', 'callback_data': '/events set timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/events'}]]},
         },
     ]  # yapf: disable
@@ -432,6 +452,8 @@ def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
                     '\n'
                     'Added <code>6fc2c510</code> to your calendar view.\n'
                     '\n'
+                    'Which calendars do you want to see?\n'
+                    '\n'
                     'Select a calendar to add or remove from the list below:',
             'reply_markup': {'inline_keyboard': [[{'text': 'Remove Test Calendar', 'callback_data': '/events set calendars remove 6fc2c510'}],
                                                  [{'text': 'Back', 'callback_data': '/events set'}]]},
@@ -446,8 +468,8 @@ def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
             'text': 'Events \u203a Settings: <b>Choose a field</b>\n'
                     '\n'
                     'Set timezone to <code>US/Pacific</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/events set calendars'}],
-                                                 [{'text': 'timezone', 'callback_data': '/events set timezone'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars do you want to see?', 'callback_data': '/events set calendars'}],
+                                                 [{'text': 'timezone \u2022 What time zone are you in?', 'callback_data': '/events set timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/events'}]]},
         },
     ]  # yapf: disable
@@ -573,8 +595,8 @@ def test_settings(conversation):  # pylint: disable=redefined-outer-name
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': 'Events \u203a Settings: <b>Choose a field</b>',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/events set calendars'}],
-                                                 [{'text': 'timezone', 'callback_data': '/events set timezone'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars do you want to see?', 'callback_data': '/events set calendars'}],
+                                                 [{'text': 'timezone \u2022 What time zone are you in?', 'callback_data': '/events set timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/events'}]]},
         },
     ]  # yapf: disable
@@ -585,6 +607,8 @@ def test_settings(conversation):  # pylint: disable=redefined-outer-name
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': 'Events \u203a Settings \u203a calendars: <b>Select a calendar</b>\n'
+                    '\n'
+                    'Which calendars do you want to see?\n'
                     '\n'
                     'Select a calendar to add or remove from the list below:',
             'reply_markup': {'inline_keyboard': [[{'text': 'Add Test Calendar', 'callback_data': '/events set calendars add 6fc2c510'}],
@@ -601,6 +625,8 @@ def test_settings(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     'Added <code>6fc2c510</code> to your calendar view.\n'
                     '\n'
+                    'Which calendars do you want to see?\n'
+                    '\n'
                     'Select a calendar to add or remove from the list below:',
             'reply_markup': {'inline_keyboard': [[{'text': 'Remove Test Calendar', 'callback_data': '/events set calendars remove 6fc2c510'}],
                                                  [{'text': 'Back', 'callback_data': '/events set'}]]},
@@ -615,6 +641,8 @@ def test_settings(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Events \u203a Settings \u203a calendars: <b>Select a calendar</b>\n'
                     '\n'
                     '<code>6fc2c510</code> is already in your calendar view!\n'
+                    '\n'
+                    'Which calendars do you want to see?\n'
                     '\n'
                     'Select a calendar to add or remove from the list below:',
             'reply_markup': {'inline_keyboard': [[{'text': 'Remove Test Calendar', 'callback_data': '/events set calendars remove 6fc2c510'}],
@@ -631,6 +659,8 @@ def test_settings(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     'Removed <code>6fc2c510</code> from your calendar view.\n'
                     '\n'
+                    'Which calendars do you want to see?\n'
+                    '\n'
                     'Select a calendar to add or remove from the list below:',
             'reply_markup': {'inline_keyboard': [[{'text': 'Add Test Calendar', 'callback_data': '/events set calendars add 6fc2c510'}],
                                                  [{'text': 'Back', 'callback_data': '/events set'}]]},
@@ -645,6 +675,8 @@ def test_settings(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Events \u203a Settings \u203a calendars: <b>Select a calendar</b>\n'
                     '\n'
                     '<code>6fc2c510</code> is not in your calendar view!\n'
+                    '\n'
+                    'Which calendars do you want to see?\n'
                     '\n'
                     'Select a calendar to add or remove from the list below:',
             'reply_markup': {'inline_keyboard': [[{'text': 'Add Test Calendar', 'callback_data': '/events set calendars add 6fc2c510'}],
@@ -661,6 +693,8 @@ def test_settings(conversation):  # pylint: disable=redefined-outer-name
                     '\n'
                     '<code>bogus</code> is not a calendar!\n'
                     '\n'
+                    'Which calendars do you want to see?\n'
+                    '\n'
                     'Select a calendar to add or remove from the list below:',
             'reply_markup': {'inline_keyboard': [[{'text': 'Add Test Calendar', 'callback_data': '/events set calendars add 6fc2c510'}],
                                                  [{'text': 'Back', 'callback_data': '/events set'}]]},
@@ -675,8 +709,8 @@ def test_settings(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Events \u203a Settings: <b>Choose a field</b>\n'
                     '\n'
                     "I can't set <code>bogus</code>.",
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars', 'callback_data': '/events set calendars'}],
-                                                 [{'text': 'timezone', 'callback_data': '/events set timezone'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars do you want to see?', 'callback_data': '/events set calendars'}],
+                                                 [{'text': 'timezone \u2022 What time zone are you in?', 'callback_data': '/events set timezone'}],
                                                  [{'text': 'Back', 'callback_data': '/events'}]]},
         },
     ]  # yapf: disable

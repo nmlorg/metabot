@@ -190,7 +190,7 @@ def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
             if event['location']:
                 subtitle = '%s @ %s' % (subtitle, event['location'].split(',', 1)[0])
             if full and event['description']:
-                title = u'%s \u2022 %s' % (event['summary'], subtitle)
+                title = '%s \u2022 %s' % (event['summary'], subtitle)
                 description = html.sanitize(event['description'], strip=True)
             else:
                 title = event['summary']
@@ -252,5 +252,8 @@ def settings(ctx, msg, modconf):
 
     user_id = '%s' % ctx.user['id']
     userconf = modconf['users'][user_id]
-    fields = {'calendars', 'timezone'}
+    fields = (
+        ('calendars', adminui.calendars, 'Which calendars do you want to see?'),
+        ('timezone', adminui.timezone, 'What time zone are you in?'),
+    )
     return adminui.fields(ctx, msg, userconf, fields, field, text)

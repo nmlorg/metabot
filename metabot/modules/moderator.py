@@ -60,5 +60,11 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
 
     msg.path(group_id)
     groupconf = modconf[group_id]
-    fields = {'calendars', 'greeting', 'maxeventscount', 'maxeventsdays', 'timezone'}
+    fields = (
+        ('calendars', adminui.calendars, 'Which calendars should be listed in /events?'),
+        ('greeting', adminui.freeform, 'How should I greet people when they join?'),
+        ('maxeventscount', adminui.integer, 'How many events should be listed in /events?'),
+        ('maxeventsdays', adminui.integer, 'How many days into the future should /events look?'),
+        ('timezone', adminui.timezone, 'What time zone should be used in /events?'),
+    )
     return adminui.fields(ctx, msg, groupconf, fields, field, text)

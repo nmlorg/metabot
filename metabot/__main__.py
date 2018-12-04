@@ -7,7 +7,9 @@ import logging
 import pkgutil
 
 from metabot import modules as modules_package
+from metabot.modules import admin
 from metabot import multibot
+from metabot.util import humanize
 
 try:
     raw_input
@@ -51,6 +53,19 @@ def main():  # pylint: disable=missing-docstring
                 print('Woops, that generated: %r', exc)
             else:
                 mybot.run_bot(username)
+    unconfigured = sorted(
+        username for username, botconf in mybot.bots.items() if not botconf['admin'].get('admins'))
+    if unconfigured:
+        print()
+        print('To configure %s, open a chat with:' % humanize.list(unconfigured))
+        print()
+        for username in unconfigured:
+            print('    https://t.me/%s' % username)
+        print()
+        print('and type:')
+        print()
+        print('    /_bootstrap %s' % admin.BOOTSTRAP_TOKEN)
+        print()
     mybot.run()
 
 

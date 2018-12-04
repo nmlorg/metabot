@@ -2,6 +2,10 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import uuid
+
+BOOTSTRAP_TOKEN = uuid.uuid4().hex
+
 
 def modhelp(ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
     bots = sorted(username for username, botconf in ctx.bot.multibot.bots.items()
@@ -11,9 +15,12 @@ def modhelp(ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
         sections['commands'].add("/admin \u2013 Manage the bot's state and settings")
 
 
-def moddispatch(ctx, msg, unused_modconf):  # pylint: disable=missing-docstring
-    if ctx.type in ('message', 'callback_query') and ctx.command == 'admin':
-        return default(ctx, msg)
+def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
+    if ctx.type in ('message', 'callback_query'):
+        if ctx.command == 'admin':
+            return default(ctx, msg)
+        if ctx.command == '_bootstrap':
+            return bootstrap(ctx, msg, modconf)
 
     return False
 
@@ -73,6 +80,14 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
     ctx.command = 'admin %s %s' % (username, modname)
     ctx.text = text
     return admin_callback(ctx, msg, ctx.bot.multibot.bots[username][modname])
+
+
+def bootstrap(ctx, msg, modconf):
+    """Add the user who sent the command to the current bot's admin list."""
+
+    if ctx.text == BOOTSTRAP_TOKEN and not modconf['admins']:
+        modconf['admins'] = [ctx.user['id']]
+        msg.add('Added %s to the admin list.', ctx.user['id'])
 
 
 def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches

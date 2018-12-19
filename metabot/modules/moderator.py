@@ -64,6 +64,8 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
         ('calendars', adminui.calendars, 'Which calendars should be listed in /events?'),
         ('daily', adminui.integer,
          'Should I announce upcoming events once a day? If so, at what hour?'),
+        ('dailytext', adminui.freeform,
+         'One or more messages (one per line) to use/cycle through for the daily announcement.'),
         ('greeting', adminui.freeform, 'How should I greet people when they join?'),
         ('maxeventscount', adminui.integer, 'How many events should be listed in /events?'),
         ('maxeventsdays', adminui.integer, 'How many days into the future should /events look?'),

@@ -43,16 +43,41 @@ def modinit(multibot):  # pylint: disable=missing-docstring
                         bot.multibot = multibot
                         events = _get_group_events(bot, calcodes, tzinfo, count, days)
                         if events:
-                            text = 'Upcoming events:\n\n' + '\n'.join(events)
+                            preambles = groupconf.get('dailytext', '').splitlines()
+                            preamble = (preambles and preambles[now.toordinal() % len(preambles)] or
+                                        '')
                             bot.send_message(
                                 chat_id=groupid,
-                                text=text,
+                                text=_format_daily_message(preamble, events),
                                 parse_mode='HTML',
                                 disable_web_page_preview=True,
                                 disable_notification=True)
         _queue()
 
     _queue()
+
+
+def _format_daily_message(preamble, events):
+    if len(events) == 1:
+        text = "There's an event coming up:"
+    elif len(events) == 2:
+        text = 'There are a couple events coming up:'
+    elif len(events) == 3:
+        text = 'There are a few events coming up:'
+    else:
+        text = 'There are a bunch of events coming up:'
+    if preamble:
+        if preamble[-1] in ('.', '?', '!'):
+            preamble += ' '
+        else:
+            preamble += ' \u2022 '
+        text = text[0].lower() + text[1:]
+        if 'event' in preamble.lower():
+            text = 'Speaking of which, ' + text
+        else:
+            text = 'Also, ' + text
+        text = preamble + text
+    return '%s\n\n%s' % (text, '\n'.join(events))
 
 
 def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring

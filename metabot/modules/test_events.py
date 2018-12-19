@@ -234,6 +234,7 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
                     'Set timezone to <code>US/Pacific</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
                                                  [{'text': 'daily \u2022 Should I announce upcoming events once a day? If so, at what hour?', 'callback_data': '/admin modulestestbot moderator -1001000001000 daily'}],
+                                                 [{'text': 'dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement.', 'callback_data': '/admin modulestestbot moderator -1001000001000 dailytext'}],
                                                  [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
                                                  [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
                                                  [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
@@ -265,6 +266,7 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
                     'Set timezone to <code>UTC</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
                                                  [{'text': 'daily \u2022 Should I announce upcoming events once a day? If so, at what hour?', 'callback_data': '/admin modulestestbot moderator -1001000001000 daily'}],
+                                                 [{'text': 'dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement.', 'callback_data': '/admin modulestestbot moderator -1001000001000 dailytext'}],
                                                  [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
                                                  [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
                                                  [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
@@ -296,6 +298,7 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
                     'Set <code>maxeventscount</code> to <code>1</code>.',
             'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
                                                  [{'text': 'daily \u2022 Should I announce upcoming events once a day? If so, at what hour?', 'callback_data': '/admin modulestestbot moderator -1001000001000 daily'}],
+                                                 [{'text': 'dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement.', 'callback_data': '/admin modulestestbot moderator -1001000001000 dailytext'}],
                                                  [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
                                                  [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
                                                  [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
@@ -732,3 +735,53 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
                     '/events \u2013 Display recent and upcoming events',
         },
     ]  # yapf: disable
+
+
+def test_format_daily_message():  # pylint: disable=missing-docstring
+    # pylint: disable=protected-access
+    assert events._format_daily_message('', ['EVENT1']) == ("There's an event coming up:\n"
+                                                            '\n'
+                                                            'EVENT1')
+    assert events._format_daily_message(
+        '', ['EVENT1', 'EVENT2']) == ("There are a couple events coming up:\n"
+                                      '\n'
+                                      'EVENT1\n'
+                                      'EVENT2')
+    assert events._format_daily_message(
+        '', ['EVENT1', 'EVENT2', 'EVENT3']) == ("There are a few events coming up:\n"
+                                                '\n'
+                                                'EVENT1\n'
+                                                'EVENT2\n'
+                                                'EVENT3')
+    assert events._format_daily_message(
+        '', ['EVENT1', 'EVENT2', 'EVENT3', 'EVENT4']) == ("There are a bunch of events coming up:\n"
+                                                          '\n'
+                                                          'EVENT1\n'
+                                                          'EVENT2\n'
+                                                          'EVENT3\n'
+                                                          'EVENT4')
+    assert events._format_daily_message('', ['EVENT1', 'EVENT2', 'EVENT3', 'EVENT4', 'EVENT5'
+                                            ]) == ("There are a bunch of events coming up:\n"
+                                                   '\n'
+                                                   'EVENT1\n'
+                                                   'EVENT2\n'
+                                                   'EVENT3\n'
+                                                   'EVENT4\n'
+                                                   'EVENT5')
+
+    assert events._format_daily_message(
+        '1 + 1 = 2!', ['EVENT1']) == ("1 + 1 = 2! Also, there's an event coming up:\n"
+                                      '\n'
+                                      'EVENT1')
+
+    assert events._format_daily_message(
+        'Visit @MYGROUP',
+        ['EVENT1']) == ("Visit @MYGROUP \u2022 Also, there's an event coming up:\n"
+                        '\n'
+                        'EVENT1')
+
+    assert events._format_daily_message(
+        'I love events.',
+        ['EVENT1']) == ("I love events. Speaking of which, there's an event coming up:\n"
+                        '\n'
+                        'EVENT1')

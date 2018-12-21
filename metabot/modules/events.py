@@ -104,9 +104,12 @@ def _get_group_conf(groupconf):
 def _get_group_events(bot, calcodes, tzinfo, count, days):
     calendar_view = bot.multibot.multical.view(calcodes)
     now = time.time()
+    nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
+    midnight = nowdt.replace(hour=0, minute=0, second=0, microsecond=0)
+    period = (midnight + datetime.timedelta(days=days + 1) - nowdt).total_seconds()
     return [
         format_event(bot, event, tzinfo, full=False)
-        for event in list(calendar_view.get_overlap(now, now + 60 * 60 * 24 * days))[:count]
+        for event in list(calendar_view.get_overlap(now, now + period))[:count]
     ]
 
 

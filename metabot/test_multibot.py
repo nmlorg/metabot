@@ -8,6 +8,7 @@ import time
 
 import ntelebot
 import pytest
+import yaml
 
 from metabot import multibot
 
@@ -25,7 +26,7 @@ def test_add_bot():
 def test_save_load(tmpdir):
     """Verify MultiBot can start with no config, can have a bot added, and can restart."""
 
-    conffile = tmpdir.join('multibot.json')
+    conffile = tmpdir.join('bots.yaml')
 
     mybot = multibot.MultiBot((), confdir=tmpdir.strpath)
     mockbot = ntelebot.bot.Bot('1234:goodbot')
@@ -33,7 +34,7 @@ def test_save_load(tmpdir):
     mockbot.getupdates.respond(json={'ok': True, 'result': []})
     mybot.add_bot('1234:goodbot')
     mybot.run_bot('goodbot')
-    assert json.loads(conffile.read()) == {
+    assert yaml.safe_load(conffile.read()) == {
         'goodbot': {
             'telegram': {
                 'running': True,

@@ -78,8 +78,11 @@ def test_setitem():
         ('alpha',): (7, None)
     }
 
+    cont['alpha'] = b'ascii'
+    assert cont.finalize() == {('alpha',): ('ascii', 7)}
+
     cont['alpha'] = None
-    assert cont.finalize() == {('alpha',): (None, 7)}
+    assert cont.finalize() == {('alpha',): (None, 'ascii')}
 
     assert 'alpha' not in cont
 

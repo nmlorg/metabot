@@ -15,5 +15,6 @@ setuptools.setup(
     install_requires=[
         'ntelebot >= 0.2.0, < 0.3',
         'pytz',
+        'PyYAML',
         'requests',
     ])

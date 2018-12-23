@@ -7,14 +7,20 @@ import logging
 
 from metabot.util import dicttools
 from metabot.util import jsonutil
+from metabot.util import yamlutil
 
 
 class BotConf(dicttools.ImplicitTrackingDict):
     """Self-managing bot/module configuration store."""
 
     def __init__(self, confdir=None):
-        self.fname = confdir and confdir + '/multibot.json'
-        data = self.fname and jsonutil.load(self.fname)
+        self.fname = confdir and confdir + '/bots.yaml'
+        data = self.fname and yamlutil.load(self.fname)
+        if not data:
+            fname = confdir and confdir + '/multibot.json'
+            data = fname and jsonutil.load(fname)
+            if data:
+                logging.info('Converted %s to %s.', fname, self.fname)
         super(BotConf, self).__init__(isinstance(data, dict) and data or {})
 
     @contextlib.contextmanager
@@ -42,4 +48,4 @@ class BotConf(dicttools.ImplicitTrackingDict):
         """Serialize the store to disk (if confdir was provided at creation)."""
 
         if self.fname:
-            jsonutil.dump(self.fname, self)
+            yamlutil.dump(self.fname, self)

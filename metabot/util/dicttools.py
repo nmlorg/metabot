@@ -92,8 +92,10 @@ class ImplicitTrackingDict(dict):
             value = ImplicitTrackingDict(value=value, log=self.log, path=path)
         elif isinstance(value, (list, tuple)):
             value = TrackingList(value=value, log=self.log, path=path)
+        elif isinstance(value, bytes):  # PyYAML converts ASCII strings to str in Python 2.7.
+            value = value.decode('ascii')
         else:
-            assert isinstance(value, (int, unicode)), value
+            assert isinstance(value, (int, unicode)), repr(value)
 
         super(ImplicitTrackingDict, self).__setitem__(key, value)
 

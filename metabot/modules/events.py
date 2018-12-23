@@ -38,7 +38,7 @@ def modinit(multibot):  # pylint: disable=missing-docstring
                 if tzinfo and isinstance(daily, int):
                     now = datetime.datetime.now(tzinfo)
                     if now.hour == daily:
-                        # TODO: See https://github.com/nmlorg/metabot/issues/26.
+                        # See https://github.com/nmlorg/metabot/issues/26.
                         bot = ntelebot.bot.Bot(botconf['telegram']['token'])
                         bot.multibot = multibot
                         events = _get_group_events(bot, calcodes, tzinfo, count, days)

@@ -2,22 +2,25 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import json
+import pytest
+import yaml
 
 from metabot import botconf
 
 
+# See https://github.com/yaml/pyyaml/issues/202.
+@pytest.mark.filterwarnings('ignore:Using or importing the ABCs from')
 def test_save_load(tmpdir):
     """Verify MultiBot can start with no config, can have a bot added, and can restart."""
 
-    conffile = tmpdir.join('multibot.json')
+    conffile = tmpdir.join('bots.yaml')
 
     conf = botconf.BotConf(confdir=tmpdir.strpath)
     conf['alpha']['bravo'] = {'charlie': 'delta'}
     conf['alpha']['echo'] = [2, 4, 6]
     conf.save()
 
-    assert json.loads(conffile.read()) == {
+    assert yaml.safe_load(conffile.read()) == {
         'alpha': {
             'bravo': {
                 'charlie': 'delta',

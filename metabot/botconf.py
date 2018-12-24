@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import contextlib
 import logging
+import os
 
 from metabot.util import dicttools
 from metabot.util import jsonutil
@@ -13,16 +14,25 @@ from metabot.util import yamlutil
 class BotConf(dicttools.ImplicitTrackingDict):
     """Self-managing bot/module configuration store."""
 
+    confdir = None
+
     def __init__(self, confdir=None):
-        self.fname = confdir and confdir + '/bots.yaml'
-        data = self.fname and yamlutil.load(self.fname)
-        if not data:
-            fname = confdir and confdir + '/multibot.json'
-            data = fname and jsonutil.load(fname)
-            if data:
-                logging.info('Converted %s to %s.', fname, self.fname)
-        data = {'bots': data or {}}
-        super(BotConf, self).__init__(data)
+        super(BotConf, self).__init__()
+        if confdir:
+            self.confdir = confdir
+            if not os.path.isdir(confdir):
+                os.makedirs(confdir, 0o700)
+            else:
+                for fname in os.listdir(confdir):
+                    if fname.endswith('.yaml'):
+                        self[fname[:-len('.yaml')]] = yamlutil.load(os.path.join(confdir, fname))
+            if not self['bots']:
+                fname = os.path.join(confdir, 'multibot.json')
+                data = jsonutil.load(fname)
+                if data:
+                    self['bots'] = data
+                    logging.info('Converted %s to %s.', fname, os.path.join(confdir, 'bots.yaml'))
+        self._fnames = set(self)
 
     @contextlib.contextmanager
     def record_mutations(self, ctx):
@@ -48,5 +58,9 @@ class BotConf(dicttools.ImplicitTrackingDict):
     def save(self):
         """Serialize the store to disk (if confdir was provided at creation)."""
 
-        if self.fname:
-            yamlutil.dump(self.fname, self['bots'])
+        if self.confdir:
+            for fname in self._fnames.difference(self):
+                os.remove(os.path.join(self.confdir, fname + '.yaml'))
+            self._fnames = set(self)
+            for fname, data in self.items():
+                yamlutil.dump(os.path.join(self.confdir, fname + '.yaml'), data)

@@ -13,11 +13,11 @@ from metabot import botconf
 def test_save_load(tmpdir):
     """Verify MultiBot can start with no config, can have a bot added, and can restart."""
 
-    conffile = tmpdir.join('bots.yaml')
+    conffile = tmpdir.join('autogen.yaml')
 
     conf = botconf.BotConf(confdir=tmpdir.strpath)
-    conf['bots']['alpha']['bravo'] = {'charlie': 'delta'}
-    conf['bots']['alpha']['echo'] = [2, 4, 6]
+    conf['autogen']['alpha']['bravo'] = {'charlie': 'delta'}
+    conf['autogen']['alpha']['echo'] = [2, 4, 6]
     conf.save()
 
     assert yaml.safe_load(conffile.read()) == {

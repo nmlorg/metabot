@@ -8,7 +8,7 @@ BOOTSTRAP_TOKEN = uuid.uuid4().hex
 
 
 def modhelp(ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
-    bots = sorted(username for username, botconf in ctx.bot.multibot.bots.items()
+    bots = sorted(username for username, botconf in ctx.bot.multibot.conf['bots'].items()
                   if ctx.user['id'] in botconf['admin']['admins'])
 
     if bots:
@@ -27,7 +27,7 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
 
 def default(ctx, msg):  # pylint: disable=missing-docstring
     ctx.private = True
-    bots = sorted(username for username, botconf in ctx.bot.multibot.bots.items()
+    bots = sorted(username for username, botconf in ctx.bot.multibot.conf['bots'].items()
                   if ctx.user['id'] in botconf['admin']['admins'])
 
     if not bots:
@@ -79,7 +79,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
     admin_callback = modules[modname].admin
     ctx.command = 'admin %s %s' % (username, modname)
     ctx.text = text
-    return admin_callback(ctx, msg, ctx.bot.multibot.bots[username][modname])
+    return admin_callback(ctx, msg, ctx.bot.multibot.conf['bots'][username][modname])
 
 
 def bootstrap(ctx, msg, modconf):

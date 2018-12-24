@@ -16,8 +16,8 @@ def test_save_load(tmpdir):
     conffile = tmpdir.join('bots.yaml')
 
     conf = botconf.BotConf(confdir=tmpdir.strpath)
-    conf['alpha']['bravo'] = {'charlie': 'delta'}
-    conf['alpha']['echo'] = [2, 4, 6]
+    conf['bots']['alpha']['bravo'] = {'charlie': 'delta'}
+    conf['bots']['alpha']['echo'] = [2, 4, 6]
     conf.save()
 
     assert yaml.safe_load(conffile.read()) == {

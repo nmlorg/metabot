@@ -20,13 +20,13 @@ def test_countdown(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('/mycountdown') == []
 
-    conversation.multibot.bots['modulestestbot']['countdown']['mycountdown'] = 1534906800
+    conversation.multibot.conf['bots']['modulestestbot']['countdown']['mycountdown'] = 1534906800
 
     ret = conversation.message('/mycountdown')
     assert len(ret) == 1
     assert ret[0]['text'].endswith(' ago')
 
-    conversation.multibot.bots['modulestestbot']['countdown']['mycountdown'] = 15349068000
+    conversation.multibot.conf['bots']['modulestestbot']['countdown']['mycountdown'] = 15349068000
 
     ret = conversation.message('/mycountdown')
     assert len(ret) == 1
@@ -47,8 +47,8 @@ def test_format_delta():
 def test_help(conversation):  # pylint: disable=redefined-outer-name
     """Test /help."""
 
-    conversation.multibot.bots['modulestestbot']['countdown']['count1'] = 1534906800
-    conversation.multibot.bots['modulestestbot']['countdown']['count2'] = 15349068000
+    conversation.multibot.conf['bots']['modulestestbot']['countdown']['count1'] = 1534906800
+    conversation.multibot.conf['bots']['modulestestbot']['countdown']['count2'] = 15349068000
 
     assert conversation.message('/help', user_id=2000) == [
         {

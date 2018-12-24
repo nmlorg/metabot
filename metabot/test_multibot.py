@@ -52,7 +52,7 @@ def test_save_load(tmpdir):
         ]))
 
     newbot = multibot.MultiBot((), confdir=tmpdir.strpath)
-    assert newbot.bots == mybot.bots
+    assert newbot.conf == mybot.conf
     assert newbot.calendars == {
         'c9328778': {
             'calid': 'static:test_multibot',

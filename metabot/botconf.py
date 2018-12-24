@@ -21,7 +21,8 @@ class BotConf(dicttools.ImplicitTrackingDict):
             data = fname and jsonutil.load(fname)
             if data:
                 logging.info('Converted %s to %s.', fname, self.fname)
-        super(BotConf, self).__init__(isinstance(data, dict) and data or {})
+        data = {'bots': data or {}}
+        super(BotConf, self).__init__(data)
 
     @contextlib.contextmanager
     def record_mutations(self, ctx):
@@ -48,4 +49,4 @@ class BotConf(dicttools.ImplicitTrackingDict):
         """Serialize the store to disk (if confdir was provided at creation)."""
 
         if self.fname:
-            yamlutil.dump(self.fname, self)
+            yamlutil.dump(self.fname, self['bots'])

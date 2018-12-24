@@ -18,8 +18,8 @@ class MultiBot(object):
     def __init__(self, modules, confdir=None):
         self.dispatcher = _MultiBotLoopDispatcher()
         self.loop = ntelebot.loop.Loop()
-        self.bots = botconf.BotConf(confdir)
-        self.bots.finalize()
+        self.conf = botconf.BotConf(confdir)
+        self.conf.finalize()
         self.multical = multicalendar.MultiCalendar()
         self.calendars = {}
         if confdir:
@@ -34,7 +34,7 @@ class MultiBot(object):
             if modinit:
                 modinit(self)
 
-        for username, bot_config in self.bots.items():
+        for username, bot_config in self.conf['bots'].items():
             if bot_config['telegram']['running']:
                 self.run_bot(username)
 
@@ -42,17 +42,17 @@ class MultiBot(object):
         """Begin polling bot_config.token, dispatching updates through bot_config.modules."""
 
         username = ntelebot.bot.Bot(token).username
-        self.bots[username] = {
+        self.conf['bots'][username] = {
             'telegram': {
                 'running': False,
                 'token': token,
             },
         }
-        self.bots.save()
+        self.conf.save()
         return username
 
     def _build_bot(self, username):
-        bot_config = self.bots[username]
+        bot_config = self.conf['bots'][username]
         bot = ntelebot.bot.Bot(bot_config['telegram']['token'])
         bot.config = bot_config
         bot.multibot = self
@@ -65,15 +65,15 @@ class MultiBot(object):
         bot = self._build_bot(username)
         self.loop.add(bot, self.dispatcher)
         bot.config['telegram']['running'] = True
-        self.bots.save()
+        self.conf.save()
 
     def stop_bot(self, username):
         """Stop polling for updates for the referenced bot."""
 
-        bot_config = self.bots[username]
+        bot_config = self.conf['bots'][username]
         self.loop.remove(bot_config['telegram']['token'])
         bot_config['telegram']['running'] = False
-        self.bots.save()
+        self.conf.save()
 
     def run(self):
         """Begin waiting for and dispatching updates sent to any bot currently running."""
@@ -96,8 +96,8 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
         if not ctx:
             return False
 
-        with multibot.bots.record_mutations(ctx):
-            botconfig = multibot.bots[bot.username]
+        with multibot.conf.record_mutations(ctx):
+            botconfig = multibot.conf['bots'][bot.username]
             msg = msgbuilder.MessageBuilder()
 
             for modname, module in multibot.modules.items():

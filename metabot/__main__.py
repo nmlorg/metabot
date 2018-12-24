@@ -27,7 +27,7 @@ def main():  # pylint: disable=missing-docstring
             modules.add(importlib.import_module('metabot.modules.' + name))
 
     mybot = multibot.MultiBot(modules, confdir='config')
-    if not mybot.bots:
+    if not mybot.conf['bots']:
         print()
         print("Hi! Before I can start, I need at least one bot's Telegram token. If you don't have "
               'one already, follow the instructions at:')
@@ -38,7 +38,7 @@ def main():  # pylint: disable=missing-docstring
               'followed by a line starting with a number. Copy the full line starting with the '
               'number and paste it here:')
         print()
-        while not mybot.bots:
+        while not mybot.conf['bots']:
             initial_token = raw_input('Telegram token: ')
             try:
                 username = mybot.add_bot(initial_token)
@@ -53,8 +53,8 @@ def main():  # pylint: disable=missing-docstring
                 print('Woops, that generated: %r', exc)
             else:
                 mybot.run_bot(username)
-    unconfigured = sorted(
-        username for username, botconf in mybot.bots.items() if not botconf['admin'].get('admins'))
+    unconfigured = sorted(username for username, botconf in mybot.conf['bots'].items()
+                          if not botconf['admin'].get('admins'))
     if unconfigured:
         print()
         print('To configure %s, open a chat with:' % humanize.list(unconfigured))

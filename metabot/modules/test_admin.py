@@ -65,15 +65,15 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
 def test_bootstrap(conversation):  # pylint: disable=redefined-outer-name
     """Test /_bootstrap."""
 
-    assert conversation.multibot.bots['modulestestbot'].pop('admin') == {'admins': [1000]}
+    assert conversation.multibot.conf['bots']['modulestestbot'].pop('admin') == {'admins': [1000]}
     assert len(admin.BOOTSTRAP_TOKEN) == 32
     admin.BOOTSTRAP_TOKEN = 'bootstraptest'
 
     assert conversation.message('/_bootstrap') == []
-    assert conversation.multibot.bots['modulestestbot'].get('admin') is None
+    assert conversation.multibot.conf['bots']['modulestestbot'].get('admin') is None
 
     assert conversation.message('/_bootstrap bogus') == []
-    assert conversation.multibot.bots['modulestestbot'].get('admin') is None
+    assert conversation.multibot.conf['bots']['modulestestbot'].get('admin') is None
 
     assert conversation.message('/_bootstrap bootstraptest') == [
         {
@@ -83,13 +83,13 @@ def test_bootstrap(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Added 1000 to the admin list.',
         },
     ]  # yapf: disable
-    assert conversation.multibot.bots['modulestestbot'].get('admin') == {'admins': [1000]}
+    assert conversation.multibot.conf['bots']['modulestestbot'].get('admin') == {'admins': [1000]}
 
     assert conversation.message('/_bootstrap bootstraptest') == []
-    assert conversation.multibot.bots['modulestestbot'].get('admin') == {'admins': [1000]}
+    assert conversation.multibot.conf['bots']['modulestestbot'].get('admin') == {'admins': [1000]}
 
     assert conversation.message('/_bootstrap bootstraptest', user_id=2000) == []
-    assert conversation.multibot.bots['modulestestbot'].get('admin') == {'admins': [1000]}
+    assert conversation.multibot.conf['bots']['modulestestbot'].get('admin') == {'admins': [1000]}
 
 
 def test_admins(conversation):  # pylint: disable=redefined-outer-name

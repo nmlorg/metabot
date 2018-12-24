@@ -20,7 +20,7 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('/myecho') == []
 
-    conversation.multibot.bots['modulestestbot']['echo']['myecho'] = (
+    conversation.multibot.conf['bots']['modulestestbot']['echo']['myecho'] = (
         'These are the rules: Have fun!')
 
     assert conversation.message('/myecho') == [
@@ -32,9 +32,9 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
-    conversation.multibot.bots['modulestestbot']['echo']['about'] = ('First line.\n'
-                                                                     'Second line.\n'
-                                                                     'Last line.')
+    conversation.multibot.conf['bots']['modulestestbot']['echo']['about'] = ('First line.\n'
+                                                                             'Second line.\n'
+                                                                             'Last line.')
 
     assert conversation.message('/about') == [
         {
@@ -98,9 +98,9 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
 def test_help(conversation):  # pylint: disable=redefined-outer-name
     """Test /help."""
 
-    conversation.multibot.bots['modulestestbot']['echo']['rules1'] = (
+    conversation.multibot.conf['bots']['modulestestbot']['echo']['rules1'] = (
         'These are the rules: Have fun!')
-    conversation.multibot.bots['modulestestbot']['echo']['rules2'] = (
+    conversation.multibot.conf['bots']['modulestestbot']['echo']['rules2'] = (
         'These are the rules: Have fun!!')
 
     assert conversation.message('/help', user_id=2000) == [

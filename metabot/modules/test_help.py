@@ -36,7 +36,7 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
             'parse_mode': 'HTML',
             'text': '<b>Commands</b>\n'
                     '\n'
-                    "/admin \u2013 Manage the bot's state and settings",
+                    '/admin \u2013 Manage the admin list',
         },
     ]  # yapf: disable
 
@@ -48,7 +48,7 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Bot Admin \u203a modulestestbot \u203a help: <b>Select a module</b>\n'
                     '\n'
                     '<code>admin</code> is now hidden.',
-            'reply_markup': {'inline_keyboard': [[{'text': "Show admin (/admin \u2013 Manage the bot's state and settings)", 'callback_data': '/admin modulestestbot help unhide admin'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'Show admin (/admin \u2013 Manage the admin list)', 'callback_data': '/admin modulestestbot help unhide admin'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
@@ -70,7 +70,7 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Bot Admin \u203a modulestestbot \u203a help: <b>Select a module</b>\n'
                     '\n'
                     '<code>admin</code> is already hidden!',
-            'reply_markup': {'inline_keyboard': [[{'text': "Show admin (/admin \u2013 Manage the bot's state and settings)", 'callback_data': '/admin modulestestbot help unhide admin'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'Show admin (/admin \u2013 Manage the admin list)', 'callback_data': '/admin modulestestbot help unhide admin'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
@@ -83,7 +83,7 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Bot Admin \u203a modulestestbot \u203a help: <b>Select a module</b>\n'
                     '\n'
                     '<code>admin</code> is now visible.',
-            'reply_markup': {'inline_keyboard': [[{'text': "Hide admin (/admin \u2013 Manage the bot's state and settings)", 'callback_data': '/admin modulestestbot help hide admin'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'Hide admin (/admin \u2013 Manage the admin list)', 'callback_data': '/admin modulestestbot help hide admin'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable
@@ -96,7 +96,7 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
             'text': 'Bot Admin \u203a modulestestbot \u203a help: <b>Select a module</b>\n'
                     '\n'
                     '<code>admin</code> is not hidden!',
-            'reply_markup': {'inline_keyboard': [[{'text': "Hide admin (/admin \u2013 Manage the bot's state and settings)", 'callback_data': '/admin modulestestbot help hide admin'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'Hide admin (/admin \u2013 Manage the admin list)', 'callback_data': '/admin modulestestbot help hide admin'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable

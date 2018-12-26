@@ -55,7 +55,7 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'text': 'Bot Admin \u203a modulestestbot: <b>Choose a module</b>',
-            'reply_markup': {'inline_keyboard': [[{'text': "admin \u2022 Manage the bot's state and settings", 'callback_data': '/admin modulestestbot admin'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'admin \u2022 Manage the admin list', 'callback_data': '/admin modulestestbot admin'}],
                                                  [{'text': 'help \u2022 Return the list of commands and other bot features', 'callback_data': '/admin modulestestbot help'}],
                                                  [{'text': 'Back', 'callback_data': '/admin'}]]},
         },
@@ -150,6 +150,8 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
         },
     ]  # yapf: disable
 
+    assert conversation.message('/dummy', user_id=2000) == []
+
     assert conversation.message('/admin modulestestbot admin bogus value') == [
         {
             'chat_id': 1000,
@@ -160,7 +162,7 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
                     "I'm not sure what <code>bogus value</code> is\u2014it's not a user id!\n"
                     '\n'
                     'Forward a message from a user to add or remove them, or select an existing admin to remove.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Remove 2000', 'callback_data': '/admin modulestestbot admin 2000'}],
+            'reply_markup': {'inline_keyboard': [[{'text': 'Remove User2000 (2000)', 'callback_data': '/admin modulestestbot admin 2000'}],
                                                  [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
         },
     ]  # yapf: disable

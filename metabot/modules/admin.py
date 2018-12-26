@@ -1,4 +1,4 @@
-"""Manage the bot's state and settings."""
+"""Manage the admin list."""
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
@@ -12,7 +12,7 @@ def modhelp(ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
                   if ctx.user['id'] in botconf['admin']['admins'])
 
     if bots:
-        sections['commands'].add("/admin \u2013 Manage the bot's state and settings")
+        sections['commands'].add('/admin \u2013 Manage the admin list')
 
 
 def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
@@ -123,4 +123,9 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
 
     for admin_id in sorted(modconf['admins']):
         if admin_id != ctx.user['id']:
-            msg.button('Remove %s' % admin_id, '%s' % admin_id)
+            userinfo = ctx.bot.multibot.conf['users'].get(admin_id)
+            if userinfo:
+                userstr = '%s (%s)' % (userinfo['name'], admin_id)
+            else:
+                userstr = '%s' % admin_id
+            msg.button('Remove ' + userstr, '%s' % admin_id)

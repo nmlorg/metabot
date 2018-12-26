@@ -51,8 +51,8 @@ class BotConf(dicttools.ImplicitTrackingDict):
                         repr('%s %s' % (ctx.user.get('first_name', ''), ctx.user.get(
                             'last_name', ''))).strip())
                 for path, (value, orig) in sorted(log.items()):
-                    logging.info('[%s] %s: %r -> %r', ' '.join(userdata), '.'.join(path), orig,
-                                 value)
+                    pathstr = '.'.join('%s' % part for part in path)
+                    logging.info('[%s] %s: %r -> %r', ' '.join(userdata), pathstr, orig, value)
                 self.save()
 
     def save(self):

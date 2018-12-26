@@ -8,6 +8,7 @@ import ntelebot
 import pytest
 
 from metabot.modules import admin
+from metabot.modules import globalrecords
 from metabot.modules import help  # pylint: disable=redefined-builtin
 from metabot import multibot
 
@@ -19,7 +20,7 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         def dummymod(ctx):  # pylint: disable=missing-docstring,unused-argument
             return ctx.command == 'dummymod' and ctx.reply_text('DUMMYMOD')
 
-        self.multibot = multibot.MultiBot(set(modules) | {admin, dummymod, help})
+        self.multibot = multibot.MultiBot(set(modules) | {admin, dummymod, globalrecords, help})
         ntelebot.bot.Bot('1234:test').getme.respond(json={
             'ok': True,
             'result': {
@@ -46,10 +47,13 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         self.multibot.dispatcher(self.bot, update)
         return responses
 
-    def message(self, text, user_id=1000, chat_type='private', language_code=None):
+    # pylint: disable=too-many-arguments
+    def message(self, text, user_id=1000, chat_type='private', last_name=None, language_code=None):
         """Simulate a private message."""
 
         user = {'id': user_id, 'username': 'user%s' % user_id, 'first_name': 'User%s' % user_id}
+        if last_name:
+            user['last_name'] = last_name
         if language_code:
             user['language_code'] = language_code
         if chat_type == 'private':

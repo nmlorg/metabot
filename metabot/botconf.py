@@ -26,12 +26,23 @@ class BotConf(dicttools.ImplicitTrackingDict):
                 for fname in os.listdir(confdir):
                     if fname.endswith('.yaml'):
                         self[fname[:-len('.yaml')]] = yamlutil.load(os.path.join(confdir, fname))
+
+            # Schema update: Remove after 2019-03-26.
             if not self['bots']:
                 fname = os.path.join(confdir, 'multibot.json')
                 data = jsonutil.load(fname)
                 if data:
                     self['bots'] = data
                     logging.info('Converted %s to %s.', fname, os.path.join(confdir, 'bots.yaml'))
+
+            # Schema update: Remove after 2019-04-05.
+            for botconf in self['bots'].values():
+                for groupid, groupconf in botconf['moderator'].items():
+                    groupid = int(groupid)
+                    for k in ('title', 'type', 'username'):
+                        if k in groupconf:
+                            self['groups'][groupid][k] = groupconf[k]
+
         self._fnames = set(self)
 
     @contextlib.contextmanager

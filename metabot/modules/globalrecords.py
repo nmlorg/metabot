@@ -7,16 +7,18 @@ def modpredispatch(ctx, unused_msg, unused_modconf):  # pylint: disable=missing-
     conf = ctx.bot.multibot.conf
 
     if ctx.chat and ctx.chat['type'] in ('channel', 'group', 'supergroup'):
-        conf['groups'][ctx.chat['id']] = {k: v for k, v in ctx.chat.items() if k != 'id'}
+        groupinfo = conf['groups'][ctx.chat['id']]
+        for k, val in ctx.chat.items():
+            if k != 'id':
+                groupinfo[k] = val
+
+        if ctx.type == 'pin':
+            groupinfo['pinned_message_id'] = ctx.data['message_id']
 
     if ctx.user:
-        userinfo = {k: v for k, v in ctx.user.items() if k != 'id'}
-        first_name = userinfo.get('first_name')
-        last_name = userinfo.get('last_name', '')
-        if first_name and last_name:
-            userinfo['name'] = '%s %s' % (first_name, last_name)
-        elif first_name:
-            userinfo['name'] = first_name
-        else:
-            userinfo['name'] = last_name
-        conf['users'][ctx.user['id']] = userinfo
+        userinfo = conf['users'][ctx.user['id']]
+        for k, val in ctx.user.items():
+            if k != 'id':
+                userinfo[k] = val
+        userinfo['name'] = (
+            '%s %s' % (ctx.user.get('first_name', ''), ctx.user.get('last_name', ''))).strip()

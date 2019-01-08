@@ -736,50 +736,54 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
 
 
 def test_format_daily_message():  # pylint: disable=missing-docstring
-    # pylint: disable=protected-access
-    assert events._format_daily_message('', ['EVENT1']) == ("There's an event coming up:\n"
-                                                            '\n'
-                                                            'EVENT1')
-    assert events._format_daily_message(
-        '', ['EVENT1', 'EVENT2']) == ("There are a couple events coming up:\n"
-                                      '\n'
-                                      'EVENT1\n'
-                                      'EVENT2')
-    assert events._format_daily_message(
-        '', ['EVENT1', 'EVENT2', 'EVENT3']) == ("There are a few events coming up:\n"
-                                                '\n'
-                                                'EVENT1\n'
-                                                'EVENT2\n'
-                                                'EVENT3')
-    assert events._format_daily_message(
-        '', ['EVENT1', 'EVENT2', 'EVENT3', 'EVENT4']) == ("There are a bunch of events coming up:\n"
-                                                          '\n'
-                                                          'EVENT1\n'
-                                                          'EVENT2\n'
-                                                          'EVENT3\n'
-                                                          'EVENT4')
-    assert events._format_daily_message('', ['EVENT1', 'EVENT2', 'EVENT3', 'EVENT4', 'EVENT5'
-                                            ]) == ("There are a bunch of events coming up:\n"
-                                                   '\n'
-                                                   'EVENT1\n'
-                                                   'EVENT2\n'
-                                                   'EVENT3\n'
-                                                   'EVENT4\n'
-                                                   'EVENT5')
+    # yapf: disable - pylint: disable=protected-access
+    assert events._format_daily_message('', ['EVENT1']) == (
+        "There's an event coming up:\n"
+        '\n'
+        'EVENT1')
+    assert events._format_daily_message('', ['EVENT1', 'EVENT2']) == (
+        "There are a couple events coming up:\n"
+        '\n'
+        'EVENT1\n'
+        'EVENT2')
+    assert events._format_daily_message('', ['EVENT1', 'EVENT2', 'EVENT3']) == (
+        "There are a few events coming up:\n"
+        '\n'
+        'EVENT1\n'
+        'EVENT2\n'
+        'EVENT3')
+    assert events._format_daily_message('', ['EVENT1', 'EVENT2', 'EVENT3', 'EVENT4']) == (
+        "There are a bunch of events coming up:\n"
+        '\n'
+        'EVENT1\n'
+        'EVENT2\n'
+        'EVENT3\n'
+        'EVENT4')
+    assert events._format_daily_message('', ['EVENT1', 'EVENT2', 'EVENT3', 'EVENT4', 'EVENT5']) == (
+        "There are a bunch of events coming up:\n"
+        '\n'
+        'EVENT1\n'
+        'EVENT2\n'
+        'EVENT3\n'
+        'EVENT4\n'
+        'EVENT5')
 
-    assert events._format_daily_message(
-        '1 + 1 = 2!', ['EVENT1']) == ("1 + 1 = 2! Also, there's an event coming up:\n"
-                                      '\n'
-                                      'EVENT1')
+    assert events._format_daily_message('1 + 1 = 2!', ['EVENT1']) == (
+        "1 + 1 = 2! Also, there's an event coming up:\n"
+        '\n'
+        'EVENT1')
 
-    assert events._format_daily_message(
-        'Visit @MYGROUP',
-        ['EVENT1']) == ("Visit @MYGROUP \u2022 Also, there's an event coming up:\n"
-                        '\n'
-                        'EVENT1')
+    assert events._format_daily_message('Visit @MYGROUP', ['EVENT1']) == (
+        "Visit @MYGROUP \u2022 Also, there's an event coming up:\n"
+        '\n'
+        'EVENT1')
 
-    assert events._format_daily_message(
-        'I love events.',
-        ['EVENT1']) == ("I love events. Speaking of which, there's an event coming up:\n"
-                        '\n'
-                        'EVENT1')
+    assert events._format_daily_message('I love events.', ['EVENT1']) == (
+        "I love events. Speaking of which, there's an event coming up:\n"
+        '\n'
+        'EVENT1')
+
+    assert events._format_daily_message('I love events:', ['EVENT1']) == (
+        "I love events:\n"
+        '\n'
+        'EVENT1')

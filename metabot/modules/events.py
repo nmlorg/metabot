@@ -66,7 +66,9 @@ def _format_daily_message(preamble, events):
         text = 'There are a few events coming up:'
     else:
         text = 'There are a bunch of events coming up:'
-    if preamble:
+    if preamble and preamble.endswith(':') and 'events' in preamble.lower():
+        text = preamble
+    elif preamble:
         if preamble[-1] in ('.', '?', '!'):
             preamble += ' '
         else:

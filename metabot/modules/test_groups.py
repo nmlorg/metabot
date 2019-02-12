@@ -18,28 +18,20 @@ def conversation(build_conversation):  # pylint: disable=missing-docstring
 def test_conversation(conversation, requests_mock):  # pylint: disable=redefined-outer-name
     """Test /groups, @BOTNAME groups, and /admin BOTNAME groups."""
 
-    assert conversation.message('/groups') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Group List\n'
-                    '\n'
-                    "I don't know about any public groups yet, sorry!",
-        }
-    ]  # yapf: disable
+    assert conversation.message('/groups') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Group List
 
-    assert conversation.message('/admin modulestestbot groups') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a groups: <b>Type a group username or invite link</b>\n'
-                    '\n'
-                    'Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
-        },
-    ]  # yapf: disable
+I don't know about any public groups yet, sorry!
+"""
+
+    assert conversation.message('/admin modulestestbot groups') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a groups: <b>Type a group username or invite link</b>
+
+Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:
+[Back | /admin modulestestbot]
+"""
 
     conversation.bot.get_chat.respond(
         json={
@@ -63,20 +55,16 @@ def test_conversation(conversation, requests_mock):  # pylint: disable=redefined
             }]
         })
 
-    assert conversation.message('@dummygroup') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a groups: <b>Type a group username or invite link</b>\n'
-                    '\n'
-                    'Added <b>Dummy Public Group!</b>.\n'
-                    '\n'
-                    'Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Dummy Public Group! \u2022 DummyGroup', 'callback_data': '/admin modulestestbot groups remove 92aa63'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message('@dummygroup') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a groups: <b>Type a group username or invite link</b>
+
+Added <b>Dummy Public Group!</b>.
+
+Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:
+[Dummy Public Group! \u2022 DummyGroup | /admin modulestestbot groups remove 92aa63]
+[Back | /admin modulestestbot]
+"""
 
     requests_mock.get(
         'https://t.me/joinchat/DUMMY_INVITE_LINK',
@@ -94,50 +82,39 @@ def test_conversation(conversation, requests_mock):  # pylint: disable=redefined
 <meta property="og:description" content="Dummy private group">
 """)
 
-    assert conversation.message('https://t.me/joinchat/DUMMY_INVITE_LINK') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a groups: <b>Type a group username or invite link</b>\n'
-                    '\n'
-                    'Added <b>Dummy Private Group!</b>.\n'
-                    '\n'
-                    'Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK', 'callback_data': '/admin modulestestbot groups remove c5bfc8'}],
-                                                 [{'text': 'Dummy Public Group! \u2022 DummyGroup', 'callback_data': '/admin modulestestbot groups remove 92aa63'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message('https://t.me/joinchat/DUMMY_INVITE_LINK') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a groups: <b>Type a group username or invite link</b>
 
-    assert conversation.message('/groups') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Group List: <b>Choose a location</b>',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Worldwide', 'callback_data': '/groups Worldwide'}]]},
-        }
-    ]  # yapf: disable
+Added <b>Dummy Private Group!</b>.
 
-    assert conversation.message('/groups Worldwide') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Group List \u203a Worldwide\n'
-                    '\n'
-                    '<a href="https://t.me/joinchat/DUMMY_INVITE_LINK">Dummy Private Group!</a>\n'
-                    'Dummy private group\n'
-                    '\n'
-                    '<a href="https://t.me/DummyGroup">Dummy Public Group!</a>\n'
-                    'Dummy public group',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Back', 'callback_data': '/groups'}]]},
-        }
-    ]  # yapf: disable
+Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:
+[Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK | /admin modulestestbot groups remove c5bfc8]
+[Dummy Public Group! \u2022 DummyGroup | /admin modulestestbot groups remove 92aa63]
+[Back | /admin modulestestbot]
+"""
 
-    assert conversation.inline('') == []
-    assert conversation.inline('groups') == [
+    assert conversation.message('/groups') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Group List: <b>Choose a location</b>
+[Worldwide | /groups Worldwide]
+"""
+
+    assert conversation.message('/groups Worldwide') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Group List \u203a Worldwide
+
+<a href="https://t.me/joinchat/DUMMY_INVITE_LINK">Dummy Private Group!</a>
+Dummy private group
+
+<a href="https://t.me/DummyGroup">Dummy Public Group!</a>
+Dummy public group
+[Back | /groups]
+"""
+
+    assert conversation.raw_inline('') == []
+
+    assert conversation.raw_inline('groups') == [
         {
             'cache_time': 60,
             'inline_query_id': 2000,
@@ -170,7 +147,7 @@ def test_conversation(conversation, requests_mock):  # pylint: disable=redefined
         }
     ]  # yapf: disable
 
-    assert conversation.inline('groups priva') == [
+    assert conversation.raw_inline('groups priva') == [
         {
             'cache_time': 60,
             'inline_query_id': 2000,
@@ -191,48 +168,37 @@ def test_conversation(conversation, requests_mock):  # pylint: disable=redefined
         }
     ]  # yapf: disable
 
-    assert conversation.message('/admin modulestestbot groups remove blah') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a groups: <b>Type a group username or invite link</b>\n'
-                    '\n'
-                    'Oops, the groups list changed since you loaded that screen, try again.\n'
-                    '\n'
-                    'Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK', 'callback_data': '/admin modulestestbot groups remove c5bfc8'}],
-                                                 [{'text': 'Dummy Public Group! \u2022 DummyGroup', 'callback_data': '/admin modulestestbot groups remove 92aa63'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message('/admin modulestestbot groups remove blah') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a groups: <b>Type a group username or invite link</b>
 
-    assert conversation.message('/admin modulestestbot groups remove 92aa63') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a groups: <b>Type a group username or invite link</b>\n'
-                    '\n'
-                    'Removed <b>Dummy Public Group!</b>.\n'
-                    '\n'
-                    'Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK', 'callback_data': '/admin modulestestbot groups remove c5bfc8'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot'}]]},
-        },
-    ]  # yapf: disable
+Oops, the groups list changed since you loaded that screen, try again.
+
+Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:
+[Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK | /admin modulestestbot groups remove c5bfc8]
+[Dummy Public Group! \u2022 DummyGroup | /admin modulestestbot groups remove 92aa63]
+[Back | /admin modulestestbot]
+"""
+
+    assert conversation.message('/admin modulestestbot groups remove 92aa63') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a groups: <b>Type a group username or invite link</b>
+
+Removed <b>Dummy Public Group!</b>.
+
+Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:
+[Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK | /admin modulestestbot groups remove c5bfc8]
+[Back | /admin modulestestbot]
+"""
 
 
 def test_help(conversation):  # pylint: disable=redefined-outer-name
     """Test /help."""
 
-    assert conversation.message('/help', user_id=2000) == [
-        {
-            'chat_id': 2000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': '<b>Commands</b>\n'
-                    '\n'
-                    '/groups \u2013 Find other group chats',
-        },
-    ]  # yapf: disable
+    assert conversation.message(
+        '/help', user_id=2000) == """\
+[chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
+<b>Commands</b>
+
+/groups \u2013 Find other group chats
+"""

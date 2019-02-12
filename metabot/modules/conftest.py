@@ -13,6 +13,20 @@ from metabot.modules import help  # pylint: disable=redefined-builtin
 from metabot import multibot
 
 
+def _format_response(response):
+    text = response.pop('text', '(EMPTY MESSAGE)')
+    reply_markup = response.pop('reply_markup', None)
+    header = ' '.join('%s=%s' % (field, value) for field, value in sorted(response.items()))
+    text = '[%s]\n%s\n' % (header, text)
+    if reply_markup:
+        for row in reply_markup.pop('inline_keyboard', ()):
+            text = '%s%s\n' % (text, ' '.join(
+                '[%s | %s]' % (button['text'], button['callback_data']) for button in row))
+        if reply_markup:
+            text = '%s%s\n' % (text, json.dumps(reply_markup, sort_keys=True))
+    return text
+
+
 class BotConversation(object):  # pylint: disable=missing-docstring,too-few-public-methods
 
     def __init__(self, *modules):
@@ -31,7 +45,7 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         self.bot = self.multibot._build_bot(username)  # pylint: disable=protected-access
         self.multibot.conf['bots']['modulestestbot']['admin']['admins'] = [1000]
 
-    def inline(self, text, user_id=1000):
+    def raw_inline(self, text, user_id=1000):
         """Simulate an inline query (@BOTNAME text)."""
 
         user = {'id': user_id}
@@ -48,7 +62,12 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         return responses
 
     # pylint: disable=too-many-arguments
-    def message(self, text, user_id=1000, chat_type='private', last_name=None, language_code=None):
+    def raw_message(self,
+                    text,
+                    user_id=1000,
+                    chat_type='private',
+                    last_name=None,
+                    language_code=None):
         """Simulate a private message."""
 
         user = {'id': user_id, 'username': 'user%s' % user_id, 'first_name': 'User%s' % user_id}
@@ -71,6 +90,12 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         self.bot.send_message.respond(json=_handler)
         self.multibot.dispatcher(self.bot, update)
         return responses
+
+    def message(self, *args, **kwargs):
+        """Simulate a private message (with human-friendly output)."""
+
+        return '\n\n'.join(
+            _format_response(response) for response in self.raw_message(*args, **kwargs))
 
 
 @pytest.fixture

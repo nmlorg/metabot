@@ -54,389 +54,306 @@ def conversation(build_conversation, monkeypatch):  # pylint: disable=missing-do
 def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-name
     """Test /events in a group chat."""
 
-    assert conversation.message('/notevents') == []
-    assert conversation.message('/events', chat_type='supergroup') == [
-        {
-            'chat_id': -1001000001000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'reply_to_message_id': 2000,
-            'text': "I'm not configured for this group! Ask a bot admin to go into the <b>moderator</b> module settings, group <b>-1001000001000</b>, and choose one or more calendars and set the time zone.",
-        },
-    ]  # yapf: disable
+    assert conversation.message('/notevents') == ''
 
-    assert conversation.message('/admin modulestestbot moderator -1001000001000 calendars add 6fc2c510') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a calendars: <b>Select a calendar</b>\n'
-                    '\n'
-                    'Added <code>6fc2c510</code> to your calendar view.\n'
-                    '\n'
-                    'Which calendars should be listed in /events?\n'
-                    '\n'
-                    'Select a calendar to add or remove from the list below:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Remove Test Calendar', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars remove 6fc2c510'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message(
+        '/events', chat_type='supergroup') == """\
+[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
+I'm not configured for this group! Ask a bot admin to go into the <b>moderator</b> module settings, group <b>-1001000001000</b>, and choose one or more calendars and set the time zone.
+"""
 
-    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
-                    '\n'
-                    'What time zone should be used in /events?\n'
-                    '\n'
-                    'Choose a time zone:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Africa', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Africa'}],
-                                                 [{'text': 'America', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America'}],
-                                                 [{'text': 'Antarctica', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Antarctica'}],
-                                                 [{'text': 'Arctic', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Arctic'}],
-                                                 [{'text': 'Asia', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Asia'}],
-                                                 [{'text': 'Atlantic', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Atlantic'}],
-                                                 [{'text': 'Australia', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Australia'}],
-                                                 [{'text': '\xa0', 'callback_data': '/stop'},
-                                                  {'text': 'Next', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone - 1'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message(
+        '/admin modulestestbot moderator -1001000001000 calendars add 6fc2c510') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a calendars: <b>Select a calendar</b>
 
-    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone - 1') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
-                    '\n'
-                    'What time zone should be used in /events?\n'
-                    '\n'
-                    'Choose a time zone:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Canada', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada'}],
-                                                 [{'text': 'Europe', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Europe'}],
-                                                 [{'text': 'GMT', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone GMT'}],
-                                                 [{'text': 'Indian', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Indian'}],
-                                                 [{'text': 'Pacific', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Pacific'}],
-                                                 [{'text': 'US', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone US'}],
-                                                 [{'text': 'UTC', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone UTC'}],
-                                                 [{'text': 'Prev', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone - 0'},
-                                                  {'text': '\xa0', 'callback_data': '/stop'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
-        },
-    ]  # yapf: disable
+Added <code>6fc2c510</code> to your calendar view.
 
-    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone', language_code='en-us') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
-                    '\n'
-                    'What time zone should be used in /events?\n'
-                    '\n'
-                    'Choose a time zone:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'US/Alaska', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone US/Alaska'}],
-                                                 [{'text': 'US/Arizona', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone US/Arizona'}],
-                                                 [{'text': 'US/Central', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone US/Central'}],
-                                                 [{'text': 'US/Eastern', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone US/Eastern'}],
-                                                 [{'text': 'US/Hawaii', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone US/Hawaii'}],
-                                                 [{'text': 'US/Mountain', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone US/Mountain'}],
-                                                 [{'text': 'US/Pacific', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone US/Pacific'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
-        },
-    ]  # yapf: disable
+Which calendars should be listed in /events?
 
-    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone', language_code='en-ca') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
-                    '\n'
-                    'What time zone should be used in /events?\n'
-                    '\n'
-                    'Choose a time zone:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Canada/Atlantic', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada/Atlantic'}],
-                                                 [{'text': 'Canada/Central', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada/Central'}],
-                                                 [{'text': 'Canada/Eastern', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada/Eastern'}],
-                                                 [{'text': 'Canada/Mountain', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada/Mountain'}],
-                                                 [{'text': 'Canada/Newfoundland', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada/Newfoundland'}],
-                                                 [{'text': 'Canada/Pacific', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Canada/Pacific'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
-        },
-    ]  # yapf: disable
+Select a calendar to add or remove from the list below:
+[Remove Test Calendar | /admin modulestestbot moderator -1001000001000 calendars remove 6fc2c510]
+[Back | /admin modulestestbot moderator -1001000001000]
+"""
 
-    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone', language_code='en-gb') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
-                    '\n'
-                    'What time zone should be used in /events?\n'
-                    '\n'
-                    'Choose a time zone:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Europe/London', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone Europe/London'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
 
-    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone America/Indiana') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
-                    '\n'
-                    'What time zone should be used in /events?\n'
-                    '\n'
-                    'Choose a time zone:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'America/Indiana/Indianapolis', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana/Indianapolis'}],
-                                                 [{'text': 'America/Indiana/Knox', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana/Knox'}],
-                                                 [{'text': 'America/Indiana/Marengo', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana/Marengo'}],
-                                                 [{'text': 'America/Indiana/Petersburg', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana/Petersburg'}],
-                                                 [{'text': 'America/Indiana/Tell_City', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana/Tell_City'}],
-                                                 [{'text': 'America/Indiana/Vevay', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana/Vevay'}],
-                                                 [{'text': 'America/Indiana/Vincennes', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana/Vincennes'}],
-                                                 [{'text': '\xa0', 'callback_data': '/stop'},
-                                                  {'text': 'Next', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana 1'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
-        },
-    ]  # yapf: disable
+What time zone should be used in /events?
 
-    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone America/Indiana 1') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>\n'
-                    '\n'
-                    'What time zone should be used in /events?\n'
-                    '\n'
-                    'Choose a time zone:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'America/Indiana/Winamac', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana/Winamac'}],
-                                                 [{'text': 'Prev', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone America/Indiana 0'},
-                                                  {'text': '\xa0', 'callback_data': '/stop'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator -1001000001000'}]]},
-        },
-    ]  # yapf: disable
+Choose a time zone:
+[Africa | /admin modulestestbot moderator -1001000001000 timezone Africa]
+[America | /admin modulestestbot moderator -1001000001000 timezone America]
+[Antarctica | /admin modulestestbot moderator -1001000001000 timezone Antarctica]
+[Arctic | /admin modulestestbot moderator -1001000001000 timezone Arctic]
+[Asia | /admin modulestestbot moderator -1001000001000 timezone Asia]
+[Atlantic | /admin modulestestbot moderator -1001000001000 timezone Atlantic]
+[Australia | /admin modulestestbot moderator -1001000001000 timezone Australia]
+[\xa0 | /stop] [Next | /admin modulestestbot moderator -1001000001000 timezone - 1]
+[Back | /admin modulestestbot moderator -1001000001000]
+"""
 
-    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone US/Pacific') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
-                    '\n'
-                    'Set timezone to <code>US/Pacific</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
-                                                 [{'text': 'daily \u2022 Should I announce upcoming events once a day? If so, at what hour?', 'callback_data': '/admin modulestestbot moderator -1001000001000 daily'}],
-                                                 [{'text': 'dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement.', 'callback_data': '/admin modulestestbot moderator -1001000001000 dailytext'}],
-                                                 [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
-                                                 [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
-                                                 [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
-                                                 [{'text': 'timezone \u2022 What time zone should be used in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message(
+        '/admin modulestestbot moderator -1001000001000 timezone - 1') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
 
-    assert conversation.message('/events', chat_type='supergroup') == [
-        {
-            'chat_id': -1001000001000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'reply_to_message_id': 2000,
-            'text': '<b>Alpha Summary</b>\n'
-                    '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">TODAY, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
-        },
-    ]  # yapf: disable
+What time zone should be used in /events?
 
-    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone UTC') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
-                    '\n'
-                    'Set timezone to <code>UTC</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
-                                                 [{'text': 'daily \u2022 Should I announce upcoming events once a day? If so, at what hour?', 'callback_data': '/admin modulestestbot moderator -1001000001000 daily'}],
-                                                 [{'text': 'dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement.', 'callback_data': '/admin modulestestbot moderator -1001000001000 dailytext'}],
-                                                 [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
-                                                 [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
-                                                 [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
-                                                 [{'text': 'timezone \u2022 What time zone should be used in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
-        },
-    ]  # yapf: disable
+Choose a time zone:
+[Canada | /admin modulestestbot moderator -1001000001000 timezone Canada]
+[Europe | /admin modulestestbot moderator -1001000001000 timezone Europe]
+[GMT | /admin modulestestbot moderator -1001000001000 timezone GMT]
+[Indian | /admin modulestestbot moderator -1001000001000 timezone Indian]
+[Pacific | /admin modulestestbot moderator -1001000001000 timezone Pacific]
+[US | /admin modulestestbot moderator -1001000001000 timezone US]
+[UTC | /admin modulestestbot moderator -1001000001000 timezone UTC]
+[Prev | /admin modulestestbot moderator -1001000001000 timezone - 0] [\xa0 | /stop]
+[Back | /admin modulestestbot moderator -1001000001000]
+"""
 
-    assert conversation.message('/events', chat_type='supergroup') == [
-        {
-            'chat_id': -1001000001000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'reply_to_message_id': 2000,
-            'text': '<b>Alpha Summary</b>\n'
-                    '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">TODAY, Thu 1, 12:16\u201312:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>\n'
-                    '<b>Bravo Summary</b>\n'
-                    '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">1 week on Thu 8, 12\u20131 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
-        },
-    ]  # yapf: disable
+    assert conversation.message(
+        '/admin modulestestbot moderator -1001000001000 timezone', language_code='en-us') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
 
-    assert conversation.message('/admin modulestestbot moderator -1001000001000 maxeventscount 1') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>\n'
-                    '\n'
-                    'Set <code>maxeventscount</code> to <code>1</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 calendars'}],
-                                                 [{'text': 'daily \u2022 Should I announce upcoming events once a day? If so, at what hour?', 'callback_data': '/admin modulestestbot moderator -1001000001000 daily'}],
-                                                 [{'text': 'dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement.', 'callback_data': '/admin modulestestbot moderator -1001000001000 dailytext'}],
-                                                 [{'text': 'greeting \u2022 How should I greet people when they join?', 'callback_data': '/admin modulestestbot moderator -1001000001000 greeting'}],
-                                                 [{'text': 'maxeventscount \u2022 How many events should be listed in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventscount'}],
-                                                 [{'text': 'maxeventsdays \u2022 How many days into the future should /events look?', 'callback_data': '/admin modulestestbot moderator -1001000001000 maxeventsdays'}],
-                                                 [{'text': 'timezone \u2022 What time zone should be used in /events?', 'callback_data': '/admin modulestestbot moderator -1001000001000 timezone'}],
-                                                 [{'text': 'Back', 'callback_data': '/admin modulestestbot moderator'}]]},
-        },
-    ]  # yapf: disable
+What time zone should be used in /events?
 
-    assert conversation.message('/events', chat_type='supergroup') == [
-        {
-            'chat_id': -1001000001000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'reply_to_message_id': 2000,
-            'text': '<b>Alpha Summary</b>\n'
-                    '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">TODAY, Thu 1, 12:16\u201312:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
-        },
-    ]  # yapf: disable
+Choose a time zone:
+[US/Alaska | /admin modulestestbot moderator -1001000001000 timezone US/Alaska]
+[US/Arizona | /admin modulestestbot moderator -1001000001000 timezone US/Arizona]
+[US/Central | /admin modulestestbot moderator -1001000001000 timezone US/Central]
+[US/Eastern | /admin modulestestbot moderator -1001000001000 timezone US/Eastern]
+[US/Hawaii | /admin modulestestbot moderator -1001000001000 timezone US/Hawaii]
+[US/Mountain | /admin modulestestbot moderator -1001000001000 timezone US/Mountain]
+[US/Pacific | /admin modulestestbot moderator -1001000001000 timezone US/Pacific]
+[Back | /admin modulestestbot moderator -1001000001000]
+"""
+
+    assert conversation.message(
+        '/admin modulestestbot moderator -1001000001000 timezone', language_code='en-ca') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
+
+What time zone should be used in /events?
+
+Choose a time zone:
+[Canada/Atlantic | /admin modulestestbot moderator -1001000001000 timezone Canada/Atlantic]
+[Canada/Central | /admin modulestestbot moderator -1001000001000 timezone Canada/Central]
+[Canada/Eastern | /admin modulestestbot moderator -1001000001000 timezone Canada/Eastern]
+[Canada/Mountain | /admin modulestestbot moderator -1001000001000 timezone Canada/Mountain]
+[Canada/Newfoundland | /admin modulestestbot moderator -1001000001000 timezone Canada/Newfoundland]
+[Canada/Pacific | /admin modulestestbot moderator -1001000001000 timezone Canada/Pacific]
+[Back | /admin modulestestbot moderator -1001000001000]
+"""
+
+    assert conversation.message(
+        '/admin modulestestbot moderator -1001000001000 timezone', language_code='en-gb') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
+
+What time zone should be used in /events?
+
+Choose a time zone:
+[Europe/London | /admin modulestestbot moderator -1001000001000 timezone Europe/London]
+[Back | /admin modulestestbot moderator -1001000001000]
+"""
+
+    assert conversation.message(
+        '/admin modulestestbot moderator -1001000001000 timezone America/Indiana') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
+
+What time zone should be used in /events?
+
+Choose a time zone:
+[America/Indiana/Indianapolis | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Indianapolis]
+[America/Indiana/Knox | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Knox]
+[America/Indiana/Marengo | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Marengo]
+[America/Indiana/Petersburg | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Petersburg]
+[America/Indiana/Tell_City | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Tell_City]
+[America/Indiana/Vevay | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Vevay]
+[America/Indiana/Vincennes | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Vincennes]
+[\xa0 | /stop] [Next | /admin modulestestbot moderator -1001000001000 timezone America/Indiana 1]
+[Back | /admin modulestestbot moderator -1001000001000]
+"""
+
+    assert conversation.message(
+        '/admin modulestestbot moderator -1001000001000 timezone America/Indiana 1') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
+
+What time zone should be used in /events?
+
+Choose a time zone:
+[America/Indiana/Winamac | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Winamac]
+[Prev | /admin modulestestbot moderator -1001000001000 timezone America/Indiana 0] [\xa0 | /stop]
+[Back | /admin modulestestbot moderator -1001000001000]
+"""
+
+    assert conversation.message(
+        '/admin modulestestbot moderator -1001000001000 timezone US/Pacific') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
+
+Set timezone to <code>US/Pacific</code>.
+[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[Back | /admin modulestestbot moderator]
+"""
+
+    assert conversation.message(
+        '/events', chat_type='supergroup') == """\
+[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">TODAY, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+"""
+
+    assert conversation.message(
+        '/admin modulestestbot moderator -1001000001000 timezone UTC') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
+
+Set timezone to <code>UTC</code>.
+[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[Back | /admin modulestestbot moderator]
+"""
+
+    assert conversation.message(
+        '/events', chat_type='supergroup') == """\
+[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">TODAY, Thu 1, 12:16\u201312:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">1 week on Thu 8, 12\u20131 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+"""
+
+    assert conversation.message(
+        '/admin modulestestbot moderator -1001000001000 maxeventscount 1') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
+
+Set <code>maxeventscount</code> to <code>1</code>.
+[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[Back | /admin modulestestbot moderator]
+"""
+
+    assert conversation.message(
+        '/events', chat_type='supergroup') == """\
+[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">TODAY, Thu 1, 12:16\u201312:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+"""
 
     monkeypatch.setattr('time.time', lambda: 2000000.)
 
-    assert conversation.message('/events', chat_type='supergroup') == [
-        {
-            'chat_id': -1001000001000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'reply_to_message_id': 2000,
-            'text': 'No events in the next 6 days!',
-        },
-    ]  # yapf: disable
+    assert conversation.message(
+        '/events', chat_type='supergroup') == """\
+[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
+No events in the next 6 days!
+"""
 
 
 def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-name
     """Test /events in a private chat."""
 
-    assert conversation.message('/events') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Please choose one or more calendars and set your time zone!',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Settings', 'callback_data': '/events set'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message('/events') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Please choose one or more calendars and set your time zone!
+[Settings | /events set]
+"""
 
-    assert conversation.message('/events set calendars') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings \u203a calendars: <b>Select a calendar</b>\n'
-                    '\n'
-                    'Which calendars do you want to see?\n'
-                    '\n'
-                    'Select a calendar to add or remove from the list below:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Add Test Calendar', 'callback_data': '/events set calendars add 6fc2c510'}],
-                                                 [{'text': 'Back', 'callback_data': '/events set'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message('/events set') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events \u203a Settings: <b>Choose a field</b>
+[calendars \u2022 Which calendars do you want to see? | /events set calendars]
+[timezone \u2022 What time zone are you in? | /events set timezone]
+[Back | /events]
+"""
 
-    assert conversation.message('/events set calendars add 6fc2c510') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings \u203a calendars: <b>Select a calendar</b>\n'
-                    '\n'
-                    'Added <code>6fc2c510</code> to your calendar view.\n'
-                    '\n'
-                    'Which calendars do you want to see?\n'
-                    '\n'
-                    'Select a calendar to add or remove from the list below:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Remove Test Calendar', 'callback_data': '/events set calendars remove 6fc2c510'}],
-                                                 [{'text': 'Back', 'callback_data': '/events set'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message('/events set calendars') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
 
-    assert conversation.message('/events set timezone US/Pacific') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings: <b>Choose a field</b>\n'
-                    '\n'
-                    'Set timezone to <code>US/Pacific</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars do you want to see?', 'callback_data': '/events set calendars'}],
-                                                 [{'text': 'timezone \u2022 What time zone are you in?', 'callback_data': '/events set timezone'}],
-                                                 [{'text': 'Back', 'callback_data': '/events'}]]},
-        },
-    ]  # yapf: disable
+Which calendars do you want to see?
 
-    assert conversation.message('/events') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': '<b>Alpha Summary</b>\n'
-                    '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">TODAY, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>\n'
-                    '\n'
-                    'Alpha Description',
-            'reply_markup': {'inline_keyboard': [[{'text': '\xa0', 'callback_data': '/stop'},
-                                                  {'text': 'Settings', 'callback_data': '/events set'},
-                                                  {'text': 'Next', 'callback_data': '/events 6fc2c510:bravo'}]]},
-        },
-    ]  # yapf: disable
+Select a calendar to add or remove from the list below:
+[Add Test Calendar | /events set calendars add 6fc2c510]
+[Back | /events set]
+"""
 
-    assert conversation.message('/events 6fc2c510:bravo') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': '<b>Bravo Summary</b>\n'
-                    '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>\n'
-                    '\n'
-                    'Bravo Description',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Prev', 'callback_data': '/events 6fc2c510:alpha'},
-                                                  {'text': 'Current', 'callback_data': '/events'},
-                                                  {'text': 'Next', 'callback_data': '/events 6fc2c510:charlie'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message('/events set calendars add 6fc2c510') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
+
+Added <code>6fc2c510</code> to your calendar view.
+
+Which calendars do you want to see?
+
+Select a calendar to add or remove from the list below:
+[Remove Test Calendar | /events set calendars remove 6fc2c510]
+[Back | /events set]
+"""
+
+    assert conversation.message('/events set timezone US/Pacific') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events \u203a Settings: <b>Choose a field</b>
+
+Set timezone to <code>US/Pacific</code>.
+[calendars \u2022 Which calendars do you want to see? | /events set calendars]
+[timezone \u2022 What time zone are you in? | /events set timezone]
+[Back | /events]
+"""
+
+    assert conversation.message('/events') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">TODAY, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+
+Alpha Description
+[\xa0 | /stop] [Settings | /events set] [Next | /events 6fc2c510:bravo]
+"""
+
+    assert conversation.message('/events 6fc2c510:bravo') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+Bravo Description
+[Prev | /events 6fc2c510:alpha] [Current | /events] [Next | /events 6fc2c510:charlie]
+"""
 
     monkeypatch.setattr('time.time', lambda: 2000000.)
 
-    assert conversation.message('/events') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'No upcoming events!',
-            'reply_markup': {'inline_keyboard': [[{'text': '\xa0', 'callback_data': '/stop'},
-                                                  {'text': 'Settings', 'callback_data': '/events set'},
-                                                  {'text': '\xa0', 'callback_data': '/stop'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message('/events') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+No upcoming events!
+[\xa0 | /stop] [Settings | /events set] [\xa0 | /stop]
+"""
 
 
 def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-name
     """Test @BOTUSER events."""
 
-    assert conversation.inline('events') == [
+    assert conversation.raw_inline('events') == [
         {
             'cache_time': 30,
             'inline_query_id': 2000,
@@ -447,38 +364,30 @@ def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
         },
     ]  # yapf: disable
 
-    assert conversation.message('/events set calendars add 6fc2c510') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings \u203a calendars: <b>Select a calendar</b>\n'
-                    '\n'
-                    'Added <code>6fc2c510</code> to your calendar view.\n'
-                    '\n'
-                    'Which calendars do you want to see?\n'
-                    '\n'
-                    'Select a calendar to add or remove from the list below:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Remove Test Calendar', 'callback_data': '/events set calendars remove 6fc2c510'}],
-                                                 [{'text': 'Back', 'callback_data': '/events set'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message('/events set calendars add 6fc2c510') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
 
-    assert conversation.message('/events set timezone US/Pacific') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings: <b>Choose a field</b>\n'
-                    '\n'
-                    'Set timezone to <code>US/Pacific</code>.',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars do you want to see?', 'callback_data': '/events set calendars'}],
-                                                 [{'text': 'timezone \u2022 What time zone are you in?', 'callback_data': '/events set timezone'}],
-                                                 [{'text': 'Back', 'callback_data': '/events'}]]},
-        },
-    ]  # yapf: disable
+Added <code>6fc2c510</code> to your calendar view.
 
-    assert conversation.inline('events') == [
+Which calendars do you want to see?
+
+Select a calendar to add or remove from the list below:
+[Remove Test Calendar | /events set calendars remove 6fc2c510]
+[Back | /events set]
+"""
+
+    assert conversation.message('/events set timezone US/Pacific') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events \u203a Settings: <b>Choose a field</b>
+
+Set timezone to <code>US/Pacific</code>.
+[calendars \u2022 Which calendars do you want to see? | /events set calendars]
+[timezone \u2022 What time zone are you in? | /events set timezone]
+[Back | /events]
+"""
+
+    assert conversation.raw_inline('events') == [
         {
             'cache_time': 30,
             'inline_query_id': 2000,
@@ -526,7 +435,7 @@ def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
         },
     ]  # yapf: disable
 
-    assert conversation.inline('events bra') == [
+    assert conversation.raw_inline('events bra') == [
         {
             'cache_time': 30,
             'inline_query_id': 2000,
@@ -550,7 +459,7 @@ def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
         },
     ]  # yapf: disable
 
-    assert conversation.inline('events full bra') == [
+    assert conversation.raw_inline('events full bra') == [
         {
             'cache_time': 30,
             'inline_query_id': 2000,
@@ -578,7 +487,7 @@ def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
 
     monkeypatch.setattr('time.time', lambda: 2000000.)
 
-    assert conversation.inline('events') == [
+    assert conversation.raw_inline('events') == [
         {
             'cache_time': 30,
             'inline_query_id': 2000,
@@ -593,146 +502,111 @@ def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
 def test_settings(conversation):  # pylint: disable=redefined-outer-name
     """Test /events set."""
 
-    assert conversation.message('/events set') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings: <b>Choose a field</b>',
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars do you want to see?', 'callback_data': '/events set calendars'}],
-                                                 [{'text': 'timezone \u2022 What time zone are you in?', 'callback_data': '/events set timezone'}],
-                                                 [{'text': 'Back', 'callback_data': '/events'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message('/events set') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events \u203a Settings: <b>Choose a field</b>
+[calendars \u2022 Which calendars do you want to see? | /events set calendars]
+[timezone \u2022 What time zone are you in? | /events set timezone]
+[Back | /events]
+"""
 
-    assert conversation.message('/events set calendars') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings \u203a calendars: <b>Select a calendar</b>\n'
-                    '\n'
-                    'Which calendars do you want to see?\n'
-                    '\n'
-                    'Select a calendar to add or remove from the list below:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Add Test Calendar', 'callback_data': '/events set calendars add 6fc2c510'}],
-                                                 [{'text': 'Back', 'callback_data': '/events set'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message('/events set calendars') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
 
-    assert conversation.message('/events set calendars add 6fc2c510') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings \u203a calendars: <b>Select a calendar</b>\n'
-                    '\n'
-                    'Added <code>6fc2c510</code> to your calendar view.\n'
-                    '\n'
-                    'Which calendars do you want to see?\n'
-                    '\n'
-                    'Select a calendar to add or remove from the list below:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Remove Test Calendar', 'callback_data': '/events set calendars remove 6fc2c510'}],
-                                                 [{'text': 'Back', 'callback_data': '/events set'}]]},
-        },
-    ]  # yapf: disable
+Which calendars do you want to see?
 
-    assert conversation.message('/events set calendars add 6fc2c510') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings \u203a calendars: <b>Select a calendar</b>\n'
-                    '\n'
-                    '<code>6fc2c510</code> is already in your calendar view!\n'
-                    '\n'
-                    'Which calendars do you want to see?\n'
-                    '\n'
-                    'Select a calendar to add or remove from the list below:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Remove Test Calendar', 'callback_data': '/events set calendars remove 6fc2c510'}],
-                                                 [{'text': 'Back', 'callback_data': '/events set'}]]},
-        },
-    ]  # yapf: disable
+Select a calendar to add or remove from the list below:
+[Add Test Calendar | /events set calendars add 6fc2c510]
+[Back | /events set]
+"""
 
-    assert conversation.message('/events set calendars remove 6fc2c510') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings \u203a calendars: <b>Select a calendar</b>\n'
-                    '\n'
-                    'Removed <code>6fc2c510</code> from your calendar view.\n'
-                    '\n'
-                    'Which calendars do you want to see?\n'
-                    '\n'
-                    'Select a calendar to add or remove from the list below:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Add Test Calendar', 'callback_data': '/events set calendars add 6fc2c510'}],
-                                                 [{'text': 'Back', 'callback_data': '/events set'}]]},
-        },
-    ]  # yapf: disable
+    assert conversation.message('/events set calendars add 6fc2c510') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
 
-    assert conversation.message('/events set calendars remove 6fc2c510') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings \u203a calendars: <b>Select a calendar</b>\n'
-                    '\n'
-                    '<code>6fc2c510</code> is not in your calendar view!\n'
-                    '\n'
-                    'Which calendars do you want to see?\n'
-                    '\n'
-                    'Select a calendar to add or remove from the list below:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Add Test Calendar', 'callback_data': '/events set calendars add 6fc2c510'}],
-                                                 [{'text': 'Back', 'callback_data': '/events set'}]]},
-        },
-    ]  # yapf: disable
+Added <code>6fc2c510</code> to your calendar view.
 
-    assert conversation.message('/events set calendars add bogus') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings \u203a calendars: <b>Select a calendar</b>\n'
-                    '\n'
-                    '<code>bogus</code> is not a calendar!\n'
-                    '\n'
-                    'Which calendars do you want to see?\n'
-                    '\n'
-                    'Select a calendar to add or remove from the list below:',
-            'reply_markup': {'inline_keyboard': [[{'text': 'Add Test Calendar', 'callback_data': '/events set calendars add 6fc2c510'}],
-                                                 [{'text': 'Back', 'callback_data': '/events set'}]]},
-        },
-    ]  # yapf: disable
+Which calendars do you want to see?
 
-    assert conversation.message('/events set bogus') == [
-        {
-            'chat_id': 1000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': 'Events \u203a Settings: <b>Choose a field</b>\n'
-                    '\n'
-                    "I can't set <code>bogus</code>.",
-            'reply_markup': {'inline_keyboard': [[{'text': 'calendars \u2022 Which calendars do you want to see?', 'callback_data': '/events set calendars'}],
-                                                 [{'text': 'timezone \u2022 What time zone are you in?', 'callback_data': '/events set timezone'}],
-                                                 [{'text': 'Back', 'callback_data': '/events'}]]},
-        },
-    ]  # yapf: disable
+Select a calendar to add or remove from the list below:
+[Remove Test Calendar | /events set calendars remove 6fc2c510]
+[Back | /events set]
+"""
+
+    assert conversation.message('/events set calendars add 6fc2c510') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
+
+<code>6fc2c510</code> is already in your calendar view!
+
+Which calendars do you want to see?
+
+Select a calendar to add or remove from the list below:
+[Remove Test Calendar | /events set calendars remove 6fc2c510]
+[Back | /events set]
+"""
+
+    assert conversation.message('/events set calendars remove 6fc2c510') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
+
+Removed <code>6fc2c510</code> from your calendar view.
+
+Which calendars do you want to see?
+
+Select a calendar to add or remove from the list below:
+[Add Test Calendar | /events set calendars add 6fc2c510]
+[Back | /events set]
+"""
+
+    assert conversation.message('/events set calendars remove 6fc2c510') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
+
+<code>6fc2c510</code> is not in your calendar view!
+
+Which calendars do you want to see?
+
+Select a calendar to add or remove from the list below:
+[Add Test Calendar | /events set calendars add 6fc2c510]
+[Back | /events set]
+"""
+
+    assert conversation.message('/events set calendars add bogus') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
+
+<code>bogus</code> is not a calendar!
+
+Which calendars do you want to see?
+
+Select a calendar to add or remove from the list below:
+[Add Test Calendar | /events set calendars add 6fc2c510]
+[Back | /events set]
+"""
+
+    assert conversation.message('/events set bogus') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events \u203a Settings: <b>Choose a field</b>
+
+I can't set <code>bogus</code>.
+[calendars \u2022 Which calendars do you want to see? | /events set calendars]
+[timezone \u2022 What time zone are you in? | /events set timezone]
+[Back | /events]
+"""
 
 
 def test_help(conversation):  # pylint: disable=redefined-outer-name
     """Test /help."""
 
-    assert conversation.message('/help', user_id=2000) == [
-        {
-            'chat_id': 2000,
-            'disable_web_page_preview': True,
-            'parse_mode': 'HTML',
-            'text': '<b>Commands</b>\n'
-                    '\n'
-                    '/events \u2013 Display recent and upcoming events',
-        },
-    ]  # yapf: disable
+    assert conversation.message(
+        '/help', user_id=2000) == """\
+[chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
+<b>Commands</b>
+
+/events \u2013 Display recent and upcoming events
+"""
 
 
 def test_format_daily_message():  # pylint: disable=missing-docstring

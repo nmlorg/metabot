@@ -21,7 +21,7 @@ def test_dummy(conversation):  # pylint: disable=redefined-outer-name
     assert not conversation.multibot.conf['groups']
     assert not conversation.multibot.conf['users']
 
-    assert conversation.message('/dummy') == []
+    assert conversation.message('/dummy') == ''
 
     assert not conversation.multibot.conf['groups']
     assert conversation.multibot.conf['users'] == {
@@ -32,7 +32,7 @@ def test_dummy(conversation):  # pylint: disable=redefined-outer-name
         },
     }
 
-    assert conversation.message('/dummy', last_name='Lastington') == []
+    assert conversation.message('/dummy', last_name='Lastington') == ''
 
     assert not conversation.multibot.conf['groups']
     assert conversation.multibot.conf['users'] == {
@@ -44,7 +44,7 @@ def test_dummy(conversation):  # pylint: disable=redefined-outer-name
         },
     }
 
-    assert conversation.message('/dummy', last_name='Lastington', chat_type='supergroup') == []
+    assert conversation.message('/dummy', last_name='Lastington', chat_type='supergroup') == ''
 
     assert conversation.multibot.conf['groups'] == {
         -1001000001000: {

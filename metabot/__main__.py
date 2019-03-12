@@ -54,7 +54,7 @@ def main():  # pylint: disable=missing-docstring
             else:
                 mybot.run_bot(username)
     unconfigured = sorted(username for username, botconf in mybot.conf['bots'].items()
-                          if not botconf['admin'].get('admins'))
+                          if not botconf['issue37']['admin'].get('admins'))
     if unconfigured:
         print()
         print('To configure %s, open a chat with:' % humanize.list(unconfigured))

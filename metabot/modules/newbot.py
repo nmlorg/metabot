@@ -78,7 +78,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
             exc.error_code, exc.description)
 
     username = ctx.bot.multibot.add_bot(token)
-    ctx.bot.multibot.conf['bots'][username]['admin']['admins'] = [ctx.user['id']]
+    ctx.bot.multibot.conf['bots'][username]['issue37']['admin']['admins'] = [ctx.user['id']]
     ctx.bot.multibot.run_bot(username)
 
     msg.action = 'Configure your new bot'

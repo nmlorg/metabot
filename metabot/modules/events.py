@@ -33,7 +33,7 @@ def modinit(multibot):  # pylint: disable=missing-docstring
     def _hourly():
         multibot.multical.poll()
         for botconf in multibot.conf['bots'].values():
-            for groupid, groupconf in botconf['moderator'].items():
+            for groupid, groupconf in botconf['issue37']['moderator'].items():
                 calcodes, tzinfo, count, days, daily = _get_group_conf(groupconf)
                 if tzinfo and isinstance(daily, int):
                     now = datetime.datetime.now(tzinfo)
@@ -119,7 +119,7 @@ def group(ctx, msg):
     """Handle /events in a group chat."""
 
     group_id = '%s' % ctx.chat['id']
-    groupconf = ctx.bot.multibot.conf['bots'][ctx.bot.username]['moderator'][group_id]
+    groupconf = ctx.bot.multibot.conf['bots'][ctx.bot.username]['issue37']['moderator'][group_id]
     calcodes, tzinfo, count, days, unused_daily = _get_group_conf(groupconf)
     if not calcodes or not tzinfo:
         missing = []

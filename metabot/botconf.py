@@ -16,7 +16,7 @@ class BotConf(dicttools.ImplicitTrackingDict):
 
     confdir = None
 
-    def __init__(self, confdir=None):
+    def __init__(self, confdir=None):  # pylint: disable=too-many-branches
         super(BotConf, self).__init__()
         if confdir:
             self.confdir = confdir
@@ -42,6 +42,14 @@ class BotConf(dicttools.ImplicitTrackingDict):
                     for k in ('title', 'type', 'username'):
                         if k in groupconf:
                             self['groups'][groupid][k] = groupconf[k]
+
+            # Schema update: Remove after 2019-06-12.
+            for botconf in self['bots'].values():
+                if botconf.get('telegram'):
+                    for modname in list(botconf):
+                        if modname != 'issue37':
+                            botconf['issue37'][modname] = botconf[modname]
+                            botconf.pop(modname)
 
         self._fnames = set(self)
 

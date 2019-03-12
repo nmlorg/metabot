@@ -25,7 +25,8 @@ def default(ctx, msg, modconf):  # pylint: disable=missing-docstring
             continue
         modhelp = getattr(module, 'modhelp', None)
         if modhelp:
-            modhelp(ctx, ctx.bot.multibot.conf['bots'][ctx.bot.username][modname], sections)
+            modhelp(ctx, ctx.bot.multibot.conf['bots'][ctx.bot.username]['issue37'][modname],
+                    sections)
 
     if not sections:
         msg.add("I don't have much documentation\u2014check with a bot admin!")
@@ -65,7 +66,8 @@ def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
     for modname, module in ctx.bot.multibot.modules.items():
         modhelp = getattr(module, 'modhelp', None)
         if modhelp:
-            modhelp(ctx, ctx.bot.multibot.conf['bots'][ctx.bot.username][modname], modules[modname])
+            modhelp(ctx, ctx.bot.multibot.conf['bots'][ctx.bot.username]['issue37'][modname],
+                    modules[modname])
 
     msg.action = 'Select a module'
     for modname, sections in sorted(modules.items()):

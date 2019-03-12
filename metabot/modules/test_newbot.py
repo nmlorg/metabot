@@ -128,21 +128,25 @@ Yay, I am now running <code>validbot</code> (<code>Valid Bot</code>). Open a pri
 
     assert conversation.multibot.conf['bots'] == {
         'modulestestbot': {
-            'admin': {
-                'admins': [1000],
-            },
-            'telegram': {
-                'running': False,
-                'token': '1234:test',
+            'issue37': {
+                'admin': {
+                    'admins': [1000],
+                },
+                'telegram': {
+                    'running': False,
+                    'token': '1234:test',
+                },
             },
         },
         'validbot': {
-            'admin': {
-                'admins': [1000],
-            },
-            'telegram': {
-                'running': True,
-                'token': '1234:valid',
+            'issue37': {
+                'admin': {
+                    'admins': [1000],
+                },
+                'telegram': {
+                    'running': True,
+                    'token': '1234:valid',
+                },
             },
         },
     }

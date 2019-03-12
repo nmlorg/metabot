@@ -48,7 +48,7 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         })
         username = self.multibot.add_bot('1234:test')
         self.bot = self.multibot._build_bot(username)  # pylint: disable=protected-access
-        self.multibot.conf['bots']['modulestestbot']['admin']['admins'] = [1000]
+        self.multibot.conf['bots']['modulestestbot']['issue37']['admin']['admins'] = [1000]
 
     def raw_inline(self, text, user_id=1000):
         """Simulate an inline query (@BOTNAME text)."""

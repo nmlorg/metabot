@@ -36,7 +36,7 @@ class MultiBot(object):
                 modinit(self)
 
         for username, bot_config in self.conf['bots'].items():
-            if bot_config['telegram']['running']:
+            if bot_config['issue37']['telegram']['running']:
                 self.run_bot(username)
 
     def add_bot(self, token):
@@ -44,9 +44,11 @@ class MultiBot(object):
 
         username = ntelebot.bot.Bot(token).username
         self.conf['bots'][username] = {
-            'telegram': {
-                'running': False,
-                'token': token,
+            'issue37': {
+                'telegram': {
+                    'running': False,
+                    'token': token,
+                },
             },
         }
         self.conf.save()
@@ -54,7 +56,7 @@ class MultiBot(object):
 
     def _build_bot(self, username):
         bot_config = self.conf['bots'][username]
-        bot = ntelebot.bot.Bot(bot_config['telegram']['token'])
+        bot = ntelebot.bot.Bot(bot_config['issue37']['telegram']['token'])
         bot.config = bot_config
         bot.multibot = self
         assert bot.username == username
@@ -65,15 +67,15 @@ class MultiBot(object):
 
         bot = self._build_bot(username)
         self.loop.add(bot, self.dispatcher)
-        bot.config['telegram']['running'] = True
+        bot.config['issue37']['telegram']['running'] = True
         self.conf.save()
 
     def stop_bot(self, username):
         """Stop polling for updates for the referenced bot."""
 
         bot_config = self.conf['bots'][username]
-        self.loop.remove(bot_config['telegram']['token'])
-        bot_config['telegram']['running'] = False
+        self.loop.remove(bot_config['issue37']['telegram']['token'])
+        bot_config['issue37']['telegram']['running'] = False
         self.conf.save()
 
     def run(self):
@@ -89,7 +91,7 @@ class MultiBot(object):
 
 class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
 
-    def __call__(self, bot, update):
+    def __call__(self, bot, update):  # pylint: disable=too-many-branches,too-many-locals
         logging.info('%s', _pretty_repr(update))
 
         multibot = bot.multibot
@@ -129,7 +131,7 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
             for modname, module in multibot.modules.items():
                 modpredispatch = getattr(module, 'modpredispatch', None)
                 if modpredispatch:
-                    modpredispatch(ctx, msg, botconfig[modname])
+                    modpredispatch(ctx, msg, botconfig['issue37'][modname])
 
             ret = False
             for modname, module in multibot.modules.items():
@@ -141,14 +143,14 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
 
                 moddispatch = getattr(module, 'moddispatch', None)
                 if moddispatch:
-                    ret = moddispatch(ctx, msg, botconfig[modname])
+                    ret = moddispatch(ctx, msg, botconfig['issue37'][modname])
                     if ret is not False:
                         break
 
             for modname, module in multibot.modules.items():
                 modpostdispatch = getattr(module, 'modpostdispatch', None)
                 if modpostdispatch:
-                    modpostdispatch(ctx, msg, botconfig[modname])
+                    modpostdispatch(ctx, msg, botconfig['issue37'][modname])
 
             if msg:
                 msg.reply(ctx)

@@ -36,9 +36,11 @@ def test_save_load(tmpdir):
     mybot.run_bot('goodbot')
     assert yaml.safe_load(conffile.read()) == {
         'goodbot': {
-            'telegram': {
-                'running': True,
-                'token': '1234:goodbot',
+            'issue37': {
+                'telegram': {
+                    'running': True,
+                    'token': '1234:goodbot',
+                },
             },
         },
     }

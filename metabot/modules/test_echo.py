@@ -31,6 +31,7 @@ These are the rules: Have fun!
     conversation.multibot.conf['bots']['modulestestbot']['issue37']['echo']['about'] = (
         'First line.\n'
         'Second line.\n'
+        ' \n'
         'Last line.')
 
     assert conversation.message('/about') == """\

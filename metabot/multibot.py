@@ -113,8 +113,9 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
                 for k, val in ctx.user.items():
                     if k not in ('first_name', 'id', 'last_name'):
                         ctx.userinfo.data[k] = val
-                    ctx.userinfo.data.name = ('%s %s' % (ctx.user.get('first_name', ''),
-                                                         ctx.user.get('last_name', ''))).strip()
+                    ctx.userinfo.data.name = (
+                        '%s %s' %
+                        (ctx.user.get('first_name', ''), ctx.user.get('last_name', ''))).strip()
 
             if not ctx.chat or ctx.chat['type'] not in ('channel', 'group', 'supergroup'):
                 ctx.groupinfo = None

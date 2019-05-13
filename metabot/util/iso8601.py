@@ -15,9 +15,8 @@ def totimestamp(isoformat):
         r'([.]\d+)?'
         r'(([-+]\d{1,2}):?(\d{1,2})|Z)?'
         r')?$', isoformat).groups()
-    dtime = datetime.datetime(
-        int(year), int(month), int(day), int(hour or 0), int(minute or 0), int(second or 0),
-        int(1000000 * float(fraction or 0)))
+    dtime = datetime.datetime(int(year), int(month), int(day), int(hour or 0), int(minute or 0),
+                              int(second or 0), int(1000000 * float(fraction or 0)))
     if utchour and utcminute:
         tzinfo = _TimeZone(int(utchour) + float(utcminute) / 60)
     else:

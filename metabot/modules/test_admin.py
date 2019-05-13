@@ -27,8 +27,8 @@ Hi! You aren't one of my admins. If you should be, ask a current admin to add yo
 
     assert conversation.message('/admin', user_id=2000) == error_message
     assert conversation.message('/admin dummy', user_id=2000) == error_message
-    assert conversation.message(
-        '/admin modulestestbot admin add 2000', user_id=2000) == error_message
+    assert conversation.message('/admin modulestestbot admin add 2000',
+                                user_id=2000) == error_message
 
 
 def test_default(conversation):  # pylint: disable=redefined-outer-name

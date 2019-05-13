@@ -56,8 +56,7 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
 
     assert conversation.message('/notevents') == ''
 
-    assert conversation.message(
-        '/events', chat_type='supergroup') == """\
+    assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
 I'm not configured for this group! Ask a bot admin to go into the <b>moderator</b> module settings, group <b>-1001000001000</b>, and choose one or more calendars and set the time zone.
 """
@@ -113,8 +112,8 @@ Choose a time zone:
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 
-    assert conversation.message(
-        '/admin modulestestbot moderator -1001000001000 timezone', language_code='en-us') == """\
+    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone',
+                                language_code='en-us') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
 
@@ -131,8 +130,8 @@ Choose a time zone:
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 
-    assert conversation.message(
-        '/admin modulestestbot moderator -1001000001000 timezone', language_code='en-ca') == """\
+    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone',
+                                language_code='en-ca') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
 
@@ -148,8 +147,8 @@ Choose a time zone:
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 
-    assert conversation.message(
-        '/admin modulestestbot moderator -1001000001000 timezone', language_code='en-gb') == """\
+    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone',
+                                language_code='en-gb') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
 
@@ -208,8 +207,7 @@ Set timezone to <code>US/Pacific</code>.
 [Back | /admin modulestestbot moderator]
 """
 
-    assert conversation.message(
-        '/events', chat_type='supergroup') == """\
+    assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
 <b>Alpha Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">TODAY, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
@@ -231,8 +229,7 @@ Set timezone to <code>UTC</code>.
 [Back | /admin modulestestbot moderator]
 """
 
-    assert conversation.message(
-        '/events', chat_type='supergroup') == """\
+    assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
 <b>Alpha Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">TODAY, Thu 1, 12:16\u201312:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
@@ -256,8 +253,7 @@ Set <code>maxeventscount</code> to <code>1</code>.
 [Back | /admin modulestestbot moderator]
 """
 
-    assert conversation.message(
-        '/events', chat_type='supergroup') == """\
+    assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
 <b>Alpha Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">TODAY, Thu 1, 12:16\u201312:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
@@ -265,8 +261,7 @@ Set <code>maxeventscount</code> to <code>1</code>.
 
     monkeypatch.setattr('time.time', lambda: 2000000.)
 
-    assert conversation.message(
-        '/events', chat_type='supergroup') == """\
+    assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
 No events in the next 6 days!
 """
@@ -600,8 +595,7 @@ I can't set <code>bogus</code>.
 def test_help(conversation):  # pylint: disable=redefined-outer-name
     """Test /help."""
 
-    assert conversation.message(
-        '/help', user_id=2000) == """\
+    assert conversation.message('/help', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 <b>Commands</b>
 

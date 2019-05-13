@@ -20,8 +20,7 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('/nothelp') == ''
 
-    assert conversation.message(
-        '/help', user_id=2000) == """\
+    assert conversation.message('/help', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 I don't have much documentation\u2014check with a bot admin!
 """

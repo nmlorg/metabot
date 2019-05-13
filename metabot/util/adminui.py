@@ -37,8 +37,8 @@ def calendars(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many
     msg.action = 'Select a calendar'
     msg.add(desc)
     msg.add('Select a calendar to add or remove from the list below:')
-    for calcode, calendar_info in sorted(
-            ctx.bot.multibot.calendars.items(), key=lambda pair: pair[1]['name']):
+    for calcode, calendar_info in sorted(ctx.bot.multibot.calendars.items(),
+                                         key=lambda pair: pair[1]['name']):
         if calcode not in calcodes:
             msg.button('Add %s' % calendar_info['name'], 'add %s' % calcode)
         else:

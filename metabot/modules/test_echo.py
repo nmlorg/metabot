@@ -80,8 +80,7 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
     conversation.multibot.conf['bots']['modulestestbot']['issue37']['echo']['rules2'] = (
         'These are the rules: Have fun!!')
 
-    assert conversation.message(
-        '/help', user_id=2000) == """\
+    assert conversation.message('/help', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 <b>Commands</b>
 

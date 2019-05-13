@@ -58,21 +58,20 @@ class _SimplifyingDumper(yaml.emitter.Emitter, yaml.serializer.Serializer, _Simp
                  explicit_end=None,
                  version=None,
                  tags=None):
-        yaml.emitter.Emitter.__init__(
-            self,
-            stream,
-            canonical=canonical,
-            indent=indent,
-            width=width,
-            allow_unicode=allow_unicode,
-            line_break=line_break)
-        yaml.serializer.Serializer.__init__(
-            self,
-            encoding=encoding,
-            explicit_start=explicit_start,
-            explicit_end=explicit_end,
-            version=version,
-            tags=tags)
-        _SimplifyingRepresenter.__init__(
-            self, default_style=default_style, default_flow_style=default_flow_style)
+        yaml.emitter.Emitter.__init__(self,
+                                      stream,
+                                      canonical=canonical,
+                                      indent=indent,
+                                      width=width,
+                                      allow_unicode=allow_unicode,
+                                      line_break=line_break)
+        yaml.serializer.Serializer.__init__(self,
+                                            encoding=encoding,
+                                            explicit_start=explicit_start,
+                                            explicit_end=explicit_end,
+                                            version=version,
+                                            tags=tags)
+        _SimplifyingRepresenter.__init__(self,
+                                         default_style=default_style,
+                                         default_flow_style=default_flow_style)
         yaml.resolver.Resolver.__init__(self)

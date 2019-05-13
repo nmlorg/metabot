@@ -18,8 +18,8 @@ except NameError:
 
 
 def main():  # pylint: disable=missing-docstring
-    logging.basicConfig(
-        format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s] %(message)s', level=logging.INFO)
+    logging.basicConfig(format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s] %(message)s',
+                        level=logging.INFO)
 
     modules = set()
     for _, name, _ in pkgutil.iter_modules(modules_package.__path__):

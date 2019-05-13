@@ -66,9 +66,8 @@ Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code
 [Back | /admin modulestestbot]
 """
 
-    requests_mock.get(
-        'https://t.me/joinchat/DUMMY_INVITE_LINK',
-        text="""
+    requests_mock.get('https://t.me/joinchat/DUMMY_INVITE_LINK',
+                      text="""
 <!DOCTYPE html>
 <html>
   <head>
@@ -195,8 +194,7 @@ Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code
 def test_help(conversation):  # pylint: disable=redefined-outer-name
     """Test /help."""
 
-    assert conversation.message(
-        '/help', user_id=2000) == """\
+    assert conversation.message('/help', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 <b>Commands</b>
 

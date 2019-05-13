@@ -155,8 +155,7 @@ Yay, I am now running <code>validbot</code> (<code>Valid Bot</code>). Open a pri
 def test_help(conversation):  # pylint: disable=redefined-outer-name
     """Test /help."""
 
-    assert conversation.message(
-        '/help', user_id=2000) == """\
+    assert conversation.message('/help', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 <b>Commands</b>
 

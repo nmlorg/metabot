@@ -20,8 +20,8 @@ else:
 
 
 def cgi_escape(text):  # pylint: disable=missing-docstring
-    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace(
-        '"', '&quot;')
+    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>',
+                                                                   '&gt;').replace('"', '&quot;')
 
 
 ALIASES = ('channel', 'channels', 'group', 'groups', 'room', 'rooms')

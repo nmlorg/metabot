@@ -16,8 +16,8 @@ except NameError:
 
 
 def cgi_escape(text):  # pylint: disable=missing-docstring
-    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace(
-        '"', '&quot;')
+    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>',
+                                                                   '&gt;').replace('"', '&quot;')
 
 
 class _HTMLSanitizer(HTMLParser.HTMLParser):

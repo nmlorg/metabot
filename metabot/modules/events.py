@@ -46,12 +46,11 @@ def modinit(multibot):  # pylint: disable=missing-docstring
                             preambles = groupconf.get('dailytext', '').splitlines()
                             preamble = (preambles and preambles[now.toordinal() % len(preambles)] or
                                         '')
-                            bot.send_message(
-                                chat_id=groupid,
-                                text=_format_daily_message(preamble, events),
-                                parse_mode='HTML',
-                                disable_web_page_preview=True,
-                                disable_notification=True)
+                            bot.send_message(chat_id=groupid,
+                                             text=_format_daily_message(preamble, events),
+                                             parse_mode='HTML',
+                                             disable_web_page_preview=True,
+                                             disable_notification=True)
         _queue()
 
     _queue()
@@ -239,12 +238,11 @@ def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
             })
         if not nextid:
             break
-    ctx.reply_inline(
-        results,
-        is_personal=True,
-        cache_time=30,
-        switch_pm_text='Settings',
-        switch_pm_parameter='L2V2ZW50cyBzZXQ')
+    ctx.reply_inline(results,
+                     is_personal=True,
+                     cache_time=30,
+                     switch_pm_text='Settings',
+                     switch_pm_parameter='L2V2ZW50cyBzZXQ')
 
 
 def format_event(bot, event, tzinfo, full=True):
@@ -267,9 +265,8 @@ def format_event(bot, event, tzinfo, full=True):
 def humanize_range(start, end, tzinfo):
     """Return the range between start and end as human-friendly text."""
 
-    return humanize.range(
-        datetime.datetime.fromtimestamp(start, tzinfo), datetime.datetime.fromtimestamp(
-            end, tzinfo))
+    return humanize.range(datetime.datetime.fromtimestamp(start, tzinfo),
+                          datetime.datetime.fromtimestamp(end, tzinfo))
 
 
 def settings(ctx, msg, modconf):

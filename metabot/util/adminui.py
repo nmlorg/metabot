@@ -2,6 +2,11 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+try:
+    import builtins
+except ImportError:
+    import __builtin__ as builtins
+
 import math
 
 import pytz
@@ -68,7 +73,15 @@ def fields(ctx, msg, subconf, fieldset, field, text):  # pylint: disable=too-man
     else:
         msg.action = 'Choose a field'
         for fieldname, unused_uifunc, fielddesc in fieldset:
-            msg.button('%s \u2022 %s' % (fieldname, fielddesc), fieldname)
+            value = subconf.get(fieldname)
+            if isinstance(value, builtins.bool):
+                value = value and 'yes' or 'no'
+            elif value is not None:
+                value = '%s' % value
+                if len(value) > 10:
+                    value = value[:9] + '\u2026'
+            label = value and '%s (%s)' % (fieldname, value) or fieldname
+            msg.button('%s \u2022 %s' % (label, fielddesc), fieldname)
 
 
 def freeform(unused_ctx, msg, subconf, field, desc, text):

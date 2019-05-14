@@ -197,13 +197,13 @@ Choose a time zone:
 Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
 
 Set timezone to <code>US/Pacific</code>.
-[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[calendars (6fc2c510) \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
 [daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
 [dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
 [greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
 [maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[timezone (US/Pacific) \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """
 
@@ -219,13 +219,13 @@ Set timezone to <code>US/Pacific</code>.
 Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
 
 Set timezone to <code>UTC</code>.
-[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[calendars (6fc2c510) \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
 [daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
 [dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
 [greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
 [maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[timezone (UTC) \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """
 
@@ -243,13 +243,13 @@ Set timezone to <code>UTC</code>.
 Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
 
 Set <code>maxeventscount</code> to <code>1</code>.
-[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[calendars (6fc2c510) \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
 [daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
 [dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
 [greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
-[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventscount (1) \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
 [maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[timezone (UTC) \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """
 
@@ -313,8 +313,8 @@ Select a calendar to add or remove from the list below:
 Events \u203a Settings: <b>Choose a field</b>
 
 Set timezone to <code>US/Pacific</code>.
-[calendars \u2022 Which calendars do you want to see? | /events set calendars]
-[timezone \u2022 What time zone are you in? | /events set timezone]
+[calendars (6fc2c510) \u2022 Which calendars do you want to see? | /events set calendars]
+[timezone (US/Pacific) \u2022 What time zone are you in? | /events set timezone]
 [Back | /events]
 """
 
@@ -377,8 +377,8 @@ Select a calendar to add or remove from the list below:
 Events \u203a Settings: <b>Choose a field</b>
 
 Set timezone to <code>US/Pacific</code>.
-[calendars \u2022 Which calendars do you want to see? | /events set calendars]
-[timezone \u2022 What time zone are you in? | /events set timezone]
+[calendars (6fc2c510) \u2022 Which calendars do you want to see? | /events set calendars]
+[timezone (US/Pacific) \u2022 What time zone are you in? | /events set timezone]
 [Back | /events]
 """
 

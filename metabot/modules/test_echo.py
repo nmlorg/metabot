@@ -146,7 +146,7 @@ Type your new value, or type "off" to disable/reset to default.
 Bot Admin \u203a modulestestbot \u203a echo \u203a echotest: <b>Choose a field</b>
 
 Set <code>text</code> to <code>my message</code>.
-[text \u2022 The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
+[text (my message) \u2022 The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
 [paginate \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
 [private \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
 [Back | /admin modulestestbot echo]
@@ -157,7 +157,7 @@ Set <code>text</code> to <code>my message</code>.
 Bot Admin \u203a modulestestbot \u203a echo \u203a echotest: <b>Choose a field</b>
 
 Changed <code>text</code> from <code>my message</code> to <code>new message</code>.
-[text \u2022 The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
+[text (new messa\u2026) \u2022 The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
 [paginate \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
 [private \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
 [Back | /admin modulestestbot echo]

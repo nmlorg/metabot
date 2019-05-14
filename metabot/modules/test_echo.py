@@ -20,19 +20,37 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('/myecho') == ''
 
-    conversation.multibot.conf['bots']['modulestestbot']['issue37']['echo']['myecho'] = (
-        'These are the rules: Have fun!')
+    conversation.multibot.conf['bots']['modulestestbot']['issue37']['echo']['myecho'] = {
+        'text': 'These are the rules: Have fun!',
+    }
 
     assert conversation.message('/myecho') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 These are the rules: Have fun!
 """
 
-    conversation.multibot.conf['bots']['modulestestbot']['issue37']['echo']['about'] = (
-        'First line.\n'
-        'Second line.\n'
-        ' \n'
-        'Last line.')
+    conversation.multibot.conf['bots']['modulestestbot']['issue37']['echo']['about'] = {
+        'text': ('First line.\n'
+                 'Second line.\n'
+                 ' \n'
+                 'Last line.'),
+    }
+
+    assert conversation.message('/about') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+First line.
+Second line.
+ 
+Last line.
+"""
+
+    conversation.multibot.conf['bots']['modulestestbot']['issue37']['echo']['about'] = {
+        'text': ('First line.\n'
+                 'Second line.\n'
+                 ' \n'
+                 'Last line.'),
+        'paginate': True,
+    }
 
     assert conversation.message('/about') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
@@ -76,10 +94,12 @@ First line.
 def test_help(conversation):  # pylint: disable=redefined-outer-name
     """Test /help."""
 
-    conversation.multibot.conf['bots']['modulestestbot']['issue37']['echo']['rules1'] = (
-        'These are the rules: Have fun!')
-    conversation.multibot.conf['bots']['modulestestbot']['issue37']['echo']['rules2'] = (
-        'These are the rules: Have fun!!')
+    conversation.multibot.conf['bots']['modulestestbot']['issue37']['echo']['rules1'] = {
+        'text': 'These are the rules: Have fun!',
+    }
+    conversation.multibot.conf['bots']['modulestestbot']['issue37']['echo']['rules2'] = {
+        'text': 'These are the rules: Have fun!!',
+    }
 
     assert conversation.message('/help', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
@@ -98,56 +118,56 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin \u203a modulestestbot \u203a echo: <b>Choose a command</b>
 
-Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo to remove.
+Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo.
 [Back | /admin modulestestbot]
 """
 
     assert conversation.message('EchoTest') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a echo \u203a echotest: <b>Type the message for /echotest</b>
-
-Type the text you want me to send in response to <code>/echotest</code>:
+Bot Admin \u203a modulestestbot \u203a echo \u203a echotest: <b>Choose a field</b>
+[text \u2022 The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
+[paginate \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
+[private \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
 [Back | /admin modulestestbot echo]
+"""
+
+    assert conversation.message('text') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a echo \u203a echotest \u203a text: <b>Type a new value for text</b>
+
+The message, sticker, or image to send in response to /echotest.
+
+Type your new value, or type "off" to disable/reset to default.
+[Back | /admin modulestestbot echo echotest]
 """
 
     assert conversation.message('my message') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a echo: <b>Choose a command</b>
+Bot Admin \u203a modulestestbot \u203a echo \u203a echotest: <b>Choose a field</b>
 
-/echotest now echoes <code>my message</code>.
-
-Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo to remove.
-[/echotest (my message) | /admin modulestestbot echo echotest remove]
-[Back | /admin modulestestbot]
+Set <code>text</code> to <code>my message</code>.
+[text \u2022 The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
+[paginate \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
+[private \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
+[Back | /admin modulestestbot echo]
 """
 
-    assert conversation.message('/admin modulestestbot echo echotest new message') == """\
+    assert conversation.message('/admin modulestestbot echo echotest text new message') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a echo \u203a echotest: <b>Choose a field</b>
+
+Changed <code>text</code> from <code>my message</code> to <code>new message</code>.
+[text \u2022 The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
+[paginate \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
+[private \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
+[Back | /admin modulestestbot echo]
+"""
+
+    assert conversation.message('/admin modulestestbot echo') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin \u203a modulestestbot \u203a echo: <b>Choose a command</b>
 
-Changed /echotest from <code>my message</code> to <code>new message</code>.
-
-Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo to remove.
-[/echotest (new message) | /admin modulestestbot echo echotest remove]
-[Back | /admin modulestestbot]
-"""
-
-    assert conversation.message('/admin modulestestbot echo echotest remove') == """\
-[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a echo: <b>Choose a command</b>
-
-Removed /echotest (<code>new message</code>).
-
-Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo to remove.
-[Back | /admin modulestestbot]
-"""
-
-    assert conversation.message('/admin modulestestbot echo bogus remove') == """\
-[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a echo: <b>Choose a command</b>
-
-/bogus is not echoing anything.
-
-Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo to remove.
+Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo.
+[/echotest (new message) | /admin modulestestbot echo echotest]
 [Back | /admin modulestestbot]
 """

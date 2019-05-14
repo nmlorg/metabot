@@ -27,7 +27,7 @@ class BotConf(dicttools.ImplicitTrackingDict):
                     if fname.endswith('.yaml'):
                         self[fname[:-len('.yaml')]] = yamlutil.load(os.path.join(confdir, fname))
 
-            # Schema update: Remove after 2019-03-26.
+            # Schema update: Remove after 2019-03-26 (https://github.com/nmlorg/metabot/issues/18).
             if not self['bots']:
                 fname = os.path.join(confdir, 'multibot.json')
                 data = jsonutil.load(fname)
@@ -35,7 +35,7 @@ class BotConf(dicttools.ImplicitTrackingDict):
                     self['bots'] = data
                     logging.info('Converted %s to %s.', fname, os.path.join(confdir, 'bots.yaml'))
 
-            # Schema update: Remove after 2019-04-05.
+            # Schema update: Remove after 2019-04-05 (https://github.com/nmlorg/metabot/issues/18).
             for botconf in self['bots'].values():
                 for groupid, groupconf in botconf['moderator'].items():
                     groupid = int(groupid)
@@ -43,13 +43,23 @@ class BotConf(dicttools.ImplicitTrackingDict):
                         if k in groupconf:
                             self['groups'][groupid][k] = groupconf[k]
 
-            # Schema update: Remove after 2019-06-12.
+            # Schema update: Remove after 2019-06-12 (https://github.com/nmlorg/metabot/issues/37).
             for botconf in self['bots'].values():
                 if botconf.get('telegram'):
                     for modname in list(botconf):
                         if modname != 'issue37':
                             botconf['issue37'][modname] = botconf[modname]
                             botconf.pop(modname)
+
+            # Schema update: Remove after 2019-08-13 (https://github.com/nmlorg/metabot/issues/41).
+            for botconf in self['bots'].values():
+                for command, message in botconf['issue37']['echo'].items():
+                    if not isinstance(message, dict):
+                        botconf['issue37']['echo'][command] = {
+                            'text': message,
+                            'paginate': True,
+                            'private': '\n' in message,
+                        }
 
         self._fnames = set(self)
 

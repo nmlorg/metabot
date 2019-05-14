@@ -7,6 +7,13 @@ import math
 import pytz
 
 
+def bool(unused_ctx, msg, subconf, field, unused_desc, unused_text):  # pylint: disable=too-many-arguments,redefined-builtin
+    """Configure a toggle-able setting."""
+
+    subconf[field] = not subconf[field]
+    msg.add('Set <code>%s</code> to <code>%s</code>.', field, subconf[field])
+
+
 def calendars(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments
     """Configure a selection of calendars."""
 

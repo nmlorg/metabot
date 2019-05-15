@@ -6,31 +6,17 @@ import datetime
 import time as _time
 
 
-def date(dtime, base=None, quiet=False):  # pylint: disable=too-many-branches
+def _now_copy_tz(dtime):
+    now = datetime.datetime.fromtimestamp(_time.time(), getattr(dtime, 'tzinfo', None))
+    return isinstance(dtime, datetime.datetime) and now or now.date()
+
+
+def date(dtime, base=None):  # pylint: disable=too-many-branches
     """Convert the given datetime.date/datetime.datetime into a human-friendly string."""
 
     if not base:
-        base = datetime.datetime.fromtimestamp(_time.time(), getattr(dtime, 'tzinfo', None)).date()
-    if not quiet:
-        delta = (isinstance(dtime, datetime.datetime) and dtime.date() or dtime) - base
-        if delta.days == 0:
-            day = 'TODAY,'
-        elif delta.days == 1:
-            day = 'TOMORROW,'
-        elif delta.days == -1:
-            day = 'YESTERDAY,'
-        elif 1 < delta.days < 7:
-            day = 'this'
-        elif -1 > delta.days > -7:
-            day = 'last'
-        elif delta.days > 0:
-            day = '%s on' % plural(delta.days // 7, 'week')
-        else:
-            day = '%s ago on' % plural(-delta.days // 7, 'week')
-        day += ' '
-    else:
-        day = ''
-    day += dtime.strftime('%a')
+        base = _now_copy_tz(dtime)
+    day = dtime.strftime('%a')
     mon = dtime.strftime('%b')
     if dtime.year != base.year:
         text = '%s, %s (%i) %i' % (day, mon, dtime.year, dtime.day)
@@ -41,6 +27,32 @@ def date(dtime, base=None, quiet=False):  # pylint: disable=too-many-branches
     if isinstance(dtime, datetime.datetime):
         text = '%s, %s' % (text, time(dtime))
     return text
+
+
+def howrecent(start, end, base=None):  # pylint: disable=too-many-return-statements
+    """Convert the delta between start and base into a human-friendly string."""
+
+    if not base:
+        base = _now_copy_tz(start)
+    if start <= base <= end:
+        return 'NOW,'
+    if isinstance(base, datetime.datetime):
+        delta = start.date() - base.date()
+    else:
+        delta = start - base
+    if delta.days == 0:
+        return 'TODAY,'
+    if delta.days == 1:
+        return 'TOMORROW,'
+    if delta.days == -1:
+        return 'YESTERDAY,'
+    if 1 < delta.days < 7:
+        return 'this'
+    if -1 > delta.days > -7:
+        return 'last'
+    if delta.days > 0:
+        return '%s on' % plural(delta.days // 7, 'week')
+    return '%s ago on' % plural(-delta.days // 7, 'week')
 
 
 def list(arr):  # pylint: disable=redefined-builtin
@@ -64,18 +76,19 @@ def plural(num, noun, fmtstr='%s %s'):
 def range(start, end):  # pylint: disable=redefined-builtin
     """Convert the given datetime.date/datetime.datetime objects into a human-friendly string."""
 
-    text = date(start)
+    now = _now_copy_tz(start)
+    text = '%s %s' % (howrecent(start, end, base=now), date(start, base=now))
     if start == end:
         return text
     if isinstance(start, datetime.datetime):
         if (start.year != end.year or start.month != end.month or
                 end - start >= datetime.timedelta(days=1)):
-            return '%s \u2013 %s' % (text, date(end, base=start.date(), quiet=True))
+            return '%s \u2013 %s' % (text, date(end, base=start.date()))
         if start.day != end.day or (start.hour < 12) != (end.hour < 12):
             return '%s \u2013 %s' % (text, time(end))
         return '%s\u2013%s' % (text.rsplit(None, 1)[0], time(end))
     if start.year != end.year or start.month != end.month:
-        return '%s \u2013 %s' % (text, date(end, base=start, quiet=True))
+        return '%s \u2013 %s' % (text, date(end, base=start))
     return '%s\u2013%i' % (text, end.day)
 
 

@@ -11,19 +11,42 @@ def test_humanize_date():
     """Quick tests for humanize.date."""
 
     base = datetime.date(2017, 11, 15)
-    assert humanize.date(datetime.date(2017, 11, 15), base=base) == 'TODAY, Wed 15'
+    assert humanize.date(datetime.date(2017, 11, 15), base=base) == 'Wed 15'
+    assert humanize.date(datetime.date(2017, 11, 16), base=base) == 'Thu 16'
 
-    assert humanize.date(datetime.date(2017, 11, 14), base=base) == 'YESTERDAY, Tue 14'
-    assert humanize.date(datetime.date(2017, 11, 13), base=base) == 'last Mon 13'
-    assert humanize.date(datetime.date(2017, 11, 9), base=base) == 'last Thu 9'
-    assert humanize.date(datetime.date(2017, 11, 8), base=base) == '1 week ago on Wed 8'
-    assert humanize.date(datetime.date(2017, 11, 1), base=base) == '2 weeks ago on Wed 1'
 
-    assert humanize.date(datetime.date(2017, 11, 16), base=base) == 'TOMORROW, Thu 16'
-    assert humanize.date(datetime.date(2017, 11, 17), base=base) == 'this Fri 17'
-    assert humanize.date(datetime.date(2017, 11, 17), base=base) == 'this Fri 17'
-    assert humanize.date(datetime.date(2017, 11, 22), base=base) == '1 week on Wed 22'
-    assert humanize.date(datetime.date(2017, 11, 29), base=base) == '2 weeks on Wed 29'
+def test_humanize_howrecent():
+    """Quick tests for humanize.howrecent."""
+
+    base = datetime.datetime(2017, 11, 15, 12)
+    assert humanize.howrecent(datetime.datetime(2017, 11, 15, 10),
+                              datetime.datetime(2017, 11, 15, 11),
+                              base=base) == 'TODAY,'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 15, 11),
+                              datetime.datetime(2017, 11, 15, 12),
+                              base=base) == 'NOW,'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 15, 12),
+                              datetime.datetime(2017, 11, 15, 13),
+                              base=base) == 'NOW,'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 15, 13),
+                              datetime.datetime(2017, 11, 15, 14),
+                              base=base) == 'TODAY,'
+
+    yesterday = datetime.datetime(2017, 11, 14, 12)
+    assert humanize.howrecent(datetime.datetime(2017, 11, 14), yesterday, base=base) == 'YESTERDAY,'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 13), yesterday, base=base) == 'last'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 9), yesterday, base=base) == 'last'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 8), yesterday,
+                              base=base) == '1 week ago on'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 1), yesterday,
+                              base=base) == '2 weeks ago on'
+
+    future = datetime.datetime(2017, 11, 30)
+    assert humanize.howrecent(datetime.datetime(2017, 11, 16), future, base=base) == 'TOMORROW,'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 17), future, base=base) == 'this'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 21), future, base=base) == 'this'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 22), future, base=base) == '1 week on'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 29), future, base=base) == '2 weeks on'
 
 
 def test_humanize_list():
@@ -48,11 +71,11 @@ def test_humanize_range(monkeypatch):
     next_month = datetime.date(2017, 12, 15)
     next_year = datetime.date(2018, 1, 15)
 
-    assert _test(start, start) == 'TODAY, Wed 15'
-    assert _test(start, next_day) == 'TODAY, Wed 15-16'
-    assert _test(start, next_week) == 'TODAY, Wed 15-22'
-    assert _test(start, next_month) == 'TODAY, Wed 15 - Fri, Dec 15'
-    assert _test(start, next_year) == 'TODAY, Wed 15 - Mon, Jan (2018) 15'
+    assert _test(start, start) == 'NOW, Wed 15'
+    assert _test(start, next_day) == 'NOW, Wed 15-16'
+    assert _test(start, next_week) == 'NOW, Wed 15-22'
+    assert _test(start, next_month) == 'NOW, Wed 15 - Fri, Dec 15'
+    assert _test(start, next_year) == 'NOW, Wed 15 - Mon, Jan (2018) 15'
 
     start = datetime.datetime(2017, 11, 15, 6)
     start_ts = float(start.strftime('%s'))
@@ -65,10 +88,10 @@ def test_humanize_range(monkeypatch):
     next_month = datetime.datetime(2017, 12, 15, 6)
     next_year = datetime.datetime(2018, 1, 15, 6)
 
-    assert _test(start, next_min) == 'TODAY, Wed 15, 6-6:01 am'
-    assert _test(start, next_hour) == 'TODAY, Wed 15, 6-7 am'
-    assert _test(start, next_pm) == 'TODAY, Wed 15, 6 am - 6 pm'
-    assert _test(start, hours_23) == 'TODAY, Wed 15, 6 am - 5 am'
-    assert _test(start, hours_25) == 'TODAY, Wed 15, 6 am - Thu 16, 7 am'
-    assert _test(start, next_month) == 'TODAY, Wed 15, 6 am - Fri, Dec 15, 6 am'
-    assert _test(start, next_year) == 'TODAY, Wed 15, 6 am - Mon, Jan (2018) 15, 6 am'
+    assert _test(start, next_min) == 'NOW, Wed 15, 6-6:01 am'
+    assert _test(start, next_hour) == 'NOW, Wed 15, 6-7 am'
+    assert _test(start, next_pm) == 'NOW, Wed 15, 6 am - 6 pm'
+    assert _test(start, hours_23) == 'NOW, Wed 15, 6 am - 5 am'
+    assert _test(start, hours_25) == 'NOW, Wed 15, 6 am - Thu 16, 7 am'
+    assert _test(start, next_month) == 'NOW, Wed 15, 6 am - Fri, Dec 15, 6 am'
+    assert _test(start, next_year) == 'NOW, Wed 15, 6 am - Mon, Jan (2018) 15, 6 am'

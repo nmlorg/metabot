@@ -22,11 +22,7 @@ def load(fname):
 def dump(fname, obj):
     """Save obj as a YAML file to fname."""
 
-    data = yaml.dump_all([obj],
-                         indent=4,
-                         default_flow_style=False,
-                         width=200,
-                         Dumper=_SimplifyingDumper).encode('ascii')
+    data = yaml.dump_all([obj], indent=4, width=200, Dumper=_SimplifyingDumper).encode('ascii')
     with open(fname, 'wb') as fobj:
         fobj.write(data)
     return obj
@@ -43,11 +39,11 @@ class _SimplifyingRepresenter(yaml.representer.SafeRepresenter):
 class _SimplifyingDumper(yaml.emitter.Emitter, yaml.serializer.Serializer, _SimplifyingRepresenter,
                          yaml.resolver.Resolver):
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments,too-many-locals
     def __init__(self,
                  stream,
                  default_style=None,
-                 default_flow_style=None,
+                 default_flow_style=False,
                  canonical=None,
                  indent=None,
                  width=None,
@@ -57,7 +53,8 @@ class _SimplifyingDumper(yaml.emitter.Emitter, yaml.serializer.Serializer, _Simp
                  explicit_start=None,
                  explicit_end=None,
                  version=None,
-                 tags=None):
+                 tags=None,
+                 sort_keys=True):
         yaml.emitter.Emitter.__init__(self,
                                       stream,
                                       canonical=canonical,
@@ -73,5 +70,6 @@ class _SimplifyingDumper(yaml.emitter.Emitter, yaml.serializer.Serializer, _Simp
                                             tags=tags)
         _SimplifyingRepresenter.__init__(self,
                                          default_style=default_style,
-                                         default_flow_style=default_flow_style)
+                                         default_flow_style=default_flow_style,
+                                         sort_keys=sort_keys)
         yaml.resolver.Resolver.__init__(self)

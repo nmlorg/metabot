@@ -26,7 +26,7 @@ Bot Admin \u203a modulestestbot \u203a moderator: <b>Choose a group</b>
 
     adding_user = {'id': 2000}
     joined_user = {'id': 3000, 'is_bot': False}
-    chat = {'id': -1001000001000, 'type': 'supergroup', 'title': 'My Group', 'username': 'mygroup'}
+    chat = {'id': -1001000001000, 'type': 'supergroup', 'title': 'My Group'}
     message = {
         'from': adding_user,
         'chat': chat,
@@ -121,6 +121,23 @@ Set <code>greeting</code> to <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; pinned me
     }
     pin_update = {'message': message}
     conversation.multibot.dispatcher(conversation.bot, pin_update)
+
+    replies = conversation.raw_message('/dummy')
+    assert replies == []
+    conversation.multibot.dispatcher(conversation.bot, join_update)
+    assert replies == [
+        {
+            'chat_id': -1001000001000,
+            'disable_notification': True,
+            'disable_web_page_preview': True,
+            'parse_mode': 'HTML',
+            'reply_to_message_id': 5000,
+            'text': 'Welcome! <b>Initial</b> <a href="https://t.me/c/1000001000/6000">pinned message</a>.',
+        },
+    ]  # yapf: disable
+
+    # This group is now public!
+    chat['username'] = 'mygroup'
 
     replies = conversation.raw_message('/dummy')
     assert replies == []

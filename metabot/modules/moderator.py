@@ -26,11 +26,19 @@ def join(ctx, msg, modconf):
     if greeting:
         for user in ctx.data:
             if not user['is_bot']:
-                if ('pinned message' in greeting and ctx.groupinfo.data.username and
-                        ctx.groupinfo.data.pinned_message_id):
-                    link = '<a href="https://t.me/%s/%s">pinned message</a>' % (
-                        ctx.groupinfo.data.username, ctx.groupinfo.data.pinned_message_id)
-                    greeting = greeting.replace('pinned message', link)
+                if 'pinned message' in greeting and ctx.groupinfo.data.pinned_message_id:
+                    if ctx.groupinfo.data.username:
+                        url = 'https://t.me/%s/%s' % (ctx.groupinfo.data.username,
+                                                      ctx.groupinfo.data.pinned_message_id)
+                    elif -1002147483647 <= ctx.chat['id'] < -1000000000000:
+                        # See https://github.com/nmlorg/metabot/issues/43.
+                        url = 'https://t.me/c/%s/%s' % (-1000000000000 - ctx.chat['id'],
+                                                        ctx.groupinfo.data.pinned_message_id)
+                    else:
+                        url = None
+                    if url:
+                        greeting = greeting.replace('pinned message',
+                                                    '<a href="%s">pinned message</a>' % url)
                 msg.quiet = True
                 return msg.add(greeting)
 

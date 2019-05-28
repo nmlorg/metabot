@@ -142,7 +142,7 @@ def admin(ctx, msg, modconf):
             else:
                 tmp = hashlib.sha1(newgroup['name'].encode('utf-8'))
                 while tmp.hexdigest()[:6] in modconf['groups']:
-                    tmp.update('.')
+                    tmp.update(b'.')
                 modconf['groups'][tmp.hexdigest()[:6]] = newgroup
                 msg.add('Added <b>%s</b>.', newgroup['name'])
 

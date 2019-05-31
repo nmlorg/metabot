@@ -210,7 +210,7 @@ Set timezone to <code>US/Pacific</code>.
     assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">NOW, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">NOW, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 """
 
     assert conversation.message(
@@ -232,9 +232,9 @@ Set timezone to <code>UTC</code>.
     assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">NOW, Thu 1, 12:16\u201312:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1, 12:16\u201312:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">1 week on Thu 8, 12\u20131 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8, 12\u20131 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 """
 
     assert conversation.message(
@@ -256,7 +256,7 @@ Set <code>maxeventscount</code> to <code>1</code>.
     assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">NOW, Thu 1, 12:16\u201312:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1, 12:16\u201312:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 """
 
     monkeypatch.setattr('time.time', lambda: 2000000.)
@@ -321,7 +321,7 @@ Set timezone to <code>US/Pacific</code>.
     assert conversation.message('/events') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">NOW, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">NOW, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 
 Alpha Description
 [\xa0 | /stop] [Settings | /events set] [Next | /events 6fc2c510:bravo]
@@ -330,7 +330,7 @@ Alpha Description
     assert conversation.message('/events 6fc2c510:bravo') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 <b>Bravo Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
 Bravo Description
 [Prev | /events 6fc2c510:alpha] [Current | /events] [Next | /events 6fc2c510:charlie]
@@ -396,7 +396,7 @@ Set timezone to <code>US/Pacific</code>.
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Alpha Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYQ">NOW, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">NOW, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Alpha Summary',
@@ -408,7 +408,7 @@ Set timezone to <code>US/Pacific</code>.
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Bravo Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Bravo Summary',
@@ -420,7 +420,7 @@ Set timezone to <code>US/Pacific</code>.
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Charlie Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGll">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVTL1BhY2lmaWM">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Charlie Summary',
@@ -444,7 +444,7 @@ Set timezone to <code>US/Pacific</code>.
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Bravo Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Bravo Summary',
@@ -468,7 +468,7 @@ Set timezone to <code>US/Pacific</code>.
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Bravo Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2bw">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>\n'
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>\n'
                                         '\n'
                                         'Bravo Description',
                         'parse_mode': 'HTML',

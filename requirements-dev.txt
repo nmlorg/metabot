@@ -1,4 +1,4 @@
 pylint
 pytest-cov
-pytest
+pytest < 4.6
 requests-mock

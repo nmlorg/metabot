@@ -48,11 +48,11 @@ def admin(ctx, msg, modconf):
 
     msg.path(command)
 
-    if ctx.document:
+    if ctx.document:  # pragma: no cover
         message = 'document:%s' % ctx.document
-    elif ctx.photo:
+    elif ctx.photo:  # pragma: no cover
         message = 'photo:%s' % ctx.photo
-    elif ctx.sticker:
+    elif ctx.sticker:  # pragma: no cover
         message = 'sticker:%s' % ctx.sticker
 
     fields = (

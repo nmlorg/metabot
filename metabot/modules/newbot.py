@@ -54,7 +54,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
             'code from someone else, send them these instructions (including the token I used). If '
             "the code you got from BotFather isn't working, select <code>Revoke current "
             'token</code> to generate a new one, then paste that new one here:', token)
-    except ntelebot.errors.Error as exc:
+    except ntelebot.errors.Error as exc:  # pragma: no cover
         return msg.add(
             'Woops, while trying to use <code>%s</code> I got error %s (<code>%s</code>).', token,
             exc.error_code, exc.description)

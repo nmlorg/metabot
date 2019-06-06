@@ -70,13 +70,10 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
                     text,
                     user_id=1000,
                     chat_type='private',
-                    last_name=None,
                     language_code=None):
         """Simulate a private message."""
 
         user = {'id': user_id, 'username': 'user%s' % user_id, 'first_name': 'User%s' % user_id}
-        if last_name:
-            user['last_name'] = last_name
         if language_code:
             user['language_code'] = language_code
         if chat_type == 'private':

@@ -69,7 +69,7 @@ class _HTMLSanitizer(html.parser.HTMLParser):
         except (OverflowError, ValueError):
             self.__pieces.append('&amp;#%s;' % name)
 
-    def error(self, message):
+    def error(self, message):  # pragma: no cover
         logging.error('HTML sanitizer error: %s', message)
 
 

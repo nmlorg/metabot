@@ -55,7 +55,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
         if hasattr(module, 'admin')
     }
 
-    if not modules:
+    if not modules:  # pragma: no cover
         return msg.add(
             "Hi! There aren't any configurable modules installed. Contact a metabot admin to "
             'install one.')
@@ -91,7 +91,7 @@ def bootstrap(ctx, msg, modconf):
 def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
     """Handle /admin BOTNAME admin (configure the admin module itself)."""
 
-    if 'admins' not in modconf:
+    if 'admins' not in modconf:  # pragma: no cover
         modconf['admins'] = []
 
     target = ctx.text

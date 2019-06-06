@@ -13,7 +13,7 @@ def date(dtime, base=None):  # pylint: disable=too-many-branches
     """Convert the given datetime.date/datetime.datetime into a human-friendly string."""
 
     if not base:
-        base = _now_copy_tz(dtime)
+        base = _now_copy_tz(dtime)  # pragma: no cover
     day = dtime.strftime('%a')
     mon = dtime.strftime('%b')
     if dtime.year != base.year:
@@ -31,13 +31,13 @@ def howrecent(start, end, base=None):  # pylint: disable=too-many-return-stateme
     """Convert the delta between start and base into a human-friendly string."""
 
     if not base:
-        base = _now_copy_tz(start)
+        base = _now_copy_tz(start)  # pragma: no cover
     if start <= base <= end:
         return 'NOW,'
     if isinstance(base, datetime.datetime):
         delta = start.date() - base.date()
     else:
-        delta = start - base
+        delta = start - base  # pragma: no cover
     if delta.days == 0:
         return 'TODAY,'
     if delta.days == 1:

@@ -19,7 +19,7 @@ class BotConf(dicttools.ImplicitTrackingDict):
         if confdir:
             self.confdir = confdir
             if not os.path.isdir(confdir):
-                os.makedirs(confdir, 0o700)
+                os.makedirs(confdir, 0o700)  # pragma: no cover
             else:
                 for fname in os.listdir(confdir):
                     if fname.endswith('.yaml'):
@@ -29,13 +29,13 @@ class BotConf(dicttools.ImplicitTrackingDict):
             if not self['bots']:
                 fname = os.path.join(confdir, 'multibot.json')
                 data = jsonutil.load(fname)
-                if data:
+                if data:  # pragma: no cover
                     self['bots'] = data
                     logging.info('Converted %s to %s.', fname, os.path.join(confdir, 'bots.yaml'))
 
             # Schema update: Remove after 2019-04-05 (https://github.com/nmlorg/metabot/issues/18).
             for botconf in self['bots'].values():
-                for groupid, groupconf in botconf['moderator'].items():
+                for groupid, groupconf in botconf['moderator'].items():  # pragma: no cover
                     groupid = int(groupid)
                     for k in ('title', 'type', 'username'):
                         if k in groupconf:
@@ -43,7 +43,7 @@ class BotConf(dicttools.ImplicitTrackingDict):
 
             # Schema update: Remove after 2019-06-12 (https://github.com/nmlorg/metabot/issues/37).
             for botconf in self['bots'].values():
-                if botconf.get('telegram'):
+                if botconf.get('telegram'):  # pragma: no cover
                     for modname in list(botconf):
                         if modname != 'issue37':
                             botconf['issue37'][modname] = botconf[modname]
@@ -52,7 +52,7 @@ class BotConf(dicttools.ImplicitTrackingDict):
             # Schema update: Remove after 2019-08-13 (https://github.com/nmlorg/metabot/issues/41).
             for botconf in self['bots'].values():
                 for command, message in botconf['issue37']['echo'].items():
-                    if not isinstance(message, dict):
+                    if not isinstance(message, dict):  # pragma: no cover
                         botconf['issue37']['echo'][command] = {
                             'text': message,
                             'paginate': True,
@@ -87,7 +87,7 @@ class BotConf(dicttools.ImplicitTrackingDict):
 
         if self.confdir:
             for fname in self._fnames.difference(self):
-                os.remove(os.path.join(self.confdir, fname + '.yaml'))
+                os.remove(os.path.join(self.confdir, fname + '.yaml'))  # pragma: no cover
             self._fnames = set(self)
             for fname, data in self.items():
                 yamlutil.dump(os.path.join(self.confdir, fname + '.yaml'), data)

@@ -33,7 +33,7 @@ def join(ctx, msg, modconf):
                         url = 'https://t.me/c/%s/%s' % (-1000000000000 - ctx.chat['id'],
                                                         ctx.groupinfo.data.pinned_message_id)
                     else:
-                        url = None
+                        url = None  # pragma: no cover
                     if url:
                         greeting = greeting.replace('pinned message',
                                                     '<a href="%s">pinned message</a>' % url)

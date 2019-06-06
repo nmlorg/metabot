@@ -1,7 +1,5 @@
 """Self-managing bot/module configuration store."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import contextlib
 import logging
 import os

@@ -1,7 +1,5 @@
 """Modularized, multi-account bot."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import importlib
 import logging
 import pkgutil
@@ -10,11 +8,6 @@ from metabot import modules as modules_package
 from metabot.modules import admin
 from metabot import multibot
 from metabot.util import humanize
-
-try:
-    raw_input
-except NameError:
-    raw_input = input  # pylint: disable=invalid-name,redefined-builtin
 
 
 def main():  # pylint: disable=missing-docstring
@@ -39,7 +32,7 @@ def main():  # pylint: disable=missing-docstring
               'number and paste it here:')
         print()
         while not mybot.conf['bots']:
-            initial_token = raw_input('Telegram token: ')
+            initial_token = input('Telegram token: ')
             try:
                 username = mybot.add_bot(initial_token)
             except AssertionError:

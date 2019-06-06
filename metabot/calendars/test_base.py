@@ -1,7 +1,5 @@
 """Tests for metabot.calendars.base (using static.Calendar instead of a local class)."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 from metabot.calendars import static
 
 

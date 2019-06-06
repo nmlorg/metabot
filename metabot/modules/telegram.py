@@ -1,7 +1,5 @@
 """Manage the bot's Telegram state."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 
 def admin(ctx, msg, modconf):
     """Handle /admin BOTNAME telegram (manage the bot's Telegram state)."""

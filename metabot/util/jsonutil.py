@@ -1,13 +1,6 @@
 """Simplified interface to https://docs.python.org/3/library/json.html."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import json
-
-try:
-    JSONDecodeError = json.decoder.JSONDecodeError  # pylint: disable=invalid-name
-except AttributeError:  # pragma: no cover (Python 2)
-    JSONDecodeError = ValueError
 
 
 def load(fname):
@@ -20,7 +13,7 @@ def load(fname):
 
     try:
         return json.loads(data)
-    except JSONDecodeError:
+    except json.decoder.JSONDecodeError:
         pass
 
 

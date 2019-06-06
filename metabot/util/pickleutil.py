@@ -1,28 +1,7 @@
 """Simplified interface to https://docs.python.org/2/library/pickle.html."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-try:
-    import cPickle as pickle
-except ImportError:
-    import pickle
+import pickle
 import pickletools
-
-try:
-    unicode
-except NameError:
-    unicode = str  # pylint: disable=invalid-name,redefined-builtin
-
-try:
-    dict.iteritems
-except AttributeError:
-
-    def iteritems(obj):  # pylint: disable=missing-docstring
-        return obj.items()
-else:  # pragma: no cover
-
-    def iteritems(obj):  # pylint: disable=missing-docstring
-        return obj.iteritems()
 
 
 def load(fname):
@@ -48,7 +27,7 @@ def optimize(obj, store=None):
     opt = lambda obj: optimize(obj, store=store)
 
     if isinstance(obj, dict):
-        new = [(opt(k), opt(v)) for k, v in iteritems(obj)]
+        new = [(opt(k), opt(v)) for k, v in obj.items()]
         obj.clear()
         obj.update(new)
         return obj
@@ -58,7 +37,7 @@ def optimize(obj, store=None):
         return obj
     if isinstance(obj, tuple):
         return tuple(map(opt, obj))
-    if isinstance(obj, (bytes, unicode)):
+    if isinstance(obj, (bytes, str)):
         new = store.get(obj)
         if new is None:
             store[obj] = new = obj

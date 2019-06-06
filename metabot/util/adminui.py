@@ -1,12 +1,6 @@
 """Reusable UI elements for admin functions (like /admin BOTNAME moderator and /events set)."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-try:
-    import builtins
-except ImportError:
-    import __builtin__ as builtins
-
+import builtins
 import math
 
 import pytz

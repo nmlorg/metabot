@@ -1,7 +1,5 @@
 """Quick routines to convert machine-friendly data types to human-friendly strings."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import datetime
 import time as _time
 

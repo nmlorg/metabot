@@ -1,12 +1,5 @@
 """A mutation-logging, key-implying dict (with accompanying list)."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-try:
-    unicode
-except NameError:
-    unicode = str  # pylint: disable=invalid-name,redefined-builtin
-
 
 class ImplicitTrackingDict(dict):
     """A mutation-logging, key-implying dict."""
@@ -95,7 +88,7 @@ class ImplicitTrackingDict(dict):
         elif isinstance(value, bytes):  # PyYAML converts ASCII strings to str in Python 2.7.
             value = value.decode('ascii')
         else:
-            assert isinstance(value, (int, unicode)), repr(value)
+            assert isinstance(value, (int, str)), repr(value)
 
         super(ImplicitTrackingDict, self).__setitem__(key, value)
 
@@ -130,7 +123,7 @@ class TrackingList(list):
                 self.log[self.path] = (value, orig)
 
     def append(self, value):
-        assert isinstance(value, (int, unicode)), value
+        assert isinstance(value, (int, str)), value
         current = tuple(self)
         super(TrackingList, self).append(value)
         self.audit(current)
@@ -144,7 +137,7 @@ class TrackingList(list):
             self.append(value)
 
     def insert(self, index, value):
-        assert isinstance(value, (int, unicode)), value
+        assert isinstance(value, (int, str)), value
         current = tuple(self)
         super(TrackingList, self).insert(index, value)
         self.audit(current)
@@ -171,7 +164,7 @@ class TrackingList(list):
         self.audit(current)
 
     def __setitem__(self, index, value):
-        assert isinstance(value, (int, unicode)), value
+        assert isinstance(value, (int, str)), value
         if self[index] == value:
             return
         current = tuple(self)

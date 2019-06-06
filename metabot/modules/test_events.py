@@ -1,7 +1,5 @@
 """Tests for metabot.modules.events."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import pytest
 
 from metabot.calendars import loader

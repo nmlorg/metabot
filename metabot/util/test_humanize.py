@@ -1,7 +1,5 @@
 """Tests for metabot.util.humanize."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import datetime
 
 from metabot.util import humanize
@@ -61,7 +59,7 @@ def test_humanize_range(monkeypatch):
     """Quick tests for humanize.range (and humanize.date/humanize.time)."""
 
     def _test(start, end):
-        return humanize.range(start, end).replace(u'\u2013', '-')
+        return humanize.range(start, end).replace('\u2013', '-')
 
     start = datetime.date(2017, 11, 15)
     start_ts = float(start.strftime('%s'))

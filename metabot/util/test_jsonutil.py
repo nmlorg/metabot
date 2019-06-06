@@ -1,7 +1,5 @@
 """Tests for metabot.util.jsonutil."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 from metabot.util import jsonutil
 
 

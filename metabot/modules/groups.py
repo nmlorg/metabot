@@ -1,22 +1,12 @@
 """Find other group chats."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import collections
 import hashlib
+import html
 import re
 
 import ntelebot
 import requests
-
-try:
-    import html
-except ImportError:  # pragma: no cover
-    import HTMLParser
-
-    html_unescape = HTMLParser.HTMLParser().unescape  # pylint: disable=invalid-name
-else:
-    html_unescape = html.unescape  # pylint: disable=invalid-name
 
 
 def cgi_escape(text):  # pylint: disable=missing-docstring
@@ -215,5 +205,5 @@ def fetch_opengraph(url):
         ret = re.search('<meta property="og:([^"]+)" content="([^"]*)">', line)
         if ret:
             key, value = ret.groups()
-            values[html_unescape(key)] = html_unescape(value)
+            values[html.unescape(key)] = html.unescape(value)
     return values

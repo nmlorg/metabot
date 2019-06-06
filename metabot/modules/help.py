@@ -1,7 +1,5 @@
 """Return the list of commands and other bot features."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import collections
 
 ALIASES = ('command', 'commands', 'help', 'start')

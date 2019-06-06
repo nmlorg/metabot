@@ -1,7 +1,5 @@
 """Count down to a specific date/time."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import time
 
 from metabot.util import humanize

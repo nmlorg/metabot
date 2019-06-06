@@ -1,10 +1,9 @@
 """Display recent and upcoming events."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import datetime
 import random
 import time
+import urllib.parse
 
 import ntelebot
 import pytz
@@ -12,11 +11,6 @@ import pytz
 from metabot.util import adminui
 from metabot.util import html
 from metabot.util import humanize
-
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
 
 ALIASES = ('calendar', 'event', 'events')
 
@@ -263,7 +257,7 @@ def format_event(bot, event, tzinfo, full=True):
         event['summary'], url, humanize_range(event['start'], event['end'], tzinfo))
     if event['location']:
         location_name = event['location'].split(',', 1)[0]
-        location_url = 'https://maps.google.com/maps?' + urlencode({
+        location_url = 'https://maps.google.com/maps?' + urllib.parse.urlencode({
             'q': event['location'].encode('utf-8'),
         })  # yapf: disable
         message = '%s @ <a href="%s">%s</a>' % (message, location_url, location_name)

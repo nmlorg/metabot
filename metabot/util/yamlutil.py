@@ -1,7 +1,5 @@
 """Simplified interface to https://pyyaml.org/wiki/PyYAMLDocumentation."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import yaml
 
 

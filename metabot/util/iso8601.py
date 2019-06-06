@@ -1,7 +1,5 @@
 """Quick and dirty ISO 8601 -> timestamp converter."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import datetime
 import re
 

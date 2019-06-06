@@ -1,22 +1,9 @@
 """A manager that blends multiple base.Calendar objects' events together."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import operator
 import time
 
 from metabot.calendars import loader
-
-try:
-    dict.itervalues
-except AttributeError:
-
-    def itervalues(obj):  # pylint: disable=missing-docstring
-        return obj.values()
-else:  # pragma: no cover
-
-    def itervalues(obj):  # pylint: disable=missing-docstring
-        return obj.itervalues()
 
 
 class MultiCalendar(object):
@@ -68,7 +55,7 @@ class MultiCalendar(object):
 
         if calid not in self.calendars:
             self.calendars[calid] = loader.get(calid)
-            self.ordered.extend(itervalues(self.calendars[calid].events))
+            self.ordered.extend(self.calendars[calid].events.values())
             self._rebuild()
         return self.calendars[calid]
 
@@ -101,12 +88,12 @@ class MultiCalendar(object):
         """Poll all installed calendars for updates."""
 
         updated = False
-        for calendar in itervalues(self.calendars):
+        for calendar in self.calendars.values():
             updated = calendar.poll() or updated
         if updated:
             self.ordered = []
-            for calendar in itervalues(self.calendars):
-                self.ordered.extend(itervalues(calendar.events))
+            for calendar in self.calendars.values():
+                self.ordered.extend(calendar.events.values())
             self._rebuild()
         return updated
 

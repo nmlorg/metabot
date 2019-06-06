@@ -1,12 +1,5 @@
 """Quick template for metabot's custom message style."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-try:
-    unicode
-except NameError:
-    unicode = str  # pylint: disable=invalid-name,redefined-builtin
-
 
 def cgi_escape(text):  # pylint: disable=missing-docstring
     return text.replace('&', '&amp;').replace('<', '&lt;').replace('>',
@@ -40,7 +33,7 @@ class MessageBuilder(object):
         """Add line to the message body, interpolating HTML-escaped args if provided."""
 
         if args:
-            line %= tuple(cgi_escape(unicode(arg)) for arg in args)
+            line %= tuple(cgi_escape(str(arg)) for arg in args)
         self._lines.append(line)
 
     def _make_button(self, data):

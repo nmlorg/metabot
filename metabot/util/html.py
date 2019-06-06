@@ -1,18 +1,8 @@
 """Telegram-specific HTML sanitizer."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-try:
-    import htmlentitydefs
-    import HTMLParser  # pragma: no cover
-except ImportError:
-    import html.entities as htmlentitydefs
-    import html.parser as HTMLParser
-
-try:
-    unichr
-except NameError:
-    unichr = chr  # pylint: disable=invalid-name,redefined-builtin
+import html
+import html.parser
+import logging
 
 
 def cgi_escape(text):  # pylint: disable=missing-docstring
@@ -20,7 +10,7 @@ def cgi_escape(text):  # pylint: disable=missing-docstring
                                                                    '&gt;').replace('"', '&quot;')
 
 
-class _HTMLSanitizer(HTMLParser.HTMLParser):
+class _HTMLSanitizer(html.parser.HTMLParser):
     __pieces = __strip = __current = None
 
     def sanitize(self, text, strip=False):
@@ -62,9 +52,9 @@ class _HTMLSanitizer(HTMLParser.HTMLParser):
         if name in ('lt', 'gt', 'amp', 'quot'):
             self.__pieces.append('&%s;' % name)
         else:
-            codepoint = htmlentitydefs.name2codepoint.get(name)
+            codepoint = html.entities.name2codepoint.get(name)
             if codepoint:
-                self.__pieces.append(unichr(codepoint))
+                self.__pieces.append(chr(codepoint))
             else:
                 self.__pieces.append('&amp;%s;' % name)
 
@@ -75,9 +65,12 @@ class _HTMLSanitizer(HTMLParser.HTMLParser):
                 codepoint = int(name[1:], 16)
             else:
                 codepoint = int(name)
-            self.__pieces.append(cgi_escape(unichr(codepoint)))
+            self.__pieces.append(cgi_escape(chr(codepoint)))
         except (OverflowError, ValueError):
             self.__pieces.append('&amp;#%s;' % name)
+
+    def error(self, message):
+        logging.error('HTML sanitizer error: %s', message)
 
 
 def sanitize(text, strip=False):

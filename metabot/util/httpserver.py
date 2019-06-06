@@ -1,18 +1,12 @@
 """Complex-UI configuration interface."""
 
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-try:
-    import http.server as BaseHTTPServer
-except ImportError:
-    import BaseHTTPServer
-
-import os
+import http.server
 import json
+import os
 import threading
 
 
-class _RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+class _RequestHandler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):  # pylint: disable=invalid-name,missing-docstring
         if self.path == '/':
@@ -26,7 +20,7 @@ class _RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             self.wfile.write(json.dumps(self.server.multibot.conf).encode('ascii'))
 
 
-class HTTPServer(BaseHTTPServer.HTTPServer):
+class HTTPServer(http.server.HTTPServer):
     """Complex-UI configuration interface."""
 
     def __init__(self, multibot, port=0):

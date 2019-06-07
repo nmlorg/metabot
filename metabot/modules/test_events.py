@@ -75,117 +75,121 @@ Select a calendar to add or remove from the list below:
 
     assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Type your 2-letter country code</b>
 
-What time zone should be used in /events?
-
-Choose a time zone:
-[Africa | /admin modulestestbot moderator -1001000001000 timezone Africa]
-[America | /admin modulestestbot moderator -1001000001000 timezone America]
-[Antarctica | /admin modulestestbot moderator -1001000001000 timezone Antarctica]
-[Arctic | /admin modulestestbot moderator -1001000001000 timezone Arctic]
-[Asia | /admin modulestestbot moderator -1001000001000 timezone Asia]
-[Atlantic | /admin modulestestbot moderator -1001000001000 timezone Atlantic]
-[Australia | /admin modulestestbot moderator -1001000001000 timezone Australia]
-[\xa0 | /stop] [Next | /admin modulestestbot moderator -1001000001000 timezone - 1]
+Type your 2-letter country code (like US, CA, GB, etc.).
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 
     assert conversation.message(
-        '/admin modulestestbot moderator -1001000001000 timezone - 1') == """\
+        '/admin modulestestbot moderator -1001000001000 timezone dummy') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Type your 2-letter country code</b>
 
-What time zone should be used in /events?
+Unknown country code <code>DUMMY</code>.
 
-Choose a time zone:
-[Canada | /admin modulestestbot moderator -1001000001000 timezone Canada]
-[Europe | /admin modulestestbot moderator -1001000001000 timezone Europe]
-[GMT | /admin modulestestbot moderator -1001000001000 timezone GMT]
-[Indian | /admin modulestestbot moderator -1001000001000 timezone Indian]
-[Pacific | /admin modulestestbot moderator -1001000001000 timezone Pacific]
-[US | /admin modulestestbot moderator -1001000001000 timezone US]
-[UTC | /admin modulestestbot moderator -1001000001000 timezone UTC]
-[Prev | /admin modulestestbot moderator -1001000001000 timezone - 0] [\xa0 | /stop]
-[Back | /admin modulestestbot moderator -1001000001000]
-"""
-
-    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone',
-                                language_code='en-us') == """\
-[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
-
-What time zone should be used in /events?
-
-Choose a time zone:
-[US/Alaska | /admin modulestestbot moderator -1001000001000 timezone US/Alaska]
-[US/Arizona | /admin modulestestbot moderator -1001000001000 timezone US/Arizona]
-[US/Central | /admin modulestestbot moderator -1001000001000 timezone US/Central]
-[US/Eastern | /admin modulestestbot moderator -1001000001000 timezone US/Eastern]
-[US/Hawaii | /admin modulestestbot moderator -1001000001000 timezone US/Hawaii]
-[US/Mountain | /admin modulestestbot moderator -1001000001000 timezone US/Mountain]
-[US/Pacific | /admin modulestestbot moderator -1001000001000 timezone US/Pacific]
-[Back | /admin modulestestbot moderator -1001000001000]
-"""
-
-    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone',
-                                language_code='en-ca') == """\
-[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
-
-What time zone should be used in /events?
-
-Choose a time zone:
-[Canada/Atlantic | /admin modulestestbot moderator -1001000001000 timezone Canada/Atlantic]
-[Canada/Central | /admin modulestestbot moderator -1001000001000 timezone Canada/Central]
-[Canada/Eastern | /admin modulestestbot moderator -1001000001000 timezone Canada/Eastern]
-[Canada/Mountain | /admin modulestestbot moderator -1001000001000 timezone Canada/Mountain]
-[Canada/Newfoundland | /admin modulestestbot moderator -1001000001000 timezone Canada/Newfoundland]
-[Canada/Pacific | /admin modulestestbot moderator -1001000001000 timezone Canada/Pacific]
-[Back | /admin modulestestbot moderator -1001000001000]
-"""
-
-    assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone',
-                                language_code='en-gb') == """\
-[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
-
-What time zone should be used in /events?
-
-Choose a time zone:
-[Europe/London | /admin modulestestbot moderator -1001000001000 timezone Europe/London]
+Type your 2-letter country code (like US, CA, GB, etc.).
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 
     assert conversation.message(
-        '/admin modulestestbot moderator -1001000001000 timezone America/Indiana') == """\
+        '/admin modulestestbot moderator -1001000001000 timezone gb') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a primary city</b>
 
 What time zone should be used in /events?
 
-Choose a time zone:
-[America/Indiana/Indianapolis | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Indianapolis]
-[America/Indiana/Knox | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Knox]
-[America/Indiana/Marengo | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Marengo]
-[America/Indiana/Petersburg | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Petersburg]
-[America/Indiana/Tell_City | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Tell_City]
-[America/Indiana/Vevay | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Vevay]
-[America/Indiana/Vincennes | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Vincennes]
-[\xa0 | /stop] [Next | /admin modulestestbot moderator -1001000001000 timezone America/Indiana 1]
+Choose a primary city:
+[London | /admin modulestestbot moderator -1001000001000 timezone Europe/London]
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 
     assert conversation.message(
-        '/admin modulestestbot moderator -1001000001000 timezone America/Indiana 1') == """\
+        '/admin modulestestbot moderator -1001000001000 timezone us') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a time zone</b>
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a primary city</b>
 
 What time zone should be used in /events?
 
-Choose a time zone:
-[America/Indiana/Winamac | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Winamac]
-[Prev | /admin modulestestbot moderator -1001000001000 timezone America/Indiana 0] [\xa0 | /stop]
+Choose a primary city:
+[New York (Eastern (most areas)) | /admin modulestestbot moderator -1001000001000 timezone America/New_York]
+[Detroit (Eastern - MI (most areas)) | /admin modulestestbot moderator -1001000001000 timezone America/Detroit]
+[Louisville (Eastern - KY (Louisville area)) | /admin modulestestbot moderator -1001000001000 timezone America/Kentucky/Louisville]
+[Monticello (Eastern - KY (Wayne)) | /admin modulestestbot moderator -1001000001000 timezone America/Kentucky/Monticello]
+[Indianapolis (Eastern - IN (most areas)) | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Indianapolis]
+[Vincennes (Eastern - IN (Da, Du, K, Mn)) | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Vincennes]
+[Winamac (Eastern - IN (Pulaski)) | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Winamac]
+[\xa0 | /stop] [Next | /admin modulestestbot moderator -1001000001000 timezone US 1]
+[Back | /admin modulestestbot moderator -1001000001000]
+"""
+
+    assert conversation.message(
+        '/admin modulestestbot moderator -1001000001000 timezone US 1') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a primary city</b>
+
+What time zone should be used in /events?
+
+Choose a primary city:
+[Marengo (Eastern - IN (Crawford)) | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Marengo]
+[Petersburg (Eastern - IN (Pike)) | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Petersburg]
+[Vevay (Eastern - IN (Switzerland)) | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Vevay]
+[Chicago (Central (most areas)) | /admin modulestestbot moderator -1001000001000 timezone America/Chicago]
+[Tell City (Central - IN (Perry)) | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Tell_City]
+[Knox (Central - IN (Starke)) | /admin modulestestbot moderator -1001000001000 timezone America/Indiana/Knox]
+[Menominee (Central - MI (Wisconsin border)) | /admin modulestestbot moderator -1001000001000 timezone America/Menominee]
+[Prev | /admin modulestestbot moderator -1001000001000 timezone US 0] [Next | /admin modulestestbot moderator -1001000001000 timezone US 2]
+[Back | /admin modulestestbot moderator -1001000001000]
+"""
+
+    assert conversation.message(
+        '/admin modulestestbot moderator -1001000001000 timezone US 2') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a primary city</b>
+
+What time zone should be used in /events?
+
+Choose a primary city:
+[Center (Central - ND (Oliver)) | /admin modulestestbot moderator -1001000001000 timezone America/North_Dakota/Center]
+[New Salem (Central - ND (Morton rural)) | /admin modulestestbot moderator -1001000001000 timezone America/North_Dakota/New_Salem]
+[Beulah (Central - ND (Mercer)) | /admin modulestestbot moderator -1001000001000 timezone America/North_Dakota/Beulah]
+[Denver (Mountain (most areas)) | /admin modulestestbot moderator -1001000001000 timezone America/Denver]
+[Boise (Mountain - ID (south); OR (east)) | /admin modulestestbot moderator -1001000001000 timezone America/Boise]
+[Phoenix (MST - Arizona (except Navajo)) | /admin modulestestbot moderator -1001000001000 timezone America/Phoenix]
+[Los Angeles (Pacific) | /admin modulestestbot moderator -1001000001000 timezone America/Los_Angeles]
+[Prev | /admin modulestestbot moderator -1001000001000 timezone US 1] [Next | /admin modulestestbot moderator -1001000001000 timezone US 3]
+[Back | /admin modulestestbot moderator -1001000001000]
+"""
+
+    assert conversation.message(
+        '/admin modulestestbot moderator -1001000001000 timezone US 3') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a primary city</b>
+
+What time zone should be used in /events?
+
+Choose a primary city:
+[Anchorage (Alaska (most areas)) | /admin modulestestbot moderator -1001000001000 timezone America/Anchorage]
+[Juneau (Alaska - Juneau area) | /admin modulestestbot moderator -1001000001000 timezone America/Juneau]
+[Sitka (Alaska - Sitka area) | /admin modulestestbot moderator -1001000001000 timezone America/Sitka]
+[Metlakatla (Alaska - Annette Island) | /admin modulestestbot moderator -1001000001000 timezone America/Metlakatla]
+[Yakutat (Alaska - Yakutat) | /admin modulestestbot moderator -1001000001000 timezone America/Yakutat]
+[Nome (Alaska (west)) | /admin modulestestbot moderator -1001000001000 timezone America/Nome]
+[Adak (Aleutian Islands) | /admin modulestestbot moderator -1001000001000 timezone America/Adak]
+[Prev | /admin modulestestbot moderator -1001000001000 timezone US 2] [Next | /admin modulestestbot moderator -1001000001000 timezone US 4]
+[Back | /admin modulestestbot moderator -1001000001000]
+"""
+
+    assert conversation.message(
+        '/admin modulestestbot moderator -1001000001000 timezone US 4') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a primary city</b>
+
+What time zone should be used in /events?
+
+Choose a primary city:
+[Honolulu (Hawaii) | /admin modulestestbot moderator -1001000001000 timezone Pacific/Honolulu]
+[Prev | /admin modulestestbot moderator -1001000001000 timezone US 3] [\xa0 | /stop]
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 

@@ -65,17 +65,10 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         self.multibot.dispatcher(self.bot, update)
         return responses
 
-    # pylint: disable=too-many-arguments
-    def raw_message(self,
-                    text,
-                    user_id=1000,
-                    chat_type='private',
-                    language_code=None):
+    def raw_message(self, text, user_id=1000, chat_type='private'):
         """Simulate a private message."""
 
         user = {'id': user_id, 'username': 'user%s' % user_id, 'first_name': 'User%s' % user_id}
-        if language_code:
-            user['language_code'] = language_code
         if chat_type == 'private':
             chat = {'id': user_id, 'type': 'private'}
         else:

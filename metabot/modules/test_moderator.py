@@ -23,7 +23,7 @@ Bot Admin \u203a modulestestbot \u203a moderator: <b>Choose a group</b>
 """
 
     adding_user = {'id': 2000}
-    joined_user = {'id': 3000, 'is_bot': False}
+    joined_user = {'id': 3000, 'is_bot': True, 'first_name': 'User 3000'}
     chat = {'id': -1001000001000, 'type': 'supergroup', 'title': 'My Group'}
     message = {
         'from': adding_user,
@@ -80,20 +80,28 @@ Type your new value, or type "off" to disable/reset to default.
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 
-    assert conversation.message('Welcome! <b>Initial</b> pinned message.') == """\
+    assert conversation.message(
+        'Welcome to chat title, new users! <b>Initial</b> pinned message.') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
 
-Set <code>greeting</code> to <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code>.
+Set <code>greeting</code> to <code>Welcome to chat title, new users! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code>.
 [calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
 [daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
 [dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
-[greeting (Welcome! \u2026) \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[greeting (Welcome t\u2026) \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
 [maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
 [timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """
+
+    replies = conversation.raw_message('/dummy')
+    assert replies == []
+    conversation.multibot.dispatcher(conversation.bot, join_update)
+    assert replies == []
+
+    joined_user['is_bot'] = False
 
     replies = conversation.raw_message('/dummy')
     assert replies == []
@@ -105,7 +113,7 @@ Set <code>greeting</code> to <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; pinned me
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'reply_to_message_id': 5000,
-            'text': 'Welcome! <b>Initial</b> pinned message.',
+            'text': 'Welcome to My Group, <a href="tg://user?id=3000">User 3000</a>! <b>Initial</b> pinned message.',
         },
     ]  # yapf: disable
 
@@ -130,7 +138,7 @@ Set <code>greeting</code> to <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; pinned me
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'reply_to_message_id': 5000,
-            'text': 'Welcome! <b>Initial</b> <a href="https://t.me/c/1000001000/6000">pinned message</a>.',
+            'text': 'Welcome to My Group, <a href="tg://user?id=3000">User 3000</a>! <b>Initial</b> <a href="https://t.me/c/1000001000/6000">pinned message</a>.',
         },
     ]  # yapf: disable
 
@@ -147,7 +155,7 @@ Set <code>greeting</code> to <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; pinned me
             'disable_web_page_preview': True,
             'parse_mode': 'HTML',
             'reply_to_message_id': 5000,
-            'text': 'Welcome! <b>Initial</b> <a href="https://t.me/mygroup/6000">pinned message</a>.',
+            'text': 'Welcome to My Group, <a href="tg://user?id=3000">User 3000</a>! <b>Initial</b> <a href="https://t.me/mygroup/6000">pinned message</a>.',
         },
     ]  # yapf: disable
 
@@ -157,7 +165,7 @@ Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a gr
 
 How should I greet people when they join?
 
-<code>greeting</code> is currently <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code>.
+<code>greeting</code> is currently <code>Welcome to chat title, new users! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code>.
 
 Type your new value, or type "off" to disable/reset to default.
 [Back | /admin modulestestbot moderator -1001000001000]
@@ -167,7 +175,7 @@ Type your new value, or type "off" to disable/reset to default.
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
 
-Changed <code>greeting</code> from <code>Welcome! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code> to <code>Welcome! New message.</code>.
+Changed <code>greeting</code> from <code>Welcome to chat title, new users! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code> to <code>Welcome! New message.</code>.
 [calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
 [daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
 [dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]

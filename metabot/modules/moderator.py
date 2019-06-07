@@ -1,6 +1,7 @@
 """Simple group/supergroup moderator tools."""
 
 from metabot.util import adminui
+from metabot.util import humanize
 
 
 def modpredispatch(ctx, unused_msg, modconf):  # pylint: disable=missing-docstring
@@ -12,7 +13,7 @@ def modpredispatch(ctx, unused_msg, modconf):  # pylint: disable=missing-docstri
 
 def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
     if ctx.type == 'join':
-        return join(ctx, msg, modconf)
+        join(ctx, msg, modconf)
 
     return False
 
@@ -21,27 +22,38 @@ def join(ctx, msg, modconf):
     """Respond to new users joining a group chat."""
 
     greeting = modconf['%s' % ctx.chat['id']].get('greeting')
-    if greeting:
-        for user in ctx.data:
-            if not user['is_bot']:
-                if 'pinned message' in greeting and ctx.groupinfo.data.pinned_message_id:
-                    if ctx.groupinfo.data.username:
-                        url = 'https://t.me/%s/%s' % (ctx.groupinfo.data.username,
-                                                      ctx.groupinfo.data.pinned_message_id)
-                    elif -1002147483647 <= ctx.chat['id'] < -1000000000000:
-                        # See https://github.com/nmlorg/metabot/issues/43.
-                        url = 'https://t.me/c/%s/%s' % (-1000000000000 - ctx.chat['id'],
-                                                        ctx.groupinfo.data.pinned_message_id)
-                    else:
-                        url = None  # pragma: no cover
-                    if url:
-                        greeting = greeting.replace('pinned message',
-                                                    '<a href="%s">pinned message</a>' % url)
-                msg.quiet = True
-                return msg.add(greeting)
+    if not greeting:
+        return
+    users = [user for user in ctx.data if not user['is_bot']]
+    if not users:
+        return
+
+    if 'pinned message' in greeting and ctx.groupinfo.data.pinned_message_id:
+        if ctx.groupinfo.data.username:
+            url = 'https://t.me/%s/%s' % (ctx.groupinfo.data.username,
+                                          ctx.groupinfo.data.pinned_message_id)
+        elif -1002147483647 <= ctx.chat['id'] < -1000000000000:
+            # See https://github.com/nmlorg/metabot/issues/43.
+            url = 'https://t.me/c/%s/%s' % (-1000000000000 - ctx.chat['id'],
+                                            ctx.groupinfo.data.pinned_message_id)
+        else:
+            url = None  # pragma: no cover
+        if url:
+            greeting = greeting.replace('pinned message', '<a href="%s">pinned message</a>' % url)
+
+    if 'new users' in greeting:
+        names = [
+            '<a href="tg://user?id=%s">%s</a>' % (user['id'], user['first_name']) for user in users
+        ]
+        greeting = greeting.replace('new users', humanize.list(names))
+
+    greeting = greeting.replace('chat title', ctx.groupinfo.data.title)
+
+    msg.quiet = True
+    msg.add(greeting)
 
 
-def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
+def admin(ctx, msg, modconf):
     """Handle /admin BOTNAME moderator."""
 
     group_id, field, text = ctx.split(3)

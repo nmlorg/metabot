@@ -171,7 +171,7 @@ def integer(unused_ctx, msg, subconf, field, desc, text):
             value = int(text)
         else:
             value = None
-        if subconf.get(field):
+        if subconf.get(field) is not None:
             if value is not None:
                 msg.add('Changed <code>%s</code> from <code>%s</code> to <code>%s</code>.', field,
                         subconf[field], text)
@@ -180,7 +180,7 @@ def integer(unused_ctx, msg, subconf, field, desc, text):
         elif value is not None:
             msg.add('Set <code>%s</code> to <code>%s</code>.', field, value)
         else:
-            msg.add('Unset <code>%s</code>.', field)
+            msg.add('<code>%s</code> is already unset.', field)
         if value is not None:
             subconf[field] = value
         else:

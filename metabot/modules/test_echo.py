@@ -124,8 +124,8 @@ Type the name of a command to add (like <code>rules</code>\u2014don't include a 
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin \u203a modulestestbot \u203a echo \u203a echotest: <b>Choose a field</b>
 [text \u2022 The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
-[paginate \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
-[private \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
+[paginate (no) \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
+[private (no) \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
 [Back | /admin modulestestbot echo]
 """
 
@@ -145,8 +145,8 @@ Bot Admin \u203a modulestestbot \u203a echo \u203a echotest: <b>Choose a field</
 
 Set <code>text</code> to <code>my message</code>.
 [text (my message) \u2022 The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
-[paginate \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
-[private \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
+[paginate (no) \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
+[private (no) \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
 [Back | /admin modulestestbot echo]
 """
 
@@ -156,8 +156,8 @@ Bot Admin \u203a modulestestbot \u203a echo \u203a echotest: <b>Choose a field</
 
 Changed <code>text</code> from <code>my message</code> to <code>new message</code>.
 [text (new messa\u2026) \u2022 The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
-[paginate \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
-[private \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
+[paginate (no) \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
+[private (no) \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
 [Back | /admin modulestestbot echo]
 """
 

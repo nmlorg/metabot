@@ -1,6 +1,5 @@
 """Reusable UI elements for admin functions (like /admin BOTNAME moderator and /events set)."""
 
-import builtins
 import math
 
 import pytz
@@ -12,8 +11,12 @@ from metabot.util import tzutil
 def bool(unused_ctx, msg, subconf, field, unused_desc, unused_text):  # pylint: disable=too-many-arguments,redefined-builtin
     """Configure a toggle-able setting."""
 
-    subconf[field] = not subconf[field]
-    msg.add('Set <code>%s</code> to <code>%s</code>.', field, subconf[field])
+    if subconf.get(field):
+        subconf.pop(field)
+        msg.add('Disabled <code>%s</code>.', field)
+    else:
+        subconf[field] = True
+        msg.add('Enabled <code>%s</code>.', field)
 
 
 def calendars(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments
@@ -120,9 +123,9 @@ def fields(ctx, msg, subconf, fieldset, field, text):  # pylint: disable=too-man
         msg.path(field)
     else:
         msg.action = 'Choose a field'
-        for fieldname, unused_uifunc, fielddesc in fieldset:
+        for fieldname, uifunc, fielddesc in fieldset:
             value = subconf.get(fieldname)
-            if isinstance(value, builtins.bool):
+            if uifunc is bool:
                 value = value and 'yes' or 'no'
             elif value is not None:
                 value = '%s' % value

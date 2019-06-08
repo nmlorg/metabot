@@ -2,24 +2,58 @@
 
 import pytest
 
+from metabot.modules import echo
 from metabot.modules import moderator
 
 
 @pytest.fixture
 def conversation(build_conversation):  # pylint: disable=missing-docstring
-    return build_conversation(moderator)
+    return build_conversation(echo, moderator)
 
 
 # pylint: disable=line-too-long
 
 
+def test_bool(conversation):  # pylint: disable=redefined-outer-name
+    """Test adminui.bool."""
+
+    echoconf = conversation.multibot.conf['bots']['modulestestbot']['issue37']['echo']['dummy']
+
+    assert 'paginate' not in echoconf
+
+    assert conversation.message('/admin modulestestbot echo dummy paginate') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin › modulestestbot › echo › dummy: <b>Choose a field</b>
+
+Enabled <code>paginate</code>.
+[text \u2022 The message, sticker, or image to send in response to /dummy. | /admin modulestestbot echo dummy text]
+[paginate (yes) \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo dummy paginate]
+[private (no) \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo dummy private]
+[Back | /admin modulestestbot echo]
+"""
+
+    assert echoconf['paginate'] is True
+
+    assert conversation.message('/admin modulestestbot echo dummy paginate') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin › modulestestbot › echo › dummy: <b>Choose a field</b>
+
+Disabled <code>paginate</code>.
+[text \u2022 The message, sticker, or image to send in response to /dummy. | /admin modulestestbot echo dummy text]
+[paginate (no) \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo dummy paginate]
+[private (no) \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo dummy private]
+[Back | /admin modulestestbot echo]
+"""
+
+    assert 'paginate' not in echoconf
+
+
 def test_daysofweek(conversation):  # pylint: disable=redefined-outer-name
     """Test adminui.daysofweek."""
 
-    conversation.multibot.conf['bots']['modulestestbot']['issue37']['moderator']['-1001000001000'][
-        '_dummy'] = 0
     groupconf = conversation.multibot.conf['bots']['modulestestbot']['issue37']['moderator'][
         '-1001000001000']
+    groupconf['_dummy'] = 0
 
     assert conversation.message('/admin modulestestbot moderator -1001000001000 dailydow') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]

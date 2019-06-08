@@ -5,6 +5,8 @@ from metabot.util import adminui
 
 def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
     for command, data in modconf.items():
+        if not data.get('text'):
+            continue
         message = data['text'].replace('\n', ' ')
         if len(message) > 30:
             message = message[:29] + '\u2026'
@@ -12,7 +14,8 @@ def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
 
 
 def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
-    if ctx.type in ('message', 'callback_query') and ctx.command in modconf:
+    if (ctx.type in ('message', 'callback_query') and ctx.command in modconf and
+            modconf[ctx.command].get('text')):
         return echo(ctx, msg, modconf[ctx.command])
 
     return False
@@ -43,7 +46,10 @@ def admin(ctx, msg, modconf):
             "Type the name of a command to add (like <code>rules</code>\u2014don't include a slash "
             'at the beginning!), or select an existing echo.')
         for command, data in sorted(modconf.items()):
-            msg.button('/%s (%s)' % (command, data['text'].replace('\n', ' ')), command)
+            title = '/' + command
+            if data.get('text'):
+                title = '%s (%s)' % (title, data['text'].replace('\n', ' '))
+            msg.button(title, command)
         return
 
     msg.path(command)

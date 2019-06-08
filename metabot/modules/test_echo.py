@@ -169,3 +169,24 @@ Type the name of a command to add (like <code>rules</code>\u2014don't include a 
 [/echotest (new message) | /admin modulestestbot echo echotest]
 [Back | /admin modulestestbot]
 """
+
+    assert conversation.message('textless paginate') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a echo \u203a textless: <b>Choose a field</b>
+
+Enabled <code>paginate</code>.
+[text \u2022 The message, sticker, or image to send in response to /textless. | /admin modulestestbot echo textless text]
+[paginate (yes) \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo textless paginate]
+[private (no) \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo textless private]
+[Back | /admin modulestestbot echo]
+"""
+
+    assert conversation.message('/admin modulestestbot echo') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin \u203a modulestestbot \u203a echo: <b>Choose a command</b>
+
+Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo.
+[/echotest (new message) | /admin modulestestbot echo echotest]
+[/textless | /admin modulestestbot echo textless]
+[Back | /admin modulestestbot]
+"""

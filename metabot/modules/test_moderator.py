@@ -47,6 +47,7 @@ Bot Admin \u203a modulestestbot \u203a moderator: <b>Choose a group</b>
 Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
 [calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
 [daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
 [greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
@@ -62,6 +63,7 @@ Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choos
 I can't set <code>bogus</code>.
 [calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
 [daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
 [greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
@@ -88,6 +90,7 @@ Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choos
 Set <code>greeting</code> to <code>Welcome to chat title, new users! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code>.
 [calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
 [daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
 [greeting (Welcome t\u2026) \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
@@ -178,6 +181,7 @@ Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choos
 Changed <code>greeting</code> from <code>Welcome to chat title, new users! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code> to <code>Welcome! New message.</code>.
 [calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
 [daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
 [greeting (Welcome! \u2026) \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
@@ -205,6 +209,7 @@ Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choos
 Unset <code>greeting</code> (was <code>Welcome! New message.</code>).
 [calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
 [daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
 [greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
@@ -221,6 +226,7 @@ Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choos
 Unset <code>greeting</code>.
 [calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
 [daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
 [greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]

@@ -5,6 +5,7 @@ import math
 
 import pytz
 
+from metabot.util import humanize
 from metabot.util import tzutil
 
 
@@ -51,6 +52,57 @@ def calendars(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many
             msg.button('Add %s' % calendar_info['name'], 'add %s' % calcode)
         else:
             msg.button('Remove %s' % calendar_info['name'], 'remove %s' % calcode)
+
+
+def daysofweek(unused_ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments,too-many-branches
+    """Select days of the week to enable/disable."""
+
+    value = subconf.get(field, 0)
+    if text == 'all':
+        value = 0
+    elif text == 'none':
+        value = 127
+    elif text.isdigit():
+        value ^= 1 << int(text)
+    if value:
+        subconf[field] = value
+    else:
+        subconf.pop(field, None)
+
+    msg.action = 'Select a day of the week to toggle'
+    msg.add(desc)
+    if value == 127:
+        msg.add('All days are currently <b>disabled</b>.')
+    elif not value:
+        msg.add('All days are currently <b>enabled</b>.')
+    else:
+        days = [
+            name for name, code in (('Sunday', 6), ('Monday', 0), ('Tuesday', 1), ('Wednesday', 2),
+                                    ('Thursday', 3), ('Friday', 4), ('Saturday', 5))
+            if not value & 1 << code
+        ]
+        msg.add('Enabled for %s.', humanize.list(days))
+
+    msg.add('Select a day of the week to toggle:')
+    layout = (
+        (('Sunday', 6), ('Monday', 0)),
+        (('Tuesday', 1), ('Wednesday', 2)),
+        (('Thursday', 3), ('Friday', 4)),
+        (('Saturday', 5), ('every day', -1)),
+    )
+    for row in layout:
+        buttons = []
+        for title, code in row:
+            if code == -1:
+                if value:
+                    buttons.append(('enable ' + title, 'all'))
+                else:
+                    buttons.append(('disable ' + title, 'none'))
+            elif value & 1 << code:
+                buttons.append(('enable ' + title, '%s' % code))
+            else:
+                buttons.append(('disable ' + title, '%s' % code))
+        msg.buttons(buttons)
 
 
 def fields(ctx, msg, subconf, fieldset, field, text):  # pylint: disable=too-many-arguments

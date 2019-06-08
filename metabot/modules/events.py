@@ -29,10 +29,10 @@ def modinit(multibot):  # pylint: disable=missing-docstring
             multibot.multical.poll()
             for botconf in multibot.conf['bots'].values():
                 for groupid, groupconf in botconf['issue37']['moderator'].items():
-                    calcodes, tzinfo, count, days, daily = _get_group_conf(groupconf)
+                    calcodes, tzinfo, count, days, daily, dailydow = _get_group_conf(groupconf)
                     if tzinfo and isinstance(daily, int):
                         now = datetime.datetime.now(tzinfo)
-                        if now.hour == daily:
+                        if now.hour == daily and not dailydow & 1 << now.weekday():
                             # See https://github.com/nmlorg/metabot/issues/26.
                             bot = ntelebot.bot.Bot(botconf['issue37']['telegram']['token'])
                             bot.multibot = multibot
@@ -95,7 +95,7 @@ def _get_group_conf(groupconf):
     timezone = groupconf.get('timezone')
     tzinfo = timezone and pytz.timezone(timezone)
     return (groupconf.get('calendars', '').split(), tzinfo, groupconf.get('maxeventscount', 10),
-            groupconf.get('maxeventsdays', 6), groupconf.get('daily'))
+            groupconf.get('maxeventsdays', 6), groupconf.get('daily'), groupconf.get('dailydow', 0))
 
 
 def _get_group_events(bot, calcodes, tzinfo, count, days):
@@ -115,7 +115,7 @@ def group(ctx, msg):
 
     group_id = '%s' % ctx.chat['id']
     groupconf = ctx.bot.multibot.conf['bots'][ctx.bot.username]['issue37']['moderator'][group_id]
-    calcodes, tzinfo, count, days, unused_daily = _get_group_conf(groupconf)
+    calcodes, tzinfo, count, days, unused_daily, unused_dailydow = _get_group_conf(groupconf)
     if not calcodes or not tzinfo:
         missing = []
         if not calcodes:

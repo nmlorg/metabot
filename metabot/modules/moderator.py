@@ -70,6 +70,8 @@ def admin(ctx, msg, modconf):
         ('calendars', adminui.calendars, 'Which calendars should be listed in /events?'),
         ('daily', adminui.integer,
          'Should I announce upcoming events once a day? If so, at what hour?'),
+        ('dailydow', adminui.daysofweek,
+         'Which days of the week should I announce upcoming events on?'),
         ('dailytext', adminui.freeform,
          'One or more messages (one per line) to use/cycle through for the daily announcement.'),
         ('greeting', adminui.freeform, 'How should I greet people when they join?'),

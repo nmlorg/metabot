@@ -42,9 +42,9 @@ Bot Admin: <b>Choose a bot</b>
 
     assert conversation.message('/admin modulestestbot') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot: <b>Choose a module</b>
-[admin \u2022 Manage the admin list | /admin modulestestbot admin]
-[help \u2022 Return the list of commands and other bot features | /admin modulestestbot help]
+Bot Admin › modulestestbot: <b>Choose a module</b>
+[admin • Manage the admin list | /admin modulestestbot admin]
+[help • Return the list of commands and other bot features | /admin modulestestbot help]
 [Back | /admin]
 """
 
@@ -88,7 +88,7 @@ def test_admins(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('/admin modulestestbot admin') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>
+Bot Admin › modulestestbot › admin: <b>Choose an admin</b>
 
 Forward a message from a user to add or remove them, or select an existing admin to remove.
 [Back | /admin modulestestbot]
@@ -96,9 +96,9 @@ Forward a message from a user to add or remove them, or select an existing admin
 
     assert conversation.message('bogus value') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>
+Bot Admin › modulestestbot › admin: <b>Choose an admin</b>
 
-I'm not sure what <code>bogus value</code> is\u2014it's not a user id!
+I'm not sure what <code>bogus value</code> is—it's not a user id!
 
 Forward a message from a user to add or remove them, or select an existing admin to remove.
 [Back | /admin modulestestbot]
@@ -106,7 +106,7 @@ Forward a message from a user to add or remove them, or select an existing admin
 
     assert conversation.message('1000') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>
+Bot Admin › modulestestbot › admin: <b>Choose an admin</b>
 
 You can't remove yourself from the admin list.
 
@@ -116,7 +116,7 @@ Forward a message from a user to add or remove them, or select an existing admin
 
     assert conversation.message('2000') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>
+Bot Admin › modulestestbot › admin: <b>Choose an admin</b>
 
 Added 2000 to the admin list.
 
@@ -129,9 +129,9 @@ Forward a message from a user to add or remove them, or select an existing admin
 
     assert conversation.message('/admin modulestestbot admin bogus value') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>
+Bot Admin › modulestestbot › admin: <b>Choose an admin</b>
 
-I'm not sure what <code>bogus value</code> is\u2014it's not a user id!
+I'm not sure what <code>bogus value</code> is—it's not a user id!
 
 Forward a message from a user to add or remove them, or select an existing admin to remove.
 [Remove User2000 (2000) | /admin modulestestbot admin 2000]
@@ -140,7 +140,7 @@ Forward a message from a user to add or remove them, or select an existing admin
 
     assert conversation.message('/admin modulestestbot admin 2000') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a admin: <b>Choose an admin</b>
+Bot Admin › modulestestbot › admin: <b>Choose an admin</b>
 
 Removed 2000 from the admin list.
 

@@ -26,9 +26,9 @@ def test_bool(conversation):  # pylint: disable=redefined-outer-name
 Bot Admin › modulestestbot › echo › dummy: <b>Choose a field</b>
 
 Enabled <code>paginate</code>.
-[text \u2022 The message, sticker, or image to send in response to /dummy. | /admin modulestestbot echo dummy text]
-[paginate (yes) \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo dummy paginate]
-[private (no) \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo dummy private]
+[text • The message, sticker, or image to send in response to /dummy. | /admin modulestestbot echo dummy text]
+[paginate (yes) • For multiline messages, display just one line at a time? | /admin modulestestbot echo dummy paginate]
+[private (no) • Send the message in group chats, or just in private? | /admin modulestestbot echo dummy private]
 [Back | /admin modulestestbot echo]
 """
 
@@ -39,9 +39,9 @@ Enabled <code>paginate</code>.
 Bot Admin › modulestestbot › echo › dummy: <b>Choose a field</b>
 
 Disabled <code>paginate</code>.
-[text \u2022 The message, sticker, or image to send in response to /dummy. | /admin modulestestbot echo dummy text]
-[paginate (no) \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo dummy paginate]
-[private (no) \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo dummy private]
+[text • The message, sticker, or image to send in response to /dummy. | /admin modulestestbot echo dummy text]
+[paginate (no) • For multiline messages, display just one line at a time? | /admin modulestestbot echo dummy paginate]
+[private (no) • Send the message in group chats, or just in private? | /admin modulestestbot echo dummy private]
 [Back | /admin modulestestbot echo]
 """
 
@@ -188,14 +188,14 @@ Type your new value, or type "off" to disable/reset to default.
 Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 
 Set <code>daily</code> to <code>8</code>.
-[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily (8) \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
-[greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
-[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
-[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily (8) • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone • What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """
 
@@ -218,14 +218,14 @@ Type your new value, or type "off" to disable/reset to default.
 Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 
 Changed <code>daily</code> from <code>8</code> to <code>9</code>.
-[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily (9) \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
-[greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
-[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
-[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily (9) • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone • What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """
 
@@ -236,14 +236,14 @@ Changed <code>daily</code> from <code>8</code> to <code>9</code>.
 Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 
 Unset <code>daily</code> (was <code>9</code>).
-[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
-[greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
-[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
-[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone • What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """
 
@@ -254,13 +254,13 @@ Unset <code>daily</code> (was <code>9</code>).
 Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 
 <code>daily</code> is already unset.
-[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
-[greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
-[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
-[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone • What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """

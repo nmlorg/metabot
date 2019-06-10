@@ -18,7 +18,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('/admin modulestestbot moderator') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator: <b>Choose a group</b>
+Bot Admin › modulestestbot › moderator: <b>Choose a group</b>
 [Back | /admin modulestestbot]
 """
 
@@ -37,44 +37,44 @@ Bot Admin \u203a modulestestbot \u203a moderator: <b>Choose a group</b>
 
     assert conversation.message('/admin modulestestbot moderator') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator: <b>Choose a group</b>
+Bot Admin › modulestestbot › moderator: <b>Choose a group</b>
 [-1001000001000 (My Group) | /admin modulestestbot moderator -1001000001000]
 [Back | /admin modulestestbot]
 """
 
     assert conversation.message('/admin modulestestbot moderator -1001000001000') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
-[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
-[greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
-[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
-[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
+[calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone • What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """
 
     assert conversation.message('/admin modulestestbot moderator -1001000001000 bogus') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
+Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 
 I can't set <code>bogus</code>.
-[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
-[greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
-[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
-[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone • What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """
 
     assert conversation.message('/admin modulestestbot moderator -1001000001000 greeting') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a greeting: <b>Type a new value for greeting</b>
+Bot Admin › modulestestbot › moderator › -1001000001000 › greeting: <b>Type a new value for greeting</b>
 
 How should I greet people when they join?
 
@@ -85,17 +85,17 @@ Type your new value, or type "off" to disable/reset to default.
     assert conversation.message(
         'Welcome to chat title, new users! <b>Initial</b> pinned message.') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
+Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 
 Set <code>greeting</code> to <code>Welcome to chat title, new users! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code>.
-[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
-[greeting (Welcome t\u2026) \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
-[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
-[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting (Welcome t…) • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone • What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """
 
@@ -164,7 +164,7 @@ Set <code>greeting</code> to <code>Welcome to chat title, new users! &lt;b&gt;In
 
     assert conversation.message('/admin modulestestbot moderator -1001000001000 greeting') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a greeting: <b>Type a new value for greeting</b>
+Bot Admin › modulestestbot › moderator › -1001000001000 › greeting: <b>Type a new value for greeting</b>
 
 How should I greet people when they join?
 
@@ -176,23 +176,23 @@ Type your new value, or type "off" to disable/reset to default.
 
     assert conversation.message('Welcome! New message.') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
+Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 
 Changed <code>greeting</code> from <code>Welcome to chat title, new users! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code> to <code>Welcome! New message.</code>.
-[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
-[greeting (Welcome! \u2026) \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
-[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
-[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting (Welcome! …) • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone • What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """
 
     assert conversation.message('/admin modulestestbot moderator -1001000001000 greeting') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a greeting: <b>Type a new value for greeting</b>
+Bot Admin › modulestestbot › moderator › -1001000001000 › greeting: <b>Type a new value for greeting</b>
 
 How should I greet people when they join?
 
@@ -204,33 +204,33 @@ Type your new value, or type "off" to disable/reset to default.
 
     assert conversation.message('OFF') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
+Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 
 Unset <code>greeting</code> (was <code>Welcome! New message.</code>).
-[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
-[greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
-[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
-[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone • What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """
 
     assert conversation.message(
         '/admin modulestestbot moderator -1001000001000 greeting OFF') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
+Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 
 Unset <code>greeting</code>.
-[calendars \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
-[greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
-[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
-[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone • What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """

@@ -8,7 +8,7 @@ def test_sanitize():
 
     assert html.sanitize('') == ''
     assert html.sanitize('empty') == 'empty'
-    assert html.sanitize('&#8592; &#x2190; &larr;') == '\u2190 \u2190 \u2190'
+    assert html.sanitize('&#8592; &#x2190; &larr; \u2190') == '← ← ← ←'
     assert html.sanitize('&#38; &#x26; &amp;') == '&amp; &amp; &amp;'
 
     # From https://core.telegram.org/bots/api#formatting-options.
@@ -39,7 +39,7 @@ def test_strip():
 
     assert html.sanitize('', True) == ''
     assert html.sanitize('empty', True) == 'empty'
-    assert html.sanitize('&#8592; &#x2190; &larr;', True) == '\u2190 \u2190 \u2190'
+    assert html.sanitize('&#8592; &#x2190; &larr; \u2190', True) == '← ← ← ←'
     assert html.sanitize('&#38; &#x26; &amp;', True) == '&amp; &amp; &amp;'
 
     # From https://core.telegram.org/bots/api#formatting-options.

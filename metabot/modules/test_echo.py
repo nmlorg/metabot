@@ -103,9 +103,9 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 <b>Commands</b>
 
-/rules1 \u2013 &quot;These are the rules: Have fun!&quot;
+/rules1 – &quot;These are the rules: Have fun!&quot;
 
-/rules2 \u2013 &quot;These are the rules: Have fun\u2026&quot;
+/rules2 – &quot;These are the rules: Have fun…&quot;
 """
 
 
@@ -114,24 +114,24 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('/admin modulestestbot echo') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a echo: <b>Choose a command</b>
+Bot Admin › modulestestbot › echo: <b>Choose a command</b>
 
-Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo.
+Type the name of a command to add (like <code>rules</code>—don't include a slash at the beginning!), or select an existing echo.
 [Back | /admin modulestestbot]
 """
 
     assert conversation.message('EchoTest') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a echo \u203a echotest: <b>Choose a field</b>
-[text \u2022 The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
-[paginate (no) \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
-[private (no) \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
+Bot Admin › modulestestbot › echo › echotest: <b>Choose a field</b>
+[text • The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
+[paginate (no) • For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
+[private (no) • Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
 [Back | /admin modulestestbot echo]
 """
 
     assert conversation.message('text') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a echo \u203a echotest \u203a text: <b>Type a new value for text</b>
+Bot Admin › modulestestbot › echo › echotest › text: <b>Type a new value for text</b>
 
 The message, sticker, or image to send in response to /echotest.
 
@@ -141,51 +141,51 @@ Type your new value, or type "off" to disable/reset to default.
 
     assert conversation.message('my message') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a echo \u203a echotest: <b>Choose a field</b>
+Bot Admin › modulestestbot › echo › echotest: <b>Choose a field</b>
 
 Set <code>text</code> to <code>my message</code>.
-[text (my message) \u2022 The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
-[paginate (no) \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
-[private (no) \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
+[text (my message) • The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
+[paginate (no) • For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
+[private (no) • Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
 [Back | /admin modulestestbot echo]
 """
 
     assert conversation.message('/admin modulestestbot echo echotest text new message') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a echo \u203a echotest: <b>Choose a field</b>
+Bot Admin › modulestestbot › echo › echotest: <b>Choose a field</b>
 
 Changed <code>text</code> from <code>my message</code> to <code>new message</code>.
-[text (new messa\u2026) \u2022 The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
-[paginate (no) \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
-[private (no) \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
+[text (new messa…) • The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
+[paginate (no) • For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
+[private (no) • Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
 [Back | /admin modulestestbot echo]
 """
 
     assert conversation.message('/admin modulestestbot echo') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a echo: <b>Choose a command</b>
+Bot Admin › modulestestbot › echo: <b>Choose a command</b>
 
-Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo.
+Type the name of a command to add (like <code>rules</code>—don't include a slash at the beginning!), or select an existing echo.
 [/echotest (new message) | /admin modulestestbot echo echotest]
 [Back | /admin modulestestbot]
 """
 
     assert conversation.message('textless paginate') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a echo \u203a textless: <b>Choose a field</b>
+Bot Admin › modulestestbot › echo › textless: <b>Choose a field</b>
 
 Enabled <code>paginate</code>.
-[text \u2022 The message, sticker, or image to send in response to /textless. | /admin modulestestbot echo textless text]
-[paginate (yes) \u2022 For multiline messages, display just one line at a time? | /admin modulestestbot echo textless paginate]
-[private (no) \u2022 Send the message in group chats, or just in private? | /admin modulestestbot echo textless private]
+[text • The message, sticker, or image to send in response to /textless. | /admin modulestestbot echo textless text]
+[paginate (yes) • For multiline messages, display just one line at a time? | /admin modulestestbot echo textless paginate]
+[private (no) • Send the message in group chats, or just in private? | /admin modulestestbot echo textless private]
 [Back | /admin modulestestbot echo]
 """
 
     assert conversation.message('/admin modulestestbot echo') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a echo: <b>Choose a command</b>
+Bot Admin › modulestestbot › echo: <b>Choose a command</b>
 
-Type the name of a command to add (like <code>rules</code>\u2014don't include a slash at the beginning!), or select an existing echo.
+Type the name of a command to add (like <code>rules</code>—don't include a slash at the beginning!), or select an existing echo.
 [/echotest (new message) | /admin modulestestbot echo echotest]
 [/textless | /admin modulestestbot echo textless]
 [Back | /admin modulestestbot]

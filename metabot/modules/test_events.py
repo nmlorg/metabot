@@ -62,7 +62,7 @@ I'm not configured for this group! Ask a bot admin to go into the <b>moderator</
     assert conversation.message(
         '/admin modulestestbot moderator -1001000001000 calendars add 6fc2c510') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a calendars: <b>Select a calendar</b>
+Bot Admin › modulestestbot › moderator › -1001000001000 › calendars: <b>Select a calendar</b>
 
 Added <code>6fc2c510</code> to your calendar view.
 
@@ -75,7 +75,7 @@ Select a calendar to add or remove from the list below:
 
     assert conversation.message('/admin modulestestbot moderator -1001000001000 timezone') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Type your 2-letter country code</b>
+Bot Admin › modulestestbot › moderator › -1001000001000 › timezone: <b>Type your 2-letter country code</b>
 
 Type your 2-letter country code (like US, CA, GB, etc.).
 [Back | /admin modulestestbot moderator -1001000001000]
@@ -84,7 +84,7 @@ Type your 2-letter country code (like US, CA, GB, etc.).
     assert conversation.message(
         '/admin modulestestbot moderator -1001000001000 timezone dummy') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Type your 2-letter country code</b>
+Bot Admin › modulestestbot › moderator › -1001000001000 › timezone: <b>Type your 2-letter country code</b>
 
 Unknown country code <code>DUMMY</code>.
 
@@ -95,7 +95,7 @@ Type your 2-letter country code (like US, CA, GB, etc.).
     assert conversation.message(
         '/admin modulestestbot moderator -1001000001000 timezone gb') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a primary city</b>
+Bot Admin › modulestestbot › moderator › -1001000001000 › timezone: <b>Choose a primary city</b>
 
 What time zone should be used in /events?
 
@@ -107,7 +107,7 @@ Choose a primary city:
     assert conversation.message(
         '/admin modulestestbot moderator -1001000001000 timezone us') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a primary city</b>
+Bot Admin › modulestestbot › moderator › -1001000001000 › timezone: <b>Choose a primary city</b>
 
 What time zone should be used in /events?
 
@@ -126,7 +126,7 @@ Choose a primary city:
     assert conversation.message(
         '/admin modulestestbot moderator -1001000001000 timezone US 1') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a primary city</b>
+Bot Admin › modulestestbot › moderator › -1001000001000 › timezone: <b>Choose a primary city</b>
 
 What time zone should be used in /events?
 
@@ -145,7 +145,7 @@ Choose a primary city:
     assert conversation.message(
         '/admin modulestestbot moderator -1001000001000 timezone US 2') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a primary city</b>
+Bot Admin › modulestestbot › moderator › -1001000001000 › timezone: <b>Choose a primary city</b>
 
 What time zone should be used in /events?
 
@@ -164,7 +164,7 @@ Choose a primary city:
     assert conversation.message(
         '/admin modulestestbot moderator -1001000001000 timezone US 3') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a primary city</b>
+Bot Admin › modulestestbot › moderator › -1001000001000 › timezone: <b>Choose a primary city</b>
 
 What time zone should be used in /events?
 
@@ -183,7 +183,7 @@ Choose a primary city:
     assert conversation.message(
         '/admin modulestestbot moderator -1001000001000 timezone US 4') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000 \u203a timezone: <b>Choose a primary city</b>
+Bot Admin › modulestestbot › moderator › -1001000001000 › timezone: <b>Choose a primary city</b>
 
 What time zone should be used in /events?
 
@@ -196,72 +196,72 @@ Choose a primary city:
     assert conversation.message(
         '/admin modulestestbot moderator -1001000001000 timezone US/Pacific') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
+Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 
 Set timezone to <code>US/Pacific</code>.
-[calendars (6fc2c510) \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
-[greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
-[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
-[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone (US/Pacific) \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[calendars (6fc2c510) • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone (US/Pacific) • What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """
 
     assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">NOW, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">NOW, Wed 31, 4:16–4:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 """
 
     assert conversation.message(
         '/admin modulestestbot moderator -1001000001000 timezone UTC') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
+Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 
 Set timezone to <code>UTC</code>.
-[calendars (6fc2c510) \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
-[greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
-[maxeventscount \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
-[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone (UTC) \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[calendars (6fc2c510) • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone (UTC) • What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """
 
     assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1, 12:16\u201312:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8, 12\u20131 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 """
 
     assert conversation.message(
         '/admin modulestestbot moderator -1001000001000 maxeventscount 1') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a moderator \u203a -1001000001000: <b>Choose a field</b>
+Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 
 Set <code>maxeventscount</code> to <code>1</code>.
-[calendars (6fc2c510) \u2022 Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily \u2022 Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow \u2022 Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext \u2022 One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
-[greeting \u2022 How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
-[maxeventscount (1) \u2022 How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
-[maxeventsdays \u2022 How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
-[timezone (UTC) \u2022 What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[calendars (6fc2c510) • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount (1) • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone (UTC) • What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
 [Back | /admin modulestestbot moderator]
 """
 
     assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1, 12:16\u201312:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 """
 
     monkeypatch.setattr('time.time', lambda: 2000000.)
@@ -283,15 +283,15 @@ Please choose one or more calendars and set your time zone!
 
     assert conversation.message('/events set') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events \u203a Settings: <b>Choose a field</b>
-[calendars \u2022 Which calendars do you want to see? | /events set calendars]
-[timezone \u2022 What time zone are you in? | /events set timezone]
+Events › Settings: <b>Choose a field</b>
+[calendars • Which calendars do you want to see? | /events set calendars]
+[timezone • What time zone are you in? | /events set timezone]
 [Back | /events]
 """
 
     assert conversation.message('/events set calendars') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
+Events › Settings › calendars: <b>Select a calendar</b>
 
 Which calendars do you want to see?
 
@@ -302,7 +302,7 @@ Select a calendar to add or remove from the list below:
 
     assert conversation.message('/events set calendars add 6fc2c510') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
+Events › Settings › calendars: <b>Select a calendar</b>
 
 Added <code>6fc2c510</code> to your calendar view.
 
@@ -315,18 +315,18 @@ Select a calendar to add or remove from the list below:
 
     assert conversation.message('/events set timezone US/Pacific') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events \u203a Settings: <b>Choose a field</b>
+Events › Settings: <b>Choose a field</b>
 
 Set timezone to <code>US/Pacific</code>.
-[calendars (6fc2c510) \u2022 Which calendars do you want to see? | /events set calendars]
-[timezone (US/Pacific) \u2022 What time zone are you in? | /events set timezone]
+[calendars (6fc2c510) • Which calendars do you want to see? | /events set calendars]
+[timezone (US/Pacific) • What time zone are you in? | /events set timezone]
 [Back | /events]
 """
 
     assert conversation.message('/events') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">NOW, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">NOW, Wed 31, 4:16–4:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 
 Alpha Description
 [\xa0 | /stop] [Settings | /events set] [Next | /events 6fc2c510:bravo]
@@ -335,7 +335,7 @@ Alpha Description
     assert conversation.message('/events 6fc2c510:bravo') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 <b>Bravo Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">1 week on Wed, Jan (1970) 7, 4–5 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
 Bravo Description
 [Prev | /events 6fc2c510:alpha] [Current | /events] [Next | /events 6fc2c510:charlie]
@@ -366,7 +366,7 @@ def test_inline(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
 
     assert conversation.message('/events set calendars add 6fc2c510') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
+Events › Settings › calendars: <b>Select a calendar</b>
 
 Added <code>6fc2c510</code> to your calendar view.
 
@@ -379,11 +379,11 @@ Select a calendar to add or remove from the list below:
 
     assert conversation.message('/events set timezone US/Pacific') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events \u203a Settings: <b>Choose a field</b>
+Events › Settings: <b>Choose a field</b>
 
 Set timezone to <code>US/Pacific</code>.
-[calendars (6fc2c510) \u2022 Which calendars do you want to see? | /events set calendars]
-[timezone (US/Pacific) \u2022 What time zone are you in? | /events set timezone]
+[calendars (6fc2c510) • Which calendars do you want to see? | /events set calendars]
+[timezone (US/Pacific) • What time zone are you in? | /events set timezone]
 [Back | /events]
 """
 
@@ -396,36 +396,36 @@ Set timezone to <code>US/Pacific</code>.
             'switch_pm_parameter': 'L2V2ZW50cyBzZXQ',
             'results': [
                 {
-                    'description': 'NOW, Wed 31, 4:16\u20134:33 pm @ Alpha Venue',
+                    'description': 'NOW, Wed 31, 4:16–4:33 pm @ Alpha Venue',
                     'id': '6fc2c510:alpha',
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Alpha Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">NOW, Wed 31, 4:16\u20134:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">NOW, Wed 31, 4:16–4:33 pm</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Alpha Summary',
                     'type': 'article',
                 },
                 {
-                    'description': '1 week on Wed, Jan (1970) 7, 4\u20135 pm @ Bravo Venue',
+                    'description': '1 week on Wed, Jan (1970) 7, 4–5 pm @ Bravo Venue',
                     'id': '6fc2c510:bravo',
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Bravo Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">1 week on Wed, Jan (1970) 7, 4–5 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Bravo Summary',
                     'type': 'article',
                 },
                 {
-                    'description': '1 week on Wed, Jan (1970) 7, 4\u20135 pm @ Charlie Venue',
+                    'description': '1 week on Wed, Jan (1970) 7, 4–5 pm @ Charlie Venue',
                     'id': '6fc2c510:charlie',
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Charlie Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVTL1BhY2lmaWM">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVTL1BhY2lmaWM">1 week on Wed, Jan (1970) 7, 4–5 pm</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Charlie Summary',
@@ -444,12 +444,12 @@ Set timezone to <code>US/Pacific</code>.
             'switch_pm_parameter': 'L2V2ZW50cyBzZXQ',
             'results': [
                 {
-                    'description': '1 week on Wed, Jan (1970) 7, 4\u20135 pm @ Bravo Venue',
+                    'description': '1 week on Wed, Jan (1970) 7, 4–5 pm @ Bravo Venue',
                     'id': '6fc2c510:bravo',
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Bravo Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">1 week on Wed, Jan (1970) 7, 4–5 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Bravo Summary',
@@ -473,12 +473,12 @@ Set timezone to <code>US/Pacific</code>.
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Bravo Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">1 week on Wed, Jan (1970) 7, 4\u20135 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>\n'
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">1 week on Wed, Jan (1970) 7, 4–5 pm</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>\n'
                                         '\n'
                                         'Bravo Description',
                         'parse_mode': 'HTML',
                     },
-                    'title': 'Bravo Summary \u2022 1 week on Wed, Jan (1970) 7, 4\u20135 pm @ Bravo Venue',
+                    'title': 'Bravo Summary • 1 week on Wed, Jan (1970) 7, 4–5 pm @ Bravo Venue',
                     'type': 'article',
                 },
             ],
@@ -504,15 +504,15 @@ def test_settings(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('/events set') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events \u203a Settings: <b>Choose a field</b>
-[calendars \u2022 Which calendars do you want to see? | /events set calendars]
-[timezone \u2022 What time zone are you in? | /events set timezone]
+Events › Settings: <b>Choose a field</b>
+[calendars • Which calendars do you want to see? | /events set calendars]
+[timezone • What time zone are you in? | /events set timezone]
 [Back | /events]
 """
 
     assert conversation.message('/events set calendars') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
+Events › Settings › calendars: <b>Select a calendar</b>
 
 Which calendars do you want to see?
 
@@ -523,7 +523,7 @@ Select a calendar to add or remove from the list below:
 
     assert conversation.message('/events set calendars add 6fc2c510') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
+Events › Settings › calendars: <b>Select a calendar</b>
 
 Added <code>6fc2c510</code> to your calendar view.
 
@@ -536,7 +536,7 @@ Select a calendar to add or remove from the list below:
 
     assert conversation.message('/events set calendars add 6fc2c510') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
+Events › Settings › calendars: <b>Select a calendar</b>
 
 <code>6fc2c510</code> is already in your calendar view!
 
@@ -549,7 +549,7 @@ Select a calendar to add or remove from the list below:
 
     assert conversation.message('/events set calendars remove 6fc2c510') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
+Events › Settings › calendars: <b>Select a calendar</b>
 
 Removed <code>6fc2c510</code> from your calendar view.
 
@@ -562,7 +562,7 @@ Select a calendar to add or remove from the list below:
 
     assert conversation.message('/events set calendars remove 6fc2c510') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
+Events › Settings › calendars: <b>Select a calendar</b>
 
 <code>6fc2c510</code> is not in your calendar view!
 
@@ -575,7 +575,7 @@ Select a calendar to add or remove from the list below:
 
     assert conversation.message('/events set calendars add bogus') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events \u203a Settings \u203a calendars: <b>Select a calendar</b>
+Events › Settings › calendars: <b>Select a calendar</b>
 
 <code>bogus</code> is not a calendar!
 
@@ -588,11 +588,11 @@ Select a calendar to add or remove from the list below:
 
     assert conversation.message('/events set bogus') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events \u203a Settings: <b>Choose a field</b>
+Events › Settings: <b>Choose a field</b>
 
 I can't set <code>bogus</code>.
-[calendars \u2022 Which calendars do you want to see? | /events set calendars]
-[timezone \u2022 What time zone are you in? | /events set timezone]
+[calendars • Which calendars do you want to see? | /events set calendars]
+[timezone • What time zone are you in? | /events set timezone]
 [Back | /events]
 """
 
@@ -604,7 +604,7 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 <b>Commands</b>
 
-/events \u2013 Display recent and upcoming events
+/events – Display recent and upcoming events
 """
 
 
@@ -647,7 +647,7 @@ def test_format_daily_message():  # pylint: disable=missing-docstring
         'EVENT1')
 
     assert events._format_daily_message('Visit @MYGROUP', ['EVENT1']) == (
-        "Visit @MYGROUP \u2022 Also, there's an event coming up:\n"
+        "Visit @MYGROUP • Also, there's an event coming up:\n"
         '\n'
         'EVENT1')
 

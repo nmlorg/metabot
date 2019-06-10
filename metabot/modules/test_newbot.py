@@ -157,5 +157,5 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 <b>Commands</b>
 
-/newbot \u2013 Set up a new bot
+/newbot – Set up a new bot
 """

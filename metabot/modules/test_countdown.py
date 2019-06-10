@@ -50,9 +50,9 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 <b>Commands</b>
 
-/count1 \u2013 Count up from 1534906800
+/count1 – Count up from 1534906800
 
-/count2 \u2013 Count down to 15349068000
+/count2 – Count down to 15349068000
 """
 
 
@@ -61,15 +61,15 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('/admin modulestestbot countdown') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a countdown: <b>Choose a command</b>
+Bot Admin › modulestestbot › countdown: <b>Choose a command</b>
 
-Type the name of a command to add (like <code>days</code>\u2014don't include a slash at the beginning!), or select an existing countdown to remove.
+Type the name of a command to add (like <code>days</code>—don't include a slash at the beginning!), or select an existing countdown to remove.
 [Back | /admin modulestestbot]
 """
 
     assert conversation.message('CountDownTest') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a countdown \u203a countdowntest: <b>Type the time for /countdowntest</b>
+Bot Admin › modulestestbot › countdown › countdowntest: <b>Type the time for /countdowntest</b>
 
 This is a little technical (it will be made simpler in the future), but type the unix timestamp to count down to.
 
@@ -79,29 +79,29 @@ This is a little technical (it will be made simpler in the future), but type the
 
     assert conversation.message('1534906800') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a countdown: <b>Choose a command</b>
+Bot Admin › modulestestbot › countdown: <b>Choose a command</b>
 
 /countdowntest is now counting down to <code>1534906800</code>.
 
-Type the name of a command to add (like <code>days</code>\u2014don't include a slash at the beginning!), or select an existing countdown to remove.
+Type the name of a command to add (like <code>days</code>—don't include a slash at the beginning!), or select an existing countdown to remove.
 [/countdowntest (1534906800) | /admin modulestestbot countdown countdowntest remove]
 [Back | /admin modulestestbot]
 """
 
     assert conversation.message('/admin modulestestbot countdown countdowntest 1000') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a countdown: <b>Choose a command</b>
+Bot Admin › modulestestbot › countdown: <b>Choose a command</b>
 
 Changed /countdowntest from <code>1534906800</code> to <code>1000</code>.
 
-Type the name of a command to add (like <code>days</code>\u2014don't include a slash at the beginning!), or select an existing countdown to remove.
+Type the name of a command to add (like <code>days</code>—don't include a slash at the beginning!), or select an existing countdown to remove.
 [/countdowntest (1000) | /admin modulestestbot countdown countdowntest remove]
 [Back | /admin modulestestbot]
 """
 
     assert conversation.message('/admin modulestestbot countdown countdowntest bogus<>') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a countdown \u203a countdowntest: <b>Type the time for /countdowntest</b>
+Bot Admin › modulestestbot › countdown › countdowntest: <b>Type the time for /countdowntest</b>
 
 I'm not sure how to count down to <code>bogus&lt;&gt;</code>!
 
@@ -113,20 +113,20 @@ This is a little technical (it will be made simpler in the future), but type the
 
     assert conversation.message('remove') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a countdown: <b>Choose a command</b>
+Bot Admin › modulestestbot › countdown: <b>Choose a command</b>
 
 Removed /countdowntest (which was counting down to <code>1000</code>).
 
-Type the name of a command to add (like <code>days</code>\u2014don't include a slash at the beginning!), or select an existing countdown to remove.
+Type the name of a command to add (like <code>days</code>—don't include a slash at the beginning!), or select an existing countdown to remove.
 [Back | /admin modulestestbot]
 """
 
     assert conversation.message('/admin modulestestbot countdown bogus remove') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a countdown: <b>Choose a command</b>
+Bot Admin › modulestestbot › countdown: <b>Choose a command</b>
 
 /bogus is not currently counting down to anything.
 
-Type the name of a command to add (like <code>days</code>\u2014don't include a slash at the beginning!), or select an existing countdown to remove.
+Type the name of a command to add (like <code>days</code>—don't include a slash at the beginning!), or select an existing countdown to remove.
 [Back | /admin modulestestbot]
 """

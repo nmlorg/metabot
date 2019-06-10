@@ -25,7 +25,7 @@ I don't know about any public groups yet, sorry!
 
     assert conversation.message('/admin modulestestbot groups') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a groups: <b>Type a group username or invite link</b>
+Bot Admin › modulestestbot › groups: <b>Type a group username or invite link</b>
 
 Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:
 [Back | /admin modulestestbot]
@@ -55,12 +55,12 @@ Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code
 
     assert conversation.message('@dummygroup') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a groups: <b>Type a group username or invite link</b>
+Bot Admin › modulestestbot › groups: <b>Type a group username or invite link</b>
 
 Added <b>Dummy Public Group!</b>.
 
 Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:
-[Dummy Public Group! \u2022 DummyGroup | /admin modulestestbot groups remove 92aa63]
+[Dummy Public Group! • DummyGroup | /admin modulestestbot groups remove 92aa63]
 [Back | /admin modulestestbot]
 """
 
@@ -81,13 +81,13 @@ Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code
 
     assert conversation.message('https://t.me/joinchat/DUMMY_INVITE_LINK') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a groups: <b>Type a group username or invite link</b>
+Bot Admin › modulestestbot › groups: <b>Type a group username or invite link</b>
 
 Added <b>Dummy Private Group!</b>.
 
 Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:
-[Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK | /admin modulestestbot groups remove c5bfc8]
-[Dummy Public Group! \u2022 DummyGroup | /admin modulestestbot groups remove 92aa63]
+[Dummy Private Group! • https://t.me/joinchat/DUMMY_INVITE_LINK | /admin modulestestbot groups remove c5bfc8]
+[Dummy Public Group! • DummyGroup | /admin modulestestbot groups remove 92aa63]
 [Back | /admin modulestestbot]
 """
 
@@ -99,7 +99,7 @@ Group List: <b>Choose a location</b>
 
     assert conversation.message('/groups Worldwide') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Group List \u203a Worldwide
+Group List › Worldwide
 
 <a href="https://t.me/joinchat/DUMMY_INVITE_LINK">Dummy Private Group!</a>
 Dummy private group
@@ -125,7 +125,7 @@ Dummy public group
                                         'Dummy private group',
                         'parse_mode': 'HTML',
                     },
-                    'title': 'Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK',
+                    'title': 'Dummy Private Group! • https://t.me/joinchat/DUMMY_INVITE_LINK',
                     'type': 'article',
                 },
                 {
@@ -137,7 +137,7 @@ Dummy public group
                                         'Dummy public group',
                         'parse_mode': 'HTML',
                     },
-                    'title': 'Dummy Public Group! \u2022 DummyGroup',
+                    'title': 'Dummy Public Group! • DummyGroup',
                     'type': 'article',
                 },
             ],
@@ -158,7 +158,7 @@ Dummy public group
                                         'Dummy private group',
                         'parse_mode': 'HTML',
                     },
-                    'title': 'Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK',
+                    'title': 'Dummy Private Group! • https://t.me/joinchat/DUMMY_INVITE_LINK',
                     'type': 'article',
                 },
             ],
@@ -167,24 +167,24 @@ Dummy public group
 
     assert conversation.message('/admin modulestestbot groups remove blah') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a groups: <b>Type a group username or invite link</b>
+Bot Admin › modulestestbot › groups: <b>Type a group username or invite link</b>
 
 Oops, the groups list changed since you loaded that screen, try again.
 
 Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:
-[Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK | /admin modulestestbot groups remove c5bfc8]
-[Dummy Public Group! \u2022 DummyGroup | /admin modulestestbot groups remove 92aa63]
+[Dummy Private Group! • https://t.me/joinchat/DUMMY_INVITE_LINK | /admin modulestestbot groups remove c5bfc8]
+[Dummy Public Group! • DummyGroup | /admin modulestestbot groups remove 92aa63]
 [Back | /admin modulestestbot]
 """
 
     assert conversation.message('/admin modulestestbot groups remove 92aa63') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin \u203a modulestestbot \u203a groups: <b>Type a group username or invite link</b>
+Bot Admin › modulestestbot › groups: <b>Type a group username or invite link</b>
 
 Removed <b>Dummy Public Group!</b>.
 
 Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code> for the group you want to add, or select an existing group to remove:
-[Dummy Private Group! \u2022 https://t.me/joinchat/DUMMY_INVITE_LINK | /admin modulestestbot groups remove c5bfc8]
+[Dummy Private Group! • https://t.me/joinchat/DUMMY_INVITE_LINK | /admin modulestestbot groups remove c5bfc8]
 [Back | /admin modulestestbot]
 """
 
@@ -196,5 +196,5 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 <b>Commands</b>
 
-/groups \u2013 Find other group chats
+/groups – Find other group chats
 """

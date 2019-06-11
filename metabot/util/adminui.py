@@ -142,7 +142,7 @@ def forward(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-a
 
     msg.add(desc)
     fieldset = (
-        ('from', integer, 'What group should messages be forwarded from?'),
+        ('from', groupid, 'What group should messages be forwarded from?'),
         ('notify', bool, 'Should forwarded messages trigger a notification?'),
     )
     return fields(ctx, msg, subconf[field], fieldset, text)
@@ -181,6 +181,21 @@ def freeform(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-
         if subconf.get(field):
             msg.add('<code>%s</code> is currently <code>%s</code>.', field, subconf[field])
         msg.add('Type your new value, or type "off" to disable/reset to default.')
+
+
+def groupid(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments
+    """Select a group."""
+
+    if text in ctx.bot.config['issue37']['moderator']:
+        subconf[field] = text
+        msg.add('Set <code>%s</code> to <code>%s</code>.', field, text)
+        return
+
+    msg.action = 'Select a group'
+    msg.add(desc)
+    msg.add('Select a group:')
+    for group_id, groupconf in sorted(ctx.bot.config['issue37']['moderator'].items()):
+        msg.button('%s (%s)' % (group_id, groupconf['title']), group_id)
 
 
 def integer(unused_ctx, msg, subconf, field, desc, text):

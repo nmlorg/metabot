@@ -8,7 +8,11 @@ from metabot.modules import moderator
 
 @pytest.fixture
 def conversation(build_conversation):  # pylint: disable=missing-docstring
-    return build_conversation(echo, moderator)
+    conv = build_conversation(echo, moderator)
+    conv.groupconf = conv.multibot.conf['bots']['modulestestbot']['issue37']['moderator'][
+        '-1001000001000']
+    conv.groupconf['title'] = 'Test Group'
+    return conv
 
 
 # pylint: disable=line-too-long
@@ -51,10 +55,6 @@ Disabled <code>paginate</code>.
 def test_daysofweek(conversation):  # pylint: disable=redefined-outer-name
     """Test adminui.daysofweek."""
 
-    groupconf = conversation.multibot.conf['bots']['modulestestbot']['issue37']['moderator'][
-        '-1001000001000']
-    groupconf['_dummy'] = 0
-
     assert conversation.message('/admin modulestestbot moderator -1001000001000 dailydow') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › moderator › -1001000001000 › dailydow: <b>Select a day of the week to toggle</b>
@@ -71,7 +71,7 @@ Select a day of the week to toggle:
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 
-    assert 'dailydow' not in groupconf
+    assert 'dailydow' not in conversation.groupconf
 
     assert conversation.message('none') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
@@ -89,7 +89,7 @@ Select a day of the week to toggle:
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 
-    assert groupconf['dailydow'] == 127
+    assert conversation.groupconf['dailydow'] == 127
 
     assert conversation.message('1') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
@@ -107,7 +107,7 @@ Select a day of the week to toggle:
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 
-    assert groupconf['dailydow'] == 125
+    assert conversation.groupconf['dailydow'] == 125
 
     assert conversation.message('6') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
@@ -125,7 +125,7 @@ Select a day of the week to toggle:
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 
-    assert groupconf['dailydow'] == 61
+    assert conversation.groupconf['dailydow'] == 61
 
     assert conversation.message('3') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
@@ -143,7 +143,7 @@ Select a day of the week to toggle:
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 
-    assert groupconf['dailydow'] == 53
+    assert conversation.groupconf['dailydow'] == 53
 
     assert conversation.message('all') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
@@ -161,15 +161,14 @@ Select a day of the week to toggle:
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 
-    assert 'dailydow' not in groupconf
+    assert 'dailydow' not in conversation.groupconf
 
 
 def test_forward(conversation):  # pylint: disable=redefined-outer-name
     """Test adminui.forward."""
 
-    groupconf = conversation.multibot.conf['bots']['modulestestbot']['issue37']['moderator'][
-        '-1001000001000']
-    groupconf['_dummy'] = 0
+    conversation.multibot.conf['bots']['modulestestbot']['issue37']['moderator']['-1002000002000'][
+        'title'] = 'Forward Source'
 
     assert conversation.message('/admin modulestestbot moderator -1001000001000 forward') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
@@ -184,13 +183,15 @@ Automatically forward messages from one chat to this one.
     assert conversation.message(
         '/admin modulestestbot moderator -1001000001000 forward from') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin › modulestestbot › moderator › -1001000001000 › forward › from: <b>Type a new value for from</b>
+Bot Admin › modulestestbot › moderator › -1001000001000 › forward › from: <b>Select a group</b>
 
 Automatically forward messages from one chat to this one.
 
 What group should messages be forwarded from?
 
-Type your new value, or type "off" to disable/reset to default.
+Select a group:
+[-1001000001000 (Test Group) | /admin modulestestbot moderator -1001000001000 forward from -1001000001000]
+[-1002000002000 (Forward Source) | /admin modulestestbot moderator -1001000001000 forward from -1002000002000]
 [Back | /admin modulestestbot moderator -1001000001000 forward]
 """
 
@@ -210,10 +211,6 @@ Set <code>from</code> to <code>-1002000002000</code>.
 def test_integer(conversation):  # pylint: disable=redefined-outer-name
     """Test adminui.integer."""
 
-    groupconf = conversation.multibot.conf['bots']['modulestestbot']['issue37']['moderator'][
-        '-1001000001000']
-    groupconf['_dummy'] = 0
-
     assert conversation.message('/admin modulestestbot moderator -1001000001000 daily') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › moderator › -1001000001000 › daily: <b>Type a new value for daily</b>
@@ -224,7 +221,7 @@ Type your new value, or type "off" to disable/reset to default.
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 
-    assert 'daily' not in groupconf
+    assert 'daily' not in conversation.groupconf
 
     assert conversation.message('8') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
@@ -243,7 +240,7 @@ Set <code>daily</code> to <code>8</code>.
 [Back | /admin modulestestbot moderator]
 """
 
-    assert groupconf['daily'] == 8
+    assert conversation.groupconf['daily'] == 8
 
     assert conversation.message('/admin modulestestbot moderator -1001000001000 daily') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
@@ -274,7 +271,7 @@ Changed <code>daily</code> from <code>8</code> to <code>9</code>.
 [Back | /admin modulestestbot moderator]
 """
 
-    assert groupconf['daily'] == 9
+    assert conversation.groupconf['daily'] == 9
 
     assert conversation.message('daily off') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
@@ -293,7 +290,7 @@ Unset <code>daily</code> (was <code>9</code>).
 [Back | /admin modulestestbot moderator]
 """
 
-    assert 'daily' not in groupconf
+    assert 'daily' not in conversation.groupconf
 
     assert conversation.message('daily off') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]

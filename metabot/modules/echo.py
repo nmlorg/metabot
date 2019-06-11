@@ -37,7 +37,7 @@ def echo(ctx, msg, data):  # pylint: disable=missing-docstring
 def admin(ctx, msg, modconf):
     """Handle /admin BOTNAME echo."""
 
-    command, field, message = ctx.split(3)
+    command, text = ctx.split(2)
     command = command.lower()
 
     if not command:
@@ -54,17 +54,10 @@ def admin(ctx, msg, modconf):
 
     msg.path(command)
 
-    if ctx.document:  # pragma: no cover
-        message = 'document:%s' % ctx.document
-    elif ctx.photo:  # pragma: no cover
-        message = 'photo:%s' % ctx.photo
-    elif ctx.sticker:  # pragma: no cover
-        message = 'sticker:%s' % ctx.sticker
-
     fields = (
         ('text', adminui.freeform,
          'The message, sticker, or image to send in response to /%s.' % command),
         ('paginate', adminui.bool, 'For multiline messages, display just one line at a time?'),
         ('private', adminui.bool, 'Send the message in group chats, or just in private?'),
     )
-    return adminui.fields(ctx, msg, modconf[command], fields, field, message)
+    return adminui.fields(ctx, msg, modconf[command], fields, text)

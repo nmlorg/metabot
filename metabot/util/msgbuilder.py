@@ -29,6 +29,12 @@ class MessageBuilder(object):
         self._path.append(path)
         self._title.append(title or path)
 
+    def pathpop(self):
+        """Remove the most-recently added path/title component."""
+
+        self._path.pop()
+        self._title.pop()
+
     def add(self, line, *args):
         """Add line to the message body, interpolating HTML-escaped args if provided."""
 

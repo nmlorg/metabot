@@ -276,7 +276,7 @@ def humanize_range(start, end, tzinfo):
 def settings(ctx, msg, modconf):
     """Handle /events set."""
 
-    _, field, text = ctx.split(3)
+    _, text = ctx.split(2)
 
     msg.path('/events', 'Events')
     msg.path('set', 'Settings')
@@ -287,4 +287,4 @@ def settings(ctx, msg, modconf):
         ('calendars', adminui.calendars, 'Which calendars do you want to see?'),
         ('timezone', adminui.timezone, 'What time zone are you in?'),
     )
-    return adminui.fields(ctx, msg, userconf, fields, field, text)
+    return adminui.fields(ctx, msg, userconf, fields, text)

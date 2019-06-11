@@ -164,6 +164,49 @@ Select a day of the week to toggle:
     assert 'dailydow' not in groupconf
 
 
+def test_forward(conversation):  # pylint: disable=redefined-outer-name
+    """Test adminui.forward."""
+
+    groupconf = conversation.multibot.conf['bots']['modulestestbot']['issue37']['moderator'][
+        '-1001000001000']
+    groupconf['_dummy'] = 0
+
+    assert conversation.message('/admin modulestestbot moderator -1001000001000 forward') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin › modulestestbot › moderator › -1001000001000 › forward: <b>Choose a field</b>
+
+Automatically forward messages from one chat to this one.
+[from • What group should messages be forwarded from? | /admin modulestestbot moderator -1001000001000 forward from]
+[notify (no) • Should forwarded messages trigger a notification? | /admin modulestestbot moderator -1001000001000 forward notify]
+[Back | /admin modulestestbot moderator -1001000001000]
+"""
+
+    assert conversation.message(
+        '/admin modulestestbot moderator -1001000001000 forward from') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin › modulestestbot › moderator › -1001000001000 › forward › from: <b>Type a new value for from</b>
+
+Automatically forward messages from one chat to this one.
+
+What group should messages be forwarded from?
+
+Type your new value, or type "off" to disable/reset to default.
+[Back | /admin modulestestbot moderator -1001000001000 forward]
+"""
+
+    assert conversation.message('-1002000002000') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin › modulestestbot › moderator › -1001000001000 › forward: <b>Choose a field</b>
+
+Automatically forward messages from one chat to this one.
+
+Set <code>from</code> to <code>-1002000002000</code>.
+[from (-10020000…) • What group should messages be forwarded from? | /admin modulestestbot moderator -1001000001000 forward from]
+[notify (no) • Should forwarded messages trigger a notification? | /admin modulestestbot moderator -1001000001000 forward notify]
+[Back | /admin modulestestbot moderator -1001000001000]
+"""
+
+
 def test_integer(conversation):  # pylint: disable=redefined-outer-name
     """Test adminui.integer."""
 
@@ -192,6 +235,7 @@ Set <code>daily</code> to <code>8</code>.
 [daily (8) • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
 [dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
 [maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
@@ -222,6 +266,7 @@ Changed <code>daily</code> from <code>8</code> to <code>9</code>.
 [daily (9) • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
 [dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
 [maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
@@ -240,6 +285,7 @@ Unset <code>daily</code> (was <code>9</code>).
 [daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
 [dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
 [maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
@@ -258,6 +304,7 @@ Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field
 [daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
 [dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
 [maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]

@@ -10,6 +10,12 @@ def modpredispatch(ctx, unused_msg, modconf):  # pylint: disable=missing-docstri
         groupconf = modconf[group_id]
         groupconf['title'] = ctx.chat.get('title')
 
+        if ctx.type == 'message':
+            for target_group_id, target_groupconf in ctx.bot.config['issue37']['moderator'].items():
+                if target_groupconf['forward']['from'] == ctx.chat['id']:
+                    ctx.forward(int(target_group_id),
+                                disable_notification=not target_groupconf['forward']['notify'])
+
 
 def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
     if ctx.type == 'join':
@@ -56,7 +62,7 @@ def join(ctx, msg, modconf):
 def admin(ctx, msg, modconf):
     """Handle /admin BOTNAME moderator."""
 
-    group_id, field, text = ctx.split(3)
+    group_id, text = ctx.split(2)
 
     if group_id not in modconf:
         msg.action = 'Choose a group'
@@ -74,9 +80,10 @@ def admin(ctx, msg, modconf):
          'Which days of the week should I announce upcoming events on?'),
         ('dailytext', adminui.freeform,
          'One or more messages (one per line) to use/cycle through for the daily announcement.'),
+        ('forward', adminui.forward, 'Automatically forward messages from one chat to this one.'),
         ('greeting', adminui.freeform, 'How should I greet people when they join?'),
         ('maxeventscount', adminui.integer, 'How many events should be listed in /events?'),
         ('maxeventsdays', adminui.integer, 'How many days into the future should /events look?'),
         ('timezone', adminui.timezone, 'What time zone should be used in /events?'),
     )
-    return adminui.fields(ctx, msg, groupconf, fields, field, text)
+    return adminui.fields(ctx, msg, groupconf, fields, text)

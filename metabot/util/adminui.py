@@ -108,20 +108,22 @@ def daysofweek(unused_ctx, msg, subconf, field, desc, text):  # pylint: disable=
         msg.buttons(buttons)
 
 
-def fields(ctx, msg, subconf, fieldset, field, text):  # pylint: disable=too-many-arguments
+def fields(ctx, msg, subconf, fieldset, text):  # pylint: disable=too-many-arguments
     """Present a menu of fields to edit."""
 
+    field, _, text = text.partition(' ')
     for fieldname, uifunc, fielddesc in fieldset:
         if fieldname == field:
+            msg.path(field)
             uifunc(ctx, msg, subconf, field, fielddesc, text)
+            if not msg.action:
+                msg.pathpop()
             break
     else:
         if field:
             msg.add("I can't set <code>%s</code>.", field)
 
-    if msg.action:
-        msg.path(field)
-    else:
+    if not msg.action:
         msg.action = 'Choose a field'
         for fieldname, uifunc, fielddesc in fieldset:
             value = subconf.get(fieldname)
@@ -135,8 +137,26 @@ def fields(ctx, msg, subconf, fieldset, field, text):  # pylint: disable=too-man
             msg.button('%s \u2022 %s' % (label, fielddesc), fieldname)
 
 
-def freeform(unused_ctx, msg, subconf, field, desc, text):
+def forward(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments
+    """Configure the bot to forward messages from one chat to another."""
+
+    msg.add(desc)
+    fieldset = (
+        ('from', integer, 'What group should messages be forwarded from?'),
+        ('notify', bool, 'Should forwarded messages trigger a notification?'),
+    )
+    return fields(ctx, msg, subconf[field], fieldset, text)
+
+
+def freeform(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments,too-many-branches
     """Configure a free-form text field."""
+
+    if ctx.document:  # pragma: no cover
+        text = 'document:%s' % ctx.document
+    elif ctx.photo:  # pragma: no cover
+        text = 'photo:%s' % ctx.photo
+    elif ctx.sticker:  # pragma: no cover
+        text = 'sticker:%s' % ctx.sticker
 
     if text:
         if text.lower() in ('-', 'none', 'off'):
@@ -167,9 +187,9 @@ def integer(unused_ctx, msg, subconf, field, desc, text):
     """Configure an integer field."""
 
     if text:
-        if text.isdigit():
+        try:
             value = int(text)
-        else:
+        except ValueError:
             value = None
         if subconf.get(field) is not None:
             if value is not None:

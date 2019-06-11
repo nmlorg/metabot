@@ -13,6 +13,20 @@ def conversation(build_conversation):  # pylint: disable=missing-docstring
 # pylint: disable=line-too-long
 
 
+def test_forward(conversation):  # pylint: disable=redefined-outer-name
+    """Test autoforward."""
+
+    assert conversation.message('Test Forward', chat_type='channel') == ''
+
+    conversation.bot.config['issue37']['moderator']['-1002000002000']['forward'][
+        'from'] = -1001000001000
+
+    assert conversation.message('Test Forward', chat_type='channel') == """\
+[chat_id=-1002000002000 disable_notification=True from_chat_id=-1001000001000 message_id=2000]
+(EMPTY MESSAGE)
+"""
+
+
 def test_admin(conversation):  # pylint: disable=redefined-outer-name
     """Test /admin BOTNAME moderator."""
 
@@ -49,6 +63,7 @@ Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field
 [daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
 [dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
 [maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
@@ -65,6 +80,7 @@ I can't set <code>bogus</code>.
 [daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
 [dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
 [maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
@@ -92,6 +108,7 @@ Set <code>greeting</code> to <code>Welcome to chat title, new users! &lt;b&gt;In
 [daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
 [dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting (Welcome t…) • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
 [maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
@@ -183,6 +200,7 @@ Changed <code>greeting</code> from <code>Welcome to chat title, new users! &lt;b
 [daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
 [dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting (Welcome! …) • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
 [maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
@@ -211,6 +229,7 @@ Unset <code>greeting</code> (was <code>Welcome! New message.</code>).
 [daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
 [dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
 [maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
@@ -228,6 +247,7 @@ Unset <code>greeting</code>.
 [daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
 [dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
 [dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
 [maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]

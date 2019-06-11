@@ -14,7 +14,7 @@ setuptools.setup(
     package_data={'': ['*.html']},
     python_requires='>=3.5',
     install_requires=[
-        'ntelebot >= 0.2',
+        'ntelebot >= 0.3.1',
         'pytz',
         'PyYAML >= 5.1',
         'requests',

@@ -70,13 +70,13 @@ class BotConf(dicttools.ImplicitTrackingDict):
         finally:
             log = self.finalize()
             if log:
-                userdata = ['%s' % ctx.user['id']]
-                if ctx.user.get('username'):
-                    userdata.append('@' + ctx.user['username'])
-                if ctx.user.get('first_name') or ctx.user.get('last_name'):
-                    userdata.append(
-                        repr('%s %s' % (ctx.user.get('first_name', ''), ctx.user.get(
-                            'last_name', ''))).strip())
+                userdata = []
+                if ctx.userinfo:
+                    userdata.append('%s' % ctx.user['id'])
+                    if ctx.userinfo.data.username:
+                        userdata.append('@' + ctx.userinfo.data.username)
+                    if ctx.userinfo.data.name:
+                        userdata.append(repr(ctx.userinfo.data.name))
                 for path, (value, orig) in sorted(log.items()):
                     pathstr = '.'.join('%s' % part for part in path)
                     logging.info('[%s] %s: %r -> %r', ' '.join(userdata), pathstr, orig, value)

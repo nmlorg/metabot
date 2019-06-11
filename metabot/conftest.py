@@ -73,8 +73,17 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
             chat = {'id': user_id, 'type': 'private'}
         else:
             chat = {'id': -1001000000000 - user_id, 'type': chat_type, 'title': 'Group Chat'}
-        message = {'from': user, 'chat': chat, 'message_id': user_id * 2, 'text': text}
-        update = {'message': message}
+        if chat_type == 'channel':
+            channel_post = {
+                'author_signature': user['first_name'],
+                'chat': chat,
+                'message_id': user_id * 2,
+                'text': text,
+            }
+            update = {'channel_post': channel_post}
+        else:
+            message = {'from': user, 'chat': chat, 'message_id': user_id * 2, 'text': text}
+            update = {'message': message}
         responses = []
 
         def _handler(request, unused_context):

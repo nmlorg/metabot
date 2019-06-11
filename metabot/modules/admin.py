@@ -77,7 +77,8 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
     admin_callback = modules[modname].admin
     ctx.command = 'admin %s %s' % (username, modname)
     ctx.text = text
-    return admin_callback(ctx, msg, ctx.bot.multibot.conf['bots'][username]['issue37'][modname])
+    ctx.targetbotconf = ctx.bot.multibot.conf['bots'][username]
+    return admin_callback(ctx, msg, ctx.targetbotconf['issue37'][modname])
 
 
 def bootstrap(ctx, msg, modconf):

@@ -186,7 +186,7 @@ def freeform(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-
 def groupid(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments
     """Select a group."""
 
-    if text in ctx.bot.config['issue37']['moderator']:
+    if text in ctx.targetbotconf['issue37']['moderator']:
         subconf[field] = text
         msg.add('Set <code>%s</code> to <code>%s</code>.', field, text)
         return
@@ -194,7 +194,7 @@ def groupid(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-a
     msg.action = 'Select a group'
     msg.add(desc)
     msg.add('Select a group:')
-    for group_id, groupconf in sorted(ctx.bot.config['issue37']['moderator'].items()):
+    for group_id, groupconf in sorted(ctx.targetbotconf['issue37']['moderator'].items()):
         msg.button('%s (%s)' % (group_id, groupconf['title']), group_id)
 
 

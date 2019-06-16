@@ -1,7 +1,47 @@
 """Simple group/supergroup moderator tools."""
 
+import logging
+import random
+
+import ntelebot
+
 from metabot.util import adminui
 from metabot.util import humanize
+
+
+def modinit(multibot):  # pylint: disable=missing-docstring
+
+    def _queue():
+        multibot.loop.queue.puthourly(30 * 60, _hourly, jitter=random.random() * 5)
+
+    def _hourly():
+        try:
+            checked = set()
+            for botconf in multibot.conf['bots'].values():
+                # See https://github.com/nmlorg/metabot/issues/26.
+                bot = ntelebot.bot.Bot(botconf['issue37']['telegram']['token'])
+                bot.multibot = multibot
+                for groupid in botconf['issue37']['moderator']:
+                    groupid = int(groupid)
+                    if groupid in checked:
+                        continue
+                    groupdata = multibot.conf['groups'][groupid]
+                    try:
+                        data = bot.get_chat_administrators(chat_id=groupid)
+                    except ntelebot.errors.Error:
+                        continue
+                    checked.add(groupid)
+                    groupdata['admins'] = sorted(member['user']['id'] for member in data)
+            log = multibot.conf.finalize()
+            if log:
+                for path, (value, orig) in sorted(log.items()):
+                    pathstr = '.'.join('%s' % part for part in path)
+                    logging.info('[moderator] %s: %r -> %r', pathstr, orig, value)
+                multibot.conf.save()
+        finally:
+            _queue()
+
+    _queue()
 
 
 def modpredispatch(ctx, unused_msg, modconf):  # pylint: disable=missing-docstring
@@ -20,6 +60,11 @@ def modpredispatch(ctx, unused_msg, modconf):  # pylint: disable=missing-docstri
 def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
     if ctx.type == 'join':
         join(ctx, msg, modconf)
+
+    if ctx.type in ('message', 'callback_query') and ctx.command == 'mod':
+        msg.path('/mod', 'Group Admin')
+        ctx.targetbotconf = ctx.bot.config
+        return admin(ctx, msg, modconf, botadmin=False)
 
     return False
 
@@ -59,14 +104,27 @@ def join(ctx, msg, modconf):
     msg.add(greeting)
 
 
-def admin(ctx, msg, modconf):
+def admin(ctx, msg, modconf, botadmin=True):
     """Handle /admin BOTNAME moderator."""
+
+    groups = sorted(
+        group_id for group_id in modconf
+        if botadmin or ctx.user['id'] in ctx.bot.multibot.conf['groups'][int(group_id)]['admins'])
+
+    if not groups:
+        if botadmin:
+            return msg.add(
+                "I'm not in any groups! Add me to an existing group from its details screen.")
+        return msg.add(
+            "Hi! You aren't an admin in any groups I'm in. If you should be, ask a current admin "
+            "to promote you from the group's members list.")
 
     group_id, text = ctx.split(2)
 
-    if group_id not in modconf:
+    if group_id not in groups:
         msg.action = 'Choose a group'
-        for group_id, groupconf in sorted(modconf.items()):
+        for group_id in groups:
+            groupconf = modconf[group_id]
             msg.button('%s (%s)' % (group_id, groupconf['title']), group_id)
         return
 

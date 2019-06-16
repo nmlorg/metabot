@@ -27,12 +27,57 @@ def test_forward(conversation):  # pylint: disable=redefined-outer-name
 """
 
 
+def test_mod(conversation):  # pylint: disable=redefined-outer-name
+    """Test /mod."""
+
+    conversation.bot.config['issue37']['moderator']['-1001000001000']['title'] = 'Mod Test'
+    conversation.bot.config['issue37']['moderator']['-1002000002000']['title'] = 'Hidden Group'
+
+    assert conversation.message('/mod', user_id=2000) == """\
+[chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
+Group Admin
+
+Hi! You aren't an admin in any groups I'm in. If you should be, ask a current admin to promote you from the group's members list.
+"""
+
+    conversation.multibot.conf['groups'][-1001000001000]['admins'] = [2000]
+
+    assert conversation.message('/mod', user_id=2000) == """\
+[chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
+Group Admin: <b>Choose a group</b>
+[-1001000001000 (Mod Test) | /mod -1001000001000]
+"""
+
+    assert conversation.message('/mod -1002000002000', user_id=2000) == """\
+[chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
+Group Admin: <b>Choose a group</b>
+[-1001000001000 (Mod Test) | /mod -1001000001000]
+"""
+
+    assert conversation.message('/mod -1001000001000', user_id=2000) == """\
+[chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
+Group Admin › -1001000001000: <b>Choose a field</b>
+[calendars • Which calendars should be listed in /events? | /mod -1001000001000 calendars]
+[daily • Should I announce upcoming events once a day? If so, at what hour? | /mod -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /mod -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /mod -1001000001000 dailytext]
+[forward • Automatically forward messages from one chat to this one. | /mod -1001000001000 forward]
+[greeting • How should I greet people when they join? | /mod -1001000001000 greeting]
+[maxeventscount • How many events should be listed in /events? | /mod -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /mod -1001000001000 maxeventsdays]
+[timezone • What time zone should be used in /events? | /mod -1001000001000 timezone]
+[Back | /mod]
+"""
+
+
 def test_admin(conversation):  # pylint: disable=redefined-outer-name
     """Test /admin BOTNAME moderator."""
 
     assert conversation.message('/admin modulestestbot moderator') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin › modulestestbot › moderator: <b>Choose a group</b>
+Bot Admin › modulestestbot › moderator
+
+I'm not in any groups! Add me to an existing group from its details screen.
 [Back | /admin modulestestbot]
 """
 

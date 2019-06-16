@@ -62,6 +62,7 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
         join(ctx, msg, modconf)
 
     if ctx.type in ('message', 'callback_query') and ctx.command == 'mod':
+        ctx.private = True
         msg.path('/mod', 'Group Admin')
         ctx.targetbotconf = ctx.bot.config
         return admin(ctx, msg, modconf, botadmin=False)

@@ -168,6 +168,21 @@ def test_forward(conversation):  # pylint: disable=redefined-outer-name
 
     conversation.bot.config['issue37']['moderator']['-1002000002000']['title'] = 'Forward Source'
 
+    assert conversation.message('/admin modulestestbot moderator -1001000001000') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
+[calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
+[greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone • What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[Back | /admin modulestestbot moderator]
+"""
+
     assert conversation.message('/admin modulestestbot moderator -1001000001000 forward') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › moderator › -1001000001000 › forward: <b>Choose a field</b>
@@ -203,6 +218,21 @@ Set <code>from</code> to <code>-1002000002000</code>.
 [from (-10020000…) • What group should messages be forwarded from? | /admin modulestestbot moderator -1001000001000 forward from]
 [notify (no) • Should forwarded messages trigger a notification? | /admin modulestestbot moderator -1001000001000 forward notify]
 [Back | /admin modulestestbot moderator -1001000001000]
+"""
+
+    assert conversation.message('/admin modulestestbot moderator -1001000001000') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
+[calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
+[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
+[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
+[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[forward (…) • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
+[greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
+[maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
+[maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]
+[timezone • What time zone should be used in /events? | /admin modulestestbot moderator -1001000001000 timezone]
+[Back | /admin modulestestbot moderator]
 """
 
 

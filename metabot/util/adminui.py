@@ -129,6 +129,8 @@ def fields(ctx, msg, subconf, fieldset, text):  # pylint: disable=too-many-argum
             value = subconf.get(fieldname)
             if uifunc is bool:
                 value = value and 'yes' or 'no'
+            elif isinstance(value, dict):
+                value = '\u2026'
             elif value is not None:
                 value = '%s' % value
                 if len(value) > 10:

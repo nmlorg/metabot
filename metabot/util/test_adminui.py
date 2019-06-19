@@ -9,8 +9,7 @@ from metabot.modules import moderator
 @pytest.fixture
 def conversation(build_conversation):  # pylint: disable=missing-docstring
     conv = build_conversation(echo, moderator)
-    conv.groupconf = conv.multibot.conf['bots']['modulestestbot']['issue37']['moderator'][
-        '-1001000001000']
+    conv.groupconf = conv.bot.config['issue37']['moderator']['-1001000001000']
     conv.groupconf['title'] = 'Test Group'
     return conv
 
@@ -21,7 +20,7 @@ def conversation(build_conversation):  # pylint: disable=missing-docstring
 def test_bool(conversation):  # pylint: disable=redefined-outer-name
     """Test adminui.bool."""
 
-    echoconf = conversation.multibot.conf['bots']['modulestestbot']['issue37']['echo']['dummy']
+    echoconf = conversation.bot.config['issue37']['echo']['dummy']
 
     assert 'paginate' not in echoconf
 
@@ -167,8 +166,7 @@ Select a day of the week to toggle:
 def test_forward(conversation):  # pylint: disable=redefined-outer-name
     """Test adminui.forward."""
 
-    conversation.multibot.conf['bots']['modulestestbot']['issue37']['moderator']['-1002000002000'][
-        'title'] = 'Forward Source'
+    conversation.bot.config['issue37']['moderator']['-1002000002000']['title'] = 'Forward Source'
 
     assert conversation.message('/admin modulestestbot moderator -1001000001000 forward') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]

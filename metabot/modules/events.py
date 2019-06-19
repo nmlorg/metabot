@@ -114,7 +114,7 @@ def group(ctx, msg):
     """Handle /events in a group chat."""
 
     group_id = '%s' % ctx.chat['id']
-    groupconf = ctx.bot.multibot.conf['bots'][ctx.bot.username]['issue37']['moderator'][group_id]
+    groupconf = ctx.bot.config['issue37']['moderator'][group_id]
     calcodes, tzinfo, count, days, unused_daily, unused_dailydow = _get_group_conf(groupconf)
     if not calcodes or not tzinfo:
         missing = []

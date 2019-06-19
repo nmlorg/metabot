@@ -18,12 +18,10 @@ def test_countdown(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('/mycountdown') == ''
 
-    conversation.multibot.conf['bots']['modulestestbot']['issue37']['countdown'][
-        'mycountdown'] = 1534906800
+    conversation.bot.config['issue37']['countdown']['mycountdown'] = 1534906800
     assert conversation.message('/mycountdown').endswith(' ago\n')
 
-    conversation.multibot.conf['bots']['modulestestbot']['issue37']['countdown'][
-        'mycountdown'] = 15349068000
+    conversation.bot.config['issue37']['countdown']['mycountdown'] = 15349068000
     assert not conversation.message('/mycountdown').endswith(' ago\n')
 
 
@@ -41,10 +39,8 @@ def test_format_delta():
 def test_help(conversation):  # pylint: disable=redefined-outer-name
     """Test /help."""
 
-    conversation.multibot.conf['bots']['modulestestbot']['issue37']['countdown'][
-        'count1'] = 1534906800
-    conversation.multibot.conf['bots']['modulestestbot']['issue37']['countdown'][
-        'count2'] = 15349068000
+    conversation.bot.config['issue37']['countdown']['count1'] = 1534906800
+    conversation.bot.config['issue37']['countdown']['count2'] = 15349068000
 
     assert conversation.message('/help', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]

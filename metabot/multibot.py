@@ -98,16 +98,15 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
             return False
 
         with multibot.conf.record_mutations(ctx):
-            botconfig = multibot.conf['bots'][bot.username]
             msg = msgbuilder.MessageBuilder()
 
-            ctx.botinfo = datasettings.DataSettings(botconfig['data'], botconfig['settings'])
+            ctx.botinfo = datasettings.DataSettings(bot.config['data'], bot.config['settings'])
 
             if not ctx.user:
                 ctx.userinfo = None
             else:
                 ctx.userinfo = datasettings.DataSettings(multibot.conf['users'][ctx.user['id']],
-                                                         botconfig['users'][ctx.user['id']])
+                                                         bot.config['users'][ctx.user['id']])
                 for k, val in ctx.user.items():
                     if k not in ('first_name', 'id', 'last_name'):
                         ctx.userinfo.data[k] = val
@@ -119,7 +118,7 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
                 ctx.groupinfo = None
             else:
                 ctx.groupinfo = datasettings.DataSettings(multibot.conf['groups'][ctx.chat['id']],
-                                                          botconfig['groups'][ctx.chat['id']])
+                                                          bot.config['groups'][ctx.chat['id']])
                 for k, val in ctx.chat.items():
                     if k != 'id':
                         ctx.groupinfo.data[k] = val
@@ -130,7 +129,7 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
             for modname, module in multibot.modules.items():
                 modpredispatch = getattr(module, 'modpredispatch', None)
                 if modpredispatch:
-                    modpredispatch(ctx, msg, botconfig['issue37'][modname])
+                    modpredispatch(ctx, msg, bot.config['issue37'][modname])
 
             ret = False
             for modname, module in multibot.modules.items():
@@ -142,14 +141,14 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
 
                 moddispatch = getattr(module, 'moddispatch', None)
                 if moddispatch:
-                    ret = moddispatch(ctx, msg, botconfig['issue37'][modname])
+                    ret = moddispatch(ctx, msg, bot.config['issue37'][modname])
                     if ret is not False:
                         break
 
             for modname, module in multibot.modules.items():
                 modpostdispatch = getattr(module, 'modpostdispatch', None)
                 if modpostdispatch:
-                    modpostdispatch(ctx, msg, botconfig['issue37'][modname])
+                    modpostdispatch(ctx, msg, bot.config['issue37'][modname])
 
             if msg:
                 msg.reply(ctx)

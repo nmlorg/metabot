@@ -8,6 +8,21 @@ from metabot.util import humanize
 from metabot.util import tzutil
 
 
+def announcement(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments
+    """Configure a daily announcement."""
+
+    if not text:
+        msg.add(desc)
+
+    fieldset = (
+        ('hour', integer, 'At what hour?'),
+        ('dow', daysofweek, 'Which days of the week should I announce upcoming events on?'),
+        ('text', freeform,
+         'One or more messages (one per line) to use/cycle through for the daily announcement.'),
+    )
+    return fields(ctx, msg, subconf[field], fieldset, text)
+
+
 def bool(unused_ctx, msg, subconf, field, unused_desc, unused_text):  # pylint: disable=too-many-arguments,redefined-builtin
     """Configure a toggle-able setting."""
 

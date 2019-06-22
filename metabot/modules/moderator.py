@@ -133,12 +133,7 @@ def admin(ctx, msg, modconf, botadmin=True):
     groupconf = modconf[group_id]
     fields = (
         ('calendars', adminui.calendars, 'Which calendars should be listed in /events?'),
-        ('daily', adminui.integer,
-         'Should I announce upcoming events once a day? If so, at what hour?'),
-        ('dailydow', adminui.daysofweek,
-         'Which days of the week should I announce upcoming events on?'),
-        ('dailytext', adminui.freeform,
-         'One or more messages (one per line) to use/cycle through for the daily announcement.'),
+        ('daily', adminui.announcement, 'Should I announce upcoming events once a day?'),
         ('forward', adminui.forward, 'Automatically forward messages from one chat to this one.'),
         ('greeting', adminui.freeform, 'How should I greet people when they join?'),
         ('maxeventscount', adminui.integer, 'How many events should be listed in /events?'),

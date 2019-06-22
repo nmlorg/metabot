@@ -58,9 +58,7 @@ Group Admin: <b>Choose a group</b>
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 Group Admin › -1001000001000: <b>Choose a field</b>
 [calendars • Which calendars should be listed in /events? | /mod -1001000001000 calendars]
-[daily • Should I announce upcoming events once a day? If so, at what hour? | /mod -1001000001000 daily]
-[dailydow • Which days of the week should I announce upcoming events on? | /mod -1001000001000 dailydow]
-[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /mod -1001000001000 dailytext]
+[daily • Should I announce upcoming events once a day? | /mod -1001000001000 daily]
 [forward • Automatically forward messages from one chat to this one. | /mod -1001000001000 forward]
 [greeting • How should I greet people when they join? | /mod -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /mod -1001000001000 maxeventscount]
@@ -105,9 +103,7 @@ Bot Admin › modulestestbot › moderator: <b>Choose a group</b>
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 [calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[daily • Should I announce upcoming events once a day? | /admin modulestestbot moderator -1001000001000 daily]
 [forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
@@ -122,9 +118,7 @@ Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field
 
 I can't set <code>bogus</code>.
 [calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[daily • Should I announce upcoming events once a day? | /admin modulestestbot moderator -1001000001000 daily]
 [forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
@@ -150,9 +144,7 @@ Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field
 
 Set <code>greeting</code> to <code>Welcome to chat title, new users! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code>.
 [calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[daily • Should I announce upcoming events once a day? | /admin modulestestbot moderator -1001000001000 daily]
 [forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting (Welcome t…) • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
@@ -242,9 +234,7 @@ Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field
 
 Changed <code>greeting</code> from <code>Welcome to chat title, new users! &lt;b&gt;Initial&lt;/b&gt; pinned message.</code> to <code>Welcome! New message.</code>.
 [calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[daily • Should I announce upcoming events once a day? | /admin modulestestbot moderator -1001000001000 daily]
 [forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting (Welcome! …) • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
@@ -271,9 +261,7 @@ Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field
 
 Unset <code>greeting</code> (was <code>Welcome! New message.</code>).
 [calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[daily • Should I announce upcoming events once a day? | /admin modulestestbot moderator -1001000001000 daily]
 [forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
@@ -289,9 +277,7 @@ Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field
 
 Unset <code>greeting</code>.
 [calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
-[daily • Should I announce upcoming events once a day? If so, at what hour? | /admin modulestestbot moderator -1001000001000 daily]
-[dailydow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 dailydow]
-[dailytext • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 dailytext]
+[daily • Should I announce upcoming events once a day? | /admin modulestestbot moderator -1001000001000 daily]
 [forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]

@@ -16,7 +16,7 @@ class BotConf(dicttools.ImplicitTrackingDict):
 
     def __init__(self, confdir=None):  # pylint: disable=too-many-branches
         super(BotConf, self).__init__()
-        if confdir:
+        if confdir:  # pylint: disable=too-many-nested-blocks
             self.confdir = confdir
             if not os.path.isdir(confdir):
                 os.makedirs(confdir, 0o700)  # pragma: no cover
@@ -58,6 +58,17 @@ class BotConf(dicttools.ImplicitTrackingDict):
                             'paginate': True,
                             'private': '\n' in message,
                         }
+
+            # Schema update: Remove after 2020-06-22 (https://github.com/nmlorg/metabot/issues/8).
+            for botconf in self['bots'].values():  # pragma: no cover
+                for groupconf in list(botconf['issue37']['moderator'].values()):
+                    dailyconf = groupconf.get('daily')
+                    if dailyconf is not None and not isinstance(dailyconf, dict):
+                        groupconf['daily'] = {'hour': dailyconf}
+                        for key in {'dow', 'text'}:
+                            value = groupconf.pop('daily' + key)
+                            if value is not None:
+                                groupconf['daily'][key] = value
 
         self._fnames = set(self)
 

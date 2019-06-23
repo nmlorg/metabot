@@ -11,6 +11,7 @@ import pytz
 from metabot.util import adminui
 from metabot.util import html
 from metabot.util import humanize
+from metabot.util import tickets
 
 ALIASES = ('calendar', 'event', 'events')
 
@@ -254,8 +255,11 @@ def format_event(bot, event, tzinfo, full=True):
     """Given a metabot.calendars.base.Calendar event, build a human-friendly representation."""
 
     url = bot.encode_url('/events %s %s' % (event['local_id'], tzinfo.zone))
-    message = '<b>%s</b>\n<a href="%s">%s</a>' % (
-        event['summary'], url, humanize_range(event['start'], event['end'], tzinfo))
+    message = '<b>%s</b>' % event['summary']
+    for count, url in tickets.get_info(event['description']):
+        message = '%s [<a href="%s">%i tickets remaining</a>]' % (message, url, count)
+    message = '%s\n<a href="%s">%s</a>' % (message, url,
+                                           humanize_range(event['start'], event['end'], tzinfo))
     if event['location']:
         location_name = event['location'].split(',', 1)[0]
         location_url = 'https://maps.google.com/maps?' + urllib.parse.urlencode({

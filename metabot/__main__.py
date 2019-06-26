@@ -1,25 +1,18 @@
 """Modularized, multi-account bot."""
 
-import importlib
 import logging
-import pkgutil
 
-from metabot import modules as modules_package
 from metabot.modules import admin
 from metabot import multibot
 from metabot.util import humanize
+from metabot.util import modutil
 
 
 def main():  # pylint: disable=missing-docstring
     logging.basicConfig(format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s] %(message)s',
                         level=logging.INFO)
 
-    modules = set()
-    for _, name, _ in pkgutil.iter_modules(modules_package.__path__):
-        if name != 'conftest' and not name.startswith('test_'):
-            modules.add(importlib.import_module('metabot.modules.' + name))
-
-    mybot = multibot.MultiBot(modules, confdir='config')
+    mybot = multibot.MultiBot(modutil.load_modules('metabot.modules'), confdir='config')
     if not mybot.conf['bots']:
         print()
         print("Hi! Before I can start, I need at least one bot's Telegram token. If you don't have "

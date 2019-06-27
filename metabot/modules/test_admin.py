@@ -37,6 +37,10 @@ def test_default(conversation):  # pylint: disable=redefined-outer-name
     assert conversation.message('/admin') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin: <b>Choose a bot</b>
+
+This is a metabot! Check out https://github.com/nmlorg/metabot/issues to keep track of bugs and features.
+
+To configure your bot, choose its username:
 [modulestestbot | /admin modulestestbot]
 """
 

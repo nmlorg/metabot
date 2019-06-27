@@ -38,11 +38,16 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
     msg.path('/admin', 'Bot Admin')
 
     username, modname, text = ctx.split(3)
-    #if not username and len(bots) == 1:
-    #    username = bots[0]
 
     if username not in bots:
         msg.action = 'Choose a bot'
+        msg.add('This is a metabot! Check out https://github.com/nmlorg/metabot/issues to keep '
+                'track of bugs and features.')
+        try:
+            msg.add(open('config/admin_motd').read().strip())
+        except IOError:
+            pass
+        msg.add('To configure your bot, choose its username:')
         for username in bots:
             msg.button(username, '/admin ' + username)
         return
@@ -59,9 +64,6 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
         return msg.add(
             "Hi! There aren't any configurable modules installed. Contact a metabot admin to "
             'install one.')
-
-    #if not modname and len(modules) == 1:
-    #    modname = list(modules)[0]
 
     if modname not in modules:
         msg.action = 'Choose a module'

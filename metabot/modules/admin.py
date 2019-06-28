@@ -77,10 +77,9 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
     msg.path(modname)
 
     admin_callback = modules[modname].admin
-    ctx.command = 'admin %s %s' % (username, modname)
-    ctx.text = text
+    ctx.targetbotuser = username
     ctx.targetbotconf = ctx.bot.multibot.conf['bots'][username]
-    return admin_callback(ctx, msg, ctx.targetbotconf['issue37'][modname])
+    return admin_callback(ctx, msg, ctx.targetbotconf['issue37'][modname], text)
 
 
 def bootstrap(ctx, msg, modconf):
@@ -91,13 +90,13 @@ def bootstrap(ctx, msg, modconf):
         msg.add('Added %s to the admin list.', ctx.user['id'])
 
 
-def admin(ctx, msg, modconf):  # pylint: disable=too-many-branches
+def admin(ctx, msg, modconf, text):  # pylint: disable=too-many-branches
     """Handle /admin BOTNAME admin (configure the admin module itself)."""
 
     if 'admins' not in modconf:  # pragma: no cover
         modconf['admins'] = []
 
-    target = ctx.text
+    target = text
     if target.isdigit():
         target = int(target)
     elif target:

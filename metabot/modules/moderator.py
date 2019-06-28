@@ -65,7 +65,7 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
         ctx.private = True
         msg.path('/mod', 'Group Admin')
         ctx.targetbotconf = ctx.bot.config
-        return admin(ctx, msg, modconf, botadmin=False)
+        return admin(ctx, msg, modconf, ctx.text, botadmin=False)
 
     return False
 
@@ -105,7 +105,7 @@ def join(ctx, msg, modconf):
     msg.add(greeting)
 
 
-def admin(ctx, msg, modconf, botadmin=True):
+def admin(ctx, msg, modconf, text, botadmin=True):
     """Handle /admin BOTNAME moderator."""
 
     groups = sorted(
@@ -120,7 +120,7 @@ def admin(ctx, msg, modconf, botadmin=True):
             "Hi! You aren't an admin in any groups I'm in. If you should be, ask a current admin "
             "to promote you from the group's members list.")
 
-    group_id, text = ctx.split(2)
+    group_id, _, text = text.partition(' ')
 
     if group_id not in groups:
         msg.action = 'Choose a group'

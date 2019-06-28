@@ -52,10 +52,10 @@ def format_delta(seconds):
     return '<b>NOW</b>'
 
 
-def admin(ctx, msg, modconf):
+def admin(unused_ctx, msg, modconf, text):
     """Handle /admin BOTNAME countdown."""
 
-    command, timestamp = ctx.split(2)
+    command, _, timestamp = text.partition(' ')
     command = command.lower()
 
     if command and timestamp:

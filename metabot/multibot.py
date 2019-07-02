@@ -133,12 +133,6 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
 
             ret = False
             for modname, module in multibot.modules.items():
-                dispatch = ntelebot.dispatch.get_callback(module)
-                if dispatch:
-                    ret = dispatch(ctx)
-                    if ret is not False:
-                        break
-
                 moddispatch = getattr(module, 'moddispatch', None)
                 if moddispatch:
                     ret = moddispatch(ctx, msg, bot.config['issue37'][modname])

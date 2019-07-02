@@ -69,12 +69,14 @@ def test_module():
 
     results = []
 
-    def dummymod(ctx):  # pylint: disable=missing-docstring
-        _ = ctx
-        results.append(ctx.text)
-        time.sleep(.5)
+    class _DummyMod:  # pylint: disable=too-few-public-methods
 
-    mybot = multibot.MultiBot({dummymod})
+        @staticmethod
+        def moddispatch(ctx, unused_msg, unused_modconf):  # pylint: disable=missing-docstring
+            results.append(ctx.text)
+            time.sleep(.5)
+
+    mybot = multibot.MultiBot({_DummyMod})
     mockbot = ntelebot.bot.Bot('1234:modbot')
     mockbot.getme.respond(json={'ok': True, 'result': {'id': 1234, 'username': 'modbot'}})
     user = {'id': 1000}

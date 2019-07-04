@@ -34,9 +34,10 @@ def echo(ctx, msg, data):  # pylint: disable=missing-docstring
             msg.button('More (%i/%i)' % (page, len(lines)), '/%s %i' % (ctx.command, page + 1))
 
 
-def admin(ctx, msg, modconf, text):
+def admin(ctx, msg, botconf, field, unused_desc, text):
     """Handle /admin BOTNAME echo."""
 
+    modconf = botconf[field]
     command, _, text = text.partition(' ')
     command = command.lower()
 

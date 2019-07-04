@@ -123,7 +123,7 @@ def daysofweek(unused_ctx, msg, subconf, field, desc, text):  # pylint: disable=
         msg.buttons(buttons)
 
 
-def fields(ctx, msg, subconf, fieldset, text):  # pylint: disable=too-many-arguments
+def fields(ctx, msg, subconf, fieldset, text, what='field'):  # pylint: disable=too-many-arguments
     """Present a menu of fields to edit."""
 
     field, _, text = text.partition(' ')
@@ -139,7 +139,7 @@ def fields(ctx, msg, subconf, fieldset, text):  # pylint: disable=too-many-argum
             msg.add("I can't set <code>%s</code>.", field)
 
     if not msg.action:
-        msg.action = 'Choose a field'
+        msg.action = 'Choose a ' + what
         for fieldname, uifunc, fielddesc in fieldset:
             value = subconf.get(fieldname)
             if uifunc is bool:

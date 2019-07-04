@@ -2,6 +2,8 @@
 
 import uuid
 
+from metabot.util import adminui
+
 BOOTSTRAP_TOKEN = uuid.uuid4().hex
 
 
@@ -37,7 +39,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
 
     msg.path('/admin', 'Bot Admin')
 
-    username, modname, text = ctx.split(3)
+    username, text = ctx.split(2)
 
     if username not in bots:
         msg.action = 'Choose a bot'
@@ -53,33 +55,19 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
         return
 
     msg.path(username)
+    ctx.targetbotuser = username
+    ctx.targetbotconf = ctx.bot.multibot.conf['bots'][username]
 
-    modules = {
-        modname: module
-        for modname, module in ctx.bot.multibot.modules.items()
-        if hasattr(module, 'admin')
-    }
+    modules = sorted((modname, module.admin, module.__doc__.splitlines()[0].rstrip('.'))
+                     for modname, module in ctx.bot.multibot.modules.items()
+                     if hasattr(module, 'admin'))
 
     if not modules:  # pragma: no cover
         return msg.add(
             "Hi! There aren't any configurable modules installed. Contact a metabot admin to "
             'install one.')
 
-    if modname not in modules:
-        msg.action = 'Choose a module'
-        for modname, module in sorted(modules.items()):
-            label = modname
-            if getattr(module, '__doc__', None):
-                label = '%s \u2022 %s' % (label, module.__doc__.splitlines()[0].rstrip('.'))
-            msg.button(label, '/admin %s %s' % (username, modname))
-        return
-
-    msg.path(modname)
-
-    admin_callback = modules[modname].admin
-    ctx.targetbotuser = username
-    ctx.targetbotconf = ctx.bot.multibot.conf['bots'][username]
-    return admin_callback(ctx, msg, ctx.targetbotconf['issue37'][modname], text)
+    return adminui.fields(ctx, msg, ctx.targetbotconf['issue37'], modules, text, what='module')
 
 
 def bootstrap(ctx, msg, modconf):
@@ -90,9 +78,10 @@ def bootstrap(ctx, msg, modconf):
         msg.add('Added %s to the admin list.', ctx.user['id'])
 
 
-def admin(ctx, msg, modconf, text):  # pylint: disable=too-many-branches
+def admin(ctx, msg, botconf, field, unused_desc, text):  # pylint: disable=too-many-branches
     """Handle /admin BOTNAME admin (configure the admin module itself)."""
 
+    modconf = botconf[field]
     if 'admins' not in modconf:  # pragma: no cover
         modconf['admins'] = []
 

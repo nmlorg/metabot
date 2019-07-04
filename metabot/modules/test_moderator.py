@@ -35,7 +35,7 @@ def test_mod(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('/mod', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
-Group Admin
+Group Admin: <b>Become a group admin</b>
 
 Hi! You aren't an admin in any groups I'm in. If you should be, ask a current admin to promote you from the group's members list.
 """
@@ -73,7 +73,7 @@ def test_admin(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('/admin modulestestbot moderator') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Bot Admin › modulestestbot › moderator
+Bot Admin › modulestestbot › moderator: <b>Add me to a group</b>
 
 I'm not in any groups! Add me to an existing group from its details screen.
 [Back | /admin modulestestbot]

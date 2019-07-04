@@ -47,7 +47,7 @@ To configure your bot, choose its username:
     assert conversation.message('/admin modulestestbot') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot: <b>Choose a module</b>
-[admin • Manage the admin list | /admin modulestestbot admin]
+[admin (…) • Manage the admin list | /admin modulestestbot admin]
 [help • Return the list of commands and other bot features | /admin modulestestbot help]
 [Back | /admin]
 """

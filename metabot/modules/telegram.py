@@ -1,9 +1,10 @@
 """Manage the bot's Telegram state."""
 
 
-def admin(ctx, msg, modconf, text):
+def admin(ctx, msg, botconf, field, unused_desc, text):
     """Handle /admin BOTNAME telegram (manage the bot's Telegram state)."""
 
+    modconf = botconf[field]
     username = ctx.targetbotuser
     msg.action = 'Choose an action'
 

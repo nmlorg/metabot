@@ -1,20 +1,20 @@
 """Manage the bot's Telegram state."""
 
 
-def admin(ctx, msg, botconf, field, unused_desc, text):
+def admin(ctx, msg, frame):
     """Handle /admin BOTNAME telegram (manage the bot's Telegram state)."""
 
-    modconf = botconf[field]
+    modconf = frame.parent[frame.field]
     username = ctx.targetbotuser
     msg.action = 'Choose an action'
 
-    if text == 'stop':
+    if frame.text == 'stop':
         if not modconf['running']:
             msg.add('@%s is not currently running.', username)
         else:
             ctx.bot.multibot.stop_bot(username)
             msg.add('@%s is now offline.', username)
-    elif text == 'start':
+    elif frame.text == 'start':
         if modconf['running']:
             msg.add('@%s is already running.', username)
         else:

@@ -34,11 +34,11 @@ def default(ctx, msg, modconf):  # pylint: disable=missing-docstring
                 msg.add('%s', line)
 
 
-def admin(ctx, msg, botconf, field, unused_desc, text):  # pylint: disable=too-many-branches
+def admin(ctx, msg, frame):  # pylint: disable=too-many-branches
     """Handle /admin BOTNAME help."""
 
-    modconf = botconf[field]
-    action, _, modname = text.partition(' ')
+    modconf = frame.parent[frame.field]
+    action, _, modname = frame.text.partition(' ')
 
     hidden = set(modconf.get('hidden', '').split())
 

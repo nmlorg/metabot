@@ -67,10 +67,7 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
         ctx.targetbotconf = ctx.bot.config
         return admin(ctx,
                      msg,
-                     ctx.bot.config['issue37'],
-                     'moderator',
-                     'Group Admin',
-                     ctx.text,
+                     adminui.Frame(ctx.bot.config['issue37'], 'moderator', 'Group Admin', ctx.text),
                      botadmin=False)
 
     return False
@@ -111,10 +108,10 @@ def join(ctx, msg, modconf):
     msg.add(greeting)
 
 
-def admin(ctx, msg, botconf, field, unused_desc, text, botadmin=True):  # pylint: disable=too-many-arguments
+def admin(ctx, msg, frame, botadmin=True):  # pylint: disable=too-many-arguments
     """Handle /admin BOTNAME moderator."""
 
-    modconf = botconf[field]
+    modconf = frame.parent[frame.field]
     groups = sorted(
         group_id for group_id in modconf
         if botadmin or ctx.user['id'] in ctx.bot.multibot.conf['groups'][int(group_id)]['admins'])
@@ -129,7 +126,7 @@ def admin(ctx, msg, botconf, field, unused_desc, text, botadmin=True):  # pylint
             "Hi! You aren't an admin in any groups I'm in. If you should be, ask a current admin "
             "to promote you from the group's members list.")
 
-    group_id, _, text = text.partition(' ')
+    group_id, _, text = frame.text.partition(' ')
 
     if group_id not in groups:
         msg.action = 'Choose a group'
@@ -139,7 +136,6 @@ def admin(ctx, msg, botconf, field, unused_desc, text, botadmin=True):  # pylint
         return
 
     msg.path(group_id)
-    groupconf = modconf[group_id]
     fields = (
         ('calendars', adminui.calendars, 'Which calendars should be listed in /events?'),
         ('daily', adminui.announcement, 'Should I announce upcoming events once a day?'),
@@ -149,4 +145,4 @@ def admin(ctx, msg, botconf, field, unused_desc, text, botadmin=True):  # pylint
         ('maxeventsdays', adminui.integer, 'How many days into the future should /events look?'),
         ('timezone', adminui.timezone, 'What time zone should be used in /events?'),
     )
-    return adminui.fields(ctx, msg, groupconf, fields, text)
+    return adminui.fields(ctx, msg, adminui.Frame(modconf, group_id, None, text), fields)

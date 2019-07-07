@@ -287,9 +287,8 @@ def settings(ctx, msg, modconf):
     msg.path('set', 'Settings')
 
     user_id = '%s' % ctx.user['id']
-    userconf = modconf['users'][user_id]
     fields = (
         ('calendars', adminui.calendars, 'Which calendars do you want to see?'),
         ('timezone', adminui.timezone, 'What time zone are you in?'),
     )
-    return adminui.fields(ctx, msg, userconf, fields, text)
+    return adminui.fields(ctx, msg, adminui.Frame(modconf['users'], user_id, None, text), fields)

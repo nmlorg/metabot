@@ -34,11 +34,11 @@ def echo(ctx, msg, data):  # pylint: disable=missing-docstring
             msg.button('More (%i/%i)' % (page, len(lines)), '/%s %i' % (ctx.command, page + 1))
 
 
-def admin(ctx, msg, botconf, field, unused_desc, text):
+def admin(ctx, msg, frame):
     """Handle /admin BOTNAME echo."""
 
-    modconf = botconf[field]
-    command, _, text = text.partition(' ')
+    modconf = frame.parent[frame.field]
+    command, _, text = frame.text.partition(' ')
     command = command.lower()
 
     if not command:
@@ -61,4 +61,4 @@ def admin(ctx, msg, botconf, field, unused_desc, text):
         ('paginate', adminui.bool, 'For multiline messages, display just one line at a time?'),
         ('private', adminui.bool, 'Send the message in group chats, or just in private?'),
     )
-    return adminui.fields(ctx, msg, modconf[command], fields, text)
+    return adminui.fields(ctx, msg, adminui.Frame(modconf, command, None, text), fields)

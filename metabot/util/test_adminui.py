@@ -449,7 +449,7 @@ Choose a primary city:
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 
-Set timezone to <code>America/Los_Angeles</code>.
+Set <code>timezone</code> to <code>America/Los_Angeles</code>.
 [calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
 [daily • Should I announce upcoming events once a day? | /admin modulestestbot moderator -1001000001000 daily]
 [forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]

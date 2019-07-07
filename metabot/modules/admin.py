@@ -67,7 +67,11 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
             "Hi! There aren't any configurable modules installed. Contact a metabot admin to "
             'install one.')
 
-    return adminui.fields(ctx, msg, ctx.targetbotconf['issue37'], modules, text, what='module')
+    return adminui.fields(ctx,
+                          msg,
+                          adminui.Frame(ctx.targetbotconf, 'issue37', None, text),
+                          modules,
+                          what='module')
 
 
 def bootstrap(ctx, msg, modconf):
@@ -78,14 +82,14 @@ def bootstrap(ctx, msg, modconf):
         msg.add('Added %s to the admin list.', ctx.user['id'])
 
 
-def admin(ctx, msg, botconf, field, unused_desc, text):  # pylint: disable=too-many-branches
+def admin(ctx, msg, frame):  # pylint: disable=too-many-branches
     """Handle /admin BOTNAME admin (configure the admin module itself)."""
 
-    modconf = botconf[field]
+    modconf = frame.parent[frame.field]
     if 'admins' not in modconf:  # pragma: no cover
         modconf['admins'] = []
 
-    target = text
+    target = frame.text
     if target.isdigit():
         target = int(target)
     elif target:

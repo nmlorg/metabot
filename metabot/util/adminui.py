@@ -8,11 +8,21 @@ from metabot.util import humanize
 from metabot.util import tzutil
 
 
-def announcement(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments
+class Frame:  # pylint: disable=too-few-public-methods
+    """The current position (and related state) within a hierarchical message."""
+
+    def __init__(self, parent, field, desc, text):
+        self.parent = parent
+        self.field = field
+        self.desc = desc
+        self.text = text
+
+
+def announcement(ctx, msg, frame):
     """Configure a daily announcement."""
 
-    if not text:
-        msg.add(desc)
+    if not frame.text:
+        msg.add(frame.desc)
 
     fieldset = (
         ('hour', integer, 'At what hour?'),
@@ -20,26 +30,26 @@ def announcement(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-m
         ('text', freeform,
          'One or more messages (one per line) to use/cycle through for the daily announcement.'),
     )
-    return fields(ctx, msg, subconf[field], fieldset, text)
+    return fields(ctx, msg, frame, fieldset)
 
 
-def bool(unused_ctx, msg, subconf, field, unused_desc, unused_text):  # pylint: disable=too-many-arguments,redefined-builtin
+def bool(unused_ctx, msg, frame):  # pylint: disable=redefined-builtin
     """Configure a toggle-able setting."""
 
-    if subconf.get(field):
-        subconf.pop(field)
-        msg.add('Disabled <code>%s</code>.', field)
+    if frame.parent.get(frame.field):
+        frame.parent.pop(frame.field)
+        msg.add('Disabled <code>%s</code>.', frame.field)
     else:
-        subconf[field] = True
-        msg.add('Enabled <code>%s</code>.', field)
+        frame.parent[frame.field] = True
+        msg.add('Enabled <code>%s</code>.', frame.field)
 
 
-def calendars(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments
+def calendars(ctx, msg, frame):
     """Configure a selection of calendars."""
 
-    action, _, target = text.partition(' ')
+    action, _, target = frame.text.partition(' ')
 
-    calcodes = set(subconf.get(field, '').split())
+    calcodes = set(frame.parent.get(frame.field, '').split())
 
     if target and target not in ctx.bot.multibot.calendars:
         msg.add('<code>%s</code> is not a calendar!', target)
@@ -57,12 +67,12 @@ def calendars(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many
             calcodes.remove(target)
 
     if calcodes:
-        subconf[field] = ' '.join(sorted(calcodes))
+        frame.parent[frame.field] = ' '.join(sorted(calcodes))
     else:
-        subconf.pop(field)
+        frame.parent.pop(frame.field)
 
     msg.action = 'Select a calendar'
-    msg.add(desc)
+    msg.add(frame.desc)
     msg.add('Select a calendar to add or remove from the list below:')
     for calcode, calendar_info in sorted(ctx.bot.multibot.calendars.items(),
                                          key=lambda pair: pair[1]['name']):
@@ -72,23 +82,23 @@ def calendars(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many
             msg.button('Remove %s' % calendar_info['name'], 'remove %s' % calcode)
 
 
-def daysofweek(unused_ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments,too-many-branches
+def daysofweek(unused_ctx, msg, frame):  # pylint: disable=too-many-branches
     """Select days of the week to enable/disable."""
 
-    value = subconf.get(field, 0)
-    if text == 'all':
+    value = frame.parent.get(frame.field, 0)
+    if frame.text == 'all':
         value = 0
-    elif text == 'none':
+    elif frame.text == 'none':
         value = 127
-    elif text.isdigit():
-        value ^= 1 << int(text)
+    elif frame.text.isdigit():
+        value ^= 1 << int(frame.text)
     if value:
-        subconf[field] = value
+        frame.parent[frame.field] = value
     else:
-        subconf.pop(field, None)
+        frame.parent.pop(frame.field)
 
     msg.action = 'Select a day of the week to toggle'
-    msg.add(desc)
+    msg.add(frame.desc)
     if value == 127:
         msg.add('All days are currently <b>disabled</b>.')
     elif not value:
@@ -123,14 +133,15 @@ def daysofweek(unused_ctx, msg, subconf, field, desc, text):  # pylint: disable=
         msg.buttons(buttons)
 
 
-def fields(ctx, msg, subconf, fieldset, text, what='field'):  # pylint: disable=too-many-arguments
+def fields(ctx, msg, frame, fieldset, what='field'):
     """Present a menu of fields to edit."""
 
-    field, _, text = text.partition(' ')
+    field, _, text = frame.text.partition(' ')
+    subconf = frame.parent[frame.field]
     for fieldname, uifunc, fielddesc in fieldset:
         if fieldname == field:
             msg.path(field)
-            uifunc(ctx, msg, subconf, field, fielddesc, text)
+            uifunc(ctx, msg, Frame(subconf, field, fielddesc, text))
             if not msg.action:
                 msg.pathpop()
             break
@@ -154,18 +165,18 @@ def fields(ctx, msg, subconf, fieldset, text, what='field'):  # pylint: disable=
             msg.button('%s \u2022 %s' % (label, fielddesc), fieldname)
 
 
-def forward(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments
+def forward(ctx, msg, frame):
     """Configure the bot to forward messages from one chat to another."""
 
-    msg.add(desc)
+    msg.add(frame.desc)
     fieldset = (
         ('from', groupid, 'What group should messages be forwarded from?'),
         ('notify', bool, 'Should forwarded messages trigger a notification?'),
     )
-    return fields(ctx, msg, subconf[field], fieldset, text)
+    return fields(ctx, msg, frame, fieldset)
 
 
-def freeform(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments,too-many-branches
+def freeform(ctx, msg, frame):  # pylint: disable=too-many-branches
     """Configure a free-form text field."""
 
     if ctx.document:  # pragma: no cover
@@ -174,85 +185,91 @@ def freeform(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-
         text = 'photo:%s' % ctx.photo
     elif ctx.sticker:  # pragma: no cover
         text = 'sticker:%s' % ctx.sticker
+    else:
+        text = frame.text
 
     if text:
         if text.lower() in ('-', 'none', 'off'):
             text = ''
-        if subconf.get(field):
+        if frame.parent.get(frame.field):
             if text:
-                msg.add('Changed <code>%s</code> from <code>%s</code> to <code>%s</code>.', field,
-                        subconf[field], text)
+                msg.add('Changed <code>%s</code> from <code>%s</code> to <code>%s</code>.',
+                        frame.field, frame.parent[frame.field], text)
             else:
-                msg.add('Unset <code>%s</code> (was <code>%s</code>).', field, subconf[field])
+                msg.add('Unset <code>%s</code> (was <code>%s</code>).', frame.field,
+                        frame.parent[frame.field])
         elif text:
-            msg.add('Set <code>%s</code> to <code>%s</code>.', field, text)
+            msg.add('Set <code>%s</code> to <code>%s</code>.', frame.field, text)
         else:
-            msg.add('Unset <code>%s</code>.', field)
+            msg.add('Unset <code>%s</code>.', frame.field)
         if text:
-            subconf[field] = text
+            frame.parent[frame.field] = text
         else:
-            subconf.pop(field)
+            frame.parent.pop(frame.field)
     else:
-        msg.action = 'Type a new value for ' + field
-        msg.add(desc)
-        if subconf.get(field):
-            msg.add('<code>%s</code> is currently <code>%s</code>.', field, subconf[field])
+        msg.action = 'Type a new value for ' + frame.field
+        msg.add(frame.desc)
+        if frame.parent.get(frame.field):
+            msg.add('<code>%s</code> is currently <code>%s</code>.', frame.field,
+                    frame.parent[frame.field])
         msg.add('Type your new value, or type "off" to disable/reset to default.')
 
 
-def groupid(ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments
+def groupid(ctx, msg, frame):
     """Select a group."""
 
-    if text in ctx.targetbotconf['issue37']['moderator']:
-        subconf[field] = text
-        msg.add('Set <code>%s</code> to <code>%s</code>.', field, text)
+    if frame.text in ctx.targetbotconf['issue37']['moderator']:
+        frame.parent[frame.field] = frame.text
+        msg.add('Set <code>%s</code> to <code>%s</code>.', frame.field, frame.text)
         return
 
     msg.action = 'Select a group'
-    msg.add(desc)
+    msg.add(frame.desc)
     msg.add('Select a group:')
     for group_id, groupconf in sorted(ctx.targetbotconf['issue37']['moderator'].items()):
         msg.button('%s (%s)' % (group_id, groupconf['title']), group_id)
 
 
-def integer(unused_ctx, msg, subconf, field, desc, text):
+def integer(unused_ctx, msg, frame):
     """Configure an integer field."""
 
-    if text:
+    if frame.text:
         try:
-            value = int(text)
+            value = int(frame.text)
         except ValueError:
             value = None
-        if subconf.get(field) is not None:
+        if frame.parent.get(frame.field) is not None:
             if value is not None:
-                msg.add('Changed <code>%s</code> from <code>%s</code> to <code>%s</code>.', field,
-                        subconf[field], text)
+                msg.add('Changed <code>%s</code> from <code>%s</code> to <code>%s</code>.',
+                        frame.field, frame.parent[frame.field], value)
             else:
-                msg.add('Unset <code>%s</code> (was <code>%s</code>).', field, subconf[field])
+                msg.add('Unset <code>%s</code> (was <code>%s</code>).', frame.field,
+                        frame.parent[frame.field])
         elif value is not None:
-            msg.add('Set <code>%s</code> to <code>%s</code>.', field, value)
+            msg.add('Set <code>%s</code> to <code>%s</code>.', frame.field, value)
         else:
-            msg.add('<code>%s</code> is already unset.', field)
+            msg.add('<code>%s</code> is already unset.', frame.field)
         if value is not None:
-            subconf[field] = value
+            frame.parent[frame.field] = value
         else:
-            subconf.pop(field)
+            frame.parent.pop(frame.field)
     else:
-        msg.action = 'Type a new value for ' + field
-        msg.add(desc)
-        if subconf.get(field):
-            msg.add('<code>%s</code> is currently <code>%s</code>.', field, subconf[field])
+        msg.action = 'Type a new value for ' + frame.field
+        msg.add(frame.desc)
+        if frame.parent.get(frame.field):
+            msg.add('<code>%s</code> is currently <code>%s</code>.', frame.field,
+                    frame.parent[frame.field])
         msg.add('Type your new value, or type "off" to disable/reset to default.')
 
 
-def timezone(unused_ctx, msg, subconf, field, desc, text):  # pylint: disable=too-many-arguments
+def timezone(unused_ctx, msg, frame):
     """Configure a time zone."""
 
-    if text in pytz.all_timezones_set:
-        subconf[field] = text
-        return msg.add('Set timezone to <code>%s</code>.', text)
+    if frame.text in pytz.all_timezones_set:
+        frame.parent[frame.field] = frame.text
+        return msg.add('Set <code>%s</code> to <code>%s</code>.', frame.field, frame.text)
 
-    country, _, page = text.partition(' ')
+    country, _, page = frame.text.partition(' ')
     country = country.upper()
     page = page.isdigit() and int(page) or 0
 
@@ -268,7 +285,7 @@ def timezone(unused_ctx, msg, subconf, field, desc, text):  # pylint: disable=to
     timezones = timezones[page * 7:(page + 1) * 7]
 
     msg.action = 'Choose a primary city'
-    msg.add(desc)
+    msg.add(frame.desc)
     msg.add('Choose a primary city:')
     for tzname, comment in timezones:
         title = tzname.rsplit('/', 1)[-1].replace('_', ' ')

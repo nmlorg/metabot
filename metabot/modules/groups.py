@@ -100,10 +100,11 @@ def inline(ctx, modconf):
     ctx.reply_inline(results, cache_time=60)
 
 
-def admin(ctx, msg, botconf, field, unused_desc, text):
+def admin(ctx, msg, frame):
     """Handle /admin BOTNAME groups."""
 
-    modconf = botconf[field]
+    modconf = frame.parent[frame.field]
+    text = frame.text
     if text.startswith('remove '):
         text = text[len('remove '):]
         group = modconf['groups'].pop(text)

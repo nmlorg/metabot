@@ -223,7 +223,7 @@ Set <code>from</code> to <code>-1002000002000</code>.
 Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 [calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
 [daily • Should I announce upcoming events once a day? | /admin modulestestbot moderator -1001000001000 daily]
-[forward (…) • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
+[forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]
 [greeting • How should I greet people when they join? | /admin modulestestbot moderator -1001000001000 greeting]
 [maxeventscount • How many events should be listed in /events? | /admin modulestestbot moderator -1001000001000 maxeventscount]
 [maxeventsdays • How many days into the future should /events look? | /admin modulestestbot moderator -1001000001000 maxeventsdays]

@@ -156,7 +156,7 @@ def fields(ctx, msg, frame, fieldset, what='field'):
             if uifunc is bool:
                 value = value and 'yes' or 'no'
             elif isinstance(value, dict):
-                value = '\u2026'
+                value = None
             elif value is not None:
                 value = '%s' % value
                 if len(value) > 10:

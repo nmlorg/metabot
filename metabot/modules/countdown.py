@@ -55,7 +55,7 @@ def format_delta(seconds):
 def admin(unused_ctx, msg, frame):
     """Handle /admin BOTNAME countdown."""
 
-    modconf = frame.parent[frame.field]
+    modconf = frame.value
     command, _, timestamp = frame.text.partition(' ')
     command = command.lower()
 

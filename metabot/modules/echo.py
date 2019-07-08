@@ -37,7 +37,7 @@ def echo(ctx, msg, data):  # pylint: disable=missing-docstring
 def admin(ctx, msg, frame):
     """Handle /admin BOTNAME echo."""
 
-    modconf = frame.parent[frame.field]
+    modconf = frame.value
     command, _, text = frame.text.partition(' ')
     command = command.lower()
 

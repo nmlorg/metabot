@@ -103,7 +103,7 @@ def inline(ctx, modconf):
 def admin(ctx, msg, frame):
     """Handle /admin BOTNAME groups."""
 
-    modconf = frame.parent[frame.field]
+    modconf = frame.value
     text = frame.text
     if text.startswith('remove '):
         text = text[len('remove '):]

@@ -17,6 +17,21 @@ class Frame:  # pylint: disable=too-few-public-methods
         self.desc = desc
         self.text = text
 
+    def get(self, default=None):
+        """Return the current value iff it already exists."""
+
+        return self.parent.get(self.field, default)
+
+    @property
+    def value(self):
+        """Return the current value if it already exists, otherwise create it as a new container."""
+
+        return self.parent[self.field]
+
+    @value.setter
+    def value(self, value):
+        self.parent[self.field] = value
+
 
 def announcement(ctx, msg, frame):
     """Configure a daily announcement."""
@@ -36,11 +51,11 @@ def announcement(ctx, msg, frame):
 def bool(unused_ctx, msg, frame):  # pylint: disable=redefined-builtin
     """Configure a toggle-able setting."""
 
-    if frame.parent.get(frame.field):
-        frame.parent.pop(frame.field)
+    if frame.get():
+        frame.value = None
         msg.add('Disabled <code>%s</code>.', frame.field)
     else:
-        frame.parent[frame.field] = True
+        frame.value = True
         msg.add('Enabled <code>%s</code>.', frame.field)
 
 
@@ -49,7 +64,7 @@ def calendars(ctx, msg, frame):
 
     action, _, target = frame.text.partition(' ')
 
-    calcodes = set(frame.parent.get(frame.field, '').split())
+    calcodes = set(frame.get('').split())
 
     if target and target not in ctx.bot.multibot.calendars:
         msg.add('<code>%s</code> is not a calendar!', target)
@@ -66,10 +81,7 @@ def calendars(ctx, msg, frame):
             msg.add('Removed <code>%s</code> from your calendar view.', target)
             calcodes.remove(target)
 
-    if calcodes:
-        frame.parent[frame.field] = ' '.join(sorted(calcodes))
-    else:
-        frame.parent.pop(frame.field)
+    frame.value = ' '.join(sorted(calcodes)) or None
 
     msg.action = 'Select a calendar'
     msg.add(frame.desc)
@@ -85,17 +97,14 @@ def calendars(ctx, msg, frame):
 def daysofweek(unused_ctx, msg, frame):  # pylint: disable=too-many-branches
     """Select days of the week to enable/disable."""
 
-    value = frame.parent.get(frame.field, 0)
+    value = frame.get(0)
     if frame.text == 'all':
         value = 0
     elif frame.text == 'none':
         value = 127
     elif frame.text.isdigit():
         value ^= 1 << int(frame.text)
-    if value:
-        frame.parent[frame.field] = value
-    else:
-        frame.parent.pop(frame.field)
+    frame.value = value or None
 
     msg.action = 'Select a day of the week to toggle'
     msg.add(frame.desc)
@@ -137,7 +146,7 @@ def fields(ctx, msg, frame, fieldset, what='field'):
     """Present a menu of fields to edit."""
 
     field, _, text = frame.text.partition(' ')
-    subconf = frame.parent[frame.field]
+    subconf = frame.value
     for fieldname, uifunc, fielddesc in fieldset:
         if fieldname == field:
             msg.path(field)
@@ -191,27 +200,22 @@ def freeform(ctx, msg, frame):  # pylint: disable=too-many-branches
     if text:
         if text.lower() in ('-', 'none', 'off'):
             text = ''
-        if frame.parent.get(frame.field):
+        if frame.get():
             if text:
                 msg.add('Changed <code>%s</code> from <code>%s</code> to <code>%s</code>.',
-                        frame.field, frame.parent[frame.field], text)
+                        frame.field, frame.value, text)
             else:
-                msg.add('Unset <code>%s</code> (was <code>%s</code>).', frame.field,
-                        frame.parent[frame.field])
+                msg.add('Unset <code>%s</code> (was <code>%s</code>).', frame.field, frame.value)
         elif text:
             msg.add('Set <code>%s</code> to <code>%s</code>.', frame.field, text)
         else:
             msg.add('Unset <code>%s</code>.', frame.field)
-        if text:
-            frame.parent[frame.field] = text
-        else:
-            frame.parent.pop(frame.field)
+        frame.value = text or None
     else:
         msg.action = 'Type a new value for ' + frame.field
         msg.add(frame.desc)
-        if frame.parent.get(frame.field):
-            msg.add('<code>%s</code> is currently <code>%s</code>.', frame.field,
-                    frame.parent[frame.field])
+        if frame.get():
+            msg.add('<code>%s</code> is currently <code>%s</code>.', frame.field, frame.value)
         msg.add('Type your new value, or type "off" to disable/reset to default.')
 
 
@@ -219,7 +223,7 @@ def groupid(ctx, msg, frame):
     """Select a group."""
 
     if frame.text in ctx.targetbotconf['issue37']['moderator']:
-        frame.parent[frame.field] = frame.text
+        frame.value = frame.text
         msg.add('Set <code>%s</code> to <code>%s</code>.', frame.field, frame.text)
         return
 
@@ -238,27 +242,22 @@ def integer(unused_ctx, msg, frame):
             value = int(frame.text)
         except ValueError:
             value = None
-        if frame.parent.get(frame.field) is not None:
+        if frame.get() is not None:
             if value is not None:
                 msg.add('Changed <code>%s</code> from <code>%s</code> to <code>%s</code>.',
-                        frame.field, frame.parent[frame.field], value)
+                        frame.field, frame.value, value)
             else:
-                msg.add('Unset <code>%s</code> (was <code>%s</code>).', frame.field,
-                        frame.parent[frame.field])
+                msg.add('Unset <code>%s</code> (was <code>%s</code>).', frame.field, frame.value)
         elif value is not None:
             msg.add('Set <code>%s</code> to <code>%s</code>.', frame.field, value)
         else:
             msg.add('<code>%s</code> is already unset.', frame.field)
-        if value is not None:
-            frame.parent[frame.field] = value
-        else:
-            frame.parent.pop(frame.field)
+        frame.value = value
     else:
         msg.action = 'Type a new value for ' + frame.field
         msg.add(frame.desc)
-        if frame.parent.get(frame.field):
-            msg.add('<code>%s</code> is currently <code>%s</code>.', frame.field,
-                    frame.parent[frame.field])
+        if frame.get():
+            msg.add('<code>%s</code> is currently <code>%s</code>.', frame.field, frame.value)
         msg.add('Type your new value, or type "off" to disable/reset to default.')
 
 
@@ -266,7 +265,7 @@ def timezone(unused_ctx, msg, frame):
     """Configure a time zone."""
 
     if frame.text in pytz.all_timezones_set:
-        frame.parent[frame.field] = frame.text
+        frame.value = frame.text
         return msg.add('Set <code>%s</code> to <code>%s</code>.', frame.field, frame.text)
 
     country, _, page = frame.text.partition(' ')

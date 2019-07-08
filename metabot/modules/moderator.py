@@ -111,7 +111,7 @@ def join(ctx, msg, modconf):
 def admin(ctx, msg, frame, botadmin=True):  # pylint: disable=too-many-arguments
     """Handle /admin BOTNAME moderator."""
 
-    modconf = frame.parent[frame.field]
+    modconf = frame.value
     groups = sorted(
         group_id for group_id in modconf
         if botadmin or ctx.user['id'] in ctx.bot.multibot.conf['groups'][int(group_id)]['admins'])

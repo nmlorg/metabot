@@ -4,7 +4,7 @@
 def admin(ctx, msg, frame):
     """Handle /admin BOTNAME telegram (manage the bot's Telegram state)."""
 
-    modconf = frame.parent[frame.field]
+    modconf = frame.value
     username = ctx.targetbotuser
     msg.action = 'Choose an action'
 

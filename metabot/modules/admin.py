@@ -85,7 +85,7 @@ def bootstrap(ctx, msg, modconf):
 def admin(ctx, msg, frame):  # pylint: disable=too-many-branches
     """Handle /admin BOTNAME admin (configure the admin module itself)."""
 
-    modconf = frame.parent[frame.field]
+    modconf = frame.value
     if 'admins' not in modconf:  # pragma: no cover
         modconf['admins'] = []
 

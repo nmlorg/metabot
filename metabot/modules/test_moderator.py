@@ -275,7 +275,7 @@ Unset <code>greeting</code> (was <code>Welcome! New message.</code>).
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › moderator › -1001000001000: <b>Choose a field</b>
 
-Unset <code>greeting</code>.
+<code>greeting</code> is already unset.
 [calendars • Which calendars should be listed in /events? | /admin modulestestbot moderator -1001000001000 calendars]
 [daily • Should I announce upcoming events once a day? | /admin modulestestbot moderator -1001000001000 daily]
 [forward • Automatically forward messages from one chat to this one. | /admin modulestestbot moderator -1001000001000 forward]

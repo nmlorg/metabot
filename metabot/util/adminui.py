@@ -199,18 +199,8 @@ def freeform(ctx, msg, frame):  # pylint: disable=too-many-branches
 
     if text:
         if text.lower() in ('-', 'none', 'off'):
-            text = ''
-        if frame.get():
-            if text:
-                msg.add('Changed <code>%s</code> from <code>%s</code> to <code>%s</code>.',
-                        frame.field, frame.value, text)
-            else:
-                msg.add('Unset <code>%s</code> (was <code>%s</code>).', frame.field, frame.value)
-        elif text:
-            msg.add('Set <code>%s</code> to <code>%s</code>.', frame.field, text)
-        else:
-            msg.add('Unset <code>%s</code>.', frame.field)
-        frame.value = text or None
+            text = None
+        set_log(msg, frame, text)
     else:
         msg.action = 'Type a new value for ' + frame.field
         msg.add(frame.desc)
@@ -223,9 +213,7 @@ def groupid(ctx, msg, frame):
     """Select a group."""
 
     if frame.text in ctx.targetbotconf['issue37']['moderator']:
-        frame.value = frame.text
-        msg.add('Set <code>%s</code> to <code>%s</code>.', frame.field, frame.text)
-        return
+        return set_log(msg, frame, frame.text)
 
     msg.action = 'Select a group'
     msg.add(frame.desc)
@@ -242,17 +230,7 @@ def integer(unused_ctx, msg, frame):
             value = int(frame.text)
         except ValueError:
             value = None
-        if frame.get() is not None:
-            if value is not None:
-                msg.add('Changed <code>%s</code> from <code>%s</code> to <code>%s</code>.',
-                        frame.field, frame.value, value)
-            else:
-                msg.add('Unset <code>%s</code> (was <code>%s</code>).', frame.field, frame.value)
-        elif value is not None:
-            msg.add('Set <code>%s</code> to <code>%s</code>.', frame.field, value)
-        else:
-            msg.add('<code>%s</code> is already unset.', frame.field)
-        frame.value = value
+        set_log(msg, frame, value)
     else:
         msg.action = 'Type a new value for ' + frame.field
         msg.add(frame.desc)
@@ -261,12 +239,27 @@ def integer(unused_ctx, msg, frame):
         msg.add('Type your new value, or type "off" to disable/reset to default.')
 
 
+def set_log(msg, frame, new):
+    """Set frame.value = new, and report the change to the user."""
+
+    current = frame.get()
+    frame.value = new
+    if current is None and new is None:
+        msg.add('<code>%s</code> is already unset.', frame.field)
+    elif current is None:
+        msg.add('Set <code>%s</code> to <code>%s</code>.', frame.field, new)
+    elif new is None:
+        msg.add('Unset <code>%s</code> (was <code>%s</code>).', frame.field, current)
+    else:
+        msg.add('Changed <code>%s</code> from <code>%s</code> to <code>%s</code>.', frame.field,
+                current, new)
+
+
 def timezone(unused_ctx, msg, frame):
     """Configure a time zone."""
 
     if frame.text in pytz.all_timezones_set:
-        frame.value = frame.text
-        return msg.add('Set <code>%s</code> to <code>%s</code>.', frame.field, frame.text)
+        return set_log(msg, frame, frame.text)
 
     country, _, page = frame.text.partition(' ')
     country = country.upper()

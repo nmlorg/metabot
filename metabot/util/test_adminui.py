@@ -196,8 +196,6 @@ Automatically forward messages from one chat to this one.
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › moderator › -1001000001000 › forward › from: <b>Select a group</b>
 
-Automatically forward messages from one chat to this one.
-
 What group should messages be forwarded from?
 
 Select a group:
@@ -210,9 +208,9 @@ Select a group:
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › moderator › -1001000001000 › forward: <b>Choose a field</b>
 
-Automatically forward messages from one chat to this one.
-
 Set <code>from</code> to <code>-1002000002000</code>.
+
+Automatically forward messages from one chat to this one.
 [from (-10020000…) • What group should messages be forwarded from? | /admin modulestestbot moderator -1001000001000 forward from]
 [notify (no) • Should forwarded messages trigger a notification? | /admin modulestestbot moderator -1001000001000 forward notify]
 [Back | /admin modulestestbot moderator -1001000001000]
@@ -263,6 +261,8 @@ Type your new value, or type "off" to disable/reset to default.
 Bot Admin › modulestestbot › moderator › -1001000001000 › daily: <b>Choose a field</b>
 
 Set <code>hour</code> to <code>8</code>.
+
+Should I announce upcoming events once a day?
 [hour (8) • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
 [dow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 daily dow]
 [text • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 daily text]
@@ -288,6 +288,8 @@ Type your new value, or type "off" to disable/reset to default.
 Bot Admin › modulestestbot › moderator › -1001000001000 › daily: <b>Choose a field</b>
 
 Changed <code>hour</code> from <code>8</code> to <code>9</code>.
+
+Should I announce upcoming events once a day?
 [hour (9) • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
 [dow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 daily dow]
 [text • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 daily text]
@@ -301,6 +303,8 @@ Changed <code>hour</code> from <code>8</code> to <code>9</code>.
 Bot Admin › modulestestbot › moderator › -1001000001000 › daily: <b>Choose a field</b>
 
 Unset <code>hour</code> (was <code>9</code>).
+
+Should I announce upcoming events once a day?
 [hour • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
 [dow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 daily dow]
 [text • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 daily text]
@@ -314,6 +318,8 @@ Unset <code>hour</code> (was <code>9</code>).
 Bot Admin › modulestestbot › moderator › -1001000001000 › daily: <b>Choose a field</b>
 
 <code>hour</code> is already unset.
+
+Should I announce upcoming events once a day?
 [hour • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
 [dow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 daily dow]
 [text • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 daily text]

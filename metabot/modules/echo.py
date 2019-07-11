@@ -55,10 +55,9 @@ def admin(ctx, msg, frame):
 
     msg.path(command)
 
-    fields = (
+    adminui.Menu(
         ('text', adminui.freeform,
          'The message, sticker, or image to send in response to /%s.' % command),
         ('paginate', adminui.bool, 'For multiline messages, display just one line at a time?'),
         ('private', adminui.bool, 'Send the message in group chats, or just in private?'),
-    )
-    return adminui.fields(ctx, msg, adminui.Frame(modconf, command, None, text), fields)
+    ).handle(ctx, msg, adminui.Frame(modconf, command, None, text))

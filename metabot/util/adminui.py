@@ -8,11 +8,11 @@ from metabot.util import humanize
 from metabot.util import tzutil
 
 
-class Frame:  # pylint: disable=too-few-public-methods
+class Frame:
     """The current position (and related state) within a hierarchical message."""
 
     def __init__(self, parent, field, desc, text):
-        self.parent = parent
+        self.parent = parent.get('issue37') or parent
         self.field = field
         self.desc = desc
         self.text = text
@@ -33,19 +33,79 @@ class Frame:  # pylint: disable=too-few-public-methods
         self.parent[self.field] = value
 
 
+class Menu:
+    """Manage the UX of navigating into each Frame."""
+
+    def __init__(self, *fields):
+        self.fields = fields
+
+    def add(self, field, handler=True, desc=None):
+        """Add a possible subframe."""
+
+        self.fields += ((field, handler, desc),)
+
+    def select(self, unused_ctx, msg, frame):
+        """Identify the selected subframe."""
+
+        field, _, text = frame.text.lstrip().partition(' ')
+        for fieldname, handler, desc in self.fields:
+            if fieldname == field:
+                return Frame(frame.value, field, desc, text), handler
+        if field:
+            msg.add("I can't set <code>%s</code>.", field)
+        return frame, None
+
+    def dispatch(self, ctx, msg, frame):
+        """Enter the selected subframe if possible."""
+
+        frame, handler = self.select(ctx, msg, frame)
+        if handler:
+            msg.path(frame.field)
+            handler(ctx, msg, frame)
+            if msg.action:
+                return True
+            msg.pathpop()
+
+    def display(self, unused_ctx, msg, frame, what='field'):
+        """Display the current available subframes as a menu."""
+
+        msg.action = 'Choose a ' + what
+        for field, handler, desc in self.fields:
+            value = frame.value.get(field)
+            if handler is bool:
+                value = value and 'yes' or 'no'
+            elif isinstance(value, dict):
+                value = None
+            elif value is not None:
+                value = '%s' % value
+                if len(value) > 10:
+                    value = value[:9] + '\u2026'
+            label = field
+            if value:
+                label = '%s (%s)' % (label, value)
+            if desc:
+                label = '%s \u2022 %s' % (label, desc)
+            msg.button(label, field)
+
+    def handle(self, ctx, msg, frame, what='field'):
+        """Enter the selected subframe if possible, or display the menu."""
+
+        if not self.dispatch(ctx, msg, frame):
+            self.display(ctx, msg, frame, what)
+
+
 def announcement(ctx, msg, frame):
     """Configure a daily announcement."""
 
-    if not frame.text:
-        msg.add(frame.desc)
-
-    fieldset = (
+    menu = Menu(
         ('hour', integer, 'At what hour?'),
         ('dow', daysofweek, 'Which days of the week should I announce upcoming events on?'),
         ('text', freeform,
          'One or more messages (one per line) to use/cycle through for the daily announcement.'),
     )
-    return fields(ctx, msg, frame, fieldset)
+    if not menu.dispatch(ctx, msg, frame):
+        msg.add(frame.desc)
+        menu.display(ctx, msg, frame)
 
 
 def bool(unused_ctx, msg, frame):  # pylint: disable=redefined-builtin
@@ -142,47 +202,16 @@ def daysofweek(unused_ctx, msg, frame):  # pylint: disable=too-many-branches
         msg.buttons(buttons)
 
 
-def fields(ctx, msg, frame, fieldset, what='field'):
-    """Present a menu of fields to edit."""
-
-    field, _, text = frame.text.partition(' ')
-    subconf = frame.value
-    for fieldname, uifunc, fielddesc in fieldset:
-        if fieldname == field:
-            msg.path(field)
-            uifunc(ctx, msg, Frame(subconf, field, fielddesc, text))
-            if not msg.action:
-                msg.pathpop()
-            break
-    else:
-        if field:
-            msg.add("I can't set <code>%s</code>.", field)
-
-    if not msg.action:
-        msg.action = 'Choose a ' + what
-        for fieldname, uifunc, fielddesc in fieldset:
-            value = subconf.get(fieldname)
-            if uifunc is bool:
-                value = value and 'yes' or 'no'
-            elif isinstance(value, dict):
-                value = None
-            elif value is not None:
-                value = '%s' % value
-                if len(value) > 10:
-                    value = value[:9] + '\u2026'
-            label = value and '%s (%s)' % (fieldname, value) or fieldname
-            msg.button('%s \u2022 %s' % (label, fielddesc), fieldname)
-
-
 def forward(ctx, msg, frame):
     """Configure the bot to forward messages from one chat to another."""
 
-    msg.add(frame.desc)
-    fieldset = (
+    menu = Menu(
         ('from', groupid, 'What group should messages be forwarded from?'),
         ('notify', bool, 'Should forwarded messages trigger a notification?'),
     )
-    return fields(ctx, msg, frame, fieldset)
+    if not menu.dispatch(ctx, msg, frame):
+        msg.add(frame.desc)
+        menu.display(ctx, msg, frame)
 
 
 def freeform(ctx, msg, frame):  # pylint: disable=too-many-branches

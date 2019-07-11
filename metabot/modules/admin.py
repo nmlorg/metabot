@@ -27,22 +27,22 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
 
 def default(ctx, msg):  # pylint: disable=missing-docstring
     ctx.private = True
-    bots = sorted(username for username, botconf in ctx.bot.multibot.conf['bots'].items()
-                  if ctx.user['id'] in botconf['issue37']['admin']['admins'])
+    msg.path('/admin', 'Bot Admin')
+    frame = adminui.Frame(ctx.bot.multibot.conf, 'bots', None, ctx.text)
+    menu = adminui.Menu()
+    for username, botconf in sorted(frame.value.items()):
+        if ctx.user['id'] in botconf['issue37']['admin']['admins']:
+            menu.add(username)
 
-    if not bots:
+    if not menu.fields:
         return msg.add(
             "Hi! You aren't one of my admins. If you should be, ask a current admin to add you by "
             'opening a chat with me (@%s) and typing:\n'
             '\n'
             '<pre>/admin %s admin add %s</pre>', ctx.bot.username, ctx.bot.username, ctx.user['id'])
 
-    msg.path('/admin', 'Bot Admin')
-
-    username, text = ctx.split(2)
-
-    if username not in bots:
-        msg.action = 'Choose a bot'
+    frame, handler = menu.select(ctx, msg, frame)
+    if not handler:
         msg.add('This is a metabot! Check out https://github.com/nmlorg/metabot/issues to keep '
                 'track of bugs and features.')
         try:
@@ -50,28 +50,23 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
         except IOError:
             pass
         msg.add('To configure your bot, choose its username:')
-        for username in bots:
-            msg.button(username, '/admin ' + username)
-        return
+        return menu.display(ctx, msg, frame, 'bot')
 
-    msg.path(username)
-    ctx.targetbotuser = username
-    ctx.targetbotconf = ctx.bot.multibot.conf['bots'][username]
+    msg.path(frame.field)
+    ctx.targetbotuser = frame.field
+    ctx.targetbotconf = frame.value
 
-    modules = sorted((modname, module.admin, module.__doc__.splitlines()[0].rstrip('.'))
-                     for modname, module in ctx.bot.multibot.modules.items()
-                     if hasattr(module, 'admin'))
+    menu = adminui.Menu()
+    for modname, module in sorted(ctx.bot.multibot.modules.items()):
+        if hasattr(module, 'admin'):
+            menu.add(modname, module.admin, module.__doc__.splitlines()[0].rstrip('.'))
 
-    if not modules:  # pragma: no cover
+    if not menu.fields:
         return msg.add(
             "Hi! There aren't any configurable modules installed. Contact a metabot admin to "
             'install one.')
 
-    return adminui.fields(ctx,
-                          msg,
-                          adminui.Frame(ctx.targetbotconf, 'issue37', None, text),
-                          modules,
-                          what='module')
+    menu.handle(ctx, msg, frame, 'module')
 
 
 def bootstrap(ctx, msg, modconf):

@@ -136,7 +136,7 @@ def admin(ctx, msg, frame, botadmin=True):  # pylint: disable=too-many-arguments
         return
 
     msg.path(group_id)
-    fields = (
+    adminui.Menu(
         ('calendars', adminui.calendars, 'Which calendars should be listed in /events?'),
         ('daily', adminui.announcement, 'Should I announce upcoming events once a day?'),
         ('forward', adminui.forward, 'Automatically forward messages from one chat to this one.'),
@@ -144,5 +144,4 @@ def admin(ctx, msg, frame, botadmin=True):  # pylint: disable=too-many-arguments
         ('maxeventscount', adminui.integer, 'How many events should be listed in /events?'),
         ('maxeventsdays', adminui.integer, 'How many days into the future should /events look?'),
         ('timezone', adminui.timezone, 'What time zone should be used in /events?'),
-    )
-    return adminui.fields(ctx, msg, adminui.Frame(modconf, group_id, None, text), fields)
+    ).handle(ctx, msg, adminui.Frame(modconf, group_id, None, text))

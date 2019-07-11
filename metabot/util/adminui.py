@@ -44,14 +44,17 @@ class Menu:
 
         self.fields += ((field, handler, desc),)
 
-    def select(self, unused_ctx, msg, frame):
+    def select(self, unused_ctx, msg, frame, create=False):
         """Identify the selected subframe."""
 
         field, _, text = frame.text.lstrip().partition(' ')
+        field = field.lower()
         for fieldname, handler, desc in self.fields:
-            if fieldname == field:
-                return Frame(frame.value, field, desc, text), handler
+            if fieldname.lower() == field:
+                return Frame(frame.value, fieldname, desc, text), handler
         if field:
+            if create:
+                return Frame(frame.value, field, None, text), create
             msg.add("I can't set <code>%s</code>.", field)
         return frame, None
 

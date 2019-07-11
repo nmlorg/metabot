@@ -166,7 +166,7 @@ Changed <code>text</code> from <code>my message</code> to <code>new message</cod
 Bot Admin › modulestestbot › echo: <b>Choose a command</b>
 
 Type the name of a command to add (like <code>rules</code>—don't include a slash at the beginning!), or select an existing echo.
-[/echotest (new message) | /admin modulestestbot echo echotest]
+[echotest • new message | /admin modulestestbot echo echotest]
 [Back | /admin modulestestbot]
 """
 
@@ -186,7 +186,7 @@ Enabled <code>paginate</code>.
 Bot Admin › modulestestbot › echo: <b>Choose a command</b>
 
 Type the name of a command to add (like <code>rules</code>—don't include a slash at the beginning!), or select an existing echo.
-[/echotest (new message) | /admin modulestestbot echo echotest]
-[/textless | /admin modulestestbot echo textless]
+[echotest • new message | /admin modulestestbot echo echotest]
+[textless | /admin modulestestbot echo textless]
 [Back | /admin modulestestbot]
 """

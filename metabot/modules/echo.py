@@ -37,27 +37,22 @@ def echo(ctx, msg, data):  # pylint: disable=missing-docstring
 def admin(ctx, msg, frame):
     """Handle /admin BOTNAME echo."""
 
-    modconf = frame.value
-    command, _, text = frame.text.partition(' ')
-    command = command.lower()
-
-    if not command:
+    menu = adminui.Menu()
+    for command, data in sorted(frame.value.items()):
+        menu.add(command, desc=data.get('text', '').replace('\n', ' '))
+    frame, handler = menu.select(ctx, msg, frame, create=True)
+    if not handler:
         msg.action = 'Choose a command'
         msg.add(
             "Type the name of a command to add (like <code>rules</code>\u2014don't include a slash "
             'at the beginning!), or select an existing echo.')
-        for command, data in sorted(modconf.items()):
-            title = '/' + command
-            if data.get('text'):
-                title = '%s (%s)' % (title, data['text'].replace('\n', ' '))
-            msg.button(title, command)
-        return
+        return menu.display(ctx, msg, frame, 'command')
 
-    msg.path(command)
+    msg.path(frame.field)
 
     adminui.Menu(
         ('text', adminui.freeform,
-         'The message, sticker, or image to send in response to /%s.' % command),
+         'The message, sticker, or image to send in response to /%s.' % frame.field),
         ('paginate', adminui.bool, 'For multiline messages, display just one line at a time?'),
         ('private', adminui.bool, 'Send the message in group chats, or just in private?'),
-    ).handle(ctx, msg, adminui.Frame(modconf, command, None, text))
+    ).handle(ctx, msg, frame)

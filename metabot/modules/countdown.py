@@ -2,6 +2,7 @@
 
 import time
 
+from metabot.util import adminui
 from metabot.util import humanize
 
 
@@ -22,16 +23,17 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
 
 
 def countdown(msg, timestamp):  # pylint: disable=missing-docstring
-    now = time.time()
-    if now > timestamp:
-        msg.add(format_delta(now - timestamp) + ' ago')
-    else:
-        msg.add(format_delta(timestamp - now))
+    msg.add(format_delta(timestamp - time.time()))
 
 
 def format_delta(seconds):
     """Format a number of seconds into "5 days, 1 hour, 13.4 seconds", etc."""
 
+    if seconds < 0:
+        suffix = ' ago'
+        seconds = -seconds
+    else:
+        suffix = ''
     days, seconds = divmod(seconds, 60 * 60 * 24)
     hours, seconds = divmod(seconds, 60 * 60)
     minutes, seconds = divmod(seconds, 60)
@@ -48,51 +50,43 @@ def format_delta(seconds):
     if seconds:
         message.append(humanize.plural(seconds, 'second', '<b>%s</b> %s'))
     if message:
-        return ', '.join(message)
+        return ', '.join(message) + suffix
     return '<b>NOW</b>'
 
 
-def admin(unused_ctx, msg, frame):
+def admin(ctx, msg, frame):
     """Handle /admin BOTNAME countdown."""
 
-    modconf = frame.value
-    command, _, timestamp = frame.text.partition(' ')
-    command = command.lower()
-
-    if command and timestamp:
-        if timestamp.isdigit():
-            timestamp = int(timestamp)
-            if command in modconf:
-                msg.add('Changed /%s from <code>%s</code> to <code>%s</code>.', command,
-                        modconf[command], timestamp)
-            else:
-                msg.add('/%s is now counting down to <code>%s</code>.', command, timestamp)
-            modconf[command] = timestamp
-            command = timestamp = None
-        elif timestamp == 'remove':
-            if command not in modconf:
-                msg.add('/%s is not currently counting down to anything.', command)
-            else:
-                msg.add('Removed /%s (which was counting down to <code>%s</code>).', command,
-                        modconf[command])
-                modconf.pop(command)
-            command = timestamp = None
+    menu = adminui.Menu()
+    for command in sorted(frame.value):
+        menu.add(command)
+    newframe, handler = menu.select(ctx, msg, frame, create=True)
+    if handler:
+        if newframe.text.isdigit():
+            adminui.set_log(msg, newframe, int(newframe.text))
+        elif newframe.text.lower() in ('-', 'none', 'off', 'remove'):
+            adminui.set_log(msg, newframe, None)
         else:
-            msg.add("I'm not sure how to count down to <code>%s</code>!", timestamp)
-            timestamp = None
+            if newframe.text:
+                msg.add("I'm not sure how to count down to <code>%s</code>!", newframe.text)
 
-    if not command:
-        msg.action = 'Choose a command'
-        msg.add(
-            "Type the name of a command to add (like <code>days</code>\u2014don't include a slash "
-            'at the beginning!), or select an existing countdown to remove.')
-        for command, timestamp in sorted(modconf.items()):
-            msg.button('/%s (%s)' % (command, timestamp), '%s remove' % command)
-        return
+            msg.path(newframe.field)
+            msg.action = 'Type the time for /' + newframe.field
+            msg.add('This is a little technical (it will be made simpler in the future), but type '
+                    'the unix timestamp to count down to.')
+            msg.add('(Go to https://www.epochconverter.com/, fill out the section "Human date to '
+                    'Timestamp", then use the number listed next to "Epoch timestamp".)')
+            if newframe.value:
+                msg.add('To remove /%s (which is counting to %s), type "off".', newframe.field,
+                        newframe.value)
+            return
 
-    msg.path(command)
-    msg.action = 'Type the time for /' + command
-    msg.add('This is a little technical (it will be made simpler in the future), but type the unix '
-            'timestamp to count down to.')
-    msg.add('(Go to https://www.epochconverter.com/, fill out the section "Human date to '
-            'Timestamp", then use the number listed next to "Epoch timestamp".)')
+    msg.action = 'Choose a command'
+    msg.add(
+        "Type the name of a command to add (like <code>days</code>\u2014don't include a slash "
+        'at the beginning!), or select an existing countdown to remove.')
+    # See https://github.com/nmlorg/metabot/issues/65.
+    menu = adminui.Menu()
+    for command in sorted(frame.value):
+        menu.add(command)
+    menu.display(ctx, msg, frame, 'command')

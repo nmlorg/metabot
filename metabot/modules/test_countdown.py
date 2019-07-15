@@ -77,10 +77,10 @@ This is a little technical (it will be made simpler in the future), but type the
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › countdown: <b>Choose a command</b>
 
-/countdowntest is now counting down to <code>1534906800</code>.
+Set <code>countdowntest</code> to <code>1534906800</code>.
 
 Type the name of a command to add (like <code>days</code>—don't include a slash at the beginning!), or select an existing countdown to remove.
-[/countdowntest (1534906800) | /admin modulestestbot countdown countdowntest remove]
+[countdowntest (1534906800) | /admin modulestestbot countdown countdowntest]
 [Back | /admin modulestestbot]
 """
 
@@ -88,10 +88,10 @@ Type the name of a command to add (like <code>days</code>—don't include a slas
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › countdown: <b>Choose a command</b>
 
-Changed /countdowntest from <code>1534906800</code> to <code>1000</code>.
+Changed <code>countdowntest</code> from <code>1534906800</code> to <code>1000</code>.
 
 Type the name of a command to add (like <code>days</code>—don't include a slash at the beginning!), or select an existing countdown to remove.
-[/countdowntest (1000) | /admin modulestestbot countdown countdowntest remove]
+[countdowntest (1000) | /admin modulestestbot countdown countdowntest]
 [Back | /admin modulestestbot]
 """
 
@@ -104,6 +104,8 @@ I'm not sure how to count down to <code>bogus&lt;&gt;</code>!
 This is a little technical (it will be made simpler in the future), but type the unix timestamp to count down to.
 
 (Go to https://www.epochconverter.com/, fill out the section "Human date to Timestamp", then use the number listed next to "Epoch timestamp".)
+
+To remove /countdowntest (which is counting to 1000), type "off".
 [Back | /admin modulestestbot countdown]
 """
 
@@ -111,7 +113,7 @@ This is a little technical (it will be made simpler in the future), but type the
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › countdown: <b>Choose a command</b>
 
-Removed /countdowntest (which was counting down to <code>1000</code>).
+Unset <code>countdowntest</code> (was <code>1000</code>).
 
 Type the name of a command to add (like <code>days</code>—don't include a slash at the beginning!), or select an existing countdown to remove.
 [Back | /admin modulestestbot]
@@ -121,7 +123,7 @@ Type the name of a command to add (like <code>days</code>—don't include a slas
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › countdown: <b>Choose a command</b>
 
-/bogus is not currently counting down to anything.
+<code>bogus</code> is already unset.
 
 Type the name of a command to add (like <code>days</code>—don't include a slash at the beginning!), or select an existing countdown to remove.
 [Back | /admin modulestestbot]

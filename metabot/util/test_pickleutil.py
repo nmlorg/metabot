@@ -43,14 +43,7 @@ def test_optimize_containers():
     assert key1 == key2 and key1 is not key2
 
     entry = {'dummy': 'test'}
-    cont = {
-        'dummy1': {
-            key1: entry,
-        },
-        'dummy2': {
-            key2: entry,
-        }
-    }
+    cont = {'dummy1': {key1: entry}, 'dummy2': {key2: entry}}
     (key1copy,) = tuple(cont['dummy1'])
     (key2copy,) = tuple(cont['dummy2'])
     assert key1copy == key2copy and key1copy is not key2copy

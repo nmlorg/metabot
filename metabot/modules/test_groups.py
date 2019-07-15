@@ -42,16 +42,15 @@ Type the <code>@USERNAME</code> or <code>https://t.me/joinchat/INVITE_LINK</code
                 'description': 'Dummy public group'
             }
         })
-    conversation.bot.get_chat_administrators.respond(
-        json={
-            'ok': True,
-            'result': [{
-                'user': {
-                    'id': 1000,
-                    'username': 'DummyUser'
-                }
-            }]
-        })
+    conversation.bot.get_chat_administrators.respond(json={
+        'ok': True,
+        'result': [{
+            'user': {
+                'id': 1000,
+                'username': 'DummyUser',
+            },
+        }],
+    })
 
     assert conversation.message('@dummygroup') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]

@@ -82,9 +82,8 @@ def admin(ctx, msg, frame):
             return
 
     msg.action = 'Choose a command'
-    msg.add(
-        "Type the name of a command to add (like <code>days</code>\u2014don't include a slash "
-        'at the beginning!), or select an existing countdown to remove.')
+    msg.add("Type the name of a command to add (like <code>days</code>\u2014don't include a slash "
+            'at the beginning!), or select an existing countdown to remove.')
     # See https://github.com/nmlorg/metabot/issues/65.
     menu = adminui.Menu()
     for command in sorted(frame.value):

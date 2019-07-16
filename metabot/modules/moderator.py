@@ -111,12 +111,13 @@ def join(ctx, msg, modconf):
 def admin(ctx, msg, frame, botadmin=True):  # pylint: disable=too-many-arguments
     """Handle /admin BOTNAME moderator."""
 
-    modconf = frame.value
-    groups = sorted(
-        group_id for group_id in modconf
-        if botadmin or ctx.user['id'] in ctx.bot.multibot.conf['groups'][int(group_id)]['admins'])
+    menu = adminui.Menu()
+    for group_id in sorted(frame.value):
+        groupdata = ctx.bot.multibot.conf['groups'][int(group_id)]
+        if botadmin or ctx.user['id'] in groupdata['admins']:
+            menu.add(group_id, desc=groupdata['title'])
 
-    if not groups:
+    if not menu.fields:
         if botadmin:
             msg.action = 'Add me to a group'
             return msg.add(
@@ -126,16 +127,12 @@ def admin(ctx, msg, frame, botadmin=True):  # pylint: disable=too-many-arguments
             "Hi! You aren't an admin in any groups I'm in. If you should be, ask a current admin "
             "to promote you from the group's members list.")
 
-    group_id, _, text = frame.text.partition(' ')
+    frame, handler = menu.select(ctx, msg, frame)
+    if not handler:
+        return menu.display(ctx, msg, frame, 'group')
 
-    if group_id not in groups:
-        msg.action = 'Choose a group'
-        for group_id in groups:
-            groupconf = modconf[group_id]
-            msg.button('%s (%s)' % (group_id, groupconf['title']), group_id)
-        return
+    msg.path(frame.field)
 
-    msg.path(group_id)
     adminui.Menu(
         ('calendars', adminui.calendars, 'Which calendars should be listed in /events?'),
         ('daily', adminui.announcement, 'Should I announce upcoming events once a day?'),
@@ -144,4 +141,4 @@ def admin(ctx, msg, frame, botadmin=True):  # pylint: disable=too-many-arguments
         ('maxeventscount', adminui.integer, 'How many events should be listed in /events?'),
         ('maxeventsdays', adminui.integer, 'How many days into the future should /events look?'),
         ('timezone', adminui.timezone, 'What time zone should be used in /events?'),
-    ).handle(ctx, msg, adminui.Frame(modconf, group_id, None, text))
+    ).handle(ctx, msg, frame)

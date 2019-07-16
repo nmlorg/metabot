@@ -30,8 +30,10 @@ def test_forward(conversation):  # pylint: disable=redefined-outer-name
 def test_mod(conversation):  # pylint: disable=redefined-outer-name
     """Test /mod."""
 
-    conversation.bot.config['issue37']['moderator']['-1001000001000']['title'] = 'Mod Test'
-    conversation.bot.config['issue37']['moderator']['-1002000002000']['title'] = 'Hidden Group'
+    modconf = conversation.bot.config['issue37']['moderator']
+    groupdata = conversation.multibot.conf['groups']
+    modconf['-1001000001000']['title'] = groupdata[-1001000001000]['title'] = 'Mod Test'
+    modconf['-1002000002000']['title'] = groupdata[-1002000002000]['title'] = 'Hidden Group'
 
     assert conversation.message('/mod', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
@@ -45,13 +47,15 @@ Hi! You aren't an admin in any groups I'm in. If you should be, ask a current ad
     assert conversation.message('/mod', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 Group Admin: <b>Choose a group</b>
-[-1001000001000 (Mod Test) | /mod -1001000001000]
+[-1001000001000 • Mod Test | /mod -1001000001000]
 """
 
     assert conversation.message('/mod -1002000002000', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 Group Admin: <b>Choose a group</b>
-[-1001000001000 (Mod Test) | /mod -1001000001000]
+
+I can't set <code>-1002000002000</code>.
+[-1001000001000 • Mod Test | /mod -1001000001000]
 """
 
     assert conversation.message('/mod -1001000001000', user_id=2000) == """\
@@ -95,7 +99,7 @@ I'm not in any groups! Add me to an existing group from its details screen.
     assert conversation.message('/admin modulestestbot moderator') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › moderator: <b>Choose a group</b>
-[-1001000001000 (My Group) | /admin modulestestbot moderator -1001000001000]
+[-1001000001000 • My Group | /admin modulestestbot moderator -1001000001000]
 [Back | /admin modulestestbot]
 """
 

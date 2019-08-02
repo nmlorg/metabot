@@ -95,11 +95,16 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         self.multibot.dispatcher(self.bot, update)
         return responses
 
+    @staticmethod
+    def format_messages(messages):
+        """Format a sequence of intercepted API calls into a transcript representation."""
+
+        return '\n\n'.join(map(_format_message, messages))
+
     def message(self, *args, **kwargs):
         """Simulate a private message (with human-friendly output)."""
 
-        return '\n\n'.join(
-            _format_message(response) for response in self.raw_message(*args, **kwargs))
+        return self.format_messages(self.raw_message(*args, **kwargs))
 
 
 @pytest.fixture

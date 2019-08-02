@@ -479,3 +479,36 @@ def test_format_daily_message():  # pylint: disable=missing-docstring
         "I love events:\n"
         '\n'
         'EVENT1')
+
+
+def test_daily_messages(conversation):  # pylint: disable=redefined-outer-name
+    """Test daily announcement logic."""
+
+    replies = conversation.raw_message('/dummy')
+    assert conversation.format_messages(replies) == ''
+
+    now = 1000
+
+    # pylint: disable=protected-access
+
+    events._daily_messages(conversation.multibot, now)
+    assert conversation.format_messages(replies) == ''
+
+    conversation.bot.config['issue37']['moderator']['-1002000002000'] = {
+        'calendars': '6fc2c510',
+        'daily': {
+            'hour': 0,
+        },
+        'timezone': 'UTC',
+    }
+
+    events._daily_messages(conversation.multibot, now)
+    assert conversation.format_messages(replies) == """\
+[chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML]
+There are a couple events coming up:
+
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+"""

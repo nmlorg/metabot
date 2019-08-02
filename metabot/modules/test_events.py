@@ -479,19 +479,20 @@ def test_format_daily_message():  # pylint: disable=missing-docstring
         "I love events:\n"
         '\n'
         'EVENT1')
+    # yapf: enable
 
 
-def test_daily_messages(conversation):  # pylint: disable=redefined-outer-name
+def test_daily_messages(conversation, monkeypatch):  # pylint: disable=redefined-outer-name
     """Test daily announcement logic."""
+
+    monkeypatch.setattr('time.time', lambda: 0)
 
     replies = conversation.raw_message('/dummy')
     assert conversation.format_messages(replies) == ''
 
-    now = 1000
-
-    # pylint: disable=protected-access
-
-    events._daily_messages(conversation.multibot, now)
+    records = {}
+    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
+    assert records == {}
     assert conversation.format_messages(replies) == ''
 
     conversation.bot.config['issue37']['moderator']['-1002000002000'] = {
@@ -502,13 +503,97 @@ def test_daily_messages(conversation):  # pylint: disable=redefined-outer-name
         'timezone': 'UTC',
     }
 
-    events._daily_messages(conversation.multibot, now)
+    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
+    assert records == {
+        ('modulestestbot', '-1002000002000'): (0, [
+            '<b>Alpha Summary</b>\n'
+            '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
+            '<b>Bravo Summary</b>\n'
+            '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
+        ], {
+            'message_id': 12345,
+        }),
+    }
     assert conversation.format_messages(replies) == """\
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML]
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 """
+    replies.clear()
+
+    conversation.bot.config['issue37']['moderator']['-1002000002000']['daily']['hour'] = 1
+
+    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
+    assert records == {
+        ('modulestestbot', '-1002000002000'): (0, [
+            '<b>Alpha Summary</b>\n'
+            '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
+            '<b>Bravo Summary</b>\n'
+            '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
+        ], {
+            'message_id': 12345,
+        }),
+    }
+    assert conversation.format_messages(replies) == ''
+
+    cal = loader.get('static:test_events')
+    cal.events['6fc2c510:alpha']['summary'] = 'Edited Summary'
+
+    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
+    assert records == {
+        ('modulestestbot', '-1002000002000'): (0, [
+            '<b>Edited Summary</b>\n'
+            '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
+            '<b>Bravo Summary</b>\n'
+            '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
+        ], {
+            'message_id': 12345,
+        }),
+    }
+    assert conversation.format_messages(replies) == """\
+[chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
+There are a couple events coming up:
+
+<b>Edited Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+[Updated]
+"""
+    replies.clear()
+
+    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
+    assert records == {
+        ('modulestestbot', '-1002000002000'): (0, [
+            '<b>Edited Summary</b>\n'
+            '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
+            '<b>Bravo Summary</b>\n'
+            '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
+        ], {
+            'message_id': 12345,
+        }),
+    }
+    assert conversation.format_messages(replies) == ''
+
+    monkeypatch.setattr('time.time', lambda: 1000)
+
+    return  # See https://github.com/nmlorg/metabot/issues/64#issuecomment-516114676.
+    # pylint: disable=unreachable
+
+    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
+    assert records == {
+        ('modulestestbot', '-1002000002000'): (0, [
+            '<b>Edited Summary</b>\n'
+            '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
+            '<b>Bravo Summary</b>\n'
+            '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
+        ], {
+            'message_id': 12345,
+        }),
+    }
+    assert conversation.format_messages(replies) == ''

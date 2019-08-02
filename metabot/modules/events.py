@@ -25,36 +25,57 @@ def modinit(multibot):  # pylint: disable=missing-docstring
     def _queue():
         multibot.loop.queue.puthourly(0, _hourly, jitter=random.random() * 5)
 
+    records = {}
+
     def _hourly():
         try:
             multibot.multical.poll()
-            _daily_messages(multibot, time.time())
+            _daily_messages(multibot, records)
         finally:
             _queue()
 
     _queue()
 
 
-def _daily_messages(multibot, now):  # pylint: disable=too-many-locals
-    for botconf in multibot.conf['bots'].values():
+def _daily_messages(multibot, records):  # pylint: disable=too-many-locals
+    now = time.time()
+    for botuser, botconf in multibot.conf['bots'].items():
         for groupid, groupconf in botconf['issue37']['moderator'].items():
             calcodes, tzinfo, count, days, hour, dow = _get_group_conf(groupconf)
-            if tzinfo and isinstance(hour, int):
-                nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
-                if nowdt.hour == hour and not dow & 1 << nowdt.weekday():
-                    # See https://github.com/nmlorg/metabot/issues/26.
-                    bot = ntelebot.bot.Bot(botconf['issue37']['telegram']['token'])
-                    bot.multibot = multibot
-                    events = _get_group_events(bot, calcodes, tzinfo, count, days)
-                    if events:
-                        preambles = groupconf['daily'].get('text', '').splitlines()
-                        preamble = (preambles and preambles[nowdt.toordinal() % len(preambles)] or
-                                    '')
-                        bot.send_message(chat_id=groupid,
-                                         text=_format_daily_message(preamble, events),
-                                         parse_mode='HTML',
-                                         disable_web_page_preview=True,
-                                         disable_notification=True)
+            if not tzinfo or not isinstance(hour, int):
+                continue
+            # See https://github.com/nmlorg/metabot/issues/26.
+            bot = ntelebot.bot.Bot(botconf['issue37']['telegram']['token'])
+            bot.multibot = multibot
+            nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
+            if nowdt.hour == hour and not dow & 1 << nowdt.weekday():
+                events = _get_group_events(bot, calcodes, tzinfo, count, days, now)
+                if events:
+                    preambles = groupconf['daily'].get('text', '').splitlines()
+                    preamble = (preambles and preambles[nowdt.toordinal() % len(preambles)] or '')
+                    message = bot.send_message(chat_id=groupid,
+                                               text=_format_daily_message(preamble, events),
+                                               parse_mode='HTML',
+                                               disable_web_page_preview=True,
+                                               disable_notification=True)
+                    records[botuser, groupid] = (now, events, message)
+            elif (botuser, groupid) in records:
+                lastnow, lastevents, lastmessage = records[botuser, groupid]
+                events = _get_group_events(bot, calcodes, tzinfo, count, days, lastnow)
+                if events != lastevents:
+                    lastnowdt = datetime.datetime.fromtimestamp(lastnow, tzinfo)
+                    preambles = groupconf['daily'].get('text', '').splitlines()
+                    preamble = (preambles and preambles[lastnowdt.toordinal() % len(preambles)] or
+                                '')
+                    updated = 'Updated'
+                    text = '%s\n\n[%s]' % (_format_daily_message(preamble, events), updated)
+                    message = bot.edit_message_text(chat_id=groupid,
+                                                    message_id=lastmessage['message_id'],
+                                                    text=text,
+                                                    parse_mode='HTML',
+                                                    disable_web_page_preview=True)
+
+                    records[botuser, groupid] = (lastnow, events, message)
 
 
 def _format_daily_message(preamble, events):
@@ -104,9 +125,10 @@ def _get_group_conf(groupconf):
                           6), groupconf['daily'].get('hour'), groupconf['daily'].get('dow', 0))
 
 
-def _get_group_events(bot, calcodes, tzinfo, count, days):
+def _get_group_events(bot, calcodes, tzinfo, count, days, now=None):  # pylint: disable=too-many-arguments
     calendar_view = bot.multibot.multical.view(calcodes)
-    now = time.time()
+    if now is None:
+        now = time.time()
     nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
     midnight = nowdt.replace(hour=0, minute=0, second=0, microsecond=0)
     period = (midnight + datetime.timedelta(days=days + 1) - nowdt).total_seconds()

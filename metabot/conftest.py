@@ -88,8 +88,9 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
 
         def _handler(request, unused_context):
             responses.append(json.loads(request.body.decode('ascii')))
-            return {'ok': True, 'result': {}}
+            return {'ok': True, 'result': {'message_id': 12345}}
 
+        self.bot.edit_message_text.respond(json=_handler)
         self.bot.forward_message.respond(json=_handler)
         self.bot.send_message.respond(json=_handler)
         self.multibot.dispatcher(self.bot, update)

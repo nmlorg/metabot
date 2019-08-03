@@ -37,9 +37,9 @@ def modinit(multibot):  # pylint: disable=missing-docstring
     _queue()
 
 
-def _daily_messages(multibot, records):  # pylint: disable=too-many-locals
+def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too-many-locals,too-many-statements
     now = time.time()
-    for botuser, botconf in multibot.conf['bots'].items():
+    for botuser, botconf in multibot.conf['bots'].items():  # pylint: disable=too-many-nested-blocks
         for groupid, groupconf in botconf['issue37']['moderator'].items():
             calcodes, tzinfo, count, days, hour, dow = _get_group_conf(groupconf)
             if not tzinfo or not isinstance(hour, int):
@@ -47,6 +47,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-locals
             # See https://github.com/nmlorg/metabot/issues/26.
             bot = ntelebot.bot.Bot(botconf['issue37']['telegram']['token'])
             bot.multibot = multibot
+            form = lambda event: format_event(bot, event, tzinfo, full=False)  # pylint: disable=cell-var-from-loop
             nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
             if nowdt.hour == hour and not dow & 1 << nowdt.weekday():
                 events = _get_group_events(bot, calcodes, tzinfo, count, days, now)
@@ -54,28 +55,93 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-locals
                     preambles = groupconf['daily'].get('text', '').splitlines()
                     preamble = (preambles and preambles[nowdt.toordinal() % len(preambles)] or '')
                     message = bot.send_message(chat_id=groupid,
-                                               text=_format_daily_message(preamble, events),
+                                               text=_format_daily_message(
+                                                   preamble, list(map(form, events))),
                                                parse_mode='HTML',
                                                disable_web_page_preview=True,
                                                disable_notification=True)
-                    records[botuser, groupid] = (now, events, message)
+                    records[botuser, groupid] = (now, [event.copy() for event in events], message)
             elif (botuser, groupid) in records:
                 lastnow, lastevents, lastmessage = records[botuser, groupid]
                 events = _get_group_events(bot, calcodes, tzinfo, count, days, lastnow)
                 if events != lastevents:
+                    curmap = {event['local_id']: event for event in events}
+                    lastmap = {event['local_id']: event for event in lastevents}
+                    removed = [
+                        form(event) for event in lastevents if event['local_id'] not in curmap
+                    ]
+                    added = [form(event) for event in events if event['local_id'] not in lastmap]
+                    updated = []
+                    for event in events:
+                        lastevent = lastmap.get(event['local_id'])
+                        if not lastevent:
+                            continue
+                        pieces = []
+                        if event['summary'] != lastevent['summary']:
+                            pieces.append((lastevent['summary'], event['summary']))
+                        if event['start'] != lastevent['start'] or event['end'] != lastevent['end']:
+                            pieces.append((humanize_range(lastevent['start'], lastevent['end'],
+                                                          tzinfo),
+                                           humanize_range(event['start'], event['end'], tzinfo)))
+                        if event['location'] != lastevent['location']:
+                            pieces.append((lastevent['location'], event['location']))
+                        curdesc = html.sanitize(event['description'], strip=True)
+                        lastdesc = html.sanitize(lastevent['description'], strip=True)
+                        if curdesc != lastdesc:
+                            pieces.append((lastdesc, curdesc))
+                        if pieces:
+                            updated.append(form(event))
+                            for left, right in pieces:
+                                updated.append('\u2022 <i>%s</i> \u2192 <b>%s</b>' %
+                                               _quick_diff(left, right))
+
+                    text = ''
+                    for label, edits in (('Added', added), ('Removed', removed), ('Updated',
+                                                                                  updated)):
+                        if edits:
+                            if text:
+                                text += '\n\n'
+                            text = '%s:\n\n%s' % (label, '\n'.join(edits))
+                    message = bot.send_message(chat_id=groupid,
+                                               reply_to_message_id=lastmessage['message_id'],
+                                               text=text,
+                                               parse_mode='HTML',
+                                               disable_web_page_preview=True,
+                                               disable_notification=True)
+
                     lastnowdt = datetime.datetime.fromtimestamp(lastnow, tzinfo)
                     preambles = groupconf['daily'].get('text', '').splitlines()
                     preamble = (preambles and preambles[lastnowdt.toordinal() % len(preambles)] or
                                 '')
                     updated = 'Updated'
-                    text = '%s\n\n[%s]' % (_format_daily_message(preamble, events), updated)
+                    groupidnum = int(groupid)
+                    if -1002147483647 <= groupidnum < -1000000000000:
+                        updated = '<a href="https://t.me/c/%s/%s">%s</a>' % (
+                            -1000000000000 - groupidnum, message['message_id'], updated)
+                    text = '%s\n\n[%s]' % (_format_daily_message(preamble, list(map(
+                        form, events))), updated)
                     message = bot.edit_message_text(chat_id=groupid,
                                                     message_id=lastmessage['message_id'],
                                                     text=text,
                                                     parse_mode='HTML',
                                                     disable_web_page_preview=True)
 
-                    records[botuser, groupid] = (lastnow, events, message)
+                    records[botuser, groupid] = (lastnow, [event.copy() for event in events],
+                                                 message)
+
+
+def _quick_diff(left, right):
+    i = 0
+    while i < len(left) and i < len(right) and right[i] == left[i]:
+        i += 1
+    if i > 5:
+        left = '\u2026' + left[i - 4:]
+        right = '\u2026' + right[i - 4:]
+    if len(left) > 30:
+        left = left[:29] + '\u2026'
+    if len(right) > 30:
+        right = right[:29] + '\u2026'
+    return left, right
 
 
 def _format_daily_message(preamble, events):
@@ -132,10 +198,7 @@ def _get_group_events(bot, calcodes, tzinfo, count, days, now=None):  # pylint: 
     nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
     midnight = nowdt.replace(hour=0, minute=0, second=0, microsecond=0)
     period = (midnight + datetime.timedelta(days=days + 1) - nowdt).total_seconds()
-    return [
-        format_event(bot, event, tzinfo, full=False)
-        for event in list(calendar_view.get_overlap(now, now + period))[:count]
-    ]
+    return list(calendar_view.get_overlap(now, now + period))[:count]
 
 
 def group(ctx, msg):
@@ -158,7 +221,7 @@ def group(ctx, msg):
     if not events:
         msg.add('No events in the next %s days!', days)
     else:
-        msg.add('\n'.join(events))
+        msg.add('\n'.join(format_event(ctx.bot, event, tzinfo, full=False) for event in events))
 
 
 def private(ctx, msg, modconf):  # pylint: disable=too-many-locals

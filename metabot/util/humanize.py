@@ -16,15 +16,30 @@ def date(dtime, base=None):  # pylint: disable=too-many-branches
         base = _now_copy_tz(dtime)  # pragma: no cover
     day = dtime.strftime('%a')
     mon = dtime.strftime('%b')
+    dom = dayofmonth(dtime.day)
     if dtime.year != base.year:
-        text = '%s, %s (%i) %i' % (day, mon, dtime.year, dtime.day)
+        text = '%s, %s (%i) %s' % (day, mon, dtime.year, dom)
     elif dtime.month != base.month:
-        text = '%s, %s %i' % (day, mon, dtime.day)
+        text = '%s, %s %s' % (day, mon, dom)
     else:
-        text = '%s %i' % (day, dtime.day)
+        text = '%s %s' % (day, dom)
     if isinstance(dtime, datetime.datetime):
         text = '%s, %s' % (text, time(dtime))
     return text
+
+
+def dayofmonth(dom):
+    """Return a day of the month in ordinal form (1st, 11th, etc.)."""
+
+    if not 11 <= dom <= 13:
+        ones = dom % 10
+        if ones == 1:
+            return '%s\u02e2\u1d57' % dom
+        if ones == 2:
+            return '%s\u207f\u1d48' % dom
+        if ones == 3:
+            return '%s\u02b3\u1d48' % dom
+    return '%s\u1d57\u02b0' % dom
 
 
 def howrecent(start, end, base=None):  # pylint: disable=too-many-return-statements
@@ -87,7 +102,7 @@ def range(start, end):  # pylint: disable=redefined-builtin
         return '%s\u2013%s' % (text.rsplit(None, 1)[0], time(end))
     if start.year != end.year or start.month != end.month:
         return '%s \u2013 %s' % (text, date(end, base=start))
-    return '%s\u2013%i' % (text, end.day)
+    return '%s\u2013%s' % (text[:-2], dayofmonth(end.day))
 
 
 def time(dtime):

@@ -9,8 +9,21 @@ def test_humanize_date():
     """Quick tests for humanize.date."""
 
     base = datetime.date(2017, 11, 15)
-    assert humanize.date(datetime.date(2017, 11, 15), base=base) == 'Wed 15'
-    assert humanize.date(datetime.date(2017, 11, 16), base=base) == 'Thu 16'
+    assert humanize.date(datetime.date(2017, 11, 15), base=base) == 'Wed 15ᵗʰ'
+    assert humanize.date(datetime.date(2017, 11, 16), base=base) == 'Thu 16ᵗʰ'
+
+
+def test_humanize_dayofmonth():
+    """Quick tests for humanize.dayofmonth."""
+
+    assert humanize.dayofmonth(1) == '1ˢᵗ'
+    assert humanize.dayofmonth(2) == '2ⁿᵈ'
+    assert humanize.dayofmonth(3) == '3ʳᵈ'
+    assert humanize.dayofmonth(4) == '4ᵗʰ'
+    assert humanize.dayofmonth(11) == '11ᵗʰ'
+    assert humanize.dayofmonth(12) == '12ᵗʰ'
+    assert humanize.dayofmonth(13) == '13ᵗʰ'
+    assert humanize.dayofmonth(21) == '21ˢᵗ'
 
 
 def test_humanize_howrecent():
@@ -69,11 +82,11 @@ def test_humanize_range(monkeypatch):
     next_month = datetime.date(2017, 12, 15)
     next_year = datetime.date(2018, 1, 15)
 
-    assert _test(start, start) == 'NOW, Wed 15'
-    assert _test(start, next_day) == 'NOW, Wed 15-16'
-    assert _test(start, next_week) == 'NOW, Wed 15-22'
-    assert _test(start, next_month) == 'NOW, Wed 15 - Fri, Dec 15'
-    assert _test(start, next_year) == 'NOW, Wed 15 - Mon, Jan (2018) 15'
+    assert _test(start, start) == 'NOW, Wed 15ᵗʰ'
+    assert _test(start, next_day) == 'NOW, Wed 15-16ᵗʰ'
+    assert _test(start, next_week) == 'NOW, Wed 15-22ⁿᵈ'
+    assert _test(start, next_month) == 'NOW, Wed 15ᵗʰ - Fri, Dec 15ᵗʰ'
+    assert _test(start, next_year) == 'NOW, Wed 15ᵗʰ - Mon, Jan (2018) 15ᵗʰ'
 
     start = datetime.datetime(2017, 11, 15, 6)
     start_ts = float(start.strftime('%s'))
@@ -86,10 +99,10 @@ def test_humanize_range(monkeypatch):
     next_month = datetime.datetime(2017, 12, 15, 6)
     next_year = datetime.datetime(2018, 1, 15, 6)
 
-    assert _test(start, next_min) == 'NOW, Wed 15, 6-6:01 am'
-    assert _test(start, next_hour) == 'NOW, Wed 15, 6-7 am'
-    assert _test(start, next_pm) == 'NOW, Wed 15, 6 am - 6 pm'
-    assert _test(start, hours_23) == 'NOW, Wed 15, 6 am - 5 am'
-    assert _test(start, hours_25) == 'NOW, Wed 15, 6 am - Thu 16, 7 am'
-    assert _test(start, next_month) == 'NOW, Wed 15, 6 am - Fri, Dec 15, 6 am'
-    assert _test(start, next_year) == 'NOW, Wed 15, 6 am - Mon, Jan (2018) 15, 6 am'
+    assert _test(start, next_min) == 'NOW, Wed 15ᵗʰ, 6-6:01 am'
+    assert _test(start, next_hour) == 'NOW, Wed 15ᵗʰ, 6-7 am'
+    assert _test(start, next_pm) == 'NOW, Wed 15ᵗʰ, 6 am - 6 pm'
+    assert _test(start, hours_23) == 'NOW, Wed 15ᵗʰ, 6 am - 5 am'
+    assert _test(start, hours_25) == 'NOW, Wed 15ᵗʰ, 6 am - Thu 16ᵗʰ, 7 am'
+    assert _test(start, next_month) == 'NOW, Wed 15ᵗʰ, 6 am - Fri, Dec 15ᵗʰ, 6 am'
+    assert _test(start, next_year) == 'NOW, Wed 15ᵗʰ, 6 am - Mon, Jan (2018) 15ᵗʰ, 6 am'

@@ -11,6 +11,7 @@ import pytz
 from metabot.util import adminui
 from metabot.util import html
 from metabot.util import humanize
+from metabot.util import pickleutil
 from metabot.util import tickets
 
 ALIASES = ('calendar', 'event', 'events')
@@ -25,12 +26,19 @@ def modinit(multibot):  # pylint: disable=missing-docstring
     def _queue():
         multibot.loop.queue.puthourly(0, _hourly, jitter=random.random() * 5)
 
-    records = {}
+    if multibot.conf.confdir:
+        recordsfname = multibot.conf.confdir + '/daily.pickle'
+        records = pickleutil.load(recordsfname) or {}
+    else:
+        recordsfname = None
+        records = {}
 
     def _hourly():
         try:
             multibot.multical.poll()
             _daily_messages(multibot, records)
+            if recordsfname:
+                pickleutil.dump(recordsfname, records)
         finally:
             _queue()
 

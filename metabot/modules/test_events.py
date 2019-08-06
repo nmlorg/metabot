@@ -650,6 +650,72 @@ There are a couple events coming up:
     }
     assert conversation.format_messages(replies) == ''
 
+    cal.events['6fc2c510:alpha']['description'] = 'Multi\nLine\nDescription'
+    cal.events['6fc2c510:new'] = {
+        'description': 'New Description',
+        'end': 3000,
+        'local_id': '6fc2c510:new',
+        'location': 'New Venue, Rest of New Location',
+        'start': 2000,
+        'summary': 'New Summary',
+    }
+    conversation.multibot.multical.ordered.append(cal.events['6fc2c510:new'])
+    conversation.multibot.multical._rebuild()  # pylint: disable=protected-access
+
+    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
+    assert records == {
+        ('modulestestbot', '-1002000002000'): (0, [{
+            'description': 'Multi\nLine\nDescription',
+            'end': 2060,
+            'local_id': '6fc2c510:alpha',
+            'location': 'Alpha Venue, Rest of Alpha Location',
+            'start': 1000,
+            'summary': 'Edited Summary',
+        }, {
+            'description': 'New Description',
+            'end': 3000,
+            'local_id': '6fc2c510:new',
+            'location': 'New Venue, Rest of New Location',
+            'start': 2000,
+            'summary': 'New Summary',
+        }, {
+            'description': 'Bravo Description',
+            'end': 608400,
+            'local_id': '6fc2c510:bravo',
+            'location': 'Bravo Venue, Rest of Bravo Location',
+            'start': 604800,
+            'summary': 'Bravo Summary',
+        }], {
+            'message_id': 12345,
+        }),
+    }
+    assert conversation.format_messages(replies) == """\
+[chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
+Added:
+
+<b>New Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">TODAY, Thu 1ˢᵗ, 12:33–12:50 am</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>
+
+Updated:
+
+<b>Edited Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1ˢᵗ, 12:16–12:34 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+• <i>Alpha Description</i> → <b>Multi Line Description</b>
+
+
+[chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
+There are a few events coming up:
+
+<b>Edited Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1ˢᵗ, 12:16–12:34 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>New Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">TODAY, Thu 1ˢᵗ, 12:33–12:50 am</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8ᵗʰ, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+[<a href="https://t.me/c/2000002000/12345">Updated</a>]
+"""
+
 
 def test_quick_diff():
     """Test description string differ."""

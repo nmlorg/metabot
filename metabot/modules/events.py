@@ -93,8 +93,9 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                                            humanize_range(event['start'], event['end'], tzinfo)))
                         if event['location'] != lastevent['location']:
                             pieces.append((lastevent['location'], event['location']))
-                        curdesc = html.sanitize(event['description'], strip=True)
-                        lastdesc = html.sanitize(lastevent['description'], strip=True)
+                        curdesc = html.sanitize(event['description'], strip=True).replace('\n', ' ')
+                        lastdesc = html.sanitize(lastevent['description'],
+                                                 strip=True).replace('\n', ' ')
                         if curdesc != lastdesc:
                             pieces.append((lastdesc, curdesc))
                         if pieces:
@@ -109,7 +110,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                         if edits:
                             if text:
                                 text += '\n\n'
-                            text = '%s:\n\n%s' % (label, '\n'.join(edits))
+                            text = '%s%s:\n\n%s' % (text, label, '\n'.join(edits))
                     message = bot.send_message(chat_id=groupid,
                                                reply_to_message_id=lastmessage['message_id'],
                                                text=text,
@@ -119,8 +120,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
 
                     lastnowdt = datetime.datetime.fromtimestamp(lastnow, tzinfo)
                     preambles = groupconf['daily'].get('text', '').splitlines()
-                    preamble = (preambles and preambles[lastnowdt.toordinal() % len(preambles)] or
-                                '')
+                    preamble = preambles and preambles[lastnowdt.toordinal() % len(preambles)] or ''
                     updated = 'Updated'
                     groupidnum = int(groupid)
                     if -1002147483647 <= groupidnum < -1000000000000:

@@ -715,6 +715,38 @@ There are a few events coming up:
 
 [<a href="https://t.me/c/2000002000/12345">Updated</a>]
 """
+    replies.clear()
+
+    cal.events['6fc2c510:alpha']['updated'] = 23456
+
+    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
+    assert records == {
+        ('modulestestbot', '-1002000002000'): (0, [{
+            'description': 'Multi\nLine\nDescription',
+            'end': 2060,
+            'local_id': '6fc2c510:alpha',
+            'location': 'Alpha Venue, Rest of Alpha Location',
+            'start': 1000,
+            'summary': 'Edited Summary',
+        }, {
+            'description': 'New Description',
+            'end': 3000,
+            'local_id': '6fc2c510:new',
+            'location': 'New Venue, Rest of New Location',
+            'start': 2000,
+            'summary': 'New Summary',
+        }, {
+            'description': 'Bravo Description',
+            'end': 608400,
+            'local_id': '6fc2c510:bravo',
+            'location': 'Bravo Venue, Rest of Bravo Location',
+            'start': 604800,
+            'summary': 'Bravo Summary',
+        }], {
+            'message_id': 12345,
+        }),
+    }
+    assert conversation.format_messages(replies) == ''
 
 
 def test_quick_diff():

@@ -71,71 +71,67 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     records[botuser, groupid] = (now, [event.copy() for event in events], message)
             elif (botuser, groupid) in records:
                 lastnow, lastevents, lastmessage = records[botuser, groupid]
+                lastmap = {event['local_id']: event for event in lastevents}
                 events = _get_group_events(bot, calcodes, tzinfo, count, days, lastnow)
-                if events != lastevents:
-                    curmap = {event['local_id']: event for event in events}
-                    lastmap = {event['local_id']: event for event in lastevents}
-                    removed = [
-                        form(event) for event in lastevents if event['local_id'] not in curmap
-                    ]
-                    added = [form(event) for event in events if event['local_id'] not in lastmap]
-                    updated = []
-                    for event in events:
-                        lastevent = lastmap.get(event['local_id'])
-                        if not lastevent:
-                            continue
-                        pieces = []
-                        if event['summary'] != lastevent['summary']:
-                            pieces.append((lastevent['summary'], event['summary']))
-                        if event['start'] != lastevent['start'] or event['end'] != lastevent['end']:
-                            pieces.append((humanize_range(lastevent['start'], lastevent['end'],
-                                                          tzinfo),
-                                           humanize_range(event['start'], event['end'], tzinfo)))
-                        if event['location'] != lastevent['location']:
-                            pieces.append((lastevent['location'], event['location']))
-                        curdesc = html.sanitize(event['description'], strip=True).replace('\n', ' ')
-                        lastdesc = html.sanitize(lastevent['description'],
-                                                 strip=True).replace('\n', ' ')
-                        if curdesc != lastdesc:
-                            pieces.append((lastdesc, curdesc))
-                        if pieces:
-                            updated.append(form(event))
-                            for left, right in pieces:
-                                updated.append('\u2022 <i>%s</i> \u2192 <b>%s</b>' %
-                                               _quick_diff(left, right))
+                curmap = {event['local_id']: event for event in events}
+                removed = [form(event) for event in lastevents if event['local_id'] not in curmap]
+                added = [form(event) for event in events if event['local_id'] not in lastmap]
+                updated = []
+                for event in events:
+                    lastevent = lastmap.get(event['local_id'])
+                    if not lastevent:
+                        continue
+                    pieces = []
+                    if event['summary'] != lastevent['summary']:
+                        pieces.append((lastevent['summary'], event['summary']))
+                    if event['start'] != lastevent['start'] or event['end'] != lastevent['end']:
+                        pieces.append((humanize_range(lastevent['start'], lastevent['end'], tzinfo),
+                                       humanize_range(event['start'], event['end'], tzinfo)))
+                    if event['location'] != lastevent['location']:
+                        pieces.append((lastevent['location'], event['location']))
+                    curdesc = html.sanitize(event['description'], strip=True).replace('\n', ' ')
+                    lastdesc = html.sanitize(lastevent['description'],
+                                             strip=True).replace('\n', ' ')
+                    if curdesc != lastdesc:
+                        pieces.append((lastdesc, curdesc))
+                    if pieces:
+                        updated.append(form(event))
+                        for left, right in pieces:
+                            updated.append('\u2022 <i>%s</i> \u2192 <b>%s</b>' %
+                                           _quick_diff(left, right))
 
-                    text = ''
-                    for label, edits in (('Added', added), ('Removed', removed), ('Updated',
-                                                                                  updated)):
-                        if edits:
-                            if text:
-                                text += '\n\n'
-                            text = '%s%s:\n\n%s' % (text, label, '\n'.join(edits))
-                    message = bot.send_message(chat_id=groupid,
-                                               reply_to_message_id=lastmessage['message_id'],
-                                               text=text,
-                                               parse_mode='HTML',
-                                               disable_web_page_preview=True,
-                                               disable_notification=True)
+                text = ''
+                for label, edits in (('Added', added), ('Removed', removed), ('Updated', updated)):
+                    if edits:
+                        if text:
+                            text += '\n\n'
+                        text = '%s%s:\n\n%s' % (text, label, '\n'.join(edits))
+                if not text:
+                    continue
+                message = bot.send_message(chat_id=groupid,
+                                           reply_to_message_id=lastmessage['message_id'],
+                                           text=text,
+                                           parse_mode='HTML',
+                                           disable_web_page_preview=True,
+                                           disable_notification=True)
 
-                    lastnowdt = datetime.datetime.fromtimestamp(lastnow, tzinfo)
-                    preambles = groupconf['daily'].get('text', '').splitlines()
-                    preamble = preambles and preambles[lastnowdt.toordinal() % len(preambles)] or ''
-                    updated = 'Updated'
-                    groupidnum = int(groupid)
-                    if -1002147483647 <= groupidnum < -1000000000000:
-                        updated = '<a href="https://t.me/c/%s/%s">%s</a>' % (
-                            -1000000000000 - groupidnum, message['message_id'], updated)
-                    text = '%s\n\n[%s]' % (_format_daily_message(preamble, list(map(
-                        form, events))), updated)
-                    message = bot.edit_message_text(chat_id=groupid,
-                                                    message_id=lastmessage['message_id'],
-                                                    text=text,
-                                                    parse_mode='HTML',
-                                                    disable_web_page_preview=True)
+                lastnowdt = datetime.datetime.fromtimestamp(lastnow, tzinfo)
+                preambles = groupconf['daily'].get('text', '').splitlines()
+                preamble = preambles and preambles[lastnowdt.toordinal() % len(preambles)] or ''
+                updated = 'Updated'
+                groupidnum = int(groupid)
+                if -1002147483647 <= groupidnum < -1000000000000:
+                    updated = '<a href="https://t.me/c/%s/%s">%s</a>' % (
+                        -1000000000000 - groupidnum, message['message_id'], updated)
+                text = '%s\n\n[%s]' % (_format_daily_message(preamble, list(map(form,
+                                                                                events))), updated)
+                message = bot.edit_message_text(chat_id=groupid,
+                                                message_id=lastmessage['message_id'],
+                                                text=text,
+                                                parse_mode='HTML',
+                                                disable_web_page_preview=True)
 
-                    records[botuser, groupid] = (lastnow, [event.copy() for event in events],
-                                                 message)
+                records[botuser, groupid] = (lastnow, [event.copy() for event in events], message)
 
 
 def _quick_diff(left, right):

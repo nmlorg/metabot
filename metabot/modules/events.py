@@ -351,14 +351,15 @@ def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
 def format_event(bot, event, tzinfo, full=True):
     """Given a metabot.calendars.base.Calendar event, build a human-friendly representation."""
 
-    url = bot.encode_url('/events %s %s' % (event['local_id'], tzinfo.zone))
     message = '<b>%s</b>' % event['summary']
     for count, url in tickets.get_info(event['description']):
         if count:
             message = '%s [<a href="%s">%i tickets remaining</a>]' % (message, url, count)
         else:
             message = '%s [<a href="%s">tickets</a>]' % (message, url)
-    message = '%s\n<a href="%s">%s</a>' % (message, url,
+    message = '%s\n<a href="%s">%s</a>' % (message,
+                                           bot.encode_url('/events %s %s' %
+                                                          (event['local_id'], tzinfo.zone)),
                                            humanize_range(event['start'], event['end'], tzinfo))
     if event['location']:
         location_name = event['location'].split(',', 1)[0]

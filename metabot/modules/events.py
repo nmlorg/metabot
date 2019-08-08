@@ -1,6 +1,7 @@
 """Display recent and upcoming events."""
 
 import datetime
+import operator
 import random
 import re
 import time
@@ -76,12 +77,20 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                 lastmap = {event['local_id']: event for event in lastevents}
                 events = _get_group_events(bot, calcodes, tzinfo, count, days, lastnow)
                 curmap = {event['local_id']: event for event in events}
-                removed = [title(event) for event in lastevents if event['local_id'] not in curmap]
-                added = [title(event) for event in events if event['local_id'] not in lastmap]
-                updated = []
-                for event in events:
+                bothevents = events.copy()
+                bothevents.extend(event for event in lastevents if event['local_id'] not in curmap)
+                bothevents.sort(key=operator.itemgetter('start', 'end', 'summary', 'local_id'))
+                edits = []
+                for event in bothevents:
                     lastevent = lastmap.get(event['local_id'])
                     if not lastevent:
+                        edits.append(title(event))
+                        edits.append('    \u2022 New event!')
+                        continue
+                    event = curmap.get(event['local_id'])
+                    if not event:
+                        edits.append(title(lastevent))
+                        edits.append('    \u2022 Removed.')
                         continue
                     pieces = []
                     if event['summary'] != lastevent['summary']:
@@ -96,22 +105,16 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     if curdesc != lastdesc:
                         pieces.append((lastdesc, curdesc))
                     if pieces:
-                        updated.append(title(event))
+                        edits.append(title(event))
                         for left, right in pieces:
-                            updated.append('    \u2022 <i>%s</i> \u2192 <b>%s</b>' %
-                                           _quick_diff(left, right))
+                            edits.append('    \u2022 <i>%s</i> \u2192 <b>%s</b>' %
+                                         _quick_diff(left, right))
 
-                text = ''
-                for label, edits in (('Added', added), ('Removed', removed), ('Updated', updated)):
-                    if edits:
-                        if text:
-                            text += '\n\n'
-                        text = '%s%s:\n\n%s' % (text, label, '\n'.join(edits))
-                if not text:
+                if not edits:
                     continue
                 message = bot.send_message(chat_id=groupid,
                                            reply_to_message_id=lastmessage['message_id'],
-                                           text=text,
+                                           text='Updated:\n' + '\n'.join(edits),
                                            parse_mode='HTML',
                                            disable_web_page_preview=True,
                                            disable_notification=True)

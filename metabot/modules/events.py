@@ -92,23 +92,23 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                         edits.append(title(lastevent))
                         edits.append('    \u2022 Removed.')
                         continue
+                    pairs = (
+                        (lastevent['summary'], event['summary']),
+                        (humanize_range(lastevent['start'], lastevent['end'], tzinfo),
+                         humanize_range(event['start'], event['end'], tzinfo)),
+                        (lastevent['location'], event['location']),
+                        (html.sanitize(lastevent['description'], strip=True),
+                         html.sanitize(event['description'], strip=True)),
+                    )  # yapf: disable
                     pieces = []
-                    if event['summary'] != lastevent['summary']:
-                        pieces.append((lastevent['summary'], event['summary']))
-                    if event['start'] != lastevent['start'] or event['end'] != lastevent['end']:
-                        pieces.append((humanize_range(lastevent['start'], lastevent['end'], tzinfo),
-                                       humanize_range(event['start'], event['end'], tzinfo)))
-                    if event['location'] != lastevent['location']:
-                        pieces.append((lastevent['location'], event['location']))
-                    curdesc = html.sanitize(event['description'], strip=True)
-                    lastdesc = html.sanitize(lastevent['description'], strip=True)
-                    if curdesc != lastdesc:
-                        pieces.append((lastdesc, curdesc))
+                    for left, right in pairs:
+                        diff = _quick_diff(left, right)
+                        if diff:
+                            pieces.append(diff)
                     if pieces:
                         edits.append(title(event))
                         for left, right in pieces:
-                            edits.append('    \u2022 <i>%s</i> \u2192 <b>%s</b>' %
-                                         _quick_diff(left, right))
+                            edits.append('    \u2022 <i>%s</i> \u2192 <b>%s</b>' % (left, right))
 
                 if not edits:
                     continue
@@ -139,8 +139,12 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
 
 
 def _quick_diff(left, right):
-    left = re.sub(r'\s+', ' ', left)
-    right = re.sub(r'\s+', ' ', right)
+    left = re.sub(r'https?://\S+', '', left)
+    left = re.sub(r'\s+', ' ', left).strip()
+    right = re.sub(r'https?://\S+', '', right)
+    right = re.sub(r'\s+', ' ', right).strip()
+    if left == right:
+        return
     i = 0
     while i < len(left) and i < len(right) and right[i] == left[i]:
         i += 1

@@ -706,6 +706,31 @@ There are a couple events coming up:
 """
     replies.clear()
 
+    cal.events['6fc2c510:alpha']['description'] = (
+        'Multi\n\nLine\nDescription https://www.example.com/?id=1234')
+
+    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
+    assert records == {
+        ('modulestestbot', '-1002000002000'): (0, [{
+            'description': 'Multi\n\nLine\nDescription',
+            'end': 2060,
+            'local_id': '6fc2c510:alpha',
+            'location': 'Alpha Venue, Rest of Alpha Location',
+            'start': 1000,
+            'summary': 'Edited Summary',
+        }, {
+            'description': 'New Description',
+            'end': 3000,
+            'local_id': '6fc2c510:new',
+            'location': 'New Venue, Rest of New Location',
+            'start': 2000,
+            'summary': 'New Summary',
+        }], {
+            'message_id': 12345,
+        }),
+    }
+    assert conversation.format_messages(replies) == ''
+
     cal.events['6fc2c510:alpha']['updated'] = 23456
 
     events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
@@ -735,7 +760,7 @@ def test_quick_diff():
     """Test description string differ."""
 
     # pylint: disable=protected-access
-    assert events._quick_diff('', '') == ('', '')
+    assert events._quick_diff('', '') is None
     assert events._quick_diff('0987654321', '0987654321new') == ('0987654321', '0987654321new')
     assert events._quick_diff('10987654321', '10987654321new') == ('…987654321', '…987654321new')
     assert events._quick_diff('10987654321old', '10987654321') == ('…987654321old', '…987654321')

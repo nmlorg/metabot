@@ -586,10 +586,9 @@ There are a couple events coming up:
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
 
-<b>Edited Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1ˢᵗ, 12:16–12:34 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
-• <i>Alpha Summary</i> → <b>Edited Summary</b>
-• <i>…12:33 am</i> → <b>…12:34 am</b>
+  Edited Summary
+    • <i>Alpha Summary</i> → <b>Edited Summary</b>
+    • <i>…2:16–12:33 am</i> → <b>…2:16–12:34 am</b>
 
 
 [chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -650,7 +649,7 @@ There are a couple events coming up:
     }
     assert conversation.format_messages(replies) == ''
 
-    cal.events['6fc2c510:alpha']['description'] = 'Multi\nLine\nDescription'
+    cal.events['6fc2c510:alpha']['description'] = 'Multi\n\nLine\nDescription'
     cal.events['6fc2c510:new'] = {
         'description': 'New Description',
         'end': 3000,
@@ -665,7 +664,7 @@ There are a couple events coming up:
     events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
     assert records == {
         ('modulestestbot', '-1002000002000'): (0, [{
-            'description': 'Multi\nLine\nDescription',
+            'description': 'Multi\n\nLine\nDescription',
             'end': 2060,
             'local_id': '6fc2c510:alpha',
             'location': 'Alpha Venue, Rest of Alpha Location',
@@ -693,14 +692,12 @@ There are a couple events coming up:
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Added:
 
-<b>New Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">TODAY, Thu 1ˢᵗ, 12:33–12:50 am</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>
+  New Summary
 
 Updated:
 
-<b>Edited Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1ˢᵗ, 12:16–12:34 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
-• <i>Alpha Description</i> → <b>Multi Line Description</b>
+  Edited Summary
+    • <i>Alpha Description</i> → <b>Multi Line Description</b>
 
 
 [chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -722,7 +719,7 @@ There are a few events coming up:
     events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
     assert records == {
         ('modulestestbot', '-1002000002000'): (0, [{
-            'description': 'Multi\nLine\nDescription',
+            'description': 'Multi\n\nLine\nDescription',
             'end': 2060,
             'local_id': '6fc2c510:alpha',
             'location': 'Alpha Venue, Rest of Alpha Location',
@@ -754,15 +751,16 @@ def test_quick_diff():
 
     # pylint: disable=protected-access
     assert events._quick_diff('', '') == ('', '')
-    assert events._quick_diff('AAAAB', 'AAAABnew') == ('AAAAB', 'AAAABnew')
-    assert events._quick_diff('AAAABC', 'AAAABCnew') == ('…AABC', '…AABCnew')
-    assert events._quick_diff('AAAABCold', 'AAAABC') == ('…AABCold', '…AABC')
-    assert events._quick_diff('AAAABCold', 'AAAABCnew') == ('…AABCold', '…AABCnew')
+    assert events._quick_diff('0987654321', '0987654321new') == ('0987654321', '0987654321new')
+    assert events._quick_diff('10987654321', '10987654321new') == ('…987654321', '…987654321new')
+    assert events._quick_diff('10987654321old', '10987654321') == ('…987654321old', '…987654321')
+    assert events._quick_diff('10987654321old',
+                              '10987654321new') == ('…987654321old', '…987654321new')
     assert events._quick_diff(
-        'AAAAB', 'AAAAB6789012345678901234567890') == ('AAAAB', 'AAAAB6789012345678901234567890')
+        'x',
+        'x234567890123456789012345678901234567890') == ('x',
+                                                        'x234567890123456789012345678901234567890')
     assert events._quick_diff(
-        'AAAAB', 'AAAAB6789012345678901234567890Z') == ('AAAAB', 'AAAAB678901234567890123456789…')
-    assert events._quick_diff(
-        'AAAABC', 'AAAABC6789012345678901234567890') == ('…AABC', '…AABC6789012345678901234567890')
-    assert events._quick_diff(
-        'AAAABC', 'AAAABC6789012345678901234567890Z') == ('…AABC', '…AABC678901234567890123456789…')
+        'x',
+        'x2345678901234567890123456789012345678901') == ('x',
+                                                         'x23456789012345678901234567890123456789…')

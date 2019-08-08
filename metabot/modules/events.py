@@ -2,6 +2,7 @@
 
 import datetime
 import random
+import re
 import time
 import urllib.parse
 
@@ -56,6 +57,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             bot = ntelebot.bot.Bot(botconf['issue37']['telegram']['token'])
             bot.multibot = multibot
             form = lambda event: format_event(bot, event, tzinfo, full=False)  # pylint: disable=cell-var-from-loop
+            title = lambda event: '  ' + event['summary']
             nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
             if nowdt.hour == hour and not dow & 1 << nowdt.weekday():
                 events = _get_group_events(bot, calcodes, tzinfo, count, days, now)
@@ -74,8 +76,8 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                 lastmap = {event['local_id']: event for event in lastevents}
                 events = _get_group_events(bot, calcodes, tzinfo, count, days, lastnow)
                 curmap = {event['local_id']: event for event in events}
-                removed = [form(event) for event in lastevents if event['local_id'] not in curmap]
-                added = [form(event) for event in events if event['local_id'] not in lastmap]
+                removed = [title(event) for event in lastevents if event['local_id'] not in curmap]
+                added = [title(event) for event in events if event['local_id'] not in lastmap]
                 updated = []
                 for event in events:
                     lastevent = lastmap.get(event['local_id'])
@@ -89,15 +91,14 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                                        humanize_range(event['start'], event['end'], tzinfo)))
                     if event['location'] != lastevent['location']:
                         pieces.append((lastevent['location'], event['location']))
-                    curdesc = html.sanitize(event['description'], strip=True).replace('\n', ' ')
-                    lastdesc = html.sanitize(lastevent['description'],
-                                             strip=True).replace('\n', ' ')
+                    curdesc = html.sanitize(event['description'], strip=True)
+                    lastdesc = html.sanitize(lastevent['description'], strip=True)
                     if curdesc != lastdesc:
                         pieces.append((lastdesc, curdesc))
                     if pieces:
-                        updated.append(form(event))
+                        updated.append(title(event))
                         for left, right in pieces:
-                            updated.append('\u2022 <i>%s</i> \u2192 <b>%s</b>' %
+                            updated.append('    \u2022 <i>%s</i> \u2192 <b>%s</b>' %
                                            _quick_diff(left, right))
 
                 text = ''
@@ -135,16 +136,18 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
 
 
 def _quick_diff(left, right):
+    left = re.sub(r'\s+', ' ', left)
+    right = re.sub(r'\s+', ' ', right)
     i = 0
     while i < len(left) and i < len(right) and right[i] == left[i]:
         i += 1
-    if i > 5:
-        left = '\u2026' + left[i - 4:]
-        right = '\u2026' + right[i - 4:]
-    if len(left) > 30:
-        left = left[:29] + '\u2026'
-    if len(right) > 30:
-        right = right[:29] + '\u2026'
+    if i > 10:
+        left = '\u2026' + left[i - 9:]
+        right = '\u2026' + right[i - 9:]
+    if len(left) > 40:
+        left = left[:39] + '\u2026'
+    if len(right) > 40:
+        right = right[:39] + '\u2026'
     return left, right
 
 

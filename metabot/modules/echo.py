@@ -34,19 +34,20 @@ def echo(ctx, msg, data):  # pylint: disable=missing-docstring
             msg.button('More (%i/%i)' % (page, len(lines)), '/%s %i' % (ctx.command, page + 1))
 
 
-def admin(ctx, msg, frame):
+def admin(frame):
     """Handle /admin BOTNAME echo."""
 
+    msg = frame.msg
     menu = adminui.Menu()
     for command, data in sorted(frame.value.items()):
         menu.add(command, desc=data.get('text', '').replace('\n', ' '))
-    frame, handler = menu.select(ctx, msg, frame, create=True)
+    frame, handler = menu.select(frame, create=True)
     if not handler:
         msg.action = 'Choose a command'
         msg.add(
             "Type the name of a command to add (like <code>rules</code>\u2014don't include a slash "
             'at the beginning!), or select an existing echo.')
-        return menu.display(ctx, msg, frame, 'command')
+        return menu.display(frame, what='command')
 
     msg.path(frame.field)
 
@@ -55,4 +56,4 @@ def admin(ctx, msg, frame):
          'The message, sticker, or image to send in response to /%s.' % frame.field),
         ('paginate', adminui.bool, 'For multiline messages, display just one line at a time?'),
         ('private', adminui.bool, 'Send the message in group chats, or just in private?'),
-    ).handle(ctx, msg, frame)
+    ).handle(frame)

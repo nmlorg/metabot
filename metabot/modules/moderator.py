@@ -65,9 +65,7 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
         ctx.private = True
         msg.path('/mod', 'Group Admin')
         ctx.targetbotconf = ctx.bot.config
-        return admin(ctx,
-                     msg,
-                     adminui.Frame(ctx.bot.config['issue37'], 'moderator', 'Group Admin', ctx.text),
+        return admin(adminui.Frame(ctx, msg, ctx.bot.config, 'moderator', 'Group Admin', ctx.text),
                      botadmin=False)
 
     return False
@@ -108,9 +106,10 @@ def join(ctx, msg, modconf):
     msg.add(greeting)
 
 
-def admin(ctx, msg, frame, botadmin=True):  # pylint: disable=too-many-arguments
+def admin(frame, botadmin=True):  # pylint: disable=too-many-arguments
     """Handle /admin BOTNAME moderator."""
 
+    ctx, msg = frame.ctx, frame.msg
     menu = adminui.Menu()
     for group_id in sorted(frame.value):
         groupdata = ctx.bot.multibot.conf['groups'][int(group_id)]
@@ -127,9 +126,9 @@ def admin(ctx, msg, frame, botadmin=True):  # pylint: disable=too-many-arguments
             "Hi! You aren't an admin in any groups I'm in. If you should be, ask a current admin "
             "to promote you from the group's members list.")
 
-    frame, handler = menu.select(ctx, msg, frame)
+    frame, handler = menu.select(frame)
     if not handler:
-        return menu.display(ctx, msg, frame, 'group')
+        return menu.display(frame, what='group')
 
     msg.path(frame.field)
 
@@ -141,4 +140,4 @@ def admin(ctx, msg, frame, botadmin=True):  # pylint: disable=too-many-arguments
         ('maxeventscount', adminui.integer, 'How many events should be listed in /events?'),
         ('maxeventsdays', adminui.integer, 'How many days into the future should /events look?'),
         ('timezone', adminui.timezone, 'What time zone should be used in /events?'),
-    ).handle(ctx, msg, frame)
+    ).handle(frame)

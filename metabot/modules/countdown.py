@@ -54,18 +54,19 @@ def format_delta(seconds):
     return '<b>NOW</b>'
 
 
-def admin(ctx, msg, frame):
+def admin(frame):
     """Handle /admin BOTNAME countdown."""
 
+    msg = frame.msg
     menu = adminui.Menu()
     for command in sorted(frame.value):
         menu.add(command)
-    newframe, handler = menu.select(ctx, msg, frame, create=True)
+    newframe, handler = menu.select(frame, create=True)
     if handler:
         if newframe.text.isdigit():
-            adminui.set_log(msg, newframe, int(newframe.text))
+            adminui.set_log(newframe, int(newframe.text))
         elif newframe.text.lower() in ('-', 'none', 'off', 'remove'):
-            adminui.set_log(msg, newframe, None)
+            adminui.set_log(newframe, None)
         else:
             if newframe.text:
                 msg.add("I'm not sure how to count down to <code>%s</code>!", newframe.text)
@@ -88,4 +89,4 @@ def admin(ctx, msg, frame):
     menu = adminui.Menu()
     for command in sorted(frame.value):
         menu.add(command)
-    menu.display(ctx, msg, frame, 'command')
+    menu.display(frame, what='command')

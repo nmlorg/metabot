@@ -28,7 +28,7 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
 def default(ctx, msg):  # pylint: disable=missing-docstring
     ctx.private = True
     msg.path('/admin', 'Bot Admin')
-    frame = adminui.Frame(ctx.bot.multibot.conf, 'bots', None, ctx.text)
+    frame = adminui.Frame(ctx, msg, ctx.bot.multibot.conf, 'bots', None, ctx.text)
     menu = adminui.Menu()
     for username, botconf in sorted(frame.value.items()):
         if ctx.user['id'] in botconf['issue37']['admin']['admins']:
@@ -41,7 +41,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
             '\n'
             '<pre>/admin %s admin add %s</pre>', ctx.bot.username, ctx.bot.username, ctx.user['id'])
 
-    frame, handler = menu.select(ctx, msg, frame)
+    frame, handler = menu.select(frame)
     if not handler:
         msg.add('This is a metabot! Check out https://github.com/nmlorg/metabot/issues to keep '
                 'track of bugs and features.')
@@ -50,7 +50,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
         except IOError:
             pass
         msg.add('To configure your bot, choose its username:')
-        return menu.display(ctx, msg, frame, 'bot')
+        return menu.display(frame, what='bot')
 
     msg.path(frame.field)
     ctx.targetbotuser = frame.field
@@ -66,7 +66,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
             "Hi! There aren't any configurable modules installed. Contact a metabot admin to "
             'install one.')
 
-    menu.handle(ctx, msg, frame, 'module')
+    menu.handle(frame, what='module')
 
 
 def bootstrap(ctx, msg, modconf):
@@ -77,10 +77,10 @@ def bootstrap(ctx, msg, modconf):
         msg.add('Added %s to the admin list.', ctx.user['id'])
 
 
-def admin(ctx, msg, frame):  # pylint: disable=too-many-branches
+def admin(frame):  # pylint: disable=too-many-branches
     """Handle /admin BOTNAME admin (configure the admin module itself)."""
 
-    modconf = frame.value
+    ctx, msg, modconf = frame.ctx, frame.msg, frame.value
     if 'admins' not in modconf:  # pragma: no cover
         modconf['admins'] = []
 

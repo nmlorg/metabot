@@ -11,7 +11,9 @@ from metabot.util import tzutil
 class Frame:
     """The current position (and related state) within a hierarchical message."""
 
-    def __init__(self, parent, field, desc, text):
+    def __init__(self, ctx, msg, parent, field, desc, text):  # pylint: disable=too-many-arguments
+        self.ctx = ctx
+        self.msg = msg
         self.parent = parent.get('issue37') or parent
         self.field = field
         self.desc = desc
@@ -44,34 +46,35 @@ class Menu:
 
         self.fields += ((field, handler, desc),)
 
-    def select(self, unused_ctx, msg, frame, create=False):
+    def select(self, frame, create=False):
         """Identify the selected subframe."""
 
         field, _, text = frame.text.lstrip().partition(' ')
         field = field.lower()
         for fieldname, handler, desc in self.fields:
             if fieldname.lower() == field:
-                return Frame(frame.value, fieldname, desc, text), handler
+                return Frame(frame.ctx, frame.msg, frame.value, fieldname, desc, text), handler
         if field:
             if create:
-                return Frame(frame.value, field, None, text), create
-            msg.add("I can't set <code>%s</code>.", field)
+                return Frame(frame.ctx, frame.msg, frame.value, field, None, text), create
+            frame.msg.add("I can't set <code>%s</code>.", field)
         return frame, None
 
-    def dispatch(self, ctx, msg, frame):
+    def dispatch(self, frame):
         """Enter the selected subframe if possible."""
 
-        frame, handler = self.select(ctx, msg, frame)
+        frame, handler = self.select(frame)
         if handler:
-            msg.path(frame.field)
-            handler(ctx, msg, frame)
-            if msg.action:
+            frame.msg.path(frame.field)
+            handler(frame)
+            if frame.msg.action:
                 return True
-            msg.pathpop()
+            frame.msg.pathpop()
 
-    def display(self, unused_ctx, msg, frame, what='field'):
+    def display(self, frame, what='field'):
         """Display the current available subframes as a menu."""
 
+        msg = frame.msg
         msg.action = 'Choose a ' + what
         for field, handler, desc in self.fields:
             value = frame.value.get(field)
@@ -90,14 +93,14 @@ class Menu:
                 label = '%s \u2022 %s' % (label, desc)
             msg.button(label, field)
 
-    def handle(self, ctx, msg, frame, what='field'):
+    def handle(self, frame, **kwargs):
         """Enter the selected subframe if possible, or display the menu."""
 
-        if not self.dispatch(ctx, msg, frame):
-            self.display(ctx, msg, frame, what)
+        if not self.dispatch(frame):
+            self.display(frame, **kwargs)
 
 
-def announcement(ctx, msg, frame):
+def announcement(frame):
     """Configure a daily announcement."""
 
     menu = Menu(
@@ -106,25 +109,26 @@ def announcement(ctx, msg, frame):
         ('text', freeform,
          'One or more messages (one per line) to use/cycle through for the daily announcement.'),
     )
-    if not menu.dispatch(ctx, msg, frame):
-        msg.add(frame.desc)
-        menu.display(ctx, msg, frame)
+    if not menu.dispatch(frame):
+        frame.msg.add(frame.desc)
+        menu.display(frame)
 
 
-def bool(unused_ctx, msg, frame):  # pylint: disable=redefined-builtin
+def bool(frame):  # pylint: disable=redefined-builtin
     """Configure a toggle-able setting."""
 
     if frame.get():
         frame.value = None
-        msg.add('Disabled <code>%s</code>.', frame.field)
+        frame.msg.add('Disabled <code>%s</code>.', frame.field)
     else:
         frame.value = True
-        msg.add('Enabled <code>%s</code>.', frame.field)
+        frame.msg.add('Enabled <code>%s</code>.', frame.field)
 
 
-def calendars(ctx, msg, frame):
+def calendars(frame):
     """Configure a selection of calendars."""
 
+    ctx, msg = frame.ctx, frame.msg
     action, _, target = frame.text.partition(' ')
 
     calcodes = set(frame.get('').split())
@@ -157,9 +161,10 @@ def calendars(ctx, msg, frame):
             msg.button('Remove %s' % calendar_info['name'], 'remove %s' % calcode)
 
 
-def daysofweek(unused_ctx, msg, frame):  # pylint: disable=too-many-branches
+def daysofweek(frame):  # pylint: disable=too-many-branches
     """Select days of the week to enable/disable."""
 
+    msg = frame.msg
     value = frame.get(0)
     if frame.text == 'all':
         value = 0
@@ -205,21 +210,22 @@ def daysofweek(unused_ctx, msg, frame):  # pylint: disable=too-many-branches
         msg.buttons(buttons)
 
 
-def forward(ctx, msg, frame):
+def forward(frame):
     """Configure the bot to forward messages from one chat to another."""
 
     menu = Menu(
         ('from', groupid, 'What group should messages be forwarded from?'),
         ('notify', bool, 'Should forwarded messages trigger a notification?'),
     )
-    if not menu.dispatch(ctx, msg, frame):
-        msg.add(frame.desc)
-        menu.display(ctx, msg, frame)
+    if not menu.dispatch(frame):
+        frame.msg.add(frame.desc)
+        menu.display(frame)
 
 
-def freeform(ctx, msg, frame):  # pylint: disable=too-many-branches
+def freeform(frame):  # pylint: disable=too-many-branches
     """Configure a free-form text field."""
 
+    ctx, msg = frame.ctx, frame.msg
     if ctx.document:  # pragma: no cover
         text = 'document:%s' % ctx.document
     elif ctx.photo:  # pragma: no cover
@@ -232,7 +238,7 @@ def freeform(ctx, msg, frame):  # pylint: disable=too-many-branches
     if text:
         if text.lower() in ('-', 'none', 'off'):
             text = None
-        set_log(msg, frame, text)
+        set_log(frame, text)
     else:
         msg.action = 'Type a new value for ' + frame.field
         msg.add(frame.desc)
@@ -241,11 +247,12 @@ def freeform(ctx, msg, frame):  # pylint: disable=too-many-branches
         msg.add('Type your new value, or type "off" to disable/reset to default.')
 
 
-def groupid(ctx, msg, frame):
+def groupid(frame):
     """Select a group."""
 
+    ctx, msg = frame.ctx, frame.msg
     if frame.text in ctx.targetbotconf['issue37']['moderator']:
-        return set_log(msg, frame, frame.text)
+        return set_log(frame, frame.text)
 
     msg.action = 'Select a group'
     msg.add(frame.desc)
@@ -254,15 +261,16 @@ def groupid(ctx, msg, frame):
         msg.button('%s (%s)' % (group_id, groupconf['title']), group_id)
 
 
-def integer(unused_ctx, msg, frame):
+def integer(frame):
     """Configure an integer field."""
 
+    msg = frame.msg
     if frame.text:
         try:
             value = int(frame.text)
         except ValueError:
             value = None
-        set_log(msg, frame, value)
+        set_log(frame, value)
     else:
         msg.action = 'Type a new value for ' + frame.field
         msg.add(frame.desc)
@@ -271,9 +279,10 @@ def integer(unused_ctx, msg, frame):
         msg.add('Type your new value, or type "off" to disable/reset to default.')
 
 
-def set_log(msg, frame, new):
+def set_log(frame, new):
     """Set frame.value = new, and report the change to the user."""
 
+    msg = frame.msg
     current = frame.get()
     frame.value = new
     if current is None and new is None:
@@ -287,11 +296,12 @@ def set_log(msg, frame, new):
                 current, new)
 
 
-def timezone(unused_ctx, msg, frame):
+def timezone(frame):
     """Configure a time zone."""
 
+    msg = frame.msg
     if frame.text in pytz.all_timezones_set:
-        return set_log(msg, frame, frame.text)
+        return set_log(frame, frame.text)
 
     country, _, page = frame.text.partition(' ')
     country = country.upper()

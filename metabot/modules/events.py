@@ -397,4 +397,4 @@ def settings(ctx, msg, modconf):
     adminui.Menu(
         ('calendars', adminui.calendars, 'Which calendars do you want to see?'),
         ('timezone', adminui.timezone, 'What time zone are you in?'),
-    ).handle(ctx, msg, adminui.Frame(modconf['users'], user_id, None, text))
+    ).handle(adminui.Frame(ctx, msg, modconf['users'], user_id, None, text))

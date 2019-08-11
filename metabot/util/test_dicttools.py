@@ -143,5 +143,8 @@ def test_list():
     cont['alpha'].insert(0, 20)
     assert cont.finalize() == {('alpha',): ((20, 10, 6), (10, 6))}
 
+    cont['alpha'] = [5, 4, 3]
+    assert cont.finalize() == {('alpha',): ((5, 4, 3), (20, 10, 6))}
+
     cont['alpha'].clear()
-    assert cont.finalize() == {('alpha',): ((), (20, 10, 6))}
+    assert cont.finalize() == {('alpha',): ((), (5, 4, 3))}

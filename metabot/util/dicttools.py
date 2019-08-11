@@ -76,7 +76,7 @@ class ImplicitTrackingDict(dict):
         current = self.get(key)
         if value == current:
             return
-        if isinstance(current, ImplicitTrackingDict):
+        if isinstance(current, (ImplicitTrackingDict, TrackingList)):
             current.clear()
             current = None
 

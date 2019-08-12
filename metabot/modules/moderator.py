@@ -111,7 +111,7 @@ def admin(frame, botadmin=True):  # pylint: disable=too-many-arguments
 
     ctx, msg = frame.ctx, frame.msg
     menu = adminui.Menu()
-    for group_id in sorted(frame.value):
+    for group_id in frame.value:
         groupdata = ctx.bot.multibot.conf['groups'][int(group_id)]
         if botadmin or ctx.user['id'] in groupdata['admins']:
             menu.add(group_id, desc=groupdata['title'])

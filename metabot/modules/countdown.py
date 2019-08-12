@@ -59,9 +59,10 @@ def admin(frame):
 
     msg = frame.msg
     menu = adminui.Menu()
-    for command in sorted(frame.value):
+    for command in frame.value:
         menu.add(command)
-    newframe, handler = menu.select(frame, create=True)
+    menu.add(None)
+    newframe, handler = menu.select(frame)
     if handler:
         if newframe.text.isdigit():
             adminui.set_log(newframe, int(newframe.text))
@@ -87,6 +88,6 @@ def admin(frame):
             'at the beginning!), or select an existing countdown to remove.')
     # See https://github.com/nmlorg/metabot/issues/65.
     menu = adminui.Menu()
-    for command in sorted(frame.value):
+    for command in frame.value:
         menu.add(command)
     menu.display(frame, what='command')

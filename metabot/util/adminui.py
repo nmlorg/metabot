@@ -39,24 +39,27 @@ class Menu:
     """Manage the UX of navigating into each Frame."""
 
     def __init__(self, *fields):
-        self.fields = fields
+        self.fields = []
+        for field in fields:
+            self.add(*field)
 
     def add(self, field, handler=True, desc=None):
         """Add a possible subframe."""
 
-        self.fields += ((field, handler, desc),)
+        self.fields.append((field, handler, desc))
+        self.fields.sort(key=lambda field: (field[0] is None, field[0]))
 
-    def select(self, frame, create=False):
+    def select(self, frame):
         """Identify the selected subframe."""
 
         field, _, text = frame.text.lstrip().partition(' ')
-        field = field.lower()
-        for fieldname, handler, desc in self.fields:
-            if fieldname.lower() == field:
-                return Frame(frame.ctx, frame.msg, frame.value, fieldname, desc, text), handler
         if field:
-            if create:
-                return Frame(frame.ctx, frame.msg, frame.value, field, None, text), create
+            field = field.lower()
+            for fieldname, handler, desc in self.fields:
+                if fieldname is None:
+                    fieldname = field
+                if fieldname.lower() == field:
+                    return Frame(frame.ctx, frame.msg, frame.value, fieldname, desc, text), handler
             frame.msg.add("I can't set <code>%s</code>.", field)
         return frame, None
 
@@ -77,6 +80,8 @@ class Menu:
         msg = frame.msg
         msg.action = 'Choose a ' + what
         for field, handler, desc in self.fields:
+            if field is None:
+                continue
             value = frame.value.get(field)
             if handler is bool:
                 value = value and 'yes' or 'no'

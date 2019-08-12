@@ -29,9 +29,9 @@ def test_bool(conversation):  # pylint: disable=redefined-outer-name
 Bot Admin › modulestestbot › echo › dummy: <b>Choose a field</b>
 
 Enabled <code>paginate</code>.
-[text • The message, sticker, or image to send in response to /dummy. | /admin modulestestbot echo dummy text]
 [paginate (yes) • For multiline messages, display just one line at a time? | /admin modulestestbot echo dummy paginate]
 [private (no) • Send the message in group chats, or just in private? | /admin modulestestbot echo dummy private]
+[text • The message, sticker, or image to send in response to /dummy. | /admin modulestestbot echo dummy text]
 [Back | /admin modulestestbot echo]
 """
 
@@ -42,9 +42,9 @@ Enabled <code>paginate</code>.
 Bot Admin › modulestestbot › echo › dummy: <b>Choose a field</b>
 
 Disabled <code>paginate</code>.
-[text • The message, sticker, or image to send in response to /dummy. | /admin modulestestbot echo dummy text]
 [paginate (no) • For multiline messages, display just one line at a time? | /admin modulestestbot echo dummy paginate]
 [private (no) • Send the message in group chats, or just in private? | /admin modulestestbot echo dummy private]
+[text • The message, sticker, or image to send in response to /dummy. | /admin modulestestbot echo dummy text]
 [Back | /admin modulestestbot echo]
 """
 
@@ -238,8 +238,8 @@ def test_integer(conversation):  # pylint: disable=redefined-outer-name
 Bot Admin › modulestestbot › moderator › -1001000001000 › daily: <b>Choose a field</b>
 
 Should I announce upcoming events once a day?
-[hour • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
 [dow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 daily dow]
+[hour • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
 [text • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 daily text]
 [Back | /admin modulestestbot moderator -1001000001000]
 """
@@ -263,8 +263,8 @@ Bot Admin › modulestestbot › moderator › -1001000001000 › daily: <b>Choo
 Set <code>hour</code> to <code>8</code>.
 
 Should I announce upcoming events once a day?
-[hour (8) • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
 [dow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 daily dow]
+[hour (8) • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
 [text • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 daily text]
 [Back | /admin modulestestbot moderator -1001000001000]
 """
@@ -290,8 +290,8 @@ Bot Admin › modulestestbot › moderator › -1001000001000 › daily: <b>Choo
 Changed <code>hour</code> from <code>8</code> to <code>9</code>.
 
 Should I announce upcoming events once a day?
-[hour (9) • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
 [dow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 daily dow]
+[hour (9) • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
 [text • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 daily text]
 [Back | /admin modulestestbot moderator -1001000001000]
 """
@@ -305,8 +305,8 @@ Bot Admin › modulestestbot › moderator › -1001000001000 › daily: <b>Choo
 Unset <code>hour</code> (was <code>9</code>).
 
 Should I announce upcoming events once a day?
-[hour • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
 [dow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 daily dow]
+[hour • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
 [text • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 daily text]
 [Back | /admin modulestestbot moderator -1001000001000]
 """
@@ -320,8 +320,8 @@ Bot Admin › modulestestbot › moderator › -1001000001000 › daily: <b>Choo
 <code>hour</code> is already unset.
 
 Should I announce upcoming events once a day?
-[hour • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
 [dow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 daily dow]
+[hour • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
 [text • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 daily text]
 [Back | /admin modulestestbot moderator -1001000001000]
 """

@@ -30,7 +30,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
     msg.path('/admin', 'Bot Admin')
     frame = adminui.Frame(ctx, msg, ctx.bot.multibot.conf, 'bots', None, ctx.text)
     menu = adminui.Menu()
-    for username, botconf in sorted(frame.value.items()):
+    for username, botconf in frame.value.items():
         if ctx.user['id'] in botconf['issue37']['admin']['admins']:
             menu.add(username)
 
@@ -57,7 +57,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
     ctx.targetbotconf = frame.value
 
     menu = adminui.Menu()
-    for modname, module in sorted(ctx.bot.multibot.modules.items()):
+    for modname, module in ctx.bot.multibot.modules.items():
         if hasattr(module, 'admin'):
             menu.add(modname, module.admin, module.__doc__.splitlines()[0].rstrip('.'))
 

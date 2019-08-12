@@ -39,9 +39,10 @@ def admin(frame):
 
     msg = frame.msg
     menu = adminui.Menu()
-    for command, data in sorted(frame.value.items()):
+    for command, data in frame.value.items():
         menu.add(command, desc=data.get('text', '').replace('\n', ' '))
-    frame, handler = menu.select(frame, create=True)
+    menu.add(None)
+    frame, handler = menu.select(frame)
     if not handler:
         msg.action = 'Choose a command'
         msg.add(

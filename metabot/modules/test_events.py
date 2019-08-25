@@ -877,6 +877,41 @@ There are a couple events coming up:
 """
     replies.clear()
 
+    cal.events['6fc2c510:alpha']['description'] = 'Fun Games?'
+    conversation.bot.config['issue37']['moderator']['-1002000002000']['maxeventscount'] = 1
+
+    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
+    assert records == {
+        ('modulestestbot', '-1002000002000'): (1000, [{
+            'description': 'Fun Games?',
+            'end': 2060,
+            'local_id': '6fc2c510:alpha',
+            'location': 'Alpha Venue, Rest of Alpha Location',
+            'start': 1000,
+            'summary': 'Edited Summary',
+            'updated': 23456,
+        }], {
+            'caption': 'CAPTION',
+            'message_id': 12345,
+        }),
+    }
+    assert conversation.format_messages(replies) == """\
+[chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
+Updated:
+  Edited Summary
+    • <i>Fun Games!</i> → <b>Fun Games?</b>
+
+
+[chat_id=-1002000002000 message_id=12345 parse_mode=HTML]
+There's an event coming up:
+
+<b>Edited Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1ˢᵗ, 12:16–12:34 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+
+[<a href="https://t.me/c/2000002000/12345">Updated</a>]
+"""
+    replies.clear()
+
 
 def test_quick_diff():
     """Test description string differ."""

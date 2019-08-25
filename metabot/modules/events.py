@@ -96,7 +96,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                         edits.append(title(event))
                         edits.append('    \u2022 New event!')
                         continue
-                    event = curmap.get(event['local_id'])
+                    event = multibot.multical.get_event(event['local_id'])[1]
                     if not event:
                         edits.append(title(lastevent))
                         edits.append('    \u2022 Removed.')

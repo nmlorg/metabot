@@ -18,7 +18,7 @@ def _dont_mangle_callback_data(monkeypatch):
 
 
 def _format_message(response):
-    text = response.pop('text', '(EMPTY MESSAGE)')
+    text = response.pop('text', None) or response.pop('caption', '(EMPTY MESSAGE)')
     reply_markup = response.pop('reply_markup', None)
     header = ' '.join('%s=%s' % (field, value) for field, value in sorted(response.items()))
     text = '[%s]\n%s\n' % (header, text)
@@ -87,12 +87,18 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         responses = []
 
         def _handler(request, unused_context):
-            responses.append(json.loads(request.body.decode('ascii')))
-            return {'ok': True, 'result': {'message_id': 12345}}
+            response = json.loads(request.body.decode('ascii'))
+            responses.append(response)
+            message = {'message_id': 12345}
+            if response.get('caption'):
+                message['caption'] = 'CAPTION'
+            return {'ok': True, 'result': message}
 
+        self.bot.edit_message_caption.respond(json=_handler)
         self.bot.edit_message_text.respond(json=_handler)
         self.bot.forward_message.respond(json=_handler)
         self.bot.send_message.respond(json=_handler)
+        self.bot.send_photo.respond(json=_handler)
         self.multibot.dispatcher(self.bot, update)
         return responses
 

@@ -13,6 +13,7 @@ import pytz
 from metabot.util import adminui
 from metabot.util import html
 from metabot.util import humanize
+from metabot.util import icons
 from metabot.util import pickleutil
 from metabot.util import tickets
 
@@ -65,12 +66,20 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                 if events:
                     preambles = groupconf['daily'].get('text', '').splitlines()
                     preamble = (preambles and preambles[nowdt.toordinal() % len(preambles)] or '')
-                    message = bot.send_message(chat_id=groupid,
-                                               text=_format_daily_message(
-                                                   preamble, list(map(form, events))),
-                                               parse_mode='HTML',
-                                               disable_web_page_preview=True,
-                                               disable_notification=True)
+                    text = _format_daily_message(preamble, list(map(form, events)))
+                    url = icons.match(events[0]['summary']) or icons.match(events[0]['description'])
+                    if url:
+                        message = bot.send_photo(chat_id=groupid,
+                                                 photo=url,
+                                                 caption=text,
+                                                 parse_mode='HTML',
+                                                 disable_notification=True)
+                    else:
+                        message = bot.send_message(chat_id=groupid,
+                                                   text=text,
+                                                   parse_mode='HTML',
+                                                   disable_web_page_preview=True,
+                                                   disable_notification=True)
                     records[botuser, groupid] = (now, [event.copy() for event in events], message)
             elif (botuser, groupid) in records:
                 lastnow, lastevents, lastmessage = records[botuser, groupid]
@@ -129,11 +138,17 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                         -1000000000000 - groupidnum, message['message_id'], updated)
                 text = '%s\n\n[%s]' % (_format_daily_message(preamble, list(map(form,
                                                                                 events))), updated)
-                message = bot.edit_message_text(chat_id=groupid,
-                                                message_id=lastmessage['message_id'],
-                                                text=text,
-                                                parse_mode='HTML',
-                                                disable_web_page_preview=True)
+                if lastmessage.get('caption'):
+                    message = bot.edit_message_caption(chat_id=groupid,
+                                                       message_id=lastmessage['message_id'],
+                                                       caption=text,
+                                                       parse_mode='HTML')
+                else:
+                    message = bot.edit_message_text(chat_id=groupid,
+                                                    message_id=lastmessage['message_id'],
+                                                    text=text,
+                                                    parse_mode='HTML',
+                                                    disable_web_page_preview=True)
 
                 records[botuser, groupid] = (lastnow, [event.copy() for event in events], message)
 
@@ -235,6 +250,9 @@ def group(ctx, msg):
     if not events:
         msg.add('No events in the next %s days!', days)
     else:
+        url = icons.match(events[0]['summary']) or icons.match(events[0]['description'])
+        if url:
+            msg.add('photo:' + url)
         msg.add('\n'.join(format_event(ctx.bot, event, tzinfo, full=False) for event in events))
 
 

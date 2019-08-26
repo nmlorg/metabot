@@ -482,18 +482,26 @@ def test_format_daily_message():  # pylint: disable=missing-docstring
     # yapf: enable
 
 
-def test_daily_messages(conversation, monkeypatch):  # pylint: disable=redefined-outer-name,too-many-statements
-    """Test daily announcement logic."""
-
+@pytest.fixture
+def daily_messages(conversation, monkeypatch):  # pylint: disable=missing-docstring,redefined-outer-name
     monkeypatch.setattr('time.time', lambda: 0)
 
     replies = conversation.raw_message('/dummy')
     assert conversation.format_messages(replies) == ''
 
     records = {}
-    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
-    assert records == {}
-    assert conversation.format_messages(replies) == ''
+
+    def _daily_messages(initial=False):
+        replies.clear()
+        if initial:
+            records.clear()
+            conversation.bot.config['issue37']['moderator']['-1002000002000']['daily']['hour'] = 0
+        else:
+            conversation.bot.config['issue37']['moderator']['-1002000002000']['daily']['hour'] = 1
+        events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
+        return records, conversation.format_messages(replies)
+
+    assert _daily_messages(True) == ({}, '')
 
     conversation.bot.config['issue37']['moderator']['-1002000002000'] = {
         'calendars': '6fc2c510',
@@ -503,8 +511,13 @@ def test_daily_messages(conversation, monkeypatch):  # pylint: disable=redefined
         'timezone': 'UTC',
     }
 
-    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
-    assert records == {
+    return _daily_messages
+
+
+def test_daily_messages(daily_messages):  # pylint: disable=redefined-outer-name
+    """Test basic daily announcement logic (essentially, test the daily_messages fixture)."""
+
+    assert daily_messages(True) == ({
         ('modulestestbot', '-1002000002000'): (0, [{
             'description': 'Alpha Description',
             'end': 2000,
@@ -522,8 +535,7 @@ def test_daily_messages(conversation, monkeypatch):  # pylint: disable=redefined
         }], {
             'message_id': 12345,
         }),
-    }
-    assert conversation.format_messages(replies) == """\
+    }, """\
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML]
 There are a couple events coming up:
 
@@ -531,13 +543,9 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1ˢᵗ, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8ᵗʰ, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
-"""
-    replies.clear()
+""")
 
-    conversation.bot.config['issue37']['moderator']['-1002000002000']['daily']['hour'] = 1
-
-    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
-    assert records == {
+    assert daily_messages() == ({
         ('modulestestbot', '-1002000002000'): (0, [{
             'description': 'Alpha Description',
             'end': 2000,
@@ -555,15 +563,19 @@ There are a couple events coming up:
         }], {
             'message_id': 12345,
         }),
-    }
-    assert conversation.format_messages(replies) == ''
+    }, '')
+
+
+def test_daily_messages_updated(daily_messages):  # pylint: disable=redefined-outer-name
+    """Test daily announcement update messages."""
+
+    daily_messages(True)
 
     cal = loader.get('static:test_events')
     cal.events['6fc2c510:alpha']['summary'] = 'Edited Summary'
     cal.events['6fc2c510:alpha']['end'] += 60
 
-    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
-    assert records == {
+    assert daily_messages() == ({
         ('modulestestbot', '-1002000002000'): (0, [{
             'description': 'Alpha Description',
             'end': 2060,
@@ -581,8 +593,7 @@ There are a couple events coming up:
         }], {
             'message_id': 12345,
         }),
-    }
-    assert conversation.format_messages(replies) == """\
+    }, """\
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
   Edited Summary
@@ -599,11 +610,9 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8ᵗʰ, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
 [<a href="https://t.me/c/2000002000/12345">Updated</a>]
-"""
-    replies.clear()
+""")
 
-    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
-    assert records == {
+    assert daily_messages() == ({
         ('modulestestbot', '-1002000002000'): (0, [{
             'description': 'Alpha Description',
             'end': 2060,
@@ -621,20 +630,57 @@ There are a couple events coming up:
         }], {
             'message_id': 12345,
         }),
-    }
-    assert conversation.format_messages(replies) == ''
+    }, '')
+
+
+def test_daily_messages_future(daily_messages, monkeypatch):  # pylint: disable=redefined-outer-name
+    """Test the behavior when an event transitions from TODAY to NOW."""
+
+    daily_messages(True)
 
     monkeypatch.setattr('time.time', lambda: 1000)
 
-    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
-    assert records == {
+    assert daily_messages()[1] == ''
+
+    cal = loader.get('static:test_events')
+    cal.events['6fc2c510:alpha']['summary'] = 'Now Summary'
+
+    # Note that TODAY is displayed as NOW now:
+    assert daily_messages()[1] == """\
+[chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
+Updated:
+  Now Summary
+    • <i>Alpha Summary</i> → <b>Now Summary</b>
+
+
+[chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
+There are a couple events coming up:
+
+<b>Now Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1ˢᵗ, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8ᵗʰ, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+[<a href="https://t.me/c/2000002000/12345">Updated</a>]
+"""
+
+
+def test_daily_messages_multiline(daily_messages):  # pylint: disable=redefined-outer-name
+    """Verify multiline event components are rendered in updates concisely."""
+
+    daily_messages(True)
+
+    cal = loader.get('static:test_events')
+    cal.events['6fc2c510:alpha']['description'] = 'Multi\n\nLine\nDescription'
+
+    assert daily_messages() == ({
         ('modulestestbot', '-1002000002000'): (0, [{
-            'description': 'Alpha Description',
-            'end': 2060,
+            'description': 'Multi\n\nLine\nDescription',
+            'end': 2000,
             'local_id': '6fc2c510:alpha',
             'location': 'Alpha Venue, Rest of Alpha Location',
             'start': 1000,
-            'summary': 'Edited Summary',
+            'summary': 'Alpha Summary',
         }, {
             'description': 'Bravo Description',
             'end': 608400,
@@ -645,10 +691,31 @@ There are a couple events coming up:
         }], {
             'message_id': 12345,
         }),
-    }
-    assert conversation.format_messages(replies) == ''
+    }, """\
+[chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
+Updated:
+  Alpha Summary
+    • <i>Alpha Description</i> → <b>Multi Line Description</b>
 
-    cal.events['6fc2c510:alpha']['description'] = 'Multi\n\nLine\nDescription'
+
+[chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
+There are a couple events coming up:
+
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1ˢᵗ, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8ᵗʰ, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+[<a href="https://t.me/c/2000002000/12345">Updated</a>]
+""")
+
+
+def test_daily_messages_add_remove_event(conversation, daily_messages):  # pylint: disable=redefined-outer-name
+    """Verify what happens when events are added/removed entirely."""
+
+    daily_messages(True)
+
+    cal = loader.get('static:test_events')
     cal.events['6fc2c510:new'] = {
         'description': 'New Description',
         'end': 3000,
@@ -663,15 +730,14 @@ There are a couple events coming up:
     assert conversation.multibot.multical.ordered.pop(1)
     conversation.multibot.multical._rebuild()  # pylint: disable=protected-access
 
-    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
-    assert records == {
+    assert daily_messages() == ({
         ('modulestestbot', '-1002000002000'): (0, [{
-            'description': 'Multi\n\nLine\nDescription',
-            'end': 2060,
+            'description': 'Alpha Description',
+            'end': 2000,
             'local_id': '6fc2c510:alpha',
             'location': 'Alpha Venue, Rest of Alpha Location',
             'start': 1000,
-            'summary': 'Edited Summary',
+            'summary': 'Alpha Summary',
         }, {
             'description': 'New Description',
             'end': 3000,
@@ -682,12 +748,9 @@ There are a couple events coming up:
         }], {
             'message_id': 12345,
         }),
-    }
-    assert conversation.format_messages(replies) == """\
+    }, """\
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  Edited Summary
-    • <i>Alpha Description</i> → <b>Multi Line Description</b>
   New Summary
     • New event!
   Bravo Summary
@@ -697,220 +760,126 @@ Updated:
 [chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
 There are a couple events coming up:
 
-<b>Edited Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1ˢᵗ, 12:16–12:34 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1ˢᵗ, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>New Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">TODAY, Thu 1ˢᵗ, 12:33–12:50 am</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>
 
 [<a href="https://t.me/c/2000002000/12345">Updated</a>]
-"""
-    replies.clear()
+""")
 
+
+def test_daily_messages_ignored(daily_messages):  # pylint: disable=redefined-outer-name
+    """Verify non-notification-worthy changes are properly ignored."""
+
+    daily_messages(True)
+
+    cal = loader.get('static:test_events')
     cal.events['6fc2c510:alpha']['description'] = (
-        'Multi\n\nLine\nDescription https://www.example.com/?id=1234')
+        'Alpha Description https://www.example.com/?id=1234')
 
-    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
-    assert records == {
-        ('modulestestbot', '-1002000002000'): (0, [{
-            'description': 'Multi\n\nLine\nDescription',
-            'end': 2060,
-            'local_id': '6fc2c510:alpha',
-            'location': 'Alpha Venue, Rest of Alpha Location',
-            'start': 1000,
-            'summary': 'Edited Summary',
-        }, {
-            'description': 'New Description',
-            'end': 3000,
-            'local_id': '6fc2c510:new',
-            'location': 'New Venue, Rest of New Location',
-            'start': 2000,
-            'summary': 'New Summary',
-        }], {
-            'message_id': 12345,
-        }),
-    }
-    assert conversation.format_messages(replies) == ''
+    assert daily_messages()[1] == ''
 
     cal.events['6fc2c510:alpha']['updated'] = 23456
 
-    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
-    assert records == {
-        ('modulestestbot', '-1002000002000'): (0, [{
-            'description': 'Multi\n\nLine\nDescription',
-            'end': 2060,
-            'local_id': '6fc2c510:alpha',
-            'location': 'Alpha Venue, Rest of Alpha Location',
-            'start': 1000,
-            'summary': 'Edited Summary',
-        }, {
-            'description': 'New Description',
-            'end': 3000,
-            'local_id': '6fc2c510:new',
-            'location': 'New Venue, Rest of New Location',
-            'start': 2000,
-            'summary': 'New Summary',
-        }], {
-            'message_id': 12345,
-        }),
-    }
-    assert conversation.format_messages(replies) == ''
+    assert daily_messages()[1] == ''
 
+
+def test_daily_messages_icons(daily_messages):  # pylint: disable=redefined-outer-name
+    """Run through all the cases where events trigger banner images."""
+
+    daily_messages(True)
+
+    cal = loader.get('static:test_events')
     cal.events['6fc2c510:alpha']['description'] = 'Board Games!'
 
-    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
-    assert records == {
-        ('modulestestbot', '-1002000002000'): (0, [{
-            'description': 'Board Games!',
-            'end': 2060,
-            'local_id': '6fc2c510:alpha',
-            'location': 'Alpha Venue, Rest of Alpha Location',
-            'start': 1000,
-            'summary': 'Edited Summary',
-            'updated': 23456,
-        }, {
-            'description': 'New Description',
-            'end': 3000,
-            'local_id': '6fc2c510:new',
-            'location': 'New Venue, Rest of New Location',
-            'start': 2000,
-            'summary': 'New Summary',
-        }], {
-            'message_id': 12345,
-        }),
-    }
-    assert conversation.format_messages(replies) == """\
+    # An update does not include references to icons.
+    assert daily_messages()[1] == """\
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  Edited Summary
-    • <i>Multi Line Description</i> → <b>Board Games!</b>
+  Alpha Summary
+    • <i>Alpha Description</i> → <b>Board Games!</b>
 
 
 [chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
 There are a couple events coming up:
 
-<b>Edited Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1ˢᵗ, 12:16–12:34 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
-<b>New Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">TODAY, Thu 1ˢᵗ, 12:33–12:50 am</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1ˢᵗ, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8ᵗʰ, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
 [<a href="https://t.me/c/2000002000/12345">Updated</a>]
 """
-    replies.clear()
 
-    conversation.bot.config['issue37']['moderator']['-1002000002000']['daily']['hour'] = 0
-    records = {}
-
-    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
-    assert records == {
-        ('modulestestbot', '-1002000002000'): (1000, [{
-            'description': 'Board Games!',
-            'end': 2060,
-            'local_id': '6fc2c510:alpha',
-            'location': 'Alpha Venue, Rest of Alpha Location',
-            'start': 1000,
-            'summary': 'Edited Summary',
-            'updated': 23456,
-        }, {
-            'description': 'New Description',
-            'end': 3000,
-            'local_id': '6fc2c510:new',
-            'location': 'New Venue, Rest of New Location',
-            'start': 2000,
-            'summary': 'New Summary',
-        }], {
-            'caption': 'CAPTION',
-            'message_id': 12345,
-        }),
-    }
-    assert conversation.format_messages(replies) == """\
+    # But an initial announcement does (photo=...).
+    assert daily_messages(True)[1] == """\
 [chat_id=-1002000002000 disable_notification=True parse_mode=HTML photo=https://ssl.gstatic.com/calendar/images/eventillustrations/v1/img_gamenight_2x.jpg]
 There are a couple events coming up:
 
-<b>Edited Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1ˢᵗ, 12:16–12:34 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
-<b>New Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">TODAY, Thu 1ˢᵗ, 12:33–12:50 am</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1ˢᵗ, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8ᵗʰ, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 """
-    replies.clear()
 
-    conversation.bot.config['issue37']['moderator']['-1002000002000']['daily']['hour'] = 1
     cal.events['6fc2c510:alpha']['description'] = 'Fun Games!'
 
-    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
-    assert records == {
-        ('modulestestbot', '-1002000002000'): (1000, [{
-            'description': 'Fun Games!',
-            'end': 2060,
-            'local_id': '6fc2c510:alpha',
-            'location': 'Alpha Venue, Rest of Alpha Location',
-            'start': 1000,
-            'summary': 'Edited Summary',
-            'updated': 23456,
-        }, {
-            'description': 'New Description',
-            'end': 3000,
-            'local_id': '6fc2c510:new',
-            'location': 'New Venue, Rest of New Location',
-            'start': 2000,
-            'summary': 'New Summary',
-        }], {
-            'caption': 'CAPTION',
-            'message_id': 12345,
-        }),
-    }
-    assert conversation.format_messages(replies) == """\
+    # Removing an icon trigger leaves the image in place.
+    assert daily_messages()[1] == """\
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  Edited Summary
+  Alpha Summary
     • <i>Board Games!</i> → <b>Fun Games!</b>
 
 
 [chat_id=-1002000002000 message_id=12345 parse_mode=HTML]
 There are a couple events coming up:
 
-<b>Edited Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1ˢᵗ, 12:16–12:34 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
-<b>New Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">TODAY, Thu 1ˢᵗ, 12:33–12:50 am</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1ˢᵗ, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">1 week on Thu 8ᵗʰ, 12–1 am</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
 [<a href="https://t.me/c/2000002000/12345">Updated</a>]
 """
-    replies.clear()
 
-    cal.events['6fc2c510:alpha']['description'] = 'Fun Games?'
+
+def test_daily_messages_geometry(conversation, daily_messages):  # pylint: disable=redefined-outer-name
+    """See https://github.com/nmlorg/metabot/issues/75."""
+
+    daily_messages(True)
+
+    cal = loader.get('static:test_events')
+    cal.events['6fc2c510:alpha']['description'] = 'Trigger'
     conversation.bot.config['issue37']['moderator']['-1002000002000']['maxeventscount'] = 1
 
-    events._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
-    assert records == {
-        ('modulestestbot', '-1002000002000'): (1000, [{
-            'description': 'Fun Games?',
-            'end': 2060,
+    assert daily_messages() == ({
+        ('modulestestbot', '-1002000002000'): (0, [{
+            'description': 'Trigger',
+            'end': 2000,
             'local_id': '6fc2c510:alpha',
             'location': 'Alpha Venue, Rest of Alpha Location',
             'start': 1000,
-            'summary': 'Edited Summary',
-            'updated': 23456,
+            'summary': 'Alpha Summary',
         }], {
-            'caption': 'CAPTION',
             'message_id': 12345,
         }),
-    }
-    assert conversation.format_messages(replies) == """\
+    }, """\
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  Edited Summary
-    • <i>Fun Games!</i> → <b>Fun Games?</b>
+  Alpha Summary
+    • <i>Alpha Description</i> → <b>Trigger</b>
 
 
-[chat_id=-1002000002000 message_id=12345 parse_mode=HTML]
+[chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
 There's an event coming up:
 
-<b>Edited Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1ˢᵗ, 12:16–12:34 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1ˢᵗ, 12:16–12:33 am</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 
 [<a href="https://t.me/c/2000002000/12345">Updated</a>]
-"""
-    replies.clear()
+""")
 
 
 def test_quick_diff():

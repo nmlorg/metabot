@@ -526,64 +526,32 @@ if __name__ == '__main__':
     import os
     import sys
 
-    def _get_varint(data):
-        val = exp = 0
-        while data:
-            chunk = data.pop(0)
-            val += (chunk & 0x7f) << (7 * exp)
-            if not chunk & 0x80:
-                break
-            exp += 1
-        return val
+    from metabot.util import protobuf
 
-    def _get_field(data):
-        key = _get_varint(data)
-        wire_type, field_number = key & 0x7, key >> 3
-        if wire_type == 0:
-            return field_number, _get_varint(data)
-        if wire_type == 2:
-            field_len = _get_varint(data)
-            value = data[:field_len]
-            for _ in range(field_len):
-                data.pop(0)
-            return field_number, value
-        return None, key
+    class _FlairPhrase(protobuf.ProtoBuf):  # pylint: disable=too-few-public-methods
+        _fields = (
+            (1, 'flag', int),
+            (2, 'phrase', str),
+        )
+
+    class _FlairEntry(protobuf.ProtoBuf):  # pylint: disable=too-few-public-methods
+        _fields = (
+            (1, 'identifier', str),
+            (2, 'phrases', _FlairPhrase, list),
+        )
+
+    class _FlairFile(protobuf.ProtoBuf):  # pylint: disable=too-few-public-methods
+        _fields = (
+            (1, 'entries', _FlairEntry, list),
+            (2, 'lang_code', str),
+        )
 
     def main(argv):  # pylint: disable=missing-docstring,too-many-branches,too-many-locals
         if len(argv) < 2:
             print('USAGE: %s path/to/assets/flairs/flairdata_en.pb' % sys.argv[0])
             return 1
 
-        data = list(open(argv[1], 'rb').read())
-
-        fields = []
-
-        while data:  # pylint: disable=too-many-nested-blocks
-            field_type, value = _get_field(data)
-            if field_type == 1:
-                name = None
-                while value:
-                    field_type, subvalue = _get_field(value)
-                    if field_type == 1:
-                        name = bytes(subvalue).decode('utf8')
-                    elif field_type == 2:
-                        flag = None
-                        while subvalue:
-                            field_type, subsubvalue = _get_field(subvalue)
-                            if field_type == 1:
-                                flag = subsubvalue
-                            elif field_type == 2:
-                                if name:
-                                    fields.append(
-                                        (bytes(subsubvalue).decode('utf8').lower(), name, flag))
-                            else:
-                                print('UNKNOWN[2]', field_type, subsubvalue)
-                    else:
-                        print('UNKNOWN[1]', field_type, subvalue)
-            elif field_type == 2:
-                lang_code = bytes(value).decode('utf8')
-            else:
-                print('UNKNOWN[0]', field_type, value)
+        flair = _FlairFile(list(open(argv[1], 'rb').read()))
 
         lines = open(__file__, 'r').read().splitlines()
         with open(__file__ + '.new', 'w') as fobj:
@@ -592,9 +560,10 @@ if __name__ == '__main__':
                 fobj.write(line + '\n')
                 if line == 'GOOGLE_TABLE = (':
                     break
-            fobj.write('    # Language code: %s\n' % lang_code)
-            for phrase, identifier, flag in fields:
-                fobj.write('    %r,  # flag: %r\n' % ((phrase, identifier), flag))
+            fobj.write('    # Language code: %s\n' % flair.lang_code)  # pylint: disable=no-member
+            for identifier, phrases in flair.entries:  # pylint: disable=no-member
+                for flag, phrase in phrases:
+                    fobj.write('    %r,  # flag: %r\n' % ((phrase.lower(), identifier), flag))
             while lines[i] != ')':
                 i += 1
             while i < len(lines):

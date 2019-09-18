@@ -114,4 +114,4 @@ def time(dtime):
     text = '%i' % (((dtime.hour - 1) % 12) + 1)
     if dtime.minute:
         text = '%s:%02i' % (text, dtime.minute)
-    return text + {'pm': '\u1d56\u1d50', 'am': '\u1d43\u1d50'}[dtime.strftime('%P')]
+    return text + unicodeutil.superscript(dtime.strftime('%P'))

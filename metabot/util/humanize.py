@@ -3,6 +3,8 @@
 import datetime
 import time as _time
 
+from metabot.util import unicodeutil
+
 
 def _now_copy_tz(dtime):
     now = datetime.datetime.fromtimestamp(_time.time(), getattr(dtime, 'tzinfo', None))
@@ -31,15 +33,16 @@ def date(dtime, base=None):  # pylint: disable=too-many-branches
 def dayofmonth(dom):
     """Return a day of the month in ordinal form (1st, 11th, etc.)."""
 
+    ending = 'th'
     if not 11 <= dom <= 13:
         ones = dom % 10
         if ones == 1:
-            return '%s\u02e2\u1d57' % dom
-        if ones == 2:
-            return '%s\u207f\u1d48' % dom
-        if ones == 3:
-            return '%s\u02b3\u1d48' % dom
-    return '%s\u1d57\u02b0' % dom
+            ending = 'st'
+        elif ones == 2:
+            ending = 'nd'
+        elif ones == 3:
+            ending = 'rd'
+    return '%s%s' % (dom, unicodeutil.superscript(ending))
 
 
 def howrecent(start, end, base=None):  # pylint: disable=too-many-return-statements
@@ -59,13 +62,13 @@ def howrecent(start, end, base=None):  # pylint: disable=too-many-return-stateme
         return 'TOMORROW,'
     if delta.days == -1:
         return 'YESTERDAY,'
-    if 1 < delta.days < 7:
-        return 'this'
-    if -1 > delta.days > -7:
-        return 'last'
+    if abs(delta.days) < 14:
+        prefix = '%i days' % abs(delta.days)
+    else:
+        prefix = '%i weeks' % abs(delta.days // 7)
     if delta.days > 0:
-        return '%s on' % plural(delta.days // 7, 'week')
-    return '%s ago on' % plural(-delta.days // 7, 'week')
+        return unicodeutil.superscript(prefix)
+    return unicodeutil.superscript(prefix + ' ago')
 
 
 def list(arr):  # pylint: disable=redefined-builtin
@@ -99,7 +102,7 @@ def range(start, end):  # pylint: disable=redefined-builtin
             return '%s \u2013 %s' % (text, date(end, base=start.date()))
         if start.day != end.day or (start.hour < 12) != (end.hour < 12):
             return '%s \u2013 %s' % (text, time(end))
-        return '%s\u2013%s' % (text.rsplit(None, 1)[0], time(end))
+        return '%s\u2013%s' % (text[:-2], time(end))
     if start.year != end.year or start.month != end.month:
         return '%s \u2013 %s' % (text, date(end, base=start))
     return '%s\u2013%s' % (text[:-2], dayofmonth(end.day))
@@ -111,4 +114,4 @@ def time(dtime):
     text = '%i' % (((dtime.hour - 1) % 12) + 1)
     if dtime.minute:
         text = '%s:%02i' % (text, dtime.minute)
-    return '%s %s' % (text, dtime.strftime('%P'))
+    return text + {'pm': '\u1d56\u1d50', 'am': '\u1d43\u1d50'}[dtime.strftime('%P')]

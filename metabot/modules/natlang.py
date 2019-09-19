@@ -63,8 +63,11 @@ def process_event(ctx, msg, query):  # pylint: disable=too-many-branches,too-man
                 if not did_first:
                     did_first = True
                     reasons.add(query['event'] + ' I know about')
-            elif not did_first or not did_cal:
+            elif not did_first:
                 did_first = did_cal = True
+                reasons.add(query['event'])
+            elif not did_cal:
+                did_cal = True
                 reasons.add('%s on the %s calendar' %
                             (query['event'], ctx.bot.multibot.calendars[calcode]['name']))
             else:
@@ -76,7 +79,7 @@ def process_event(ctx, msg, query):  # pylint: disable=too-many-branches,too-man
                     reasons.add('%s at %s' % (query['event'], event['location'].split(',', 1)[0]))
 
             if reasons:
-                msg.add('The next %s is:', ' / '.join(sorted(reasons)))
+                msg.add('<i>The next %s is:</i>', ' / '.join(sorted(reasons)))
                 msg.add(events.format_event(ctx.bot, event, timezone, full=False))
                 summaries.add(summary)
                 venues.add(venue)

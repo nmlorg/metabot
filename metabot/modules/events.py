@@ -1,6 +1,7 @@
 """Display recent and upcoming events."""
 
 import datetime
+import logging
 import operator
 import random
 import re
@@ -69,12 +70,16 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     text = _format_daily_message(preamble, list(map(form, events)))
                     url = icons.match(events[0]['summary']) or icons.match(events[0]['description'])
                     if url:
-                        message = bot.send_photo(chat_id=groupid,
-                                                 photo=url,
-                                                 caption=text,
-                                                 parse_mode='HTML',
-                                                 disable_notification=True)
-                    else:
+                        try:
+                            message = bot.send_photo(chat_id=groupid,
+                                                     photo=url,
+                                                     caption=text,
+                                                     parse_mode='HTML',
+                                                     disable_notification=True)
+                        except ntelebot.errors.Error:
+                            logging.exception('Downgrading to plain text:')
+                            url = None
+                    if not url:
                         message = bot.send_message(chat_id=groupid,
                                                    text=text,
                                                    parse_mode='HTML',

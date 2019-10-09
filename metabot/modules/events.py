@@ -60,7 +60,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             bot = ntelebot.bot.Bot(botconf['issue37']['telegram']['token'])
             bot.multibot = multibot
             form = lambda event: format_event(bot, event, tzinfo, full=False)  # pylint: disable=cell-var-from-loop
-            title = lambda event: '  ' + event['summary']
+            title = lambda event: '  \u2022 ' + event['summary']
             nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
             if nowdt.hour == hour and not dow & 1 << nowdt.weekday():
                 events = _get_group_events(bot, calcodes, tzinfo, count, days, now)
@@ -99,12 +99,12 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     lastevent = lastmap.get(event['local_id'])
                     if not lastevent:
                         edits.append(title(event))
-                        edits.append('    \u2022 New event!')
+                        edits.append('    \u25e6 New event!')
                         continue
                     event = multibot.multical.get_event(event['local_id'])[1]
                     if not event:
                         edits.append(title(lastevent))
-                        edits.append('    \u2022 Removed.')
+                        edits.append('    \u25e6 Removed.')
                         continue
                     pairs = (
                         (lastevent['summary'], event['summary']),
@@ -122,7 +122,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     if pieces:
                         edits.append(title(event))
                         for left, right in pieces:
-                            edits.append('    \u2022 <i>%s</i> \u2192 <b>%s</b>' % (left, right))
+                            edits.append('    \u25e6 <i>%s</i> \u2192 <b>%s</b>' % (left, right))
 
                 if not edits:
                     continue
@@ -136,11 +136,13 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                 lastnowdt = datetime.datetime.fromtimestamp(lastnow, tzinfo)
                 preambles = groupconf['daily'].get('text', '').splitlines()
                 preamble = preambles and preambles[lastnowdt.toordinal() % len(preambles)] or ''
-                updated = 'Updated'
+                updated = 'Updated ' + humanize.time(nowdt)
                 groupidnum = int(groupid)
                 if -1002147483647 <= groupidnum < -1000000000000:
                     updated = '<a href="https://t.me/c/%s/%s">%s</a>' % (
                         -1000000000000 - groupidnum, message['message_id'], updated)
+                else:
+                    updated = '%s (%s)' % (updated, message['message_id'])
                 text = '%s\n\n[%s]' % (_format_daily_message(preamble, list(map(form,
                                                                                 events))), updated)
                 if lastmessage.get('caption'):

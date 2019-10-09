@@ -596,9 +596,9 @@ def test_daily_messages_updated(daily_messages):  # pylint: disable=redefined-ou
     }, """\
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  Edited Summary
-    • <i>Alpha Summary</i> → <b>Edited Summary</b>
-    • <i>…2:16–12:33ᵃᵐ</i> → <b>…2:16–12:34ᵃᵐ</b>
+  • Edited Summary
+    ◦ <i>Alpha Summary</i> → <b>Edited Summary</b>
+    ◦ <i>…2:16–12:33ᵃᵐ</i> → <b>…2:16–12:34ᵃᵐ</b>
 
 
 [chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -609,7 +609,7 @@ There are a couple events coming up:
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁷ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated</a>]
+[<a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>]
 """)
 
     assert daily_messages() == ({
@@ -649,8 +649,8 @@ def test_daily_messages_future(daily_messages, monkeypatch):  # pylint: disable=
     assert daily_messages()[1] == """\
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  Now Summary
-    • <i>Alpha Summary</i> → <b>Now Summary</b>
+  • Now Summary
+    ◦ <i>Alpha Summary</i> → <b>Now Summary</b>
 
 
 [chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -661,7 +661,7 @@ There are a couple events coming up:
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁷ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated</a>]
+[<a href="https://t.me/c/2000002000/12345">Updated 12:16ᵃᵐ</a>]
 """
 
 
@@ -694,8 +694,8 @@ def test_daily_messages_multiline(daily_messages):  # pylint: disable=redefined-
     }, """\
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  Alpha Summary
-    • <i>Alpha Description</i> → <b>Multi Line Description</b>
+  • Alpha Summary
+    ◦ <i>Alpha Description</i> → <b>Multi Line Description</b>
 
 
 [chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -706,7 +706,7 @@ There are a couple events coming up:
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁷ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated</a>]
+[<a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>]
 """)
 
 
@@ -751,10 +751,10 @@ def test_daily_messages_add_remove_event(conversation, daily_messages):  # pylin
     }, """\
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  New Summary
-    • New event!
-  Bravo Summary
-    • Removed.
+  • New Summary
+    ◦ New event!
+  • Bravo Summary
+    ◦ Removed.
 
 
 [chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -765,7 +765,7 @@ There are a couple events coming up:
 <b>New Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">TODAY, Thu 1ˢᵗ, 12:33–12:50ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated</a>]
+[<a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>]
 """)
 
 
@@ -797,8 +797,8 @@ def test_daily_messages_icons(daily_messages):  # pylint: disable=redefined-oute
     assert daily_messages()[1] == """\
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  Alpha Summary
-    • <i>Alpha Description</i> → <b>Board Games!</b>
+  • Alpha Summary
+    ◦ <i>Alpha Description</i> → <b>Board Games!</b>
 
 
 [chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -809,7 +809,7 @@ There are a couple events coming up:
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁷ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated</a>]
+[<a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>]
 """
 
     # But an initial announcement does (photo=...).
@@ -829,8 +829,8 @@ There are a couple events coming up:
     assert daily_messages()[1] == """\
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  Alpha Summary
-    • <i>Board Games!</i> → <b>Fun Games!</b>
+  • Alpha Summary
+    ◦ <i>Board Games!</i> → <b>Fun Games!</b>
 
 
 [chat_id=-1002000002000 message_id=12345 parse_mode=HTML]
@@ -841,7 +841,7 @@ There are a couple events coming up:
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁷ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated</a>]
+[<a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>]
 """
 
 
@@ -868,8 +868,8 @@ def test_daily_messages_geometry(conversation, daily_messages):  # pylint: disab
     }, """\
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  Alpha Summary
-    • <i>Alpha Description</i> → <b>Trigger</b>
+  • Alpha Summary
+    ◦ <i>Alpha Description</i> → <b>Trigger</b>
 
 
 [chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -878,7 +878,7 @@ There's an event coming up:
 <b>Alpha Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated</a>]
+[<a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>]
 """)
 
 

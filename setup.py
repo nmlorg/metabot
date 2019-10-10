@@ -3,7 +3,7 @@ import setuptools
 
 setuptools.setup(
     name='metabot',
-    version='0.3.16.3',
+    version='0.3.16.4',
     author='Daniel Reed',
     author_email='nmlorg@gmail.com',
     description='Modularized, multi-account bot.',
@@ -14,7 +14,7 @@ setuptools.setup(
     package_data={'': ['*.html']},
     python_requires='>=3.5',
     install_requires=[
-        'ntelebot >= 0.3.3',
+        'ntelebot >= 0.3.4',
         'pytz',
         'PyYAML >= 5.1',
         'requests',

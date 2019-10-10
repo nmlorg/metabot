@@ -19,6 +19,8 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
     if ctx.type in ('message', 'callback_query'):
         if ctx.command == 'admin':
             return default(ctx, msg)
+        if ctx.command == 'whoami':
+            return whoami(ctx, msg)
         if ctx.command == '_bootstrap':
             return bootstrap(ctx, msg, modconf)
 
@@ -61,12 +63,18 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
         if hasattr(module, 'admin'):
             menu.add(modname, module.admin, module.__doc__.splitlines()[0].rstrip('.'))
 
-    if not menu.fields:
+    if not menu.fields:  # pragma: no cover
         return msg.add(
             "Hi! There aren't any configurable modules installed. Contact a metabot admin to "
             'install one.')
 
     menu.handle(frame, what='module')
+
+
+def whoami(ctx, msg):
+    """Simply tell the user their userid (primarily to copy/paste into /admin BOTNAME admin)."""
+
+    msg.add('<code>%s</code>', ctx.user['id'])
 
 
 def bootstrap(ctx, msg, modconf):
@@ -84,15 +92,20 @@ def admin(frame):  # pylint: disable=too-many-branches
     if 'admins' not in modconf:  # pragma: no cover
         modconf['admins'] = []
 
-    target = frame.text
-    if target.isdigit():
-        target = int(target)
-    elif target:
-        msg.add("I'm not sure what <code>%s</code> is\u2014it's not a user id!", target)
-        target = None
-
-    if not target:
+    target = None
+    if ctx.forward_from:
         target = ctx.forward_from
+    elif frame.text.isdigit():
+        target = int(frame.text)
+    elif ctx.forwarded:
+        msg.add(
+            "I can't tell exactly who sent that message, possibly because the sender enabled <a "
+            'href="https://telegram.org/blog/unsend-privacy-emoji#anonymous-forwarding">Anonymous '
+            'Forwarding</a>. You can either ask them to temporarily re-enable normal forwarding, '
+            'or ask them to open a chat with me, type <code>/whoami</code>, then forward or '
+            'copy/paste the number they receive to you (to copy/paste on to me).')
+    elif frame.text:
+        msg.add("I'm not sure what <code>%s</code> is\u2014it's not a user id!", frame.text)
 
     if target in modconf['admins']:
         if target == ctx.user['id']:

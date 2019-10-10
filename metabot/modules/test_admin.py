@@ -55,6 +55,15 @@ Bot Admin › modulestestbot: <b>Choose a module</b>
 """
 
 
+def test_whoami(conversation):  # pylint: disable=redefined-outer-name
+    """Test /whoami."""
+
+    assert conversation.message('/whoami') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+<code>1000</code>
+"""
+
+
 def test_bootstrap(conversation):  # pylint: disable=redefined-outer-name
     """Test /_bootstrap."""
 
@@ -143,5 +152,26 @@ Bot Admin › modulestestbot › admin: <b>Choose an admin</b>
 Removed 2000 from the admin list.
 
 Forward a message from a user to add or remove them, or select an existing admin to remove.
+[Back | /admin modulestestbot]
+"""
+
+    assert conversation.message('/whoami', forward_date=1000) == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin › modulestestbot › admin: <b>Choose an admin</b>
+
+I can't tell exactly who sent that message, possibly because the sender enabled <a href="https://telegram.org/blog/unsend-privacy-emoji#anonymous-forwarding">Anonymous Forwarding</a>. You can either ask them to temporarily re-enable normal forwarding, or ask them to open a chat with me, type <code>/whoami</code>, then forward or copy/paste the number they receive to you (to copy/paste on to me).
+
+Forward a message from a user to add or remove them, or select an existing admin to remove.
+[Back | /admin modulestestbot]
+"""
+
+    assert conversation.message('/whoami', forward_date=1000, forward_from=2000) == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Bot Admin › modulestestbot › admin: <b>Choose an admin</b>
+
+Added 2000 to the admin list.
+
+Forward a message from a user to add or remove them, or select an existing admin to remove.
+[Remove User2000 (2000) | /admin modulestestbot admin 2000]
 [Back | /admin modulestestbot]
 """

@@ -65,13 +65,13 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         self.multibot.dispatcher(self.bot, update)
         return responses
 
-    def raw_message(  # pylint: disable=too-many-arguments
-            self,
-            text,
-            user_id=1000,
-            chat_type='private',
-            forward_date=None,
-            forward_from=None):
+    # pylint: disable=too-many-arguments
+    def raw_message(self,
+                    text,
+                    user_id=1000,
+                    chat_type='private',
+                    forward_date=None,
+                    forward_from=None):
         """Simulate a private message."""
 
         user = {'id': user_id, 'username': 'user%s' % user_id, 'first_name': 'User%s' % user_id}
@@ -111,6 +111,8 @@ class BotConversation(object):  # pylint: disable=missing-docstring,too-few-publ
         self.bot.send_photo.respond(json=_handler)
         self.multibot.dispatcher(self.bot, update)
         return responses
+
+    # pylint: enable=too-many-arguments
 
     @staticmethod
     def format_messages(messages):

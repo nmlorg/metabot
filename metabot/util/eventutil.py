@@ -1,6 +1,7 @@
 """Display recent and upcoming events."""
 
 import datetime
+import logging
 import time
 import urllib.parse
 
@@ -64,7 +65,11 @@ def format_event(bot, event, tzinfo, full=True):
 def format_geo(address, now):
     """Build a string of weather exceptions for the given address as of the given time."""
 
-    geo = geoutil.lookup(address, now)
+    try:
+        geo = geoutil.lookup(address, now)
+    except Exception:  # pylint: disable=broad-except
+        logging.exception('Ignoring:')
+        return
     if not geo or not geo.get('forecast'):
         return
     warnings = []

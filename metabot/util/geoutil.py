@@ -31,6 +31,7 @@ def geocode(address):
     if 'geocode' not in _CACHE:
         _CACHE['geocode'] = {}
     if address not in _CACHE['geocode']:
+        logging.info('Geocoding %r.', address)
         _CACHE['geocode'][address] = _CLIENT.geocode(address)
         _save()
     return _CACHE['geocode'][address]
@@ -42,7 +43,7 @@ def _weatherfetch(url):
         'user-agent': 'https://github.com/nmlorg/metabot',
     }
     logging.info('Fetching %r.', url)
-    return requests.get(url, headers=headers).json()
+    return requests.get(url, headers=headers, timeout=10).json()
 
 
 def weatherpoint(lat, lon):

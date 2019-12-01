@@ -12,6 +12,11 @@ from metabot.util import html
 from metabot.util import humanize
 from metabot.util import tickets
 
+# https://www.weather.gov/forecast-icons
+BAD_WEATHER_KEYWORDS = {
+    'blizzard', 'freezing', 'heavy', 'hurricane', 'ice', 'snow', 'tornado', 'tropical'
+}
+
 
 def get_group_conf(groupconf):
     """Pull calendar configuration from a raw group conf."""
@@ -73,16 +78,14 @@ def format_geo(address, now):
     if not geo or not geo.get('forecast'):
         return
     warnings = []
-    if geo['forecast']['temperatureUnit'] == 'F':
-        if not 65 <= geo['forecast']['temperature'] <= 85:
-            warnings.append('%s\u2109' % geo['forecast']['temperature'])
-    elif geo['forecast']['temperatureUnit'] == 'C':
-        if not 18 <= geo['forecast']['temperature'] <= 29:
-            warnings.append('%s\u2103' % geo['forecast']['temperature'])
-    short = geo['forecast']['shortForecast'].lower()
-    if 'rain' in short or 'snow' in short:
+    if set(geo['forecast']['shortForecast'].lower().split()) & BAD_WEATHER_KEYWORDS:
         warnings.append(geo['forecast']['shortForecast'])
-    return ' \u2022 '.join(warnings)
+    if warnings:
+        if geo['forecast']['temperatureUnit'] == 'F':
+            warnings.append('%s\u2109' % geo['forecast']['temperature'])
+        elif geo['forecast']['temperatureUnit'] == 'C':
+            warnings.append('%s\u2103' % geo['forecast']['temperature'])
+        return ' \u2022 '.join(warnings)
 
 
 def humanize_range(start, end, tzinfo):

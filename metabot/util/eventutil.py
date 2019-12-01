@@ -6,6 +6,7 @@ import urllib.parse
 
 import pytz
 
+from metabot.util import geoutil
 from metabot.util import html
 from metabot.util import humanize
 from metabot.util import tickets
@@ -52,9 +53,31 @@ def format_event(bot, event, tzinfo, full=True):
             'q': event['location'].encode('utf-8'),
         })  # yapf: disable
         message = '%s @ <a href="%s">%s</a>' % (message, location_url, location_name)
+        geo = format_geo(event['location'], event['start'])
+        if geo:
+            message = '%s\n\u26a0 %s' % (message, geo)
     if full and event['description']:
         message = '%s\n\n%s' % (message, html.sanitize(event['description']))
     return message
+
+
+def format_geo(address, now):
+    """Build a string of weather exceptions for the given address as of the given time."""
+
+    geo = geoutil.lookup(address, now)
+    if not geo or not geo.get('forecast'):
+        return
+    warnings = []
+    if geo['forecast']['temperatureUnit'] == 'F':
+        if not 65 <= geo['forecast']['temperature'] <= 85:
+            warnings.append('%s\u2109' % geo['forecast']['temperature'])
+    elif geo['forecast']['temperatureUnit'] == 'C':
+        if not 18 <= geo['forecast']['temperature'] <= 29:
+            warnings.append('%s\u2103' % geo['forecast']['temperature'])
+    short = geo['forecast']['shortForecast'].lower()
+    if 'rain' in short or 'snow' in short:
+        warnings.append(geo['forecast']['shortForecast'])
+    return ' \u2022 '.join(warnings)
 
 
 def humanize_range(start, end, tzinfo):

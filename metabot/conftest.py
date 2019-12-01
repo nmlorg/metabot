@@ -17,6 +17,11 @@ def _dont_mangle_callback_data(monkeypatch):
     monkeypatch.setattr('ntelebot.keyboardutil.fix', lambda keyboard, maxlen=0: None)
 
 
+@pytest.fixture(autouse=True)
+def _disable_geoutil(monkeypatch):
+    monkeypatch.setattr('metabot.util.geoutil._CLIENT', None)
+
+
 def _format_message(response):
     text = response.pop('text', None) or response.pop('caption', '(EMPTY MESSAGE)')
     reply_markup = response.pop('reply_markup', None)

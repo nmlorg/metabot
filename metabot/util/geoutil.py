@@ -28,6 +28,8 @@ def _save():
 def geocode(address):
     """Look up the given address in Google Maps."""
 
+    if _CLIENT is None:
+        return
     if 'geocode' not in _CACHE:
         _CACHE['geocode'] = {}
     if address not in _CACHE['geocode']:
@@ -46,7 +48,7 @@ def _weatherfetch(url):
     return requests.get(url, headers=headers, timeout=10).json()
 
 
-def weatherpoint(lat, lon):
+def _weatherpoint(lat, lon):
     """Map a latitude/longitude to a weather.gov gridpoint."""
 
     # https://weather-gov.github.io/api/general-faqs#how-do-i-get-a-forecast-for-a-location-from-the-api
@@ -62,38 +64,54 @@ def weatherpoint(lat, lon):
     return _CACHE['weatherpoint'][key]
 
 
-def hourlyforecast(lat, lon):
+def _hourlyforecast(lat, lon, when):
     """Retrieve the hourly forecast for the given latitude/longitude."""
 
-    point = weatherpoint(lat, lon)
+    point = _weatherpoint(lat, lon)
     if not point.get('properties'):
-        return ()
+        return
     now = time.time()
     url = point['properties']['forecastHourly']
     last, ret = _SHORTCACHE.get(url) or (0, None)
     if last < now - 10 * 60:
         ret = _weatherfetch(url)['properties']['periods']
         _SHORTCACHE[url] = (now, ret)
-    return ret
+
+    for period in ret:
+        start = iso8601.totimestamp(period['startTime'])
+        end = iso8601.totimestamp(period['endTime'])
+        if start <= when < end:
+            return period
 
 
-def lookup(address, now=None):
-    """Retrieve the forecasted weather conditions for the given address as of the given time."""
+def hourlyforecast(address, when):
+    """Retrieve the hourly forecast for the given address."""
 
-    if _CLIENT is None:
-        return
-    if now is None:
-        now = time.time()
-    ret = {}
     geo = geocode(address)
     if not geo:
         return
-    ret['lat'] = geo[0]['geometry']['location']['lat']
-    ret['lon'] = geo[0]['geometry']['location']['lng']
-    for period in hourlyforecast(ret['lat'], ret['lon']):
-        start = iso8601.totimestamp(period['startTime'])
-        end = iso8601.totimestamp(period['endTime'])
-        if start <= now < end:
-            ret['forecast'] = period
-            break
+    return _hourlyforecast(geo[0]['geometry']['location']['lat'],
+                           geo[0]['geometry']['location']['lng'], when)
+
+
+def _weatheralerts(lat, lon):
+    point = _weatherpoint(lat, lon)
+    if not point.get('properties'):
+        return ()
+    now = time.time()
+    url = 'alerts/active?zone=' + point['properties']['forecastZone'].rsplit('/', 1)[1]
+    last, ret = _SHORTCACHE.get(url) or (0, None)
+    if last < now - 10 * 60:
+        ret = [feature['properties'] for feature in _weatherfetch(url)['features']]
+        _SHORTCACHE[url] = (now, ret)
     return ret
+
+
+def weatheralerts(address):
+    """Retrieve active NWS weather alerts for the given address."""
+
+    geo = geocode(address)
+    if not geo:
+        return
+    return _weatheralerts(geo[0]['geometry']['location']['lat'],
+                          geo[0]['geometry']['location']['lng'])

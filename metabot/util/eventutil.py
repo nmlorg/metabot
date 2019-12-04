@@ -71,20 +71,20 @@ def format_geo(address, now):
     """Build a string of weather exceptions for the given address as of the given time."""
 
     try:
-        geo = geoutil.lookup(address, now)
+        forecast = geoutil.hourlyforecast(address, now)
     except Exception:  # pylint: disable=broad-except
         logging.exception('Ignoring:')
         return
-    if not geo or not geo.get('forecast'):
+    if not forecast:
         return
     warnings = []
-    if set(geo['forecast']['shortForecast'].lower().split()) & BAD_WEATHER_KEYWORDS:
-        warnings.append(geo['forecast']['shortForecast'])
+    if set(forecast['shortForecast'].lower().split()) & BAD_WEATHER_KEYWORDS:
+        warnings.append(forecast['shortForecast'])
     if warnings:
-        if geo['forecast']['temperatureUnit'] == 'F':
-            warnings.append('%s\u2109' % geo['forecast']['temperature'])
-        elif geo['forecast']['temperatureUnit'] == 'C':
-            warnings.append('%s\u2103' % geo['forecast']['temperature'])
+        if forecast['temperatureUnit'] == 'F':
+            warnings.append('%s\u2109' % forecast['temperature'])
+        elif forecast['temperatureUnit'] == 'C':
+            warnings.append('%s\u2103' % forecast['temperature'])
         return ' \u2022 '.join(warnings)
 
 

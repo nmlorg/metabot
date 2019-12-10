@@ -97,7 +97,7 @@ def hourlyforecast(address, when):
 def _weatheralerts(lat, lon):
     point = _weatherpoint(lat, lon)
     if not point.get('properties'):
-        return ()
+        return
     now = time.time()
     url = 'alerts/active?zone=' + point['properties']['forecastZone'].rsplit('/', 1)[1]
     last, ret = _SHORTCACHE.get(url) or (0, None)

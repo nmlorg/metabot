@@ -45,7 +45,7 @@ def group(ctx, msg):
             "I'm not configured for this group! Ask a bot admin to go into the <b>moderator</b> "
             'module settings, group <b>%s</b>, and %s.', group_id, humanize.list(missing))
 
-    events = eventutil.get_group_events(ctx.bot, calcodes, tzinfo, count, days)
+    events, unused_alerts = eventutil.get_group_events(ctx.bot, calcodes, tzinfo, count, days)
     if not events:
         msg.add('No events in the next %s days!', days)
     else:

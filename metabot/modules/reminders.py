@@ -54,7 +54,8 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             title = lambda event: '  \u2022 ' + event['summary']
             nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
             if nowdt.hour == hour and not dow & 1 << nowdt.weekday():
-                events = eventutil.get_group_events(bot, calcodes, tzinfo, count, days, now)
+                events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days, now)
+                _handle_alerts(bot, records, groupid, alerts)
                 if events:
                     preambles = groupconf['daily'].get('text', '').splitlines()
                     preamble = (preambles and preambles[nowdt.toordinal() % len(preambles)] or '')
@@ -80,7 +81,9 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             elif (botuser, groupid) in records:
                 lastnow, lastevents, lastmessage = records[botuser, groupid]
                 lastmap = {event['local_id']: event for event in lastevents}
-                events = eventutil.get_group_events(bot, calcodes, tzinfo, count, days, lastnow)
+                events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days,
+                                                            lastnow)
+                _handle_alerts(bot, records, groupid, alerts)
                 curmap = {event['local_id']: event for event in events}
                 bothevents = events.copy()
                 bothevents.extend(event for event in lastevents if event['local_id'] not in curmap)
@@ -194,3 +197,45 @@ def _format_daily_message(preamble, events):
             text = 'Also, ' + text
         text = preamble + text
     return '%s\n\n%s' % (text, '\n'.join(events))
+
+
+def _handle_alerts(bot, records, groupid, alerts):
+    text = _format_alerts(alerts)
+
+    kwargs = {}
+    key = ('alerts', groupid)
+    if key in records:
+        if not text:
+            records.pop(key)
+            return
+        lasttext, lastmessage = records[key]
+        if lasttext == text:
+            return
+        kwargs['reply_to_message_id'] = lastmessage['message_id']
+    if text:
+        logging.info('Alerts for %s:\n%s', groupid, text)
+        message = bot.send_message(chat_id=groupid,
+                                   text=text,
+                                   parse_mode='HTML',
+                                   disable_web_page_preview=True,
+                                   **kwargs)
+        records[key] = (text, message)
+
+
+def _format_alerts(alerts):
+    if not alerts:
+        return ''
+    text = []
+    for alert in alerts:
+        text.append('<a href="https://alerts-v2.weather.gov/products/%s">%s %s</a>' %
+                    (alert['id'], alert['event'], alert['id']))
+        text.append('')
+        desc = '%s\n\n%s\n\n%s' % (alert['description'], alert['instruction'], alert['areaDesc'])
+        desc = re.sub(r'\s*\n\s*', ' ', re.sub(r'\s*\n\s*\n\s*', '\0',
+                                               desc)).replace('\0', '\n\n').strip()
+        if len(desc) > 250:
+            desc = desc[:249] + '\u2026'
+        text.append(desc)
+        text.append('')
+        text.append('')
+    return '\n'.join(text).strip()

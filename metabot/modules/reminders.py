@@ -53,6 +53,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             form = lambda event: eventutil.format_event(bot, event, tzinfo, full=False)  # pylint: disable=cell-var-from-loop
             title = lambda event: '  \u2022 ' + event['summary']
             nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
+            key = (botuser, groupid)
             if nowdt.hour == hour and not dow & 1 << nowdt.weekday():
                 events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days, now)
                 _handle_alerts(bot, records, groupid, alerts)
@@ -61,6 +62,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     preamble = (preambles and preambles[nowdt.toordinal() % len(preambles)] or '')
                     text = _format_daily_message(preamble, list(map(form, events)))
                     url = icons.match(events[0]['summary']) or icons.match(events[0]['description'])
+                    message = None
                     if url:
                         try:
                             message = bot.send_photo(chat_id=groupid,
@@ -70,16 +72,19 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                                                      disable_notification=True)
                         except ntelebot.errors.Error:
                             logging.exception('Downgrading to plain text:')
-                            url = None
-                    if not url:
-                        message = bot.send_message(chat_id=groupid,
-                                                   text=text,
-                                                   parse_mode='HTML',
-                                                   disable_web_page_preview=True,
-                                                   disable_notification=True)
-                    records[botuser, groupid] = (now, [event.copy() for event in events], message)
-            elif (botuser, groupid) in records:
-                lastnow, lastevents, lastmessage = records[botuser, groupid]
+                    if not message:
+                        try:
+                            message = bot.send_message(chat_id=groupid,
+                                                       text=text,
+                                                       parse_mode='HTML',
+                                                       disable_web_page_preview=True,
+                                                       disable_notification=True)
+                        except ntelebot.errors.Error:
+                            logging.exception('While sending to %s:\n%s', groupid, text)
+                    if message:
+                        records[key] = (now, [event.copy() for event in events], message)
+            elif key in records:
+                lastnow, lastevents, lastmessage = records[key]
                 lastmap = {event['local_id']: event for event in lastevents}
                 events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days,
                                                             lastnow)
@@ -120,12 +125,17 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
 
                 if not edits:
                     continue
-                message = bot.send_message(chat_id=groupid,
-                                           reply_to_message_id=lastmessage['message_id'],
-                                           text='Updated:\n' + '\n'.join(edits),
-                                           parse_mode='HTML',
-                                           disable_web_page_preview=True,
-                                           disable_notification=True)
+                text = 'Updated:\n' + '\n'.join(edits)
+                try:
+                    message = bot.send_message(chat_id=groupid,
+                                               reply_to_message_id=lastmessage['message_id'],
+                                               text=text,
+                                               parse_mode='HTML',
+                                               disable_web_page_preview=True,
+                                               disable_notification=True)
+                except ntelebot.errors.Error:
+                    logging.exception('While sending to %s:\n%s', groupid, text)
+                    continue
 
                 lastnowdt = datetime.datetime.fromtimestamp(lastnow, tzinfo)
                 preambles = groupconf['daily'].get('text', '').splitlines()
@@ -139,19 +149,22 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     updated = '%s (%s)' % (updated, message['message_id'])
                 text = '%s\n\n[%s]' % (_format_daily_message(preamble, list(map(form,
                                                                                 events))), updated)
-                if lastmessage.get('caption'):
-                    message = bot.edit_message_caption(chat_id=groupid,
-                                                       message_id=lastmessage['message_id'],
-                                                       caption=text,
-                                                       parse_mode='HTML')
+                try:
+                    if lastmessage.get('caption'):
+                        message = bot.edit_message_caption(chat_id=groupid,
+                                                           message_id=lastmessage['message_id'],
+                                                           caption=text,
+                                                           parse_mode='HTML')
+                    else:
+                        message = bot.edit_message_text(chat_id=groupid,
+                                                        message_id=lastmessage['message_id'],
+                                                        text=text,
+                                                        parse_mode='HTML',
+                                                        disable_web_page_preview=True)
+                except ntelebot.errors.Error:
+                    logging.exception('While sending to %s:\n%s', groupid, text)
                 else:
-                    message = bot.edit_message_text(chat_id=groupid,
-                                                    message_id=lastmessage['message_id'],
-                                                    text=text,
-                                                    parse_mode='HTML',
-                                                    disable_web_page_preview=True)
-
-                records[botuser, groupid] = (lastnow, [event.copy() for event in events], message)
+                    records[key] = (lastnow, [event.copy() for event in events], message)
 
 
 def _quick_diff(left, right):
@@ -213,13 +226,25 @@ def _handle_alerts(bot, records, groupid, alerts):
             return
         kwargs['reply_to_message_id'] = lastmessage['message_id']
     if text:
-        logging.info('Alerts for %s:\n%s', groupid, text)
-        message = bot.send_message(chat_id=groupid,
-                                   text=text,
-                                   parse_mode='HTML',
-                                   disable_web_page_preview=True,
-                                   **kwargs)
-        records[key] = (text, message)
+        message = None
+        try:
+            message = bot.send_message(chat_id=groupid,
+                                       text=text,
+                                       parse_mode='HTML',
+                                       disable_web_page_preview=True,
+                                       **kwargs)
+        except ntelebot.errors.Error:
+            logging.exception('While sending to %s:\n%s', groupid, text)
+        if not message and kwargs:
+            try:
+                message = bot.send_message(chat_id=groupid,
+                                           text=text,
+                                           parse_mode='HTML',
+                                           disable_web_page_preview=True)
+            except ntelebot.errors.Error:
+                logging.exception('While sending to %s:\n%s', groupid, text)
+        if message:
+            records[key] = (text, message)
 
 
 def _format_alerts(alerts):

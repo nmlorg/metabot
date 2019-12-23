@@ -556,7 +556,7 @@ def test_handle_alerts(handle_alerts):  # pylint: disable=redefined-outer-name
         'event': 'Winter Storm Warning',
     }]
     assert handle_alerts(alerts) == """\
-[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML]
+[chat_id=-1001000001000 disable_notification=True disable_web_page_preview=True parse_mode=HTML]
 <a href="https://alerts-v2.weather.gov/products/alert-id">Winter Storm Warning alert-id</a>
 
 Alert Description
@@ -572,7 +572,7 @@ Area description
     # Fourth poll; existing alert is modified.
     alerts[0]['instruction'] = 'Run for your lives!'
     assert handle_alerts(alerts) == """\
-[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
+[chat_id=-1001000001000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 <a href="https://alerts-v2.weather.gov/products/alert-id">Winter Storm Warning alert-id</a>
 
 Alert Description
@@ -591,7 +591,7 @@ Area description
         'event': 'Winter Storm Watch',
     })
     assert handle_alerts(alerts) == """\
-[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
+[chat_id=-1001000001000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 <a href="https://alerts-v2.weather.gov/products/alert-id">Winter Storm Warning alert-id</a>
 
 Alert Description

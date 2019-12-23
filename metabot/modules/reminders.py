@@ -232,6 +232,7 @@ def _handle_alerts(bot, records, groupid, alerts):
                                        text=text,
                                        parse_mode='HTML',
                                        disable_web_page_preview=True,
+                                       disable_notification=True,
                                        **kwargs)
         except ntelebot.errors.Error:
             logging.exception('While sending to %s:\n%s', groupid, text)
@@ -240,7 +241,8 @@ def _handle_alerts(bot, records, groupid, alerts):
                 message = bot.send_message(chat_id=groupid,
                                            text=text,
                                            parse_mode='HTML',
-                                           disable_web_page_preview=True)
+                                           disable_web_page_preview=True,
+                                           disable_notification=True)
             except ntelebot.errors.Error:
                 logging.exception('While sending to %s:\n%s', groupid, text)
         if message:

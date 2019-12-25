@@ -554,6 +554,10 @@ def test_handle_alerts(handle_alerts):  # pylint: disable=redefined-outer-name
         'description': 'Alert Description',
         'instruction': 'Alert Instructions',
         'event': 'Winter Storm Warning',
+        'messageType': 'Alert',
+        'urgency': 'Immediate',
+        'severity': 'Extreme',
+        'certainty': 'Observed',
     }]
     assert handle_alerts(alerts) == """\
 [chat_id=-1001000001000 disable_notification=True disable_web_page_preview=True parse_mode=HTML]
@@ -589,6 +593,10 @@ Area description
         'description': 'Second Description',
         'instruction': 'Second Instructions',
         'event': 'Winter Storm Watch',
+        'messageType': 'Alert',
+        'urgency': 'Immediate',
+        'severity': 'Extreme',
+        'certainty': 'Observed',
     })
     assert handle_alerts(alerts) == """\
 [chat_id=-1001000001000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
@@ -611,4 +619,18 @@ Second area description
 """
 
     # Sixth poll; both alerts have been canceled.
+    assert handle_alerts([]) == ''
+
+    # Seventh poll; a new alert that we don't care about.
+    alerts = [{
+        'id': 'alert-id-3',
+        'areaDesc': 'Third area description',
+        'description': 'Third Description',
+        'instruction': 'Third Instructions',
+        'event': 'Special Weather Statement',
+        'messageType': 'Alert',
+        'urgency': 'Immediate',
+        'severity': 'Moderate',
+        'certainty': 'Observed',
+    }]
     assert handle_alerts([]) == ''

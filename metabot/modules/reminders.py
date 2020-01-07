@@ -213,10 +213,6 @@ def _format_daily_message(preamble, events):
 
 
 def _handle_alerts(bot, records, groupid, alerts):
-    logging.info(
-        'Alerts:\n%s', '\n'.join(('%(id)s | %(messageType)s | %(severity)s | %(certainty)s '
-                                  '| %(urgency)s | %(event)s | %(instruction)s') % alert
-                                 for alert in alerts))
     # See https://github.com/nmlorg/metabot/issues/85.
     alerts = [
         alert for alert in alerts

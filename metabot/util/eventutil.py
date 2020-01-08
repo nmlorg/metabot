@@ -10,6 +10,7 @@ import pytz
 from metabot.util import geoutil
 from metabot.util import html
 from metabot.util import humanize
+from metabot.util import icons
 from metabot.util import tickets
 
 # https://www.weather.gov/forecast-icons
@@ -106,3 +107,9 @@ def humanize_range(start, end, tzinfo):
 
     return humanize.range(datetime.datetime.fromtimestamp(start, tzinfo),
                           datetime.datetime.fromtimestamp(end, tzinfo))
+
+
+def get_image(event, unused_botconf):
+    """Choose the best image for a given event and botconf."""
+
+    return icons.match(event['summary']) or icons.match(event['description'])

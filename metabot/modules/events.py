@@ -6,7 +6,6 @@ from metabot.util import adminui
 from metabot.util import eventutil
 from metabot.util import html
 from metabot.util import humanize
-from metabot.util import icons
 
 ALIASES = ('calendar', 'event', 'events')
 
@@ -49,7 +48,7 @@ def group(ctx, msg):
     if not events:
         msg.add('No events in the next %s days!', days)
     else:
-        url = icons.match(events[0]['summary']) or icons.match(events[0]['description'])
+        url = eventutil.get_image(events[0], ctx.bot.config)
         if url:
             msg.add('photo:' + url)
         msg.add('\n'.join(

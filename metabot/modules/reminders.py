@@ -12,7 +12,6 @@ import ntelebot
 from metabot.util import eventutil
 from metabot.util import html
 from metabot.util import humanize
-from metabot.util import icons
 from metabot.util import pickleutil
 
 
@@ -61,7 +60,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     preambles = groupconf['daily'].get('text', '').splitlines()
                     preamble = (preambles and preambles[nowdt.toordinal() % len(preambles)] or '')
                     text = _format_daily_message(preamble, list(map(form, events)))
-                    url = icons.match(events[0]['summary']) or icons.match(events[0]['description'])
+                    url = eventutil.get_image(events[0], botconf)
                     message = None
                     if url:
                         try:

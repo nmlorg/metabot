@@ -20,6 +20,8 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
             return group(ctx, msg)
         if ctx.prefix == 'set':
             return settings(ctx, msg, modconf)
+        if ctx.prefix == 'admin':
+            return customize(ctx, msg, modconf)
         return private(ctx, msg, modconf)
 
     if ctx.type == 'inline_query' and ctx.prefix.lstrip('/') in ALIASES:
@@ -55,7 +57,7 @@ def group(ctx, msg):
             eventutil.format_event(ctx.bot, event, tzinfo, full=False) for event in events))
 
 
-def private(ctx, msg, modconf):  # pylint: disable=too-many-locals
+def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-locals
     """Handle /events in a private chat."""
 
     eventid, timezone = ctx.split(2)
@@ -87,6 +89,8 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-locals
         msg.add('No upcoming events!')
     else:
         msg.add(eventutil.format_event(ctx.bot, event, tzinfo, full=True))
+    if ctx.user['id'] in ctx.bot.config['issue37']['admin']['admins']:
+        msg.button('Customize', '/events admin ' + event['local_id'])
     buttons = [None, ('Settings', '/events set'), None]
     if prevev:
         buttons[0] = ('Prev', '/events %s%s' % (prevev['local_id'], suffix))
@@ -169,6 +173,37 @@ def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
                      cache_time=30,
                      switch_pm_text='Settings',
                      switch_pm_parameter='L2V2ZW50cyBzZXQ')
+
+
+def customize(ctx, msg, modconf):
+    """Handle /events admin."""
+
+    _, eventid, field, text = ctx.split(4)
+
+    msg.path('/events', 'Events')
+    msg.path('admin', 'Customize')
+    msg.path(eventid)
+
+    _, event, _ = ctx.bot.multibot.multical.get_event(eventid)
+    if not event:
+        return msg.add('Unknown event!')
+
+    frame = adminui.Frame(ctx, msg, modconf, 'events', None, field)
+    menu = adminui.Menu(
+        ('event', 'event', 'What banner image should be used for this specific event?'),
+        ('series', 'series', 'What banner image should be used for events with this title?'),
+    )
+    _, handler = menu.select(frame)
+    if handler == 'event':
+        msg.path('event')
+        frame = adminui.Frame(ctx, msg, modconf['events'], eventid, None, text)
+        adminui.image(frame)
+    elif handler == 'series':
+        msg.path('series')
+        frame = adminui.Frame(ctx, msg, modconf['series'], event['summary'], None, text)
+        adminui.image(frame)
+    else:
+        menu.display(frame)
 
 
 def settings(ctx, msg, modconf):

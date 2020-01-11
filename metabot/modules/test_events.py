@@ -110,22 +110,22 @@ No events in the next 6 days!
 def test_private(conversation, monkeypatch):  # pylint: disable=redefined-outer-name
     """Test /events in a private chat."""
 
-    assert conversation.message('/events') == """\
-[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+    assert conversation.message('/events', user_id=2000) == """\
+[chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 Please choose one or more calendars and set your time zone!
 [Settings | /events set]
 """
 
-    assert conversation.message('/events set') == """\
-[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+    assert conversation.message('/events set', user_id=2000) == """\
+[chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 Events › Settings: <b>Choose a field</b>
 [calendars • Which calendars do you want to see? | /events set calendars]
 [timezone • What time zone are you in? | /events set timezone]
 [Back | /events]
 """
 
-    assert conversation.message('/events set calendars') == """\
-[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+    assert conversation.message('/events set calendars', user_id=2000) == """\
+[chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 Events › Settings › calendars: <b>Select a calendar</b>
 
 Which calendars do you want to see?
@@ -135,8 +135,8 @@ Select a calendar to add or remove from the list below:
 [Back | /events set]
 """
 
-    assert conversation.message('/events set calendars add 6fc2c510') == """\
-[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+    assert conversation.message('/events set calendars add 6fc2c510', user_id=2000) == """\
+[chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 Events › Settings › calendars: <b>Select a calendar</b>
 
 Added <code>6fc2c510</code> to your calendar view.
@@ -148,10 +148,10 @@ Select a calendar to add or remove from the list below:
 [Back | /events set]
 """
 
-    conversation.bot.config['issue37']['events']['users']['1000']['timezone'] = 'US/Pacific'
+    conversation.bot.config['issue37']['events']['users']['2000']['timezone'] = 'US/Pacific'
 
-    assert conversation.message('/events') == """\
-[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+    assert conversation.message('/events', user_id=2000) == """\
+[chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 <b>Alpha Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">NOW, Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 
@@ -159,8 +159,8 @@ Alpha Description
 [\xa0 | /stop] [Settings | /events set] [Next | /events 6fc2c510:bravo]
 """
 
-    assert conversation.message('/events 6fc2c510:bravo') == """\
-[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+    assert conversation.message('/events 6fc2c510:bravo', user_id=2000) == """\
+[chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">⁷ ᵈᵃʸˢ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
@@ -170,8 +170,8 @@ Bravo Description
 
     monkeypatch.setattr('time.time', lambda: 2000000.)
 
-    assert conversation.message('/events') == """\
-[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+    assert conversation.message('/events', user_id=2000) == """\
+[chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 No upcoming events!
 [\xa0 | /stop] [Settings | /events set] [\xa0 | /stop]
 """
@@ -316,6 +316,71 @@ Select a calendar to add or remove from the list below:
             'results': [],
         },
     ]  # yapf: disable
+
+
+def test_customize(conversation):  # pylint: disable=redefined-outer-name
+    """Test /events admin."""
+
+    conversation.bot.config['issue37']['events']['users']['1000']['calendars'] = '6fc2c510'
+    conversation.bot.config['issue37']['events']['users']['1000']['timezone'] = 'US/Pacific'
+
+    assert conversation.message('/events') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">NOW, Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+
+Alpha Description
+[Customize | /events admin 6fc2c510:alpha]
+[\xa0 | /stop] [Settings | /events set] [Next | /events 6fc2c510:bravo]
+"""
+
+    assert conversation.message('/events admin 6fc2c510:alpha') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events › Customize › 6fc2c510:alpha: <b>Choose a field</b>
+[event • What banner image should be used for this specific event? | /events admin 6fc2c510:alpha event]
+[series • What banner image should be used for events with this title? | /events admin 6fc2c510:alpha series]
+[Back | /events admin]
+"""
+
+    assert conversation.message('/events admin 6fc2c510:alpha series') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events › Customize › 6fc2c510:alpha › series: <b>Send a new image for Alpha Summary</b>
+
+Send a new image, or type "off" to disable/reset to default.
+[Back | /events admin 6fc2c510:alpha]
+"""
+
+    assert conversation.message('https://SERIES-IMAGE') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events › Customize › 6fc2c510:alpha › series
+
+Set <code>Alpha Summary</code> to <code>https://SERIES-IMAGE</code>.
+[Back | /events admin 6fc2c510:alpha]
+"""
+
+    assert conversation.bot.config['issue37']['events']['series'] == {
+        'Alpha Summary': 'https://SERIES-IMAGE',
+    }
+
+    assert conversation.message('/events admin 6fc2c510:alpha event') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events › Customize › 6fc2c510:alpha › event: <b>Send a new image for 6fc2c510:alpha</b>
+
+Send a new image, or type "off" to disable/reset to default.
+[Back | /events admin 6fc2c510:alpha]
+"""
+
+    assert conversation.message('https://EVENT-ICON') == """\
+[chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+Events › Customize › 6fc2c510:alpha › event
+
+Set <code>6fc2c510:alpha</code> to <code>https://EVENT-ICON</code>.
+[Back | /events admin 6fc2c510:alpha]
+"""
+
+    assert conversation.bot.config['issue37']['events']['events'] == {
+        '6fc2c510:alpha': 'https://EVENT-ICON',
+    }
 
 
 def test_settings(conversation):  # pylint: disable=redefined-outer-name

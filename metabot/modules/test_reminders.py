@@ -408,7 +408,7 @@ def test_daily_messages_ignored(daily_messages):  # pylint: disable=redefined-ou
     assert daily_messages()[1] == ''
 
 
-def test_daily_messages_icons(daily_messages):  # pylint: disable=redefined-outer-name
+def test_daily_messages_icons(conversation, daily_messages):  # pylint: disable=redefined-outer-name
     """Run through all the cases where events trigger banner images."""
 
     daily_messages(True)
@@ -438,6 +438,30 @@ There are a couple events coming up:
     # But an initial announcement does (photo=...).
     assert daily_messages(True)[1] == """\
 [chat_id=-1002000002000 disable_notification=True parse_mode=HTML photo=https://ssl.gstatic.com/calendar/images/eventillustrations/v1/img_gamenight_2x.jpg]
+There are a couple events coming up:
+
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁷ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+"""
+
+    conversation.bot.config['issue37']['events']['series']['ha sum'] = 'SERIES ICON'
+
+    assert daily_messages(True)[1] == """\
+[chat_id=-1002000002000 disable_notification=True parse_mode=HTML photo=SERIES ICON]
+There are a couple events coming up:
+
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁷ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+"""
+
+    conversation.bot.config['issue37']['events']['events']['6fc2c510:alpha'] = 'EVENT ICON'
+
+    assert daily_messages(True)[1] == """\
+[chat_id=-1002000002000 disable_notification=True parse_mode=HTML photo=EVENT ICON]
 There are a couple events coming up:
 
 <b>Alpha Summary</b>

@@ -109,7 +109,14 @@ def humanize_range(start, end, tzinfo):
                           datetime.datetime.fromtimestamp(end, tzinfo))
 
 
-def get_image(event, unused_botconf):
+def get_image(event, botconf):
     """Choose the best image for a given event and botconf."""
 
+    eventconf = botconf['issue37']['events']
+    eventimage = eventconf['events'].get(event['local_id'])
+    if eventimage:
+        return eventimage
+    for pattern, seriesimage in eventconf['series'].items():
+        if pattern.lower() in event['summary'].lower():
+            return seriesimage
     return icons.match(event['summary']) or icons.match(event['description'])

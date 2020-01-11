@@ -266,6 +266,23 @@ def groupid(frame):
         msg.button('%s (%s)' % (group_id, groupconf['title']), group_id)
 
 
+def image(frame):
+    """Configure an image field."""
+
+    ctx, msg = frame.ctx, frame.msg
+    if ctx.photo:
+        set_log(frame, ctx.photo)
+    elif frame.text.lower() in ('-', 'none', 'off'):
+        set_log(frame, None)
+    elif frame.text.startswith('https://'):
+        set_log(frame, frame.text)
+    else:
+        msg.action = 'Send a new image for ' + frame.field
+        if frame.get():
+            msg.add('<code>%s</code> is currently <code>%s</code>.', frame.field, frame.value)
+        msg.add('Send a new image, or type "off" to disable/reset to default.')
+
+
 def integer(frame):
     """Configure an integer field."""
 

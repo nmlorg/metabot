@@ -2,7 +2,6 @@
 
 import json
 import threading
-import time
 
 import ntelebot
 import pytest
@@ -68,13 +67,15 @@ def test_module():
     """Verify the configurable module dispatcher."""
 
     results = []
+    event = threading.Event()
 
     class _DummyMod:  # pylint: disable=too-few-public-methods
 
         @staticmethod
         def moddispatch(ctx, unused_msg, unused_modconf):  # pylint: disable=missing-docstring
             results.append(ctx.text)
-            time.sleep(.5)
+            mybot.stop()
+            event.set()
 
     mybot = multibot.MultiBot({_DummyMod})
     mockbot = ntelebot.bot.Bot('1234:modbot')
@@ -86,6 +87,6 @@ def test_module():
     mockbot.getupdates.respond(json={'ok': True, 'result': [update]})
     mybot.add_bot('1234:modbot')
     mybot.run_bot('modbot')
-    threading.Timer(.1, mybot.stop).start()
     mybot.run()
+    event.wait()
     assert results == ['test']

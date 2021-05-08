@@ -211,7 +211,7 @@ def test_view(monkeypatch):
         multical.add('zulu')
 
     assert multical.by_local_id == {'xray:alpha': 0, 'yankee:bravo': 1, 'zulu:charlie': 2}
-    alpha, bravo, charlie = multical.ordered
+    alpha, bravo, charlie = multical.ordered  # pylint: disable=unbalanced-tuple-unpacking
 
     assert multical.get_event('xray:alpha') == (None, alpha, bravo)
     assert multical.get_event('yankee:bravo') == (alpha, bravo, charlie)

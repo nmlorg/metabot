@@ -1,3 +1,13 @@
 [MESSAGES CONTROL]
 
-disable=consider-using-ternary,duplicate-code,inconsistent-return-statements,super-with-arguments,useless-object-inheritance
+disable=
+    consider-using-f-string,
+    consider-using-ternary,
+    consider-using-with,
+    duplicate-code,
+    inconsistent-return-statements,
+    super-with-arguments,
+    unspecified-encoding,
+    unused-variable,
+    use-sequence-for-iteration,
+    useless-object-inheritance,

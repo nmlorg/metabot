@@ -25,6 +25,6 @@ class _Container:
 
     def __setattr__(self, field, value):
         if field.startswith('_'):
-            return super(_Container, self).__setattr__(field, value)
+            return super().__setattr__(field, value)
 
         self[field] = value

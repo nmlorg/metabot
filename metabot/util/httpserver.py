@@ -25,11 +25,10 @@ class HTTPServer(http.server.HTTPServer):
 
     def __init__(self, multibot, port=0):
         self.multibot = multibot
-        super(HTTPServer, self).__init__(('', port), _RequestHandler)
+        super().__init__(('', port), _RequestHandler)
 
     def process_request(self, request, client_address):
-        self.multibot.loop.queue.put(
-            lambda: super(HTTPServer, self).process_request(request, client_address))
+        self.multibot.loop.queue.put(lambda: super().process_request(request, client_address))
 
     def serve_forever_in_thread(self):
         """Run the server (self.serve_forever()) in a separate daemon thread."""

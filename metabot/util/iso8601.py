@@ -26,7 +26,7 @@ class _TimeZone(datetime.tzinfo):
     __slots__ = ('_utcoffset',)
 
     def __init__(self, utcoffset):
-        super(_TimeZone, self).__init__()
+        super().__init__()
         self._utcoffset = datetime.timedelta(hours=utcoffset)
 
     @staticmethod

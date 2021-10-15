@@ -5,7 +5,7 @@ class ImplicitTrackingDict(dict):
     """A mutation-logging, key-implying dict."""
 
     def __init__(self, value=None, log=None, path=(), **kwargs):
-        super(ImplicitTrackingDict, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         if log is not None:
             self.log = log
         else:
@@ -47,7 +47,7 @@ class ImplicitTrackingDict(dict):
 
     def pop(self, key, default=None):
         path = self.path + (key,)
-        current = super(ImplicitTrackingDict, self).pop(key, None)
+        current = super().pop(key, None)
         if current is None:
             return default
         if isinstance(current, ImplicitTrackingDict):
@@ -90,7 +90,7 @@ class ImplicitTrackingDict(dict):
         else:
             assert isinstance(value, (int, str)), repr(value)
 
-        super(ImplicitTrackingDict, self).__setitem__(key, value)
+        super().__setitem__(key, value)
 
         if not isinstance(value, (ImplicitTrackingDict, TrackingList)):
             self.audit(path, value, current)
@@ -100,7 +100,7 @@ class TrackingList(list):
     """A mutation-logging list."""
 
     def __init__(self, value=None, log=None, path=(), **kwargs):
-        super(TrackingList, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         if log is not None:
             self.log = log
         else:
@@ -125,7 +125,7 @@ class TrackingList(list):
     def append(self, value):
         assert isinstance(value, (int, str)), value
         current = tuple(self)
-        super(TrackingList, self).append(value)
+        super().append(value)
         self.audit(current)
 
     def clear(self):  # pylint: disable=missing-docstring
@@ -139,28 +139,28 @@ class TrackingList(list):
     def insert(self, index, value):
         assert isinstance(value, (int, str)), value
         current = tuple(self)
-        super(TrackingList, self).insert(index, value)
+        super().insert(index, value)
         self.audit(current)
 
     def pop(self, index=-1):
         current = tuple(self)
-        ret = super(TrackingList, self).pop(index)
+        ret = super().pop(index)
         self.audit(current)
         return ret
 
     def remove(self, value):
         current = tuple(self)
-        super(TrackingList, self).remove(value)
+        super().remove(value)
         self.audit(current)
 
     def reverse(self):
         current = tuple(self)
-        super(TrackingList, self).reverse()
+        super().reverse()
         self.audit(current)
 
     def sort(self, **kwargs):
         current = tuple(self)
-        super(TrackingList, self).sort(**kwargs)
+        super().sort(**kwargs)
         self.audit(current)
 
     def __setitem__(self, index, value):
@@ -168,5 +168,5 @@ class TrackingList(list):
         if self[index] == value:
             return
         current = tuple(self)
-        super(TrackingList, self).__setitem__(index, value)
+        super().__setitem__(index, value)
         self.audit(current)

@@ -6,5 +6,4 @@ disable=
     consider-using-with,
     duplicate-code,
     inconsistent-return-statements,
-    super-with-arguments,
     unspecified-encoding,

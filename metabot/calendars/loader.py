@@ -32,7 +32,7 @@ class _CachingCalendarMixin:
     _cache_dir = 'calendars'
 
     def __init__(self, calid):
-        super(_CachingCalendarMixin, self).__init__(calid)
+        super().__init__(calid)
         self.__fname = '%s/%s.pickle' % (self._cache_dir, self.calcode)
         data = pickleutil.load(self.__fname)
         if data:
@@ -43,21 +43,21 @@ class _CachingCalendarMixin:
         self.__dict__.update(pickleutil.dump(self.__fname, self.__dict__))
 
     def poll(self):  # pylint: disable=missing-docstring
-        if super(_CachingCalendarMixin, self).poll():
+        if super().poll():
             self.__save()
             return True
 
     def add(self, local):  # pylint: disable=missing-docstring
-        ret = super(_CachingCalendarMixin, self).add(local)
+        ret = super().add(local)
         self.__save()
         return ret
 
     def remove(self, local_id):  # pylint: disable=missing-docstring
-        ret = super(_CachingCalendarMixin, self).remove(local_id)
+        ret = super().remove(local_id)
         self.__save()
         return ret
 
     def update(self, local_id, local):  # pylint: disable=missing-docstring
-        ret = super(_CachingCalendarMixin, self).update(local_id, local)
+        ret = super().update(local_id, local)
         self.__save()
         return ret

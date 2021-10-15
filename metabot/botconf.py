@@ -15,7 +15,7 @@ class BotConf(dicttools.ImplicitTrackingDict):
     confdir = None
 
     def __init__(self, confdir=None):  # pylint: disable=too-many-branches
-        super(BotConf, self).__init__()
+        super().__init__()
         if confdir:  # pylint: disable=too-many-nested-blocks
             self.confdir = confdir
             if not os.path.isdir(confdir):

@@ -12,7 +12,7 @@ class Calendar(base.Calendar):
     poll_result = False
 
     def __init__(self, calid):
-        super(Calendar, self).__init__(calid)
+        super().__init__(calid)
         self.__live_events = {}
 
     def poll(self):

@@ -6,7 +6,7 @@ def cgi_escape(text):  # pylint: disable=missing-docstring
                                                                    '&gt;').replace('"', '&quot;')
 
 
-class MessageBuilder(object):
+class MessageBuilder:
     """Quick template for metabot's custom message style."""
 
     action = None

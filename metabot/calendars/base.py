@@ -4,7 +4,7 @@ import hashlib
 import logging
 
 
-class Calendar(object):
+class Calendar:
     """Base calendar container."""
 
     caltype = 'base'

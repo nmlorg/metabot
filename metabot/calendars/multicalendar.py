@@ -6,7 +6,7 @@ import time
 from metabot.calendars import loader
 
 
-class MultiCalendar(object):
+class MultiCalendar:
     """A manager that blends multiple base.Calendar objects' events together."""
 
     _current_index = None
@@ -103,7 +103,7 @@ class MultiCalendar(object):
         return View(self, calcodes)
 
 
-class View(object):
+class View:
     """A MultiCalendar-like object that operates on a subset of the installed calendars."""
 
     def __init__(self, multical, calcodes):

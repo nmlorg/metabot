@@ -36,7 +36,7 @@ def _format_message(response):
     return text
 
 
-class BotConversation(object):  # pylint: disable=missing-docstring,too-few-public-methods
+class BotConversation:  # pylint: disable=missing-docstring,too-few-public-methods
 
     def __init__(self, *modules):
 

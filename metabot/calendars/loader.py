@@ -28,7 +28,7 @@ def get(calid):
     return cal
 
 
-class _CachingCalendarMixin(object):
+class _CachingCalendarMixin:
     _cache_dir = 'calendars'
 
     def __init__(self, calid):

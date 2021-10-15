@@ -1,7 +1,7 @@
 """Simple container for bot, group, and user configuration."""
 
 
-class DataSettings(object):  # pylint: disable=too-few-public-methods
+class DataSettings:  # pylint: disable=too-few-public-methods
     """Simple container for bot, group, and user configuration."""
 
     def __init__(self, data, settings):
@@ -9,7 +9,7 @@ class DataSettings(object):  # pylint: disable=too-few-public-methods
         self.settings = _Container(settings)
 
 
-class _Container(object):
+class _Container:
 
     def __init__(self, data):
         self._data = data

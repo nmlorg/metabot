@@ -11,7 +11,7 @@ from metabot.util import jsonutil
 from metabot.util import msgbuilder
 
 
-class MultiBot(object):
+class MultiBot:
     """An ntelebot.loop.Loop that manages multiple bots."""
 
     def __init__(self, modules, confdir=None):

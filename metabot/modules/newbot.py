@@ -64,7 +64,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
 
     try:
         bot.get_updates(limit=1, timeout=10)
-    except ntelebot.errors.Conflict as exc:
+    except ntelebot.errors.Conflict:
         return msg.add(
             'Woops, it looks like this bot account is already in use. Make sure no other bot '
             'programs are running using this API Token and paste the token again, or use another '

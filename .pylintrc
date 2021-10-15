@@ -8,5 +8,4 @@ disable=
     inconsistent-return-statements,
     super-with-arguments,
     unspecified-encoding,
-    use-sequence-for-iteration,
     useless-object-inheritance,

@@ -65,7 +65,7 @@ class BotConf(dicttools.ImplicitTrackingDict):
                     dailyconf = groupconf.get('daily')
                     if dailyconf is not None and not isinstance(dailyconf, dict):
                         groupconf['daily'] = {'hour': dailyconf}
-                        for key in {'dow', 'text'}:
+                        for key in ('dow', 'text'):
                             value = groupconf.pop('daily' + key)
                             if value is not None:
                                 groupconf['daily'][key] = value

@@ -412,7 +412,7 @@ Choose a primary city:
 [Beulah (Central - ND (Mercer)) | /admin modulestestbot moderator -1001000001000 timezone America/North_Dakota/Beulah]
 [Denver (Mountain (most areas)) | /admin modulestestbot moderator -1001000001000 timezone America/Denver]
 [Boise (Mountain - ID (south); OR (east)) | /admin modulestestbot moderator -1001000001000 timezone America/Boise]
-[Phoenix (MST - Arizona (except Navajo)) | /admin modulestestbot moderator -1001000001000 timezone America/Phoenix]
+[Phoenix (MST - AZ (except Navajo)) | /admin modulestestbot moderator -1001000001000 timezone America/Phoenix]
 [Los Angeles (Pacific) | /admin modulestestbot moderator -1001000001000 timezone America/Los_Angeles]
 [Prev | /admin modulestestbot moderator -1001000001000 timezone US 1] [Next | /admin modulestestbot moderator -1001000001000 timezone US 3]
 [Back | /admin modulestestbot moderator -1001000001000]
@@ -432,7 +432,7 @@ Choose a primary city:
 [Metlakatla (Alaska - Annette Island) | /admin modulestestbot moderator -1001000001000 timezone America/Metlakatla]
 [Yakutat (Alaska - Yakutat) | /admin modulestestbot moderator -1001000001000 timezone America/Yakutat]
 [Nome (Alaska (west)) | /admin modulestestbot moderator -1001000001000 timezone America/Nome]
-[Adak (Aleutian Islands) | /admin modulestestbot moderator -1001000001000 timezone America/Adak]
+[Adak (Alaska - western Aleutians) | /admin modulestestbot moderator -1001000001000 timezone America/Adak]
 [Prev | /admin modulestestbot moderator -1001000001000 timezone US 2] [Next | /admin modulestestbot moderator -1001000001000 timezone US 4]
 [Back | /admin modulestestbot moderator -1001000001000]
 """

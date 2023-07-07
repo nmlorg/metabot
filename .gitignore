@@ -1,6 +1,7 @@
 /*.egg-info/
 /.pytest_cache/
 /.tox/
+/.venv/
 /bin/
 /build/
 /calendars/

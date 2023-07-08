@@ -30,14 +30,14 @@ class _TimeZone(datetime.tzinfo):
         self._utcoffset = datetime.timedelta(hours=utcoffset)
 
     @staticmethod
-    def tzname(unused_dt):  # pragma: no cover
+    def tzname(unused_dt):  # pragma: no cover  pylint: disable=arguments-differ
         return 'x'
 
     def utcoffset(self, unused_dt):
         return self._utcoffset
 
     @staticmethod
-    def dst(unused_dt):  # pragma: no cover
+    def dst(unused_dt):  # pragma: no cover  pylint: disable=arguments-differ
         return datetime.timedelta(0)
 
 

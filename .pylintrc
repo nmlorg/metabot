@@ -6,4 +6,6 @@ disable=
     consider-using-with,
     duplicate-code,
     inconsistent-return-statements,
+    unnecessary-lambda-assignment,
     unspecified-encoding,
+    use-implicit-booleaness-not-comparison,

@@ -15,7 +15,7 @@ class Calendar(base.Calendar):
         super().__init__(calid)
         self.__live_events = {}
 
-    def poll(self):
+    def poll(self):  # pylint: disable=arguments-differ
         return self.poll_result
 
     @staticmethod
@@ -26,7 +26,7 @@ class Calendar(base.Calendar):
     def event_local_to_proto(local):
         return {key.upper(): value for key, value in local.items()}
 
-    def proto_add(self, proto):
+    def proto_add(self, proto):  # pylint: disable=arguments-differ
         newproto = dict(proto)
         self.__last_id += 1
         newproto['ID'] = '%s' % self.__last_id
@@ -35,12 +35,12 @@ class Calendar(base.Calendar):
         self.__live_events[newproto['ID']] = newproto
         return newproto
 
-    def proto_update(self, proto_id, proto):
+    def proto_update(self, proto_id, proto):  # pylint: disable=arguments-differ
         current = self.__live_events[proto_id]
         current.update(proto)
         self.__last_update += 1
         current['UPDATED'] = 1000 + self.__last_update
         return current
 
-    def proto_remove(self, proto_id):
+    def proto_remove(self, proto_id):  # pylint: disable=arguments-differ
         self.__live_events.pop(proto_id)

@@ -201,7 +201,7 @@ def fetch_opengraph(url):
     """Basic (and fragile) Open Graph object fetcher/decoder."""
 
     values = {}
-    for line in requests.get(url).text.splitlines():
+    for line in requests.get(url, timeout=10).text.splitlines():
         ret = re.search('<meta property="og:([^"]+)" content="([^"]*)">', line)
         if ret:
             key, value = ret.groups()

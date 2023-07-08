@@ -21,7 +21,7 @@ def _brownpapertickets(text):
     }
     for event_id in sorted(events):
         ret = re.search('>([0-9]+) tickets remaining',
-                        requests.get('https://m.bpt.me/event/' + event_id).text)
+                        requests.get('https://m.bpt.me/event/' + event_id, timeout=10).text)
         if ret:
             remaining = int(ret.groups()[0])
         else:
@@ -37,6 +37,7 @@ def _eventbrite(text):
         url = 'https://www.eventbrite.com/ajax/event/%s/ticket_classes/for_sale/' % event_id
         try:
             data = requests.get(url,
+                                timeout=10,
                                 params={
                                     'pos': 'online',
                                 },

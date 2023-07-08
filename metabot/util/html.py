@@ -69,7 +69,8 @@ class _HTMLSanitizer(html.parser.HTMLParser):
         except (OverflowError, ValueError):
             self.__pieces.append('&amp;#%s;' % name)
 
-    def error(self, message):  # pragma: no cover
+    def error(self, message):  # pragma: no cover  pylint: disable=missing-function-docstring
+        # Remove when support for Python below 3.10 is dropped.
         logging.error('HTML sanitizer error: %s', message)
 
 

@@ -53,22 +53,66 @@ def howrecent(start, end, base=None):  # pylint: disable=too-many-return-stateme
     if start <= base <= end:
         return 'NOW,'
     if isinstance(base, datetime.datetime):
-        delta = start.date() - base.date()
-    else:
-        delta = start - base  # pragma: no cover
+        start = start.date()
+        base = base.date()
+    delta = start - base
     if delta.days == 0:
         return 'TODAY,'
     if delta.days == 1:
         return 'TOMORROW,'
     if delta.days == -1:
         return 'YESTERDAY,'
-    if abs(delta.days) < 14:
-        prefix = '%i days' % abs(delta.days)
+
+    if start < base:
+        left = start
+        right = base
     else:
-        prefix = '%i weeks' % abs(delta.days // 7)
-    if delta.days > 0:
-        return unicodeutil.superscript(prefix)
-    return unicodeutil.superscript(prefix + ' ago')
+        left = base
+        right = start
+
+    years = 0
+    left = left.replace(year=left.year + 1)
+    while left <= right:
+        years += 1
+        left = left.replace(year=left.year + 1)
+    left = left.replace(year=left.year - 1)
+
+    months = 0
+    if left.month == 12:
+        left = left.replace(year=left.year + 1, month=1)
+    else:
+        left = left.replace(month=left.month + 1)
+    while left <= right:
+        months += 1
+        if left.month == 12:
+            left = left.replace(year=left.year + 1, month=1)
+        else:
+            left = left.replace(month=left.month + 1)
+    if left.month == 1:
+        left = left.replace(year=left.year - 1, month=12)
+    else:
+        left = left.replace(month=left.month - 1)
+
+    weeks, days = divmod((right - left).days, 7)
+
+    if years:
+        prefix = f'{years}y'
+        if months:
+            prefix = f'{prefix}{months}m'
+    elif months:
+        prefix = f'{months}m'
+        if weeks:
+            prefix = f'{prefix}{weeks}w'
+    elif weeks:
+        prefix = f'{weeks}w'
+        if days:
+            prefix = f'{prefix}{days}d'
+    else:
+        prefix = f'{days} days'
+
+    if delta.days < 0:
+        prefix += ' ago'
+    return unicodeutil.superscript(prefix)
 
 
 def list(arr):  # pylint: disable=redefined-builtin

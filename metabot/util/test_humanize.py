@@ -47,17 +47,30 @@ def test_humanize_howrecent():
     assert humanize.howrecent(datetime.datetime(2017, 11, 14), yesterday, base=base) == 'YESTERDAY,'
     assert humanize.howrecent(datetime.datetime(2017, 11, 13), yesterday, base=base) == '² ᵈᵃʸˢ ᵃᵍᵒ'
     assert humanize.howrecent(datetime.datetime(2017, 11, 9), yesterday, base=base) == '⁶ ᵈᵃʸˢ ᵃᵍᵒ'
-    assert humanize.howrecent(datetime.datetime(2017, 11, 8), yesterday, base=base) == '⁷ ᵈᵃʸˢ ᵃᵍᵒ'
-    assert humanize.howrecent(datetime.datetime(2017, 11, 2), yesterday, base=base) == '¹³ ᵈᵃʸˢ ᵃᵍᵒ'
-    assert humanize.howrecent(datetime.datetime(2017, 11, 1), yesterday, base=base) == '² ʷᵉᵉᵏˢ ᵃᵍᵒ'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 8), yesterday, base=base) == '¹ʷ ᵃᵍᵒ'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 2), yesterday, base=base) == '¹ʷ⁶ᵈ ᵃᵍᵒ'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 1), yesterday, base=base) == '²ʷ ᵃᵍᵒ'
+    assert humanize.howrecent(datetime.datetime(2016, 11, 16), yesterday, base=base) == '¹¹ᵐ⁴ʷ ᵃᵍᵒ'
+    assert humanize.howrecent(datetime.datetime(2016, 11, 15), yesterday, base=base) == '¹ʸ ᵃᵍᵒ'
+    assert humanize.howrecent(datetime.datetime(2016, 10, 15), yesterday, base=base) == '¹ʸ¹ᵐ ᵃᵍᵒ'
 
-    future = datetime.datetime(2017, 11, 30)
+    future = datetime.datetime(2018, 3, 30)
     assert humanize.howrecent(datetime.datetime(2017, 11, 16), future, base=base) == 'TOMORROW,'
     assert humanize.howrecent(datetime.datetime(2017, 11, 17), future, base=base) == '² ᵈᵃʸˢ'
     assert humanize.howrecent(datetime.datetime(2017, 11, 21), future, base=base) == '⁶ ᵈᵃʸˢ'
-    assert humanize.howrecent(datetime.datetime(2017, 11, 22), future, base=base) == '⁷ ᵈᵃʸˢ'
-    assert humanize.howrecent(datetime.datetime(2017, 11, 28), future, base=base) == '¹³ ᵈᵃʸˢ'
-    assert humanize.howrecent(datetime.datetime(2017, 11, 29), future, base=base) == '² ʷᵉᵉᵏˢ'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 22), future, base=base) == '¹ʷ'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 28), future, base=base) == '¹ʷ⁶ᵈ'
+    assert humanize.howrecent(datetime.datetime(2017, 11, 29), future, base=base) == '²ʷ'
+    assert humanize.howrecent(datetime.datetime(2017, 12, 14), future, base=base) == '⁴ʷ¹ᵈ'
+    assert humanize.howrecent(datetime.datetime(2017, 12, 15), future, base=base) == '¹ᵐ'
+    assert humanize.howrecent(datetime.datetime(2017, 12, 16), future, base=base) == '¹ᵐ'
+    assert humanize.howrecent(datetime.datetime(2017, 12, 22), future, base=base) == '¹ᵐ¹ʷ'
+    assert humanize.howrecent(datetime.datetime(2018, 1, 15), future, base=base) == '²ᵐ'
+    assert humanize.howrecent(datetime.datetime(2018, 1, 21), future, base=base) == '²ᵐ'
+    assert humanize.howrecent(datetime.datetime(2018, 11, 14), future, base=base) == '¹¹ᵐ⁴ʷ'
+    assert humanize.howrecent(datetime.datetime(2018, 11, 15), future, base=base) == '¹ʸ'
+    assert humanize.howrecent(datetime.datetime(2018, 12, 14), future, base=base) == '¹ʸ'
+    assert humanize.howrecent(datetime.datetime(2019, 12, 15), future, base=base) == '²ʸ¹ᵐ'
 
 
 def test_humanize_list():

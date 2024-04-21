@@ -88,7 +88,7 @@ Select a calendar to add or remove from the list below:
 <b>Alpha Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁷ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 """
 
     conversation.bot.config['issue37']['moderator']['-1001000001000']['maxeventscount'] = 1
@@ -162,7 +162,7 @@ Alpha Description
     assert conversation.message('/events 6fc2c510:bravo', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 <b>Bravo Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">⁷ ᵈᵃʸˢ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">¹ʷ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
 Bravo Description
 [Prev | /events 6fc2c510:alpha] [Current | /events] [Next | /events 6fc2c510:charlie]
@@ -227,24 +227,24 @@ Select a calendar to add or remove from the list below:
                     'type': 'article',
                 },
                 {
-                    'description': '⁷ ᵈᵃʸˢ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ @ Bravo Venue',
+                    'description': '¹ʷ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ @ Bravo Venue',
                     'id': '6fc2c510:bravo',
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Bravo Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">⁷ ᵈᵃʸˢ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">¹ʷ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Bravo Summary',
                     'type': 'article',
                 },
                 {
-                    'description': '⁷ ᵈᵃʸˢ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ @ Charlie Venue',
+                    'description': '¹ʷ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ @ Charlie Venue',
                     'id': '6fc2c510:charlie',
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Charlie Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVTL1BhY2lmaWM">⁷ ᵈᵃʸˢ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVTL1BhY2lmaWM">¹ʷ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Charlie Summary',
@@ -263,12 +263,12 @@ Select a calendar to add or remove from the list below:
             'switch_pm_parameter': 'L2V2ZW50cyBzZXQ',
             'results': [
                 {
-                    'description': '⁷ ᵈᵃʸˢ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ @ Bravo Venue',
+                    'description': '¹ʷ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ @ Bravo Venue',
                     'id': '6fc2c510:bravo',
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Bravo Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">⁷ ᵈᵃʸˢ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">¹ʷ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Bravo Summary',
@@ -292,12 +292,12 @@ Select a calendar to add or remove from the list below:
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Bravo Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">⁷ ᵈᵃʸˢ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>\n'
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">¹ʷ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>\n'
                                         '\n'
                                         'Bravo Description',
                         'parse_mode': 'HTML',
                     },
-                    'title': 'Bravo Summary • ⁷ ᵈᵃʸˢ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ @ Bravo Venue',
+                    'title': 'Bravo Summary • ¹ʷ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ @ Bravo Venue',
                     'type': 'article',
                 },
             ],

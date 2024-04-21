@@ -411,7 +411,7 @@ Choose a primary city:
 [New Salem (Central - ND (Morton rural)) | /admin modulestestbot moderator -1001000001000 timezone America/North_Dakota/New_Salem]
 [Beulah (Central - ND (Mercer)) | /admin modulestestbot moderator -1001000001000 timezone America/North_Dakota/Beulah]
 [Denver (Mountain (most areas)) | /admin modulestestbot moderator -1001000001000 timezone America/Denver]
-[Boise (Mountain - ID (south); OR (east)) | /admin modulestestbot moderator -1001000001000 timezone America/Boise]
+[Boise (Mountain - ID (south), OR (east)) | /admin modulestestbot moderator -1001000001000 timezone America/Boise]
 [Phoenix (MST - AZ (except Navajo)) | /admin modulestestbot moderator -1001000001000 timezone America/Phoenix]
 [Los Angeles (Pacific) | /admin modulestestbot moderator -1001000001000 timezone America/Los_Angeles]
 [Prev | /admin modulestestbot moderator -1001000001000 timezone US 1] [Next | /admin modulestestbot moderator -1001000001000 timezone US 3]

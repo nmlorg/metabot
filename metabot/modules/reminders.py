@@ -120,7 +120,8 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     if pieces:
                         edits.append(title(event))
                         for left, right in pieces:
-                            edits.append('    \u25e6 <i>%s</i> \u2192 <b>%s</b>' % (left, right))
+                            edits.append(f'      <s>{left}</s>')
+                            edits.append(f'      {right}')
 
                 if not edits:
                     continue

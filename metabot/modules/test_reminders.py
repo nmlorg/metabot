@@ -220,8 +220,10 @@ def test_daily_messages_updated(daily_messages):  # pylint: disable=redefined-ou
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
   • Edited Summary
-    ◦ <i>Alpha Summary</i> → <b>Edited Summary</b>
-    ◦ <i>…2:16–12:33ᵃᵐ</i> → <b>…2:16–12:34ᵃᵐ</b>
+      <s>Alpha Summary</s>
+      Edited Summary
+      <s>…2:16–12:33ᵃᵐ</s>
+      …2:16–12:34ᵃᵐ
 
 
 [chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -273,7 +275,8 @@ def test_daily_messages_future(daily_messages, monkeypatch):  # pylint: disable=
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
   • Now Summary
-    ◦ <i>Alpha Summary</i> → <b>Now Summary</b>
+      <s>Alpha Summary</s>
+      Now Summary
 
 
 [chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -318,7 +321,8 @@ def test_daily_messages_multiline(daily_messages):  # pylint: disable=redefined-
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
   • Alpha Summary
-    ◦ <i>Alpha Description</i> → <b>Multi Line Description</b>
+      <s>Alpha Description</s>
+      Multi Line Description
 
 
 [chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -421,7 +425,8 @@ def test_daily_messages_icons(conversation, daily_messages):  # pylint: disable=
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
   • Alpha Summary
-    ◦ <i>Alpha Description</i> → <b>Board Games!</b>
+      <s>Alpha Description</s>
+      Board Games!
 
 
 [chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -477,7 +482,8 @@ There are a couple events coming up:
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
   • Alpha Summary
-    ◦ <i>Board Games!</i> → <b>Fun Games!</b>
+      <s>Board Games!</s>
+      Fun Games!
 
 
 [chat_id=-1002000002000 message_id=12345 parse_mode=HTML]
@@ -516,7 +522,8 @@ def test_daily_messages_geometry(conversation, daily_messages):  # pylint: disab
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
   • Alpha Summary
-    ◦ <i>Alpha Description</i> → <b>Trigger</b>
+      <s>Alpha Description</s>
+      Trigger
 
 
 [chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]

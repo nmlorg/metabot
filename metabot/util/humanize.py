@@ -45,7 +45,23 @@ def dayofmonth(dom):
     return '%s%s' % (dom, unicodeutil.superscript(ending))
 
 
-def howrecent(start, end, base=None):  # pylint: disable=too-many-return-statements
+def _nextmonth(dt, months=1):
+    while months > 0:
+        months -= 1
+        if dt.month == 12:
+            dt = dt.replace(year=dt.year + 1, month=1)
+        else:
+            dt = dt.replace(month=dt.month + 1)
+    while months < 0:
+        months += 1
+        if dt.month == 1:
+            dt = dt.replace(year=dt.year - 1, month=12)
+        else:
+            dt = dt.replace(month=dt.month - 1)
+    return dt
+
+
+def howrecent(start, end, base=None):  # pylint: disable=too-many-branches,too-many-return-statements
     """Convert the delta between start and base into a human-friendly string."""
 
     if not base:
@@ -78,20 +94,11 @@ def howrecent(start, end, base=None):  # pylint: disable=too-many-return-stateme
     left = left.replace(year=left.year - 1)
 
     months = 0
-    if left.month == 12:
-        left = left.replace(year=left.year + 1, month=1)
-    else:
-        left = left.replace(month=left.month + 1)
+    left = _nextmonth(left)
     while left <= right:
         months += 1
-        if left.month == 12:
-            left = left.replace(year=left.year + 1, month=1)
-        else:
-            left = left.replace(month=left.month + 1)
-    if left.month == 1:
-        left = left.replace(year=left.year - 1, month=12)
-    else:
-        left = left.replace(month=left.month - 1)
+        left = _nextmonth(left)
+    left = _nextmonth(left, -1)
 
     weeks, days = divmod((right - left).days, 7)
 

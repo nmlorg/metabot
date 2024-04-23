@@ -12,7 +12,7 @@ setuptools.setup(
     url='https://github.com/nmlorg/metabot',
     packages=setuptools.find_packages(include=('metabot', 'metabot.*')),
     package_data={'': ['*.html']},
-    python_requires='>=3.5',
+    python_requires='>=3.8',
     install_requires=[
         'googlemaps',
         'ntelebot >= 0.3.4',

@@ -11,7 +11,6 @@ setuptools.setup(
     long_description_content_type='text/markdown',
     url='https://github.com/nmlorg/metabot',
     packages=setuptools.find_packages(include=('metabot', 'metabot.*')),
-    package_data={'': ['*.html']},
     python_requires='>=3.8',
     install_requires=[
         'googlemaps',

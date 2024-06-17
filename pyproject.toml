@@ -1,0 +1,20 @@
+[project]
+name = "metabot"
+version = "0.3.19"
+dependencies = [
+  "googlemaps",
+  "ntelebot >= 0.3.4",
+  "pytz",
+  "PyYAML >= 5.1",
+  "requests",
+]
+requires-python = ">=3.8"
+authors = [
+  {name = "Daniel Reed", email = "nmlorg@gmail.com"},
+]
+description = "Modularized, multi-account bot."
+readme = "README.md"
+
+[project.urls]
+Homepage = "https://github.com/nmlorg/metabot"
+Issues = "https://github.com/nmlorg/metabot/issues"

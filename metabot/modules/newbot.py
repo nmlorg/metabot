@@ -44,7 +44,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
         return
 
     try:
-        bot_info = bot.get_me()
+        bot_info = bot.get_me()  # pylint: disable=possibly-used-before-assignment
     except ntelebot.errors.Unauthorized:
         return msg.add(
             'Woops, Telegram told me <code>%s</code> is unauthorized, meaning the code is either '

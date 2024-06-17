@@ -4,6 +4,11 @@ if [ ! -d .venv ]; then
   python3 -m venv .venv --prompt="$(basename $(readlink -f .))"
 fi
 
+if [ ! -f .venv/bin/build ]; then
+  echo 'exec python -m build "$@"' > .venv/bin/build
+  chmod +x .venv/bin/build
+fi
+
 source .venv/bin/activate
 
 pip install -U pip setuptools
@@ -11,4 +16,4 @@ if [ -d ../ntelebot ]; then
   pip install -U -e ../ntelebot
 fi
 pip install -U -e .
-pip install -U -r requirements-dev.txt
+pip install -U -r requirements-dev.txt build twine

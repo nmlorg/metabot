@@ -1,4 +1,0 @@
-pylint
-pytest-cov
-pytest
-requests-mock

@@ -44,7 +44,7 @@ addopts = '-vv --cov=metabot --cov-report=term:skip-covered --cov-report=html'
 testpaths = ['metabot']
 
 [tool.setuptools.packages.find]
-include = ['metabot']
+include = ['metabot', 'metabot.*']
 
 [tool.yapf]
 based_on_style = 'google'

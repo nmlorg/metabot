@@ -1,43 +1,43 @@
 [project]
-name = "metabot"
-version = "0.3.19"
-dependencies = [
-  "googlemaps",
-  "ntelebot >= 0.3.4",
-  "pytz",
-  "PyYAML >= 5.1",
-  "requests",
-]
-requires-python = ">=3.8"
+name = 'metabot'
+version = '0.3.19'
+description = 'Modularized, multi-account bot.'
+readme = 'README.md'
 authors = [
-  {name = "Daniel Reed", email = "nmlorg@gmail.com"},
+    {name = 'Daniel Reed', email = 'nmlorg@gmail.com'},
 ]
-description = "Modularized, multi-account bot."
-readme = "README.md"
+requires-python = '>=3.8'
+dependencies = [
+    'googlemaps',
+    'ntelebot >= 0.3.4',
+    'pytz',
+    'PyYAML >= 5.1',
+    'requests',
+]
 
 [project.urls]
-Homepage = "https://github.com/nmlorg/metabot"
-Issues = "https://github.com/nmlorg/metabot/issues"
+Homepage = 'https://github.com/nmlorg/metabot'
+Issues = 'https://github.com/nmlorg/metabot/issues'
 
 [tool.pylint.'MESSAGES CONTROL']
 disable = [
-    "consider-using-f-string",
-    "consider-using-ternary",
-    "consider-using-with",
-    "duplicate-code",
-    "inconsistent-return-statements",
-    "unnecessary-lambda-assignment",
-    "unspecified-encoding",
-    "use-implicit-booleaness-not-comparison",
+    'consider-using-f-string',
+    'consider-using-ternary',
+    'consider-using-with',
+    'duplicate-code',
+    'inconsistent-return-statements',
+    'unnecessary-lambda-assignment',
+    'unspecified-encoding',
+    'use-implicit-booleaness-not-comparison',
 ]
 
 [tool.pytest.ini_options]
-addopts = "-vv --cov=metabot --cov-report=term:skip-covered --cov-report=html"
-testpaths = ["metabot"]
+addopts = '-vv --cov=metabot --cov-report=term:skip-covered --cov-report=html'
+testpaths = ['metabot']
 
 [tool.setuptools.packages.find]
-include = ["metabot"]
+include = ['metabot']
 
 [tool.yapf]
-based_on_style = "google"
+based_on_style = 'google'
 column_limit = 100

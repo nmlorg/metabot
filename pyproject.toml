@@ -20,4 +20,4 @@ Homepage = "https://github.com/nmlorg/metabot"
 Issues = "https://github.com/nmlorg/metabot/issues"
 
 [tool.setuptools.packages.find]
-exclude = ["config"]
+include = ["metabot"]

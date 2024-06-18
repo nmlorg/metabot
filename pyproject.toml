@@ -21,3 +21,7 @@ Issues = "https://github.com/nmlorg/metabot/issues"
 
 [tool.setuptools.packages.find]
 include = ["metabot"]
+
+[tool.yapf]
+based_on_style = "google"
+column_limit = 100

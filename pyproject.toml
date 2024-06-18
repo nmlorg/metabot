@@ -19,6 +19,10 @@ readme = "README.md"
 Homepage = "https://github.com/nmlorg/metabot"
 Issues = "https://github.com/nmlorg/metabot/issues"
 
+[tool.pytest.ini_options]
+addopts = "-vv --cov=metabot --cov-report=term:skip-covered --cov-report=html"
+testpaths = ["metabot"]
+
 [tool.setuptools.packages.find]
 include = ["metabot"]
 

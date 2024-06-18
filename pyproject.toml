@@ -19,6 +19,18 @@ readme = "README.md"
 Homepage = "https://github.com/nmlorg/metabot"
 Issues = "https://github.com/nmlorg/metabot/issues"
 
+[tool.pylint.'MESSAGES CONTROL']
+disable = [
+    "consider-using-f-string",
+    "consider-using-ternary",
+    "consider-using-with",
+    "duplicate-code",
+    "inconsistent-return-statements",
+    "unnecessary-lambda-assignment",
+    "unspecified-encoding",
+    "use-implicit-booleaness-not-comparison",
+]
+
 [tool.pytest.ini_options]
 addopts = "-vv --cov=metabot --cov-report=term:skip-covered --cov-report=html"
 testpaths = ["metabot"]

@@ -1,6 +1,6 @@
 [project]
 name = 'metabot'
-version = '0.3.19'
+version = '0.3.20'
 description = 'Modularized, multi-account bot.'
 readme = 'README.md'
 authors = [
@@ -22,6 +22,9 @@ dev = [
     'pytest',
     'requests-mock',
 ]
+
+[project.scripts]
+metabot = 'metabot.__main__:main'
 
 [project.urls]
 Homepage = 'https://github.com/nmlorg/metabot'

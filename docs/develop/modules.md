@@ -1,9 +1,9 @@
 ```shell
 MODULENAME=somethingcool
-virtualenv -ppython3 metabot.modules.${MODULENAME}
+python3 -m venv metabot.modules.${MODULENAME}
 cd metabot.modules.${MODULENAME}
-. bin/activate
-mkdir -p config metabot/modules
+source bin/activate
+mkdir -p metabot/modules
 for i in metabot metabot/modules; do
   echo "__import__('pkg_resources').declare_namespace(__name__)" > ${i}/__init__.py
 done
@@ -39,5 +39,5 @@ def moddispatch(ctx, msg, unused_modconf):
 def ${MODULENAME}(ctx, msg):
     msg.add('Your user id is %s!', ctx.user['id'])
 EOF
-python -m metabot
+metabot
 ```

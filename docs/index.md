@@ -1,10 +1,9 @@
 title: Quickstart
 
 ```shell
-virtualenv -ppython3 mymetabot
+python3 -m venv mymetabot
 cd mymetabot
-. bin/activate
+source bin/activate
 pip install metabot
-mkdir config
-python -m metabot
+metabot
 ```

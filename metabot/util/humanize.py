@@ -1,5 +1,6 @@
 """Quick routines to convert machine-friendly data types to human-friendly strings."""
 
+import calendar
 import datetime
 import time as _time
 
@@ -46,18 +47,28 @@ def dayofmonth(dom):
 
 
 def _nextmonth(dt, months=1):
+    day = dt.day
+
     while months > 0:
         months -= 1
         if dt.month == 12:
-            dt = dt.replace(year=dt.year + 1, month=1)
+            year = dt.year + 1
+            month = 1
         else:
-            dt = dt.replace(month=dt.month + 1)
+            year = dt.year
+            month = dt.month + 1
+        _, ndays = calendar.monthrange(year, month)
+        dt = dt.replace(year=year, month=month, day=min(day, ndays))
     while months < 0:
         months += 1
         if dt.month == 1:
-            dt = dt.replace(year=dt.year - 1, month=12)
+            year = dt.year - 1
+            month = 12
         else:
-            dt = dt.replace(month=dt.month - 1)
+            year = dt.year
+            month = dt.month - 1
+        _, ndays = calendar.monthrange(year, month)
+        dt = dt.replace(year=year, month=month, day=min(day, ndays))
     return dt
 
 

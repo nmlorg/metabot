@@ -26,6 +26,26 @@ def test_humanize_dayofmonth():
     assert humanize.dayofmonth(21) == '21ˢᵗ'
 
 
+def test_nextmonth():
+    """Quick tests for humanize._nextmonth."""
+
+    # pylint: disable=protected-access
+    assert humanize._nextmonth(datetime.date(2024, 11, 1)) == datetime.date(2024, 12, 1)
+    assert humanize._nextmonth(datetime.date(2024, 12, 1), -1) == datetime.date(2024, 11, 1)
+    assert humanize._nextmonth(datetime.date(2024, 12, 1)) == datetime.date(2025, 1, 1)
+    assert humanize._nextmonth(datetime.date(2025, 1, 1), -1) == datetime.date(2024, 12, 1)
+
+    assert humanize._nextmonth(datetime.date(2025, 1, 31), 1) == datetime.date(2025, 2, 28)
+    assert humanize._nextmonth(datetime.date(2025, 1, 31), 2) == datetime.date(2025, 3, 31)
+    assert humanize._nextmonth(datetime.date(2025, 1, 31), 3) == datetime.date(2025, 4, 30)
+    assert humanize._nextmonth(datetime.date(2025, 1, 31), 4) == datetime.date(2025, 5, 31)
+
+    assert humanize._nextmonth(datetime.date(2025, 5, 31), -1) == datetime.date(2025, 4, 30)
+    assert humanize._nextmonth(datetime.date(2025, 5, 31), -2) == datetime.date(2025, 3, 31)
+    assert humanize._nextmonth(datetime.date(2025, 5, 31), -3) == datetime.date(2025, 2, 28)
+    assert humanize._nextmonth(datetime.date(2025, 5, 31), -4) == datetime.date(2025, 1, 31)
+
+
 def test_humanize_howrecent():
     """Quick tests for humanize.howrecent."""
 

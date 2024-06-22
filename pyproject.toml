@@ -1,6 +1,6 @@
 [project]
 name = 'metabot'
-version = '0.3.20.1'
+version = '0.3.20.2'
 description = 'Modularized, multi-account bot.'
 readme = 'README.md'
 authors = [
@@ -43,7 +43,8 @@ disable = [
 ]
 
 [tool.pytest.ini_options]
-addopts = '-vv --cov=metabot --cov-report=term:skip-covered --cov-report=html'
+addopts = '--cov=metabot --cov-report=term:skip-covered --cov-report=html'
+consider_namespace_packages = true
 testpaths = ['metabot']
 
 [tool.setuptools.packages.find]

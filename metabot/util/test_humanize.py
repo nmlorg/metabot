@@ -30,9 +30,9 @@ def test_nextmonth():
     """Quick tests for humanize._nextmonth."""
 
     # pylint: disable=protected-access
-    assert humanize._nextmonth(datetime.date(2024, 11, 1)) == datetime.date(2024, 12, 1)
+    assert humanize._nextmonth(datetime.date(2024, 11, 1), 1) == datetime.date(2024, 12, 1)
     assert humanize._nextmonth(datetime.date(2024, 12, 1), -1) == datetime.date(2024, 11, 1)
-    assert humanize._nextmonth(datetime.date(2024, 12, 1)) == datetime.date(2025, 1, 1)
+    assert humanize._nextmonth(datetime.date(2024, 12, 1), 1) == datetime.date(2025, 1, 1)
     assert humanize._nextmonth(datetime.date(2025, 1, 1), -1) == datetime.date(2024, 12, 1)
 
     assert humanize._nextmonth(datetime.date(2025, 1, 31), 1) == datetime.date(2025, 2, 28)
@@ -44,6 +44,24 @@ def test_nextmonth():
     assert humanize._nextmonth(datetime.date(2025, 5, 31), -2) == datetime.date(2025, 3, 31)
     assert humanize._nextmonth(datetime.date(2025, 5, 31), -3) == datetime.date(2025, 2, 28)
     assert humanize._nextmonth(datetime.date(2025, 5, 31), -4) == datetime.date(2025, 1, 31)
+
+
+def test_nextyear():
+    """Quick tests for humanize._nextyear."""
+
+    # pylint: disable=protected-access
+    assert humanize._nextyear(datetime.date(2024, 11, 1), 1) == datetime.date(2025, 11, 1)
+    assert humanize._nextyear(datetime.date(2025, 11, 1), -1) == datetime.date(2024, 11, 1)
+
+    assert humanize._nextyear(datetime.date(2024, 2, 29), 1) == datetime.date(2025, 2, 28)
+    assert humanize._nextyear(datetime.date(2024, 2, 29), 2) == datetime.date(2026, 2, 28)
+    assert humanize._nextyear(datetime.date(2024, 2, 29), 3) == datetime.date(2027, 2, 28)
+    assert humanize._nextyear(datetime.date(2024, 2, 29), 4) == datetime.date(2028, 2, 29)
+
+    assert humanize._nextyear(datetime.date(2028, 2, 29), -1) == datetime.date(2027, 2, 28)
+    assert humanize._nextyear(datetime.date(2028, 2, 29), -2) == datetime.date(2026, 2, 28)
+    assert humanize._nextyear(datetime.date(2028, 2, 29), -3) == datetime.date(2025, 2, 28)
+    assert humanize._nextyear(datetime.date(2028, 2, 29), -4) == datetime.date(2024, 2, 29)
 
 
 def test_humanize_howrecent():

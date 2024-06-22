@@ -72,6 +72,12 @@ def _nextmonth(dt, months=1):
     return dt
 
 
+def _nextyear(dt, years=1):
+    year = dt.year + years
+    _, ndays = calendar.monthrange(year, dt.month)
+    return dt.replace(year=year, day=min(dt.day, ndays))
+
+
 def howrecent(start, end, base=None):  # pylint: disable=too-many-branches,too-many-return-statements
     """Convert the delta between start and base into a human-friendly string."""
 
@@ -98,11 +104,11 @@ def howrecent(start, end, base=None):  # pylint: disable=too-many-branches,too-m
         right = start
 
     years = 0
-    left = left.replace(year=left.year + 1)
+    left = _nextyear(left)
     while left <= right:
         years += 1
-        left = left.replace(year=left.year + 1)
-    left = left.replace(year=left.year - 1)
+        left = _nextyear(left)
+    left = _nextyear(left, -1)
 
     months = 0
     left = _nextmonth(left)

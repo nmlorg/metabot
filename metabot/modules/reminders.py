@@ -64,24 +64,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     preamble = (preambles and preambles[nowdt.toordinal() % len(preambles)] or '')
                     text = _format_daily_message(preamble, list(map(form, events)))
                     url = eventutil.get_image(events[0], botconf)
-                    if url:
-                        try:
-                            message = bot.send_photo(chat_id=groupid,
-                                                     photo=url,
-                                                     caption=text,
-                                                     parse_mode='HTML',
-                                                     disable_notification=True)
-                        except ntelebot.errors.Error:
-                            logging.exception('Downgrading to plain text:')
-                    if not message:
-                        try:
-                            message = bot.send_message(chat_id=groupid,
-                                                       text=text,
-                                                       parse_mode='HTML',
-                                                       disable_web_page_preview=True,
-                                                       disable_notification=True)
-                        except ntelebot.errors.Error:
-                            logging.exception('While sending to %s:\n%s', groupid, text)
+                    message = reminder_send(bot, groupid, text, url)
             elif key in records:
                 eventtime, lastevents, lastmessage = records[key]
                 events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days,
@@ -166,6 +149,29 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
 
             if message:
                 records[key] = (eventtime, [event.copy() for event in events], message)
+
+
+def reminder_send(bot, groupid, text, photo):
+    """Send a message with the given photo + caption, falling back to plain text."""
+
+    if photo:
+        try:
+            return bot.send_photo(chat_id=groupid,
+                                  photo=photo,
+                                  caption=text,
+                                  parse_mode='HTML',
+                                  disable_notification=True)
+        except ntelebot.errors.Error:  # See https://github.com/nmlorg/metabot/issues/76.
+            logging.exception('Downgrading to plain text:')
+
+    try:
+        return bot.send_message(chat_id=groupid,
+                                text=text,
+                                parse_mode='HTML',
+                                disable_web_page_preview=True,
+                                disable_notification=True)
+    except ntelebot.errors.Error:
+        logging.exception('While sending to %s:\n%s', groupid, text)
 
 
 def _quick_diff(left, right):

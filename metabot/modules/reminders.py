@@ -210,6 +210,9 @@ def _quick_diff(left, right):
 
 
 def _format_daily_message(preamble, events):
+    if not events:
+        return preamble or 'No upcoming events!'
+
     if len(events) == 1:
         text = "There's an event coming up:"
     elif len(events) == 2:

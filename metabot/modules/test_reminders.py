@@ -52,6 +52,11 @@ def conversation(build_conversation, monkeypatch):  # pylint: disable=missing-do
 
 def test_format_daily_message():  # pylint: disable=missing-docstring
     # yapf: disable - pylint: disable=protected-access
+    assert reminders._format_daily_message('', []) == (
+        'No upcoming events!')
+    assert reminders._format_daily_message('1 + 1 = 2!', []) == (
+        '1 + 1 = 2!')
+
     assert reminders._format_daily_message('', ['EVENT1']) == (
         "There's an event coming up:\n"
         '\n'

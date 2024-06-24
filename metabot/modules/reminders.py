@@ -39,9 +39,9 @@ def modinit(multibot):  # pylint: disable=missing-docstring
     _queue()
 
 
-def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too-many-locals,too-many-statements
+def _daily_messages(multibot, records):  # pylint: disable=too-many-locals
     now = time.time()
-    for botuser, botconf in multibot.conf['bots'].items():  # pylint: disable=too-many-nested-blocks
+    for botuser, botconf in multibot.conf['bots'].items():
         for groupid, groupconf in botconf['issue37']['moderator'].items():
             calcodes, tzinfo, count, days, hour, dow = eventutil.get_group_conf(groupconf)
             if not tzinfo or not isinstance(hour, int):
@@ -50,7 +50,6 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             bot = ntelebot.bot.Bot(botconf['issue37']['telegram']['token'])
             bot.multibot = multibot
             form = lambda event: eventutil.format_event(bot, event, tzinfo, full=False)  # pylint: disable=cell-var-from-loop
-            title = lambda event: '  \u2022 ' + event['summary']
             nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
             key = (botuser, groupid)
             message = None
@@ -70,44 +69,12 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                 events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days,
                                                             eventtime)
                 _handle_alerts(bot, records, groupid, alerts)
-                lastmap = {event['local_id']: event for event in lastevents}
-                curmap = {event['local_id']: event for event in events}
-                bothevents = events.copy()
-                bothevents.extend(event for event in lastevents if event['local_id'] not in curmap)
-                bothevents.sort(key=operator.itemgetter('start', 'end', 'summary', 'local_id'))
-                edits = []
-                for event in bothevents:
-                    lastevent = lastmap.get(event['local_id'])
-                    if not lastevent:
-                        edits.append(title(event))
-                        edits.append('    \u25e6 New event!')
-                        continue
-                    event = multibot.multical.get_event(event['local_id'])[1]
-                    if not event:
-                        edits.append(title(lastevent))
-                        edits.append('    \u25e6 Removed.')
-                        continue
-                    pairs = (
-                        (lastevent['summary'], event['summary']),
-                        (eventutil.humanize_range(lastevent['start'], lastevent['end'], tzinfo),
-                         eventutil.humanize_range(event['start'], event['end'], tzinfo)),
-                        (lastevent['location'], event['location']),
-                        (html.sanitize(lastevent['description'], strip=True),
-                         html.sanitize(event['description'], strip=True)),
-                    )  # yapf: disable
-                    pieces = []
-                    for left, right in pairs:
-                        diff = _quick_diff(left, right)
-                        if diff:
-                            pieces.append(diff)
-                    if pieces:
-                        edits.append(title(event))
-                        for left, right in pieces:
-                            edits.append(f'      <s>{left}</s>')
-                            edits.append(f'      {right}')
+
+                edits = diff_events(multibot, tzinfo, lastevents, events)
 
                 if not edits:
                     continue
+
                 updtext = 'Updated:\n' + '\n'.join(edits)
                 try:
                     updmessage = bot.send_message(chat_id=groupid,
@@ -178,6 +145,48 @@ def reminder_edit(bot, groupid, message_id, text, isphoto):
                                      disable_web_page_preview=True)
     except ntelebot.errors.Error:
         logging.exception('While editing %s in %s:\n%s', message_id, groupid, text)
+
+
+def diff_events(multibot, tzinfo, lastevents, events):  # pylint: disable=too-many-locals
+    """Return a list of differences between lastevents and events."""
+
+    lastmap = {event['local_id']: event for event in lastevents}
+    curmap = {event['local_id']: event for event in events}
+    bothevents = events.copy()
+    bothevents.extend(event for event in lastevents if event['local_id'] not in curmap)
+    bothevents.sort(key=operator.itemgetter('start', 'end', 'summary', 'local_id'))
+    edits = []
+    for event in bothevents:
+        title = '  \u2022 ' + event['summary']
+        lastevent = lastmap.get(event['local_id'])
+        if not lastevent:
+            edits.append(title)
+            edits.append('    \u25e6 New event!')
+            continue
+        event = multibot.multical.get_event(event['local_id'])[1]
+        if not event:
+            edits.append(title)
+            edits.append('    \u25e6 Removed.')
+            continue
+        pairs = (
+            (lastevent['summary'], event['summary']),
+            (eventutil.humanize_range(lastevent['start'], lastevent['end'], tzinfo),
+             eventutil.humanize_range(event['start'], event['end'], tzinfo)),
+            (lastevent['location'], event['location']),
+            (html.sanitize(lastevent['description'], strip=True),
+             html.sanitize(event['description'], strip=True)),
+        )  # yapf: disable
+        pieces = []
+        for left, right in pairs:
+            diff = _quick_diff(left, right)
+            if diff:
+                pieces.append(diff)
+        if pieces:
+            edits.append(title)
+            for left, right in pieces:
+                edits.append(f'      <s>{left}</s>')
+                edits.append(f'      {right}')
+    return edits
 
 
 def _quick_diff(left, right):

@@ -53,15 +53,17 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             title = lambda event: '  \u2022 ' + event['summary']
             nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
             key = (botuser, groupid)
+            message = None
             if nowdt.hour == hour and not dow & 1 << nowdt.weekday():
-                events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days, now)
+                eventtime = now
+                events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days,
+                                                            eventtime)
                 _handle_alerts(bot, records, groupid, alerts)
                 if events:
                     preambles = groupconf['daily'].get('text', '').splitlines()
                     preamble = (preambles and preambles[nowdt.toordinal() % len(preambles)] or '')
                     text = _format_daily_message(preamble, list(map(form, events)))
                     url = eventutil.get_image(events[0], botconf)
-                    message = None
                     if url:
                         try:
                             message = bot.send_photo(chat_id=groupid,
@@ -80,14 +82,12 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                                                        disable_notification=True)
                         except ntelebot.errors.Error:
                             logging.exception('While sending to %s:\n%s', groupid, text)
-                    if message:
-                        records[key] = (now, [event.copy() for event in events], message)
             elif key in records:
-                lastnow, lastevents, lastmessage = records[key]
-                lastmap = {event['local_id']: event for event in lastevents}
+                eventtime, lastevents, lastmessage = records[key]
                 events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days,
-                                                            lastnow)
+                                                            eventtime)
                 _handle_alerts(bot, records, groupid, alerts)
+                lastmap = {event['local_id']: event for event in lastevents}
                 curmap = {event['local_id']: event for event in events}
                 bothevents = events.copy()
                 bothevents.extend(event for event in lastevents if event['local_id'] not in curmap)
@@ -125,28 +125,28 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
 
                 if not edits:
                     continue
-                text = 'Updated:\n' + '\n'.join(edits)
+                updtext = 'Updated:\n' + '\n'.join(edits)
                 try:
-                    message = bot.send_message(chat_id=groupid,
-                                               reply_to_message_id=lastmessage['message_id'],
-                                               text=text,
-                                               parse_mode='HTML',
-                                               disable_web_page_preview=True,
-                                               disable_notification=True)
+                    updmessage = bot.send_message(chat_id=groupid,
+                                                  reply_to_message_id=lastmessage['message_id'],
+                                                  text=updtext,
+                                                  parse_mode='HTML',
+                                                  disable_web_page_preview=True,
+                                                  disable_notification=True)
                 except ntelebot.errors.Error:
-                    logging.exception('While sending to %s:\n%s', groupid, text)
+                    logging.exception('While sending to %s:\n%s', groupid, updtext)
                     continue
 
-                lastnowdt = datetime.datetime.fromtimestamp(lastnow, tzinfo)
+                eventdt = datetime.datetime.fromtimestamp(eventtime, tzinfo)
                 preambles = groupconf['daily'].get('text', '').splitlines()
-                preamble = preambles and preambles[lastnowdt.toordinal() % len(preambles)] or ''
+                preamble = preambles and preambles[eventdt.toordinal() % len(preambles)] or ''
                 updated = 'Updated ' + humanize.time(nowdt)
                 groupidnum = int(groupid)
                 if -1002147483647 <= groupidnum < -1000000000000:
                     updated = '<a href="https://t.me/c/%s/%s">%s</a>' % (
-                        -1000000000000 - groupidnum, message['message_id'], updated)
+                        -1000000000000 - groupidnum, updmessage['message_id'], updated)
                 else:
-                    updated = '%s (%s)' % (updated, message['message_id'])
+                    updated = '%s (%s)' % (updated, updmessage['message_id'])
                 text = '%s\n\n[%s]' % (_format_daily_message(preamble, list(map(form,
                                                                                 events))), updated)
                 try:
@@ -163,8 +163,9 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                                                         disable_web_page_preview=True)
                 except ntelebot.errors.Error:
                     logging.exception('While sending to %s:\n%s', groupid, text)
-                else:
-                    records[key] = (lastnow, [event.copy() for event in events], message)
+
+            if message:
+                records[key] = (eventtime, [event.copy() for event in events], message)
 
 
 def _quick_diff(left, right):

@@ -132,20 +132,8 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     updated = '%s (%s)' % (updated, updmessage['message_id'])
                 text = '%s\n\n[%s]' % (_format_daily_message(preamble, list(map(form,
                                                                                 events))), updated)
-                try:
-                    if lastmessage.get('caption'):
-                        message = bot.edit_message_caption(chat_id=groupid,
-                                                           message_id=lastmessage['message_id'],
-                                                           caption=text,
-                                                           parse_mode='HTML')
-                    else:
-                        message = bot.edit_message_text(chat_id=groupid,
-                                                        message_id=lastmessage['message_id'],
-                                                        text=text,
-                                                        parse_mode='HTML',
-                                                        disable_web_page_preview=True)
-                except ntelebot.errors.Error:
-                    logging.exception('While sending to %s:\n%s', groupid, text)
+                message = reminder_edit(bot, groupid, lastmessage['message_id'], text,
+                                        lastmessage.get('caption'))
 
             if message:
                 records[key] = (eventtime, [event.copy() for event in events], message)
@@ -172,6 +160,24 @@ def reminder_send(bot, groupid, text, photo):
                                 disable_notification=True)
     except ntelebot.errors.Error:
         logging.exception('While sending to %s:\n%s', groupid, text)
+
+
+def reminder_edit(bot, groupid, message_id, text, isphoto):
+    """Edit a photo caption/plain message."""
+
+    try:
+        if isphoto:
+            return bot.edit_message_caption(chat_id=groupid,
+                                            message_id=message_id,
+                                            caption=text,
+                                            parse_mode='HTML')
+        return bot.edit_message_text(chat_id=groupid,
+                                     message_id=message_id,
+                                     text=text,
+                                     parse_mode='HTML',
+                                     disable_web_page_preview=True)
+    except ntelebot.errors.Error:
+        logging.exception('While editing %s in %s:\n%s', message_id, groupid, text)
 
 
 def _quick_diff(left, right):

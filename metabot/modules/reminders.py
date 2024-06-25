@@ -98,14 +98,14 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     logging.exception('While sending to %s:\n%s', groupid, updtext)
                     continue
 
-                updated = 'Updated ' + humanize.time(nowdt)
+                suffix = 'Updated ' + humanize.time(nowdt)
                 groupidnum = int(groupid)
                 if -1002147483647 <= groupidnum < -1000000000000:
-                    updated = '<a href="https://t.me/c/%s/%s">%s</a>' % (
-                        -1000000000000 - groupidnum, updmessage['message_id'], updated)
+                    suffix = '<a href="https://t.me/c/%s/%s">%s</a>' % (
+                        -1000000000000 - groupidnum, updmessage['message_id'], suffix)
                 else:
-                    updated = '%s (%s)' % (updated, updmessage['message_id'])
-                newtext = '%s\n\n[%s]' % (text, updated)
+                    suffix = '%s (%s)' % (suffix, updmessage['message_id'])
+                newtext = '%s\n\n[%s]' % (text, suffix)
                 message = reminder_edit(bot, groupid, lastmessage['message_id'], newtext,
                                         lastmessage.get('caption'))
 

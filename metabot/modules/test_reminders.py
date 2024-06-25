@@ -231,7 +231,7 @@ Updated:
       …2:16–12:34ᵃᵐ
 
 
-[chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
+[edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
 There are a couple events coming up:
 
 <b>Edited Summary</b>
@@ -284,7 +284,7 @@ Updated:
       Now Summary
 
 
-[chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
+[edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
 There are a couple events coming up:
 
 <b>Now Summary</b>
@@ -330,7 +330,7 @@ Updated:
       Multi Line Description
 
 
-[chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
+[edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
@@ -389,7 +389,7 @@ Updated:
     ◦ Removed.
 
 
-[chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
+[edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
@@ -434,7 +434,7 @@ Updated:
       Board Games!
 
 
-[chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
+[edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
@@ -447,7 +447,7 @@ There are a couple events coming up:
 
     # But an initial announcement does (photo=...).
     assert daily_messages(True)[1] == """\
-[chat_id=-1002000002000 disable_notification=True parse_mode=HTML photo=https://ssl.gstatic.com/calendar/images/eventillustrations/v1/img_gamenight_2x.jpg]
+[send_photo chat_id=-1002000002000 disable_notification=True parse_mode=HTML photo=https://ssl.gstatic.com/calendar/images/eventillustrations/v1/img_gamenight_2x.jpg]
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
@@ -459,7 +459,7 @@ There are a couple events coming up:
     conversation.bot.config['issue37']['events']['series']['ha sum'] = 'SERIES ICON'
 
     assert daily_messages(True)[1] == """\
-[chat_id=-1002000002000 disable_notification=True parse_mode=HTML photo=SERIES ICON]
+[send_photo chat_id=-1002000002000 disable_notification=True parse_mode=HTML photo=SERIES ICON]
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
@@ -471,7 +471,7 @@ There are a couple events coming up:
     conversation.bot.config['issue37']['events']['events']['6fc2c510:alpha'] = 'EVENT ICON'
 
     assert daily_messages(True)[1] == """\
-[chat_id=-1002000002000 disable_notification=True parse_mode=HTML photo=EVENT ICON]
+[send_photo chat_id=-1002000002000 disable_notification=True parse_mode=HTML photo=EVENT ICON]
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
@@ -491,7 +491,7 @@ Updated:
       Fun Games!
 
 
-[chat_id=-1002000002000 message_id=12345 parse_mode=HTML]
+[edit_message_caption chat_id=-1002000002000 message_id=12345 parse_mode=HTML]
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
@@ -531,7 +531,7 @@ Updated:
       Trigger
 
 
-[chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
+[edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
 There's an event coming up:
 
 <b>Alpha Summary</b>

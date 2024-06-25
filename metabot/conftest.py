@@ -1,5 +1,6 @@
 """Test environment defaults."""
 
+import functools
 import json
 
 import ntelebot
@@ -22,10 +23,15 @@ def _disable_geoutil(monkeypatch):
 
 
 def _format_message(response):
+    method = response.pop('method')
     text = response.pop('text', None) or response.pop('caption', '(EMPTY MESSAGE)')
     reply_markup = response.pop('reply_markup', None)
     header = ' '.join('%s=%s' % (field, value) for field, value in sorted(response.items()))
-    text = '[%s]\n%s\n' % (header, text)
+    if method != 'send_message':
+        method = f'{method} '
+    else:
+        method = ''
+    text = f'[{method}{header}]\n{text}\n'
     if reply_markup:
         for row in reply_markup.pop('inline_keyboard', ()):
             text = '%s%s\n' % (text, ' '.join(
@@ -98,21 +104,21 @@ class BotConversation:  # pylint: disable=missing-docstring,too-few-public-metho
             if forward_from:
                 message['forward_from'] = {'id': forward_from}
             update = {'message': message}
+
         responses = []
 
-        def _handler(request, unused_context):
+        def _handler(method, request, unused_context):
             response = json.loads(request.body.decode('ascii'))
+            response['method'] = method
             responses.append(response)
             message = {'message_id': 12345}
             if response.get('caption'):
                 message['caption'] = 'CAPTION'
             return {'ok': True, 'result': message}
 
-        self.bot.edit_message_caption.respond(json=_handler)
-        self.bot.edit_message_text.respond(json=_handler)
-        self.bot.forward_message.respond(json=_handler)
-        self.bot.send_message.respond(json=_handler)
-        self.bot.send_photo.respond(json=_handler)
+        for method in ('edit_message_caption', 'edit_message_text', 'forward_message',
+                       'send_message', 'send_photo'):
+            getattr(self.bot, method).respond(json=functools.partial(_handler, method))
         self.multibot.dispatcher(self.bot, update)
         return responses
 

@@ -22,7 +22,7 @@ def test_forward(conversation):  # pylint: disable=redefined-outer-name
         'from'] = -1001000001000
 
     assert conversation.message('Test Forward', chat_type='channel') == """\
-[chat_id=-1002000002000 disable_notification=True from_chat_id=-1001000001000 message_id=2000]
+[forward_message chat_id=-1002000002000 disable_notification=True from_chat_id=-1001000001000 message_id=2000]
 (EMPTY MESSAGE)
 """
 
@@ -172,6 +172,7 @@ Set <code>greeting</code> to <code>Welcome to chat title, new users! &lt;b&gt;In
             'chat_id': -1001000001000,
             'disable_notification': True,
             'disable_web_page_preview': True,
+            'method': 'send_message',
             'parse_mode': 'HTML',
             'reply_to_message_id': 5000,
             'text': 'Welcome to My Group, <a href="tg://user?id=3000">User 3000</a>! <b>Initial</b> pinned message.',
@@ -197,6 +198,7 @@ Set <code>greeting</code> to <code>Welcome to chat title, new users! &lt;b&gt;In
             'chat_id': -1001000001000,
             'disable_notification': True,
             'disable_web_page_preview': True,
+            'method': 'send_message',
             'parse_mode': 'HTML',
             'reply_to_message_id': 5000,
             'text': 'Welcome to My Group, <a href="tg://user?id=3000">User 3000</a>! <b>Initial</b> <a href="https://t.me/c/1000001000/6000">pinned message</a>.',
@@ -214,6 +216,7 @@ Set <code>greeting</code> to <code>Welcome to chat title, new users! &lt;b&gt;In
             'chat_id': -1001000001000,
             'disable_notification': True,
             'disable_web_page_preview': True,
+            'method': 'send_message',
             'parse_mode': 'HTML',
             'reply_to_message_id': 5000,
             'text': 'Welcome to My Group, <a href="tg://user?id=3000">User 3000</a>! <b>Initial</b> <a href="https://t.me/mygroup/6000">pinned message</a>.',

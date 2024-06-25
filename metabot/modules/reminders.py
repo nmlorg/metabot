@@ -39,7 +39,7 @@ def modinit(multibot):  # pylint: disable=missing-docstring
     _queue()
 
 
-def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too-many-locals,too-many-statements
+def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too-many-locals
     now = time.time()
     for botuser, botconf in multibot.conf['bots'].items():
         for groupid, groupconf in botconf['issue37']['moderator'].items():
@@ -56,22 +56,24 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             if nowdt.hour == hour and not dow & 1 << nowdt.weekday():
                 sendnew = True
                 eventtime = now
+                eventdt = nowdt
             elif key in records:
                 sendnew = False
                 eventtime, lastevents, lastmessage = records[key]
+                eventdt = datetime.datetime.fromtimestamp(eventtime, tzinfo)
             else:
                 continue
 
             events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days,
                                                         eventtime)
             _handle_alerts(bot, records, groupid, alerts)
+            preambles = groupconf['daily'].get('text', '').splitlines()
+            preamble = preambles and preambles[eventdt.toordinal() % len(preambles)] or ''
 
             message = None
 
             if sendnew:
                 if events:
-                    preambles = groupconf['daily'].get('text', '').splitlines()
-                    preamble = (preambles and preambles[nowdt.toordinal() % len(preambles)] or '')
                     text = _format_daily_message(preamble, list(map(form, events)))
                     url = eventutil.get_image(events[0], botconf)
                     message = reminder_send(bot, groupid, text, url)
@@ -94,9 +96,6 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     logging.exception('While sending to %s:\n%s', groupid, updtext)
                     continue
 
-                eventdt = datetime.datetime.fromtimestamp(eventtime, tzinfo)
-                preambles = groupconf['daily'].get('text', '').splitlines()
-                preamble = preambles and preambles[eventdt.toordinal() % len(preambles)] or ''
                 updated = 'Updated ' + humanize.time(nowdt)
                 groupidnum = int(groupid)
                 if -1002147483647 <= groupidnum < -1000000000000:

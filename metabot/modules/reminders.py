@@ -39,7 +39,7 @@ def modinit(multibot):  # pylint: disable=missing-docstring
     _queue()
 
 
-def _daily_messages(multibot, records):  # pylint: disable=too-many-locals
+def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too-many-locals,too-many-statements
     now = time.time()
     for botuser, botconf in multibot.conf['bots'].items():
         for groupid, groupconf in botconf['issue37']['moderator'].items():
@@ -52,37 +52,44 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-locals
             form = lambda event: eventutil.format_event(bot, event, tzinfo, full=False)  # pylint: disable=cell-var-from-loop
             nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
             key = (botuser, groupid)
-            message = None
+
             if nowdt.hour == hour and not dow & 1 << nowdt.weekday():
+                sendnew = True
                 eventtime = now
-                events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days,
-                                                            eventtime)
-                _handle_alerts(bot, records, groupid, alerts)
+            elif key in records:
+                sendnew = False
+                eventtime, lastevents, lastmessage = records[key]
+            else:
+                continue
+
+            events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days,
+                                                        eventtime)
+            _handle_alerts(bot, records, groupid, alerts)
+
+            message = None
+
+            if sendnew:
                 if events:
                     preambles = groupconf['daily'].get('text', '').splitlines()
                     preamble = (preambles and preambles[nowdt.toordinal() % len(preambles)] or '')
                     text = _format_daily_message(preamble, list(map(form, events)))
                     url = eventutil.get_image(events[0], botconf)
                     message = reminder_send(bot, groupid, text, url)
-            elif key in records:
-                eventtime, lastevents, lastmessage = records[key]
-                events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days,
-                                                            eventtime)
-                _handle_alerts(bot, records, groupid, alerts)
-
-                edits = diff_events(multibot, tzinfo, lastevents, events)
+            else:
+                edits = diff_events(multibot, tzinfo, lastevents, events)  # pylint: disable=possibly-used-before-assignment
 
                 if not edits:
                     continue
 
                 updtext = 'Updated:\n' + '\n'.join(edits)
                 try:
-                    updmessage = bot.send_message(chat_id=groupid,
-                                                  reply_to_message_id=lastmessage['message_id'],
-                                                  text=updtext,
-                                                  parse_mode='HTML',
-                                                  disable_web_page_preview=True,
-                                                  disable_notification=True)
+                    updmessage = bot.send_message(
+                        chat_id=groupid,
+                        reply_to_message_id=lastmessage['message_id'],  # pylint: disable=possibly-used-before-assignment
+                        text=updtext,
+                        parse_mode='HTML',
+                        disable_web_page_preview=True,
+                        disable_notification=True)
                 except ntelebot.errors.Error:
                     logging.exception('While sending to %s:\n%s', groupid, updtext)
                     continue

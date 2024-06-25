@@ -46,10 +46,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             calcodes, tzinfo, count, days, hour, dow = eventutil.get_group_conf(groupconf)
             if not tzinfo or not isinstance(hour, int):
                 continue
-            # See https://github.com/nmlorg/metabot/issues/26.
-            bot = ntelebot.bot.Bot(botconf['issue37']['telegram']['token'])
-            bot.multibot = multibot
-            form = lambda event: eventutil.format_event(bot, event, tzinfo, full=False)  # pylint: disable=cell-var-from-loop
+
             nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
             key = (botuser, groupid)
 
@@ -64,17 +61,22 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             else:
                 continue
 
+            # See https://github.com/nmlorg/metabot/issues/26.
+            bot = ntelebot.bot.Bot(botconf['issue37']['telegram']['token'])
+            bot.multibot = multibot
             events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days,
                                                         eventtime)
             _handle_alerts(bot, records, groupid, alerts)
             preambles = groupconf['daily'].get('text', '').splitlines()
             preamble = preambles and preambles[eventdt.toordinal() % len(preambles)] or ''
+            text = _format_daily_message(
+                preamble,
+                [eventutil.format_event(bot, event, tzinfo, full=False) for event in events])
 
             message = None
 
             if sendnew:
                 if events:
-                    text = _format_daily_message(preamble, list(map(form, events)))
                     url = eventutil.get_image(events[0], botconf)
                     message = reminder_send(bot, groupid, text, url)
             else:
@@ -103,9 +105,8 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                         -1000000000000 - groupidnum, updmessage['message_id'], updated)
                 else:
                     updated = '%s (%s)' % (updated, updmessage['message_id'])
-                text = '%s\n\n[%s]' % (_format_daily_message(preamble, list(map(form,
-                                                                                events))), updated)
-                message = reminder_edit(bot, groupid, lastmessage['message_id'], text,
+                newtext = '%s\n\n[%s]' % (text, updated)
+                message = reminder_edit(bot, groupid, lastmessage['message_id'], newtext,
                                         lastmessage.get('caption'))
 
             if message:

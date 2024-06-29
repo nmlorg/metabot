@@ -31,7 +31,7 @@ def modinit(multibot):  # pylint: disable=missing-docstring
 
         for key, record in records.items():
             botuser, unused_groupid = key
-            if botuser == 'alerts' and len(record) == 3:
+            if botuser != 'alerts' and len(record) == 3:
                 records[key] += ('', '')
     else:
         recordsfname = None

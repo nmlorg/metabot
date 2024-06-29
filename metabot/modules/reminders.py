@@ -14,11 +14,16 @@ from metabot.util import html
 from metabot.util import humanize
 from metabot.util import pickleutil
 
+PERIOD = 60 * 10  # Run modinit.periodic every 10 minutes.
+
 
 def modinit(multibot):  # pylint: disable=missing-docstring
 
-    def _queue():
-        multibot.loop.queue.puthourly(0, _hourly, jitter=random.random() * 5)
+    def queue():
+        now = time.time()
+        nextrun = (now // PERIOD + 1) * PERIOD
+        jitter = random.random() * 5
+        multibot.loop.queue.putwhen(nextrun + jitter, periodic)
 
     if multibot.conf.confdir:
         recordsfname = multibot.conf.confdir + '/daily.pickle'
@@ -32,20 +37,23 @@ def modinit(multibot):  # pylint: disable=missing-docstring
         recordsfname = None
         records = {}
 
-    def _hourly():
+    def periodic():
+        logging.info('Running periodic.')
         try:
             multibot.multical.poll()
             _daily_messages(multibot, records)
             if recordsfname:
                 pickleutil.dump(recordsfname, records)
         finally:
-            _queue()
+            queue()
 
-    _queue()
+    queue()
 
 
 def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too-many-locals,too-many-statements
     now = time.time()
+    startofhour = now // 3600
+
     for botuser, botconf in multibot.conf['bots'].items():  # pylint: disable=too-many-nested-blocks
         for groupid, groupconf in botconf['issue37']['moderator'].items():
             calcodes, tzinfo, count, days, hour, dow = eventutil.get_group_conf(groupconf)
@@ -54,14 +62,18 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
 
             nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
             key = (botuser, groupid)
+            if key in records:
+                eventtime, lastevents, lastmessage, lasttext, lastsuffix = records[key]
+            else:
+                eventtime = 0
 
-            if nowdt.hour == hour and not dow & 1 << nowdt.weekday():
+            if nowdt.hour == hour and not dow & 1 << nowdt.weekday() and (
+                    not eventtime or startofhour > eventtime // 3600):
                 sendnew = True
                 eventtime = now
                 eventdt = nowdt
-            elif key in records:
+            elif eventtime:
                 sendnew = False
-                eventtime, lastevents, lastmessage, lasttext, lastsuffix = records[key]
                 eventdt = datetime.datetime.fromtimestamp(eventtime, tzinfo)
             else:
                 continue
@@ -123,6 +135,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
 def reminder_send(bot, groupid, text, photo):
     """Send a message with the given photo + caption, falling back to plain text."""
 
+    logging.info('Sending reminder to %s.', groupid)
     if photo:
         try:
             return bot.send_photo(chat_id=groupid,
@@ -146,6 +159,7 @@ def reminder_send(bot, groupid, text, photo):
 def reminder_edit(bot, groupid, message_id, text, isphoto):
     """Edit a photo caption/plain message."""
 
+    logging.info('Editing reminder %s/%s.', groupid, message_id)
     try:
         if isphoto:
             return bot.edit_message_caption(chat_id=groupid,

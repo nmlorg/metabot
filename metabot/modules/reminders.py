@@ -23,6 +23,11 @@ def modinit(multibot):  # pylint: disable=missing-docstring
     if multibot.conf.confdir:
         recordsfname = multibot.conf.confdir + '/daily.pickle'
         records = pickleutil.load(recordsfname) or {}
+
+        for key, record in records.items():
+            botuser, unused_groupid = key
+            if botuser == 'alerts' and len(record) == 3:
+                records[key] += ('', '')
     else:
         recordsfname = None
         records = {}
@@ -56,7 +61,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                 eventdt = nowdt
             elif key in records:
                 sendnew = False
-                eventtime, lastevents, lastmessage = records[key]
+                eventtime, lastevents, lastmessage, lasttext, lastsuffix = records[key]
                 eventdt = datetime.datetime.fromtimestamp(eventtime, tzinfo)
             else:
                 continue
@@ -79,6 +84,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                 if events:
                     url = eventutil.get_image(events[0], botconf)
                     message = reminder_send(bot, groupid, text, url)
+                    suffix = ''
             else:
                 edits = diff_events(multibot, tzinfo, lastevents, events)  # pylint: disable=possibly-used-before-assignment
 
@@ -110,7 +116,8 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                                         lastmessage.get('caption'))
 
             if message:
-                records[key] = (eventtime, [event.copy() for event in events], message)
+                records[key] = (eventtime, [event.copy() for event in events], message, text,
+                                suffix)
 
 
 def reminder_send(bot, groupid, text, photo):

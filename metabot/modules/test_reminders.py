@@ -113,7 +113,7 @@ def test_format_daily_message():  # pylint: disable=missing-docstring
 
 @pytest.fixture
 def daily_messages(conversation, monkeypatch):  # pylint: disable=missing-docstring,redefined-outer-name
-    monkeypatch.setattr('time.time', lambda: 0)
+    monkeypatch.setattr('time.time', lambda: 1)
 
     replies = conversation.raw_message('/dummy')
     assert conversation.format_messages(replies) == ''
@@ -155,7 +155,7 @@ def test_daily_messages(daily_messages):  # pylint: disable=redefined-outer-name
 
     assert daily_messages(True) == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Alpha Description
     end: 2000
     local_id: 6fc2c510:alpha
@@ -189,7 +189,7 @@ There are a couple events coming up:
 
     assert daily_messages() == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Alpha Description
     end: 2000
     local_id: 6fc2c510:alpha
@@ -224,7 +224,7 @@ def test_daily_messages_updated(daily_messages):  # pylint: disable=redefined-ou
 
     assert daily_messages() == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Alpha Description
     end: 2060
     local_id: 6fc2c510:alpha
@@ -269,7 +269,7 @@ There are a couple events coming up:
 
     assert daily_messages() == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Alpha Description
     end: 2060
     local_id: 6fc2c510:alpha
@@ -298,7 +298,7 @@ def test_daily_messages_future(daily_messages, monkeypatch):  # pylint: disable=
 
     assert daily_messages(True) == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Alpha Description
     end: 2000
     local_id: 6fc2c510:alpha
@@ -335,7 +335,7 @@ There are a couple events coming up:
 
     assert daily_messages() == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Alpha Description
     end: 2000
     local_id: 6fc2c510:alpha
@@ -372,7 +372,7 @@ There are a couple events coming up:
 
     assert daily_messages() == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Alpha Description
     end: 2000
     local_id: 6fc2c510:alpha
@@ -424,7 +424,7 @@ def test_daily_messages_multiline(daily_messages):  # pylint: disable=redefined-
 
     assert daily_messages() == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: 'Multi
 
       Line
@@ -491,7 +491,7 @@ def test_daily_messages_add_remove_event(conversation, daily_messages):  # pylin
 
     assert daily_messages() == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Alpha Description
     end: 2000
     local_id: 6fc2c510:alpha
@@ -545,7 +545,7 @@ def test_daily_messages_ignored(daily_messages):  # pylint: disable=redefined-ou
 
     assert daily_messages() == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Alpha Description
     end: 2000
     local_id: 6fc2c510:alpha
@@ -572,7 +572,7 @@ modulestestbot/-1002000002000:
 
     assert daily_messages() == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Alpha Description
     end: 2000
     local_id: 6fc2c510:alpha
@@ -607,7 +607,7 @@ def test_daily_messages_icons(conversation, daily_messages):  # pylint: disable=
     # An update does not include references to icons.
     assert daily_messages() == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Board Games!
     end: 2000
     local_id: 6fc2c510:alpha
@@ -651,7 +651,7 @@ There are a couple events coming up:
     # But an initial announcement does (photo=...).
     assert daily_messages(True) == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Board Games!
     end: 2000
     local_id: 6fc2c510:alpha
@@ -688,7 +688,7 @@ There are a couple events coming up:
 
     assert daily_messages(True) == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Board Games!
     end: 2000
     local_id: 6fc2c510:alpha
@@ -725,7 +725,7 @@ There are a couple events coming up:
 
     assert daily_messages(True) == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Board Games!
     end: 2000
     local_id: 6fc2c510:alpha
@@ -763,7 +763,7 @@ There are a couple events coming up:
     # Removing an icon trigger leaves the image in place.
     assert daily_messages() == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Fun Games!
     end: 2000
     local_id: 6fc2c510:alpha
@@ -817,7 +817,7 @@ def test_daily_messages_geometry(conversation, daily_messages):  # pylint: disab
 
     assert daily_messages() == """
 modulestestbot/-1002000002000:
-- 0
+- 1
 - - description: Trigger
     end: 2000
     local_id: 6fc2c510:alpha

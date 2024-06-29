@@ -43,7 +43,7 @@ disable = [
 ]
 
 [tool.pytest.ini_options]
-addopts = '-rN --cov=metabot --cov-report=term:skip-covered --cov-report=html'
+addopts = '-rN --cov=metabot --cov-report=html'
 consider_namespace_packages = true
 testpaths = ['metabot']
 verbosity_assertions = 2

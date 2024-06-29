@@ -296,11 +296,7 @@ modulestestbot/-1002000002000:
 def test_daily_messages_future(daily_messages, monkeypatch):  # pylint: disable=redefined-outer-name
     """Test the behavior when an event transitions from TODAY to NOW."""
 
-    daily_messages(True)
-
-    monkeypatch.setattr('time.time', lambda: 1000)
-
-    assert daily_messages() == """
+    assert daily_messages(True) == """
 modulestestbot/-1002000002000:
 - 0
 - - description: Alpha Description
@@ -323,12 +319,57 @@ modulestestbot/-1002000002000:
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
 - ''
+
+
+[chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML]
+There are a couple events coming up:
+
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">TODAY, Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+"""
+
+    # See https://github.com/nmlorg/metabot/issues/97.
+    monkeypatch.setattr('time.time', lambda: 1000)
+
+    assert daily_messages() == """
+modulestestbot/-1002000002000:
+- 0
+- - description: Alpha Description
+    end: 2000
+    local_id: 6fc2c510:alpha
+    location: Alpha Venue, Rest of Alpha Location
+    start: 1000
+    summary: Alpha Summary
+  - description: Bravo Description
+    end: 608400
+    local_id: 6fc2c510:bravo
+    location: Bravo Venue, Rest of Bravo Location
+    start: 604800
+    summary: Bravo Summary
+- message_id: 12345
+- 'There are a couple events coming up:
+
+  <b>Alpha Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <b>Bravo Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+- ''
+
+
+[edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
+There are a couple events coming up:
+
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 """
 
     cal = loader.get('static:test_events')
     cal.events['6fc2c510:alpha']['summary'] = 'Now Summary'
 
-    # Note that TODAY is displayed as NOW now:
     assert daily_messages() == """
 modulestestbot/-1002000002000:
 - 0

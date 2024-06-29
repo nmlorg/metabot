@@ -44,9 +44,9 @@ def modinit(multibot):  # pylint: disable=missing-docstring
     _queue()
 
 
-def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too-many-locals
+def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too-many-locals,too-many-statements
     now = time.time()
-    for botuser, botconf in multibot.conf['bots'].items():
+    for botuser, botconf in multibot.conf['bots'].items():  # pylint: disable=too-many-nested-blocks
         for groupid, groupconf in botconf['issue37']['moderator'].items():
             calcodes, tzinfo, count, days, hour, dow = eventutil.get_group_conf(groupconf)
             if not tzinfo or not isinstance(hour, int):
@@ -88,32 +88,32 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             else:
                 edits = diff_events(multibot, tzinfo, lastevents, events)  # pylint: disable=possibly-used-before-assignment
 
-                if not edits:
-                    continue
+                suffix = lastsuffix  # pylint: disable=possibly-used-before-assignment
+                if edits:
+                    updtext = 'Updated:\n' + '\n'.join(edits)
+                    try:
+                        updmessage = bot.send_message(
+                            chat_id=groupid,
+                            reply_to_message_id=lastmessage['message_id'],  # pylint: disable=possibly-used-before-assignment
+                            text=updtext,
+                            parse_mode='HTML',
+                            disable_web_page_preview=True,
+                            disable_notification=True)
+                    except ntelebot.errors.Error:
+                        logging.exception('While sending to %s:\n%s', groupid, updtext)
+                    else:
+                        suffix = 'Updated ' + humanize.time(nowdt)
+                        groupidnum = int(groupid)
+                        if -1002147483647 <= groupidnum < -1000000000000:
+                            suffix = '<a href="https://t.me/c/%s/%s">%s</a>' % (
+                                -1000000000000 - groupidnum, updmessage['message_id'], suffix)
 
-                updtext = 'Updated:\n' + '\n'.join(edits)
-                try:
-                    updmessage = bot.send_message(
-                        chat_id=groupid,
-                        reply_to_message_id=lastmessage['message_id'],  # pylint: disable=possibly-used-before-assignment
-                        text=updtext,
-                        parse_mode='HTML',
-                        disable_web_page_preview=True,
-                        disable_notification=True)
-                except ntelebot.errors.Error:
-                    logging.exception('While sending to %s:\n%s', groupid, updtext)
-                    continue
-
-                suffix = 'Updated ' + humanize.time(nowdt)
-                groupidnum = int(groupid)
-                if -1002147483647 <= groupidnum < -1000000000000:
-                    suffix = '<a href="https://t.me/c/%s/%s">%s</a>' % (
-                        -1000000000000 - groupidnum, updmessage['message_id'], suffix)
-                else:
-                    suffix = '%s (%s)' % (suffix, updmessage['message_id'])
-                newtext = '%s\n\n[%s]' % (text, suffix)
-                message = reminder_edit(bot, groupid, lastmessage['message_id'], newtext,
-                                        lastmessage.get('caption'))
+                if text != lasttext or suffix != lastsuffix:  # pylint: disable=possibly-used-before-assignment
+                    newtext = text
+                    if suffix:
+                        newtext = f'{newtext}\n\n[{suffix}]'
+                    message = reminder_edit(bot, groupid, lastmessage['message_id'], newtext,
+                                            lastmessage.get('caption'))
 
             if message:
                 records[key] = (eventtime, [event.copy() for event in events], message, text,

@@ -81,6 +81,8 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             # See https://github.com/nmlorg/metabot/issues/26.
             bot = ntelebot.bot.Bot(botconf['issue37']['telegram']['token'])
             bot.multibot = multibot
+            bot._username = botuser  # pylint: disable=protected-access
+
             events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days,
                                                         eventtime)
             _handle_alerts(bot, records, groupid, alerts)

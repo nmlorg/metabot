@@ -78,9 +78,7 @@ def _nextyear(dt, years=1):
     return dt.replace(year=year, day=min(dt.day, ndays))
 
 
-def howrecent(start, end, base=None):  # pylint: disable=too-many-branches,too-many-return-statements
-    """Convert the delta between start and base into a human-friendly string."""
-
+def _howrecent(start, end, base=None):  # pylint: disable=too-many-branches,too-many-return-statements
     if not base:
         base = _now_copy_tz(start)  # pragma: no cover
     if start <= base <= end:
@@ -136,7 +134,13 @@ def howrecent(start, end, base=None):  # pylint: disable=too-many-branches,too-m
 
     if delta.days < 0:
         prefix += ' ago'
-    return unicodeutil.superscript(prefix)
+    return prefix
+
+
+def howrecent(start, end, base=None):
+    """Convert the delta between start and base into a human-friendly string."""
+
+    return unicodeutil.superscript(_howrecent(start, end, base=base))
 
 
 def list(arr):  # pylint: disable=redefined-builtin

@@ -78,7 +78,7 @@ Select a calendar to add or remove from the list below:
     assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">NOW, Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">⭐ ᴺᴼᵂ Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 """
 
     conversation.bot.config['issue37']['moderator']['-1001000001000']['timezone'] = 'UTC'
@@ -86,7 +86,7 @@ Select a calendar to add or remove from the list below:
     assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 """
@@ -96,7 +96,7 @@ Select a calendar to add or remove from the list below:
     assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">NOW, Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 """
 
     monkeypatch.setattr('time.time', lambda: 2000000.)
@@ -153,7 +153,7 @@ Select a calendar to add or remove from the list below:
     assert conversation.message('/events', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">NOW, Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">⭐ ᴺᴼᵂ Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 
 Alpha Description
 [\xa0 | /stop] [Settings | /events set] [Next | /events 6fc2c510:bravo]
@@ -215,12 +215,12 @@ Select a calendar to add or remove from the list below:
             'switch_pm_parameter': 'L2V2ZW50cyBzZXQ',
             'results': [
                 {
-                    'description': 'NOW, Wed 31ˢᵗ, 4:16–4:33ᵖᵐ @ Alpha Venue',
+                    'description': '⭐ ᴺᴼᵂ Wed 31ˢᵗ, 4:16–4:33ᵖᵐ @ Alpha Venue',
                     'id': '6fc2c510:alpha',
                     'input_message_content': {
                         'disable_web_page_preview': True,
                         'message_text': '<b>Alpha Summary</b>\n'
-                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">NOW, Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
+                                        '<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">⭐ ᴺᴼᵂ Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>',
                         'parse_mode': 'HTML',
                     },
                     'title': 'Alpha Summary',
@@ -327,7 +327,7 @@ def test_customize(conversation):  # pylint: disable=redefined-outer-name
     assert conversation.message('/events') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">NOW, Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">⭐ ᴺᴼᵂ Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 
 Alpha Description
 [Customize | /events admin 6fc2c510:alpha]

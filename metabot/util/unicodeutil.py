@@ -38,6 +38,9 @@ SUPERSCRIPTS = {
     'x': '\u02e3',
     'y': '\u02b8',
     'z': '\u1dbb',
+    'N': '\u1d3a',
+    'O': '\u1d3c',
+    'W': '\u1d42',
 }
 
 

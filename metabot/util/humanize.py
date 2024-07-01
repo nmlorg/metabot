@@ -82,7 +82,7 @@ def _howrecent(start, end, base=None):  # pylint: disable=too-many-branches,too-
     if not base:
         base = _now_copy_tz(start)  # pragma: no cover
     if start <= base <= end:
-        return 'NOW,'
+        return '\u2b50 NOW'
     if isinstance(base, datetime.datetime):
         start = start.date()
         base = base.date()

@@ -78,14 +78,28 @@ def _nextyear(dt, years=1):
     return dt.replace(year=year, day=min(dt.day, ndays))
 
 
-def _howrecent(start, end, base=None):  # pylint: disable=too-many-branches,too-many-return-statements
+def _howrecent(start, end, base=None):  # pylint: disable=too-many-branches,too-many-return-statements,too-many-statements
     if not base:
         base = _now_copy_tz(start)  # pragma: no cover
     if start <= base <= end:
         return '\u2b50 NOW'
     if isinstance(base, datetime.datetime):
+        if base < start:
+            seconds = int((start - base).total_seconds())
+            if seconds <= 60 * 60 * 24:
+                hours, seconds = divmod(seconds, 3600)
+                minutes, seconds = divmod(seconds, 60)
+                if not hours:
+                    prefix = f'{minutes} min'
+                elif minutes:
+                    prefix = f'{hours}h{minutes}m'
+                else:
+                    prefix = plural(hours, 'hour')
+                return f'\U0001f51c {prefix}'
+
         start = start.date()
         base = base.date()
+
     delta = start - base
     if delta.days == 0:
         return 'today'

@@ -44,7 +44,6 @@ def _weatherfetch(url):
     headers = {
         'user-agent': 'https://github.com/nmlorg/metabot',
     }
-    logging.info('Fetching %r.', url)
     return requests.get(url, headers=headers, timeout=10).json()
 
 

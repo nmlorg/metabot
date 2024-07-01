@@ -477,10 +477,10 @@ def test_daily_messages_add_remove_event(conversation, daily_messages):  # pylin
     cal = loader.get('static:test_events')
     cal.events['6fc2c510:new'] = {
         'description': 'New Description',
-        'end': 3000,
+        'end': 60 * 60 * 4.5,
         'local_id': '6fc2c510:new',
         'location': 'New Venue, Rest of New Location',
-        'start': 2000,
+        'start': 60 * 60 * 3.5,
         'summary': 'New Summary',
     }
     conversation.multibot.multical.ordered.append(cal.events['6fc2c510:new'])
@@ -499,10 +499,10 @@ modulestestbot/-1002000002000:
     start: 1000
     summary: Alpha Summary
   - description: New Description
-    end: 3000
+    end: 16200.0
     local_id: 6fc2c510:new
     location: New Venue, Rest of New Location
-    start: 2000
+    start: 12600.0
     summary: New Summary
 - message_id: 12345
 - 'There are a couple events coming up:
@@ -510,7 +510,7 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>New Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:33–12:50ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 3:30–4:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>'
 - <a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>
 
 
@@ -528,7 +528,7 @@ There are a couple events coming up:
 <b>Alpha Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>New Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:33–12:50ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 3:30–4:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>
 
 [<a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>]
 """

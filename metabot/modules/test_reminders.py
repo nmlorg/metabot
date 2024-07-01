@@ -18,10 +18,10 @@ def conversation(build_conversation, monkeypatch):  # pylint: disable=missing-do
     cal.events = {
         '6fc2c510:alpha': {
             'description': 'Alpha Description',
-            'end': 2000,
+            'end': 60 * 60 * 3.5,
             'local_id': '6fc2c510:alpha',
             'location': 'Alpha Venue, Rest of Alpha Location',
-            'start': 1000,
+            'start': 60 * 60 * 2.5,
             'summary': 'Alpha Summary',
         },
         '6fc2c510:bravo': {
@@ -157,10 +157,10 @@ def test_daily_messages(daily_messages):  # pylint: disable=redefined-outer-name
 modulestestbot/-1002000002000:
 - 1
 - - description: Alpha Description
-    end: 2000
+    end: 12600.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Alpha Summary
   - description: Bravo Description
     end: 608400
@@ -172,7 +172,7 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
 - ''
@@ -182,7 +182,7 @@ modulestestbot/-1002000002000:
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 """
@@ -191,10 +191,10 @@ There are a couple events coming up:
 modulestestbot/-1002000002000:
 - 1
 - - description: Alpha Description
-    end: 2000
+    end: 12600.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Alpha Summary
   - description: Bravo Description
     end: 608400
@@ -206,7 +206,7 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
 - ''
@@ -226,10 +226,10 @@ def test_daily_messages_updated(daily_messages):  # pylint: disable=redefined-ou
 modulestestbot/-1002000002000:
 - 1
 - - description: Alpha Description
-    end: 2060
+    end: 12660.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Edited Summary
   - description: Bravo Description
     end: 608400
@@ -241,7 +241,7 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Edited Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:34ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:31ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
 - <a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>
@@ -252,15 +252,15 @@ Updated:
   • Edited Summary
       <s>Alpha Summary</s>
       Edited Summary
-      <s>…2:16–12:33ᵃᵐ</s>
-      …2:16–12:34ᵃᵐ
+      <s>… 2:30–3:30ᵃᵐ</s>
+      … 2:30–3:31ᵃᵐ
 
 
 [edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
 There are a couple events coming up:
 
 <b>Edited Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:34ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:31ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
@@ -271,10 +271,10 @@ There are a couple events coming up:
 modulestestbot/-1002000002000:
 - 1
 - - description: Alpha Description
-    end: 2060
+    end: 12660.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Edited Summary
   - description: Bravo Description
     end: 608400
@@ -286,7 +286,7 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Edited Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:34ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:31ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
 - <a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>
@@ -300,10 +300,10 @@ def test_daily_messages_future(daily_messages, monkeypatch):  # pylint: disable=
 modulestestbot/-1002000002000:
 - 1
 - - description: Alpha Description
-    end: 2000
+    end: 12600.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Alpha Summary
   - description: Bravo Description
     end: 608400
@@ -315,7 +315,7 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
 - ''
@@ -325,22 +325,22 @@ modulestestbot/-1002000002000:
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 """
 
     # See https://github.com/nmlorg/metabot/issues/97.
-    monkeypatch.setattr('time.time', lambda: 1000)
+    monkeypatch.setattr('time.time', lambda: 60 * 60 * 2.5)
 
     assert daily_messages() == """
 modulestestbot/-1002000002000:
 - 1
 - - description: Alpha Description
-    end: 2000
+    end: 12600.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Alpha Summary
   - description: Bravo Description
     end: 608400
@@ -352,7 +352,7 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
 - ''
@@ -362,7 +362,7 @@ modulestestbot/-1002000002000:
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 """
@@ -374,10 +374,10 @@ There are a couple events coming up:
 modulestestbot/-1002000002000:
 - 1
 - - description: Alpha Description
-    end: 2000
+    end: 12600.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Now Summary
   - description: Bravo Description
     end: 608400
@@ -389,10 +389,10 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Now Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
-- <a href="https://t.me/c/2000002000/12345">Updated 12:16ᵃᵐ</a>
+- <a href="https://t.me/c/2000002000/12345">Updated 2:30ᵃᵐ</a>
 
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
@@ -406,11 +406,11 @@ Updated:
 There are a couple events coming up:
 
 <b>Now Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated 12:16ᵃᵐ</a>]
+[<a href="https://t.me/c/2000002000/12345">Updated 2:30ᵃᵐ</a>]
 """
 
 
@@ -429,10 +429,10 @@ modulestestbot/-1002000002000:
 
       Line
       Description'
-    end: 2000
+    end: 12600.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Alpha Summary
   - description: Bravo Description
     end: 608400
@@ -444,7 +444,7 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
 - <a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>
@@ -461,7 +461,7 @@ Updated:
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
@@ -493,10 +493,10 @@ def test_daily_messages_add_remove_event(conversation, daily_messages):  # pylin
 modulestestbot/-1002000002000:
 - 1
 - - description: Alpha Description
-    end: 2000
+    end: 12600.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Alpha Summary
   - description: New Description
     end: 16200.0
@@ -508,7 +508,7 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>New Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 3:30–4:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>'
 - <a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>
@@ -526,7 +526,7 @@ Updated:
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>New Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 3:30–4:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>
 
@@ -547,10 +547,10 @@ def test_daily_messages_ignored(daily_messages):  # pylint: disable=redefined-ou
 modulestestbot/-1002000002000:
 - 1
 - - description: Alpha Description
-    end: 2000
+    end: 12600.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Alpha Summary
   - description: Bravo Description
     end: 608400
@@ -562,7 +562,7 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
 - ''
@@ -574,10 +574,10 @@ modulestestbot/-1002000002000:
 modulestestbot/-1002000002000:
 - 1
 - - description: Alpha Description
-    end: 2000
+    end: 12600.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Alpha Summary
   - description: Bravo Description
     end: 608400
@@ -589,7 +589,7 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
 - ''
@@ -609,10 +609,10 @@ def test_daily_messages_icons(conversation, daily_messages):  # pylint: disable=
 modulestestbot/-1002000002000:
 - 1
 - - description: Board Games!
-    end: 2000
+    end: 12600.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Alpha Summary
   - description: Bravo Description
     end: 608400
@@ -624,7 +624,7 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
 - <a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>
@@ -641,7 +641,7 @@ Updated:
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
@@ -653,10 +653,10 @@ There are a couple events coming up:
 modulestestbot/-1002000002000:
 - 1
 - - description: Board Games!
-    end: 2000
+    end: 12600.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Alpha Summary
   - description: Bravo Description
     end: 608400
@@ -669,7 +669,7 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
 - ''
@@ -679,7 +679,7 @@ modulestestbot/-1002000002000:
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 """
@@ -690,10 +690,10 @@ There are a couple events coming up:
 modulestestbot/-1002000002000:
 - 1
 - - description: Board Games!
-    end: 2000
+    end: 12600.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Alpha Summary
   - description: Bravo Description
     end: 608400
@@ -706,7 +706,7 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
 - ''
@@ -716,7 +716,7 @@ modulestestbot/-1002000002000:
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 """
@@ -727,10 +727,10 @@ There are a couple events coming up:
 modulestestbot/-1002000002000:
 - 1
 - - description: Board Games!
-    end: 2000
+    end: 12600.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Alpha Summary
   - description: Bravo Description
     end: 608400
@@ -743,7 +743,7 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
 - ''
@@ -753,7 +753,7 @@ modulestestbot/-1002000002000:
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 """
@@ -765,10 +765,10 @@ There are a couple events coming up:
 modulestestbot/-1002000002000:
 - 1
 - - description: Fun Games!
-    end: 2000
+    end: 12600.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Alpha Summary
   - description: Bravo Description
     end: 608400
@@ -781,7 +781,7 @@ modulestestbot/-1002000002000:
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
 - <a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>
@@ -798,7 +798,7 @@ Updated:
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
@@ -819,16 +819,16 @@ def test_daily_messages_geometry(conversation, daily_messages):  # pylint: disab
 modulestestbot/-1002000002000:
 - 1
 - - description: Trigger
-    end: 2000
+    end: 12600.0
     local_id: 6fc2c510:alpha
     location: Alpha Venue, Rest of Alpha Location
-    start: 1000
+    start: 9000.0
     summary: Alpha Summary
 - message_id: 12345
 - 'There''s an event coming up:
 
   <b>Alpha Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>'
 - <a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>
 
 
@@ -843,7 +843,7 @@ Updated:
 There's an event coming up:
 
 <b>Alpha Summary</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 
 [<a href="https://t.me/c/2000002000/12345">Updated 12ᵃᵐ</a>]
 """

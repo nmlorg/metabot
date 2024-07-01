@@ -74,22 +74,22 @@ def test_simple(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
 <i>The next sock hop I know about is:</i>
 
 <b>Other Sock Hop</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyAyYTM2Njk4MzphbHBoYSBVVEM">TODAY, Thu 1ˢᵗ, 12:33–12:50ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyAyYTM2Njk4MzphbHBoYSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 12:33–12:50ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 
 <i>The next sock hop on the My Group calendar is:</i>
 
 <b>My Sock Hop</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyBmYzJkNWUwNTpicmF2byBVVEM">TODAY, Thu 1ˢᵗ, 1:06–1:23ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=My+Venue%2C+Rest+of+My+Location">My Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyBmYzJkNWUwNTpicmF2byBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 1:06–1:23ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=My+Venue%2C+Rest+of+My+Location">My Venue</a>
 
 <i>The next Special Sock Hop is:</i>
 
 <b>Special Sock Hop</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyBmYzJkNWUwNTpjaGFybGllIFVUQw">TODAY, Thu 1ˢᵗ, 1:40–1:56ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=My+Venue%2C+Rest+of+My+Location">My Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyBmYzJkNWUwNTpjaGFybGllIFVUQw">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 1:40–1:56ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=My+Venue%2C+Rest+of+My+Location">My Venue</a>
 
 <i>The next sock hop at Alternate Venue is:</i>
 
 <b>Alternate Sock Hop</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyBmYzJkNWUwNTpkZWx0YSBVVEM">TODAY, Thu 1ˢᵗ, 2:13–2:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alternate+Venue%2C+Rest+of+Special+Location">Alternate Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyBmYzJkNWUwNTpkZWx0YSBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 2:13–2:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alternate+Venue%2C+Rest+of+Special+Location">Alternate Venue</a>
 """
 
     assert conversation.message('When is the next my sock hop?') == """\
@@ -97,5 +97,5 @@ def test_simple(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
 <i>The next my sock hop is:</i>
 
 <b>My Sock Hop</b>
-<a href="https://t.me/modulestestbot?start=L2V2ZW50cyBmYzJkNWUwNTpicmF2byBVVEM">TODAY, Thu 1ˢᵗ, 1:06–1:23ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=My+Venue%2C+Rest+of+My+Location">My Venue</a>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyBmYzJkNWUwNTpicmF2byBVVEM">ᵗᵒᵈᵃʸ Thu 1ˢᵗ, 1:06–1:23ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=My+Venue%2C+Rest+of+My+Location">My Venue</a>
 """

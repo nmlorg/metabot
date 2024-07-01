@@ -88,11 +88,11 @@ def _howrecent(start, end, base=None):  # pylint: disable=too-many-branches,too-
         base = base.date()
     delta = start - base
     if delta.days == 0:
-        return 'TODAY,'
+        return 'today'
     if delta.days == 1:
-        return 'TOMORROW,'
+        return 'tomorrow'
     if delta.days == -1:
-        return 'YESTERDAY,'
+        return 'yesterday'
 
     if start < base:
         left = start

@@ -54,7 +54,7 @@ def get_group_events(bot, calcodes, tzinfo, count, days, now=None):  # pylint: d
             [alert for alertid, alert in sorted(alerts.items())])
 
 
-def format_event(bot, event, tzinfo, full=True):
+def format_event(bot, event, tzinfo, full=True, base=None):
     """Given a metabot.calendars.base.Calendar event, build a human-friendly representation."""
 
     message = '<b>%s</b>' % event['summary']
@@ -63,10 +63,9 @@ def format_event(bot, event, tzinfo, full=True):
             message = '%s [<a href="%s">%i tickets remaining</a>]' % (message, url, count)
         else:
             message = '%s [<a href="%s">tickets</a>]' % (message, url)
-    message = '%s\n<a href="%s">%s</a>' % (message,
-                                           bot.encode_url('/events %s %s' %
-                                                          (event['local_id'], tzinfo.zone)),
-                                           humanize_range(event['start'], event['end'], tzinfo))
+    message = '%s\n<a href="%s">%s</a>' % (
+        message, bot.encode_url('/events %s %s' % (event['local_id'], tzinfo.zone)),
+        humanize_range(event['start'], event['end'], tzinfo, base=base))
     if event['location']:
         location_name = event['location'].split(',', 1)[0]
         location_url = 'https://maps.google.com/maps?' + urllib.parse.urlencode({
@@ -102,11 +101,12 @@ def format_geo(address, now):
         return ' \u2022 '.join(warnings)
 
 
-def humanize_range(start, end, tzinfo):
+def humanize_range(start, end, tzinfo, base=None):
     """Return the range between start and end as human-friendly text."""
 
     return humanize.range(datetime.datetime.fromtimestamp(start, tzinfo),
-                          datetime.datetime.fromtimestamp(end, tzinfo))
+                          datetime.datetime.fromtimestamp(end, tzinfo),
+                          base=base)
 
 
 def get_image(event, botconf):

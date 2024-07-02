@@ -52,6 +52,8 @@ def modinit(multibot):  # pylint: disable=missing-docstring
 
 def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too-many-locals,too-many-statements
     now = time.time()
+    # If running at 11:22:33.444, act as if we're running at exactly 11:20:00.000.
+    period = int(now // PERIOD * PERIOD)
     startofhour = now // 3600
 
     for botuser, botconf in multibot.conf['bots'].items():  # pylint: disable=too-many-nested-blocks
@@ -61,17 +63,18 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                 continue
 
             nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
+            perioddt = datetime.datetime.fromtimestamp(period, tzinfo)
             key = (botuser, groupid)
             if key in records:
                 eventtime, lastevents, lastmessage, lasttext, lastsuffix = records[key]
             else:
                 eventtime = 0
 
-            if nowdt.hour == hour and not dow & 1 << nowdt.weekday() and (
+            if perioddt.hour == hour and not dow & 1 << perioddt.weekday() and (
                     not eventtime or startofhour > eventtime // 3600):
                 sendnew = True
-                eventtime = now
-                eventdt = nowdt
+                eventtime = period
+                eventdt = perioddt
             elif eventtime:
                 sendnew = False
                 eventdt = datetime.datetime.fromtimestamp(eventtime, tzinfo)
@@ -88,9 +91,10 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             _handle_alerts(bot, records, groupid, alerts)
             preambles = groupconf['daily'].get('text', '').splitlines()
             preamble = preambles and preambles[eventdt.toordinal() % len(preambles)] or ''
-            text = _format_daily_message(
-                preamble,
-                [eventutil.format_event(bot, event, tzinfo, full=False) for event in events])
+            text = _format_daily_message(preamble, [
+                eventutil.format_event(bot, event, tzinfo, full=False, base=perioddt)
+                for event in events
+            ])
 
             message = None
 
@@ -100,7 +104,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     message = reminder_send(bot, groupid, text, url)
                     suffix = ''
             else:
-                edits = diff_events(multibot, tzinfo, lastevents, events)  # pylint: disable=possibly-used-before-assignment
+                edits = diff_events(multibot, tzinfo, perioddt, lastevents, events)  # pylint: disable=possibly-used-before-assignment
 
                 suffix = lastsuffix  # pylint: disable=possibly-used-before-assignment
                 if edits:
@@ -177,7 +181,7 @@ def reminder_edit(bot, groupid, message_id, text, isphoto):
         logging.exception('While editing %s in %s:\n%s', message_id, groupid, text)
 
 
-def diff_events(multibot, tzinfo, lastevents, events):  # pylint: disable=too-many-locals
+def diff_events(multibot, tzinfo, base, lastevents, events):  # pylint: disable=too-many-locals
     """Return a list of differences between lastevents and events."""
 
     lastmap = {event['local_id']: event for event in lastevents}
@@ -200,8 +204,8 @@ def diff_events(multibot, tzinfo, lastevents, events):  # pylint: disable=too-ma
             continue
         pairs = (
             (lastevent['summary'], event['summary']),
-            (eventutil.humanize_range(lastevent['start'], lastevent['end'], tzinfo),
-             eventutil.humanize_range(event['start'], event['end'], tzinfo)),
+            (eventutil.humanize_range(lastevent['start'], lastevent['end'], tzinfo, base),
+             eventutil.humanize_range(event['start'], event['end'], tzinfo, base)),
             (lastevent['location'], event['location']),
             (html.sanitize(lastevent['description'], strip=True),
              html.sanitize(event['description'], strip=True)),

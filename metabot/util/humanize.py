@@ -175,11 +175,12 @@ def plural(num, noun, fmtstr='%s %s'):
     return fmtstr % (num, noun + 's')
 
 
-def range(start, end):  # pylint: disable=redefined-builtin
+def range(start, end, base=None):  # pylint: disable=redefined-builtin
     """Convert the given datetime.date/datetime.datetime objects into a human-friendly string."""
 
-    now = _now_copy_tz(start)
-    text = '%s %s' % (howrecent(start, end, base=now), date(start, base=now))
+    if not base:
+        base = _now_copy_tz(start)
+    text = '%s %s' % (howrecent(start, end, base=base), date(start, base=base))
     if start == end:
         return text
     if isinstance(start, datetime.datetime):

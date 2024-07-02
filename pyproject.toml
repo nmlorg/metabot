@@ -1,6 +1,6 @@
 [project]
 name = 'metabot'
-version = '0.3.22'
+version = '0.3.23'
 description = 'Modularized, multi-account bot.'
 readme = 'README.md'
 authors = [

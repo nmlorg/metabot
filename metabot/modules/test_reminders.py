@@ -1,12 +1,17 @@
 """Tests for metabot.modules.reminders."""
 
+import datetime
+
 import pytest
+import pytz
 import yaml
 
 from metabot.calendars import loader
 from metabot.modules import events
 from metabot.modules import moderator
 from metabot.modules import reminders
+
+# pylint: disable=too-many-lines
 
 
 @pytest.fixture
@@ -247,11 +252,7 @@ modulestestbot/-1002000002000:
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  • Edited Summary
-      <s>Alpha Summary</s>
-      Edited Summary
-      <s>… 2:30–3:30ᵃᵐ</s>
-      … 2:30–3:31ᵃᵐ
+• <s>Alpha Summary</s> is now called <b>Edited Summary</b> and was extended to <b>Thu 1ˢᵗ, 3:31ᵃᵐ</b> (instead of <s>Thu 1ˢᵗ, 3:30ᵃᵐ</s>).
 
 
 [edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -395,9 +396,7 @@ modulestestbot/-1002000002000:
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  • Now Summary
-      <s>Alpha Summary</s>
-      Now Summary
+• <s>Alpha Summary</s> is now called <b>Now Summary</b>.
 
 
 [edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -450,9 +449,7 @@ modulestestbot/-1002000002000:
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  • Alpha Summary
-      <s>Alpha Description</s>
-      Multi Line Description
+• The description of <b>Alpha Summary</b> was changed from <s>Alpha Description</s> to <b>Multi Line Description</b>.
 
 
 [edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -514,10 +511,8 @@ modulestestbot/-1002000002000:
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  • New Summary
-    ◦ New event!
-  • Bravo Summary
-    ◦ Removed.
+• <b>New Summary</b> was added.
+• <s>Bravo Summary</s> was removed.
 
 
 [edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -630,9 +625,7 @@ modulestestbot/-1002000002000:
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  • Alpha Summary
-      <s>Alpha Description</s>
-      Board Games!
+• The description of <b>Alpha Summary</b> was changed from <s>Alpha Description</s> to <b>Board Games!</b>.
 
 
 [edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -787,9 +780,7 @@ modulestestbot/-1002000002000:
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  • Alpha Summary
-      <s>Board Games!</s>
-      Fun Games!
+• The description of <b>Alpha Summary</b> was changed from <s>Board Games!</s> to <b>Fun Games!</b>.
 
 
 [edit_message_caption chat_id=-1002000002000 message_id=12345 parse_mode=HTML]
@@ -832,9 +823,7 @@ modulestestbot/-1002000002000:
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-  • Alpha Summary
-      <s>Alpha Description</s>
-      Trigger
+• The description of <b>Alpha Summary</b> was changed from <s>Alpha Description</s> to <b>Trigger</b>.
 
 
 [edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -845,6 +834,98 @@ There's an event coming up:
 
 [<a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>]
 """
+
+
+def test_daily_messages_grammar(daily_messages):  # pylint: disable=redefined-outer-name
+    """Quick tests for the differ's grammar."""
+
+    daily_messages(True)
+    cal = loader.get('static:test_events')
+    cal.events['6fc2c510:alpha']['summary'] = 'New Summary'
+    cal.events['6fc2c510:alpha']['start'] -= 1800
+    cal.events['6fc2c510:alpha']['location'] = 'New Location'
+    cal.events['6fc2c510:alpha']['description'] = 'New Description'
+    cal.events['6fc2c510:bravo']['start'] -= 1800
+    cal.events['6fc2c510:bravo']['end'] += 1800
+    cal.events['6fc2c510:bravo']['location'] = 'New Location'
+    cal.events['6fc2c510:bravo']['description'] = 'New Description'
+
+    assert daily_messages() == """
+modulestestbot/-1002000002000:
+- 1800
+- - description: New Description
+    end: 12600.0
+    local_id: 6fc2c510:alpha
+    location: New Location
+    start: 7200.0
+    summary: New Summary
+  - description: New Description
+    end: 610200
+    local_id: 6fc2c510:bravo
+    location: New Location
+    start: 603000
+    summary: Bravo Summary
+- message_id: 12345
+- 'There are a couple events coming up:
+
+  <b>New Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ¹ʰ³⁰ᵐ Thu 1ˢᵗ, 2–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Location">New Location</a>
+  <b>Bravo Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁶ ᵈᵃʸˢ Wed 7ᵗʰ, 11:30ᵖᵐ – 1:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Location">New Location</a>'
+- <a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>
+
+
+[chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
+Updated:
+• <s>Alpha Summary</s> is now called <b>New Summary</b>, is starting earlier at <b>Thu 1ˢᵗ, 2ᵃᵐ</b> (instead of <s>Thu 1ˢᵗ, 2:30ᵃᵐ</s>; same end), was moved from <s>Alpha Venue, Rest of Alpha Location</s> to <b>New Location</b>, and its description was changed from <s>Alpha Description</s> to <b>New Description</b>.
+• <b>Bravo Summary</b> now starts at <b>Wed 7ᵗʰ, 11:30ᵖᵐ</b> and ends at <b>Thu 8ᵗʰ, 1:30ᵃᵐ</b> (was <s>Thu 8ᵗʰ, 12ᵃᵐ to Thu 8ᵗʰ, 1ᵃᵐ</s>), was moved from <s>Bravo Venue, Rest of Bravo Location</s> to <b>New Location</b>, and its description was changed from <s>Bravo Description</s> to <b>New Description</b>.
+
+
+[edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
+There are a couple events coming up:
+
+<b>New Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ¹ʰ³⁰ᵐ Thu 1ˢᵗ, 2–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Location">New Location</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁶ ᵈᵃʸˢ Wed 7ᵗʰ, 11:30ᵖᵐ – 1:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Location">New Location</a>
+
+[<a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>]
+"""
+
+
+def test_diff_time():
+    """Test start/end time difference detector."""
+
+    tzinfo = pytz.timezone('America/Los_Angeles')
+    base = datetime.datetime.fromtimestamp(1719946200, tzinfo)
+    start = 1719946800.
+    end = 1719950400
+
+    # pylint: disable=protected-access
+
+    assert not reminders._diff_time(start, end, start, end, tzinfo, base)
+
+    assert reminders._diff_time(start, end, start + 60, end + 120, tzinfo, base) == (
+        'now starts at <b>Tue 2ⁿᵈ, 12:01ᵖᵐ</b> and ends at <b>Tue 2ⁿᵈ, 1:02ᵖᵐ</b> (was <s>Tue 2ⁿᵈ, 12ᵖᵐ to Tue 2ⁿᵈ, 1ᵖᵐ</s>)'
+    )
+
+    assert reminders._diff_time(start, end, start - 60, end, tzinfo, base) == (
+        'is starting earlier at <b>Tue 2ⁿᵈ, 11:59ᵃᵐ</b> (instead of <s>Tue 2ⁿᵈ, 12ᵖᵐ</s>; same end)'
+    )
+    assert reminders._diff_time(start, end, start - 60, end - 60, tzinfo, base) == (
+        'was moved up to <b>Tue 2ⁿᵈ, 11:59ᵃᵐ</b> (from <s>Tue 2ⁿᵈ, 12ᵖᵐ</s>; same duration)')
+
+    assert reminders._diff_time(start, end, start + 60, end, tzinfo, base) == (
+        'is starting later at <b>Tue 2ⁿᵈ, 12:01ᵖᵐ</b> (instead of <s>Tue 2ⁿᵈ, 12ᵖᵐ</s>; same end)')
+    assert reminders._diff_time(start, end, start + 60, end + 60, tzinfo, base) == (
+        'was moved back to <b>Tue 2ⁿᵈ, 12:01ᵖᵐ</b> (from <s>Tue 2ⁿᵈ, 12ᵖᵐ</s>; same duration)')
+
+    assert reminders._diff_time(
+        start, end, start, end - 60, tzinfo,
+        base) == ('was shortened to <b>Tue 2ⁿᵈ, 12:59ᵖᵐ</b> (instead of <s>Tue 2ⁿᵈ, 1ᵖᵐ</s>)')
+    assert reminders._diff_time(
+        start, end, start, end + 60, tzinfo,
+        base) == ('was extended to <b>Tue 2ⁿᵈ, 1:01ᵖᵐ</b> (instead of <s>Tue 2ⁿᵈ, 1ᵖᵐ</s>)')
 
 
 def test_quick_diff():

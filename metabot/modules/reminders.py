@@ -191,36 +191,85 @@ def diff_events(multibot, tzinfo, base, lastevents, events):  # pylint: disable=
     bothevents.sort(key=operator.itemgetter('start', 'end', 'summary', 'local_id'))
     edits = []
     for event in bothevents:
-        title = '  \u2022 ' + event['summary']
         lastevent = lastmap.get(event['local_id'])
         if not lastevent:
-            edits.append(title)
-            edits.append('    \u25e6 New event!')
+            edits.append(f"\u2022 <b>{event['summary']}</b> was added.")
             continue
         event = multibot.multical.get_event(event['local_id'])[1]
         if not event:
-            edits.append(title)
-            edits.append('    \u25e6 Removed.')
+            edits.append(f"\u2022 <s>{lastevent['summary']}</s> was removed.")
             continue
-        pairs = (
-            (lastevent['summary'], event['summary']),
-            (eventutil.humanize_range(lastevent['start'], lastevent['end'], tzinfo, base),
-             eventutil.humanize_range(event['start'], event['end'], tzinfo, base)),
-            (lastevent['location'], event['location']),
-            (html.sanitize(lastevent['description'], strip=True),
-             html.sanitize(event['description'], strip=True)),
-        )  # yapf: disable
+
+        mentioned_event = False
         pieces = []
-        for left, right in pairs:
-            diff = _quick_diff(left, right)
-            if diff:
-                pieces.append(diff)
+
+        diff = _quick_diff(lastevent['summary'], event['summary'])
+        if diff:
+            pieces.append(f'<s>{diff[0]}</s> is now called <b>{diff[1]}</b>')
+            mentioned_event = True
+
+        diff = _diff_time(lastevent['start'], lastevent['end'], event['start'], event['end'],
+                          tzinfo, base)
+        if diff:
+            pieces.append(diff)
+
+        diff = _quick_diff(lastevent['location'], event['location'])
+        if diff:
+            pieces.append(f'was moved from <s>{diff[0]}</s> to <b>{diff[1]}</b>')
+
+        diff = _quick_diff(html.sanitize(lastevent['description'], strip=True),
+                           html.sanitize(event['description'], strip=True))
+        if diff:
+            if pieces:
+                prefix = 'its description'
+            else:
+                prefix = f"The description of <b>{event['summary']}</b>"
+                mentioned_event = True
+            pieces.append(f'{prefix} was changed from <s>{diff[0]}</s> to <b>{diff[1]}</b>')
+
         if pieces:
-            edits.append(title)
-            for left, right in pieces:
-                edits.append(f'      <s>{left}</s>')
-                edits.append(f'      {right}')
+            text = humanize.list(pieces)
+            if not mentioned_event:
+                text = f"<b>{event['summary']}</b> {text}"
+            edits.append(f'\u2022 {text}.')
+
     return edits
+
+
+def _diff_time(laststart, lastend, curstart, curend, tzinfo, base):  # pylint: disable=too-many-arguments,too-many-locals,too-many-return-statements
+    laststartdt = datetime.datetime.fromtimestamp(laststart, tzinfo)
+    lastenddt = datetime.datetime.fromtimestamp(lastend, tzinfo)
+    curstartdt = datetime.datetime.fromtimestamp(curstart, tzinfo)
+    curenddt = datetime.datetime.fromtimestamp(curend, tzinfo)
+
+    laststartstr = humanize.date(laststartdt, base=base)
+    lastendstr = humanize.date(lastenddt, base=base)
+    curstartstr = humanize.date(curstartdt, base=base)
+    curendstr = humanize.date(curenddt, base=base)
+
+    start_earlier = curstart < laststart
+    start_later = curstart > laststart
+    start_same = curstart == laststart
+    end_earlier = curend < lastend
+    end_later = curend > lastend
+    end_same = curend == lastend
+    duration_same = lastend - laststart == curend - curstart
+
+    # pylint: disable=line-too-long
+    if not start_same and not end_same and not duration_same:  # Everything changed.
+        return f'now starts at <b>{curstartstr}</b> and ends at <b>{curendstr}</b> (was <s>{laststartstr} to {lastendstr}</s>)'
+    if start_earlier:
+        if duration_same:
+            return f'was moved up to <b>{curstartstr}</b> (from <s>{laststartstr}</s>; same duration)'
+        return f'is starting earlier at <b>{curstartstr}</b> (instead of <s>{laststartstr}</s>; same end)'
+    if start_later:
+        if duration_same:
+            return f'was moved back to <b>{curstartstr}</b> (from <s>{laststartstr}</s>; same duration)'
+        return f'is starting later at <b>{curstartstr}</b> (instead of <s>{laststartstr}</s>; same end)'
+    if end_earlier:
+        return f'was shortened to <b>{curendstr}</b> (instead of <s>{lastendstr}</s>)'
+    if end_later:
+        return f'was extended to <b>{curendstr}</b> (instead of <s>{lastendstr}</s>)'
 
 
 def _quick_diff(left, right):
@@ -230,6 +279,10 @@ def _quick_diff(left, right):
     right = re.sub(r'\s+', ' ', right).strip()
     if left == right:
         return
+    if not left:
+        left = '(empty)'
+    if not right:
+        right = '(empty)'
     i = 0
     while i < len(left) and i < len(right) and right[i] == left[i]:
         i += 1

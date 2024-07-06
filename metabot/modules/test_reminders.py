@@ -948,6 +948,44 @@ def test_quick_diff():
                                                          'x23456789012345678901234567890123456789…')
 
 
+def test_truncation(daily_messages, monkeypatch):  # pylint: disable=redefined-outer-name
+    """Verify that message limits are correctly enforced."""
+
+    monkeypatch.setattr('metabot.modules.reminders.PLAIN_TEXT_LIMIT', 40)
+
+    assert daily_messages(True) == """
+modulestestbot/-1002000002000:
+- 1800
+- - description: Alpha Description
+    end: 12600.0
+    local_id: 6fc2c510:alpha
+    location: Alpha Venue, Rest of Alpha Location
+    start: 9000.0
+    summary: Alpha Summary
+  - description: Bravo Description
+    end: 608400
+    local_id: 6fc2c510:bravo
+    location: Bravo Venue, Rest of Bravo Location
+    start: 604800
+    summary: Bravo Summary
+- message_id: 12345
+- 'There are a couple events coming up:
+
+  <b>Alpha Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <b>Bravo Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+- ''
+
+
+[chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML]
+There are a couple events coming up:
+
+<b>Al</b>
+"""
+    assert len('There are a couple events coming up:\n\nAl') == 40
+
+
 @pytest.fixture
 def handle_alerts(conversation):  # pylint: disable=missing-docstring,redefined-outer-name
     replies = conversation.raw_message('/dummy')

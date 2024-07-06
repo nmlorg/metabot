@@ -11,13 +11,14 @@ def cgi_escape(text):  # pylint: disable=missing-docstring
 
 
 class _HTMLSanitizer(html.parser.HTMLParser):
-    __pieces = __strip = __stack = None
+    __pieces = __strip = __remaining = __stack = None
 
-    def sanitize(self, text, strip=False):
+    def sanitize(self, text, strip=False, length=None):
         """Sanitize (or optionally entirely strip) HTML for use in Telegram."""
 
         self.__pieces = []
         self.__strip = strip
+        self.__remaining = length
         self.__stack = []
         self.feed(text)
         self.close()
@@ -34,8 +35,10 @@ class _HTMLSanitizer(html.parser.HTMLParser):
     }
 
     def handle_starttag(self, tag, attrs):
+        if self.__remaining is not None and not self.__remaining:
+            return
         if tag in ('br', 'div', 'p'):
-            self.__pieces.append('\n')
+            self.__append('\n')
             return
         if self.__strip or tag not in self.naked and tag not in self.coupled:
             return
@@ -60,18 +63,41 @@ class _HTMLSanitizer(html.parser.HTMLParser):
             if lasttag == tag:
                 break
 
+    def __append(self, data):
+        if self.__remaining is None:
+            return self.__pieces.append(data)
+
+        if len(data) <= self.__remaining and '&' not in data:
+            self.__remaining -= len(data)
+            return self.__pieces.append(data)
+
+        inentity = False
+        for char in data:
+            if not self.__remaining:
+                break
+            self.__pieces.append(char)
+            if inentity:
+                if char == ';':
+                    self.__remaining -= 1
+                    inentity = False
+            else:
+                if char == '&':
+                    inentity = True
+                else:
+                    self.__remaining -= 1
+
     def handle_data(self, data):
-        self.__pieces.append(cgi_escape(data))
+        self.__append(cgi_escape(data))
 
     def handle_entityref(self, name):  # pragma: no cover
         if name in ('lt', 'gt', 'amp', 'quot'):
-            self.__pieces.append(f'&{name};')
+            self.__append(f'&{name};')
         else:
             codepoint = html.entities.name2codepoint.get(name)
             if codepoint:
-                self.__pieces.append(chr(codepoint))
+                self.__append(chr(codepoint))
             else:
-                self.__pieces.append(f'&amp;{name};')
+                self.__append(f'&amp;{name};')
 
     def handle_charref(self, name):  # pragma: no cover
         name = name.lower()
@@ -80,9 +106,9 @@ class _HTMLSanitizer(html.parser.HTMLParser):
                 codepoint = int(name[1:], 16)
             else:
                 codepoint = int(name)
-            self.__pieces.append(cgi_escape(chr(codepoint)))
+            self.__append(cgi_escape(chr(codepoint)))
         except (OverflowError, ValueError):
-            self.__pieces.append(f'&amp;#{name};')
+            self.__append(f'&amp;#{name};')
 
     def error(self, message):  # pragma: no cover  pylint: disable=missing-function-docstring
         # Remove when support for Python below 3.10 is dropped.
@@ -93,3 +119,9 @@ def sanitize(text, strip=False):
     """Sanitize (or optionally entirely strip) HTML for use in Telegram."""
 
     return _HTMLSanitizer().sanitize(text, strip=strip)
+
+
+def truncate(text, length):
+    """Truncate text to at most length non-markup characters."""
+
+    return _HTMLSanitizer().sanitize(text, length=length)

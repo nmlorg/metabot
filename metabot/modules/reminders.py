@@ -15,6 +15,8 @@ from metabot.util import humanize
 from metabot.util import pickleutil
 
 PERIOD = 60 * 10  # Run modinit.periodic every 10 minutes.
+PLAIN_TEXT_LIMIT = 4096
+PHOTO_TEXT_LIMIT = 1024
 
 
 def modinit(multibot):  # pylint: disable=missing-docstring
@@ -113,7 +115,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                         updmessage = bot.send_message(
                             chat_id=groupid,
                             reply_to_message_id=lastmessage['message_id'],  # pylint: disable=possibly-used-before-assignment
-                            text=updtext,
+                            text=_truncate(updtext, PLAIN_TEXT_LIMIT),
                             parse_mode='HTML',
                             disable_web_page_preview=True,
                             disable_notification=True)
@@ -154,7 +156,7 @@ def reminder_send(bot, groupid, text, photo):
 
     try:
         return bot.send_message(chat_id=groupid,
-                                text=text,
+                                text=_truncate(text, PLAIN_TEXT_LIMIT),
                                 parse_mode='HTML',
                                 disable_web_page_preview=True,
                                 disable_notification=True)
@@ -170,15 +172,24 @@ def reminder_edit(bot, groupid, message_id, text, isphoto):
         if isphoto:
             return bot.edit_message_caption(chat_id=groupid,
                                             message_id=message_id,
-                                            caption=text,
+                                            caption=_truncate(text, PHOTO_TEXT_LIMIT),
                                             parse_mode='HTML')
+
         return bot.edit_message_text(chat_id=groupid,
                                      message_id=message_id,
-                                     text=text,
+                                     text=_truncate(text, PLAIN_TEXT_LIMIT),
                                      parse_mode='HTML',
                                      disable_web_page_preview=True)
     except ntelebot.errors.Error:
         logging.exception('While editing %s in %s:\n%s', message_id, groupid, text)
+
+
+def _truncate(rawtext, length):
+    text = html.truncate(rawtext, length)
+    # See https://github.com/nmlorg/metabot/issues/101.
+    if text != rawtext and text != html.sanitize(rawtext):
+        logging.info('Truncated:\n- %r\n+ %r', rawtext, text)
+    return text
 
 
 def diff_events(multibot, tzinfo, base, lastevents, events):  # pylint: disable=too-many-locals
@@ -348,7 +359,7 @@ def _handle_alerts(bot, records, groupid, alerts):
         message = None
         try:
             message = bot.send_message(chat_id=groupid,
-                                       text=text,
+                                       text=_truncate(text, PLAIN_TEXT_LIMIT),
                                        parse_mode='HTML',
                                        disable_web_page_preview=True,
                                        disable_notification=True,

@@ -94,3 +94,25 @@ Expandable block quotation started\nExpandable block quotation continued\nExpand
     assert html.sanitize('&bogus;', True) == '&amp;bogus;'
     assert html.sanitize('&#bogus;', True) == '&amp;#bogus;'
     assert html.sanitize('&#xxbogus;', True) == '&amp;#xxbogus;'
+
+
+def test_truncate():
+    """Test truncating logic."""
+
+    assert html.truncate('', 10) == ''
+    assert html.truncate('123456789012345', 10) == '1234567890'
+    assert html.truncate('<b>123456789012345</b>', 10) == '<b>1234567890</b>'
+    assert html.truncate('123<b>456<i>789012345', 10) == '123<b>456<i>7890</i></b>'
+    assert html.truncate('&lt;' * 100, 10) == '&lt;' * 10
+    assert html.truncate('&#x2022;' * 100, 10) == '\u2022' * 10
+
+    # I originally had a short circuit in _HTMLSanitizer.__append:
+    #   if len(data) <= self.__remaining:
+    #       self.__remaining -= len(data)
+    #       return self.__pieces.append(data)
+    # which would overcount the lengths of entities if they were part of a fragment that otherwise
+    # didn't trip the length limit. So this would work because the fragment tripped the limit:
+    assert html.truncate('&lt;2345678901234567890', 10) == '&lt;234567890'
+    # but this would truncate to '&lt;2345<b>67</b>' because it counted '&lt;' as 4 instead of 1
+    # while processing '&lt;2345':
+    assert html.truncate('&lt;2345<b>678901234567890', 10) == '&lt;2345<b>67890</b>'

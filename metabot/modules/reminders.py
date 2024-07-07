@@ -186,8 +186,7 @@ def reminder_edit(bot, groupid, message_id, text, isphoto):
 
 def _truncate(rawtext, length):
     text = html.truncate(rawtext, length)
-    # See https://github.com/nmlorg/metabot/issues/101.
-    if text != rawtext and text != html.sanitize(rawtext):
+    if text != rawtext:
         logging.info('Truncated:\n- %r\n+ %r', rawtext, text)
     return text
 
@@ -202,19 +201,23 @@ def diff_events(multibot, tzinfo, base, lastevents, events):  # pylint: disable=
     bothevents.sort(key=operator.itemgetter('start', 'end', 'summary', 'local_id'))
     edits = []
     for event in bothevents:
+        title = html.escape(event['summary'])
+
         lastevent = lastmap.get(event['local_id'])
         if not lastevent:
-            edits.append(f"\u2022 <b>{event['summary']}</b> was added.")
+            edits.append(f'\u2022 <b>{title}</b> was added.')
             continue
+
+        # See https://github.com/nmlorg/metabot/issues/75.
         event = multibot.multical.get_event(event['local_id'])[1]
         if not event:
-            edits.append(f"\u2022 <s>{lastevent['summary']}</s> was removed.")
+            edits.append(f'\u2022 <s>{title}</s> was removed.')
             continue
 
         mentioned_event = False
         pieces = []
 
-        diff = _quick_diff(lastevent['summary'], event['summary'])
+        diff = _quick_diff(html.escape(lastevent['summary']), html.escape(event['summary']))
         if diff:
             pieces.append(f'<s>{diff[0]}</s> is now called <b>{diff[1]}</b>')
             mentioned_event = True
@@ -224,7 +227,8 @@ def diff_events(multibot, tzinfo, base, lastevents, events):  # pylint: disable=
         if diff:
             pieces.append(diff)
 
-        diff = _quick_diff(lastevent['location'], event['location'])
+        diff = _quick_diff(html.escape(lastevent['location'].split(',', 1)[0]),
+                           html.escape(event['location'].split(',', 1)[0]))
         if diff:
             pieces.append(f'was moved from <s>{diff[0]}</s> to <b>{diff[1]}</b>')
 
@@ -234,14 +238,14 @@ def diff_events(multibot, tzinfo, base, lastevents, events):  # pylint: disable=
             if pieces:
                 prefix = 'its description'
             else:
-                prefix = f"The description of <b>{event['summary']}</b>"
+                prefix = f'The description of <b>{title}</b>'
                 mentioned_event = True
             pieces.append(f'{prefix} was changed from <s>{diff[0]}</s> to <b>{diff[1]}</b>')
 
         if pieces:
             text = humanize.list(pieces)
             if not mentioned_event:
-                text = f"<b>{event['summary']}</b> {text}"
+                text = f'<b>{title}</b> {text}'
             edits.append(f'\u2022 {text}.')
 
     return edits

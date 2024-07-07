@@ -57,7 +57,7 @@ def get_group_events(bot, calcodes, tzinfo, count, days, now=None):  # pylint: d
 def format_event(bot, event, tzinfo, full=True, base=None):
     """Given a metabot.calendars.base.Calendar event, build a human-friendly representation."""
 
-    message = '<b>%s</b>' % event['summary']
+    message = '<b>%s</b>' % html.escape(event['summary'])
     for count, url in tickets.get_info(event['description']):
         if count:
             message = '%s [<a href="%s">%i tickets remaining</a>]' % (message, url, count)
@@ -71,7 +71,7 @@ def format_event(bot, event, tzinfo, full=True, base=None):
         location_url = 'https://maps.google.com/maps?' + urllib.parse.urlencode({
             'q': event['location'].encode('utf-8'),
         })  # yapf: disable
-        message = '%s @ <a href="%s">%s</a>' % (message, location_url, location_name)
+        message = '%s @ <a href="%s">%s</a>' % (message, location_url, html.escape(location_name))
         geo = format_geo(event['location'], event['start'])
         if geo:
             message = '%s\n\u26a0 %s' % (message, geo)

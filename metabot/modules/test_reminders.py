@@ -877,8 +877,8 @@ modulestestbot/-1002000002000:
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
 Updated:
-• <s>Alpha Summary</s> is now called <b>New Summary</b>, is starting earlier at <b>Thu 1ˢᵗ, 2ᵃᵐ</b> (instead of <s>Thu 1ˢᵗ, 2:30ᵃᵐ</s>; same end), was moved from <s>Alpha Venue, Rest of Alpha Location</s> to <b>New Location</b>, and its description was changed from <s>Alpha Description</s> to <b>New Description</b>.
-• <b>Bravo Summary</b> now starts at <b>Wed 7ᵗʰ, 11:30ᵖᵐ</b> and ends at <b>Thu 8ᵗʰ, 1:30ᵃᵐ</b> (was <s>Thu 8ᵗʰ, 12ᵃᵐ to Thu 8ᵗʰ, 1ᵃᵐ</s>), was moved from <s>Bravo Venue, Rest of Bravo Location</s> to <b>New Location</b>, and its description was changed from <s>Bravo Description</s> to <b>New Description</b>.
+• <s>Alpha Summary</s> is now called <b>New Summary</b>, is starting earlier at <b>Thu 1ˢᵗ, 2ᵃᵐ</b> (instead of <s>Thu 1ˢᵗ, 2:30ᵃᵐ</s>; same end), was moved from <s>Alpha Venue</s> to <b>New Location</b>, and its description was changed from <s>Alpha Description</s> to <b>New Description</b>.
+• <b>Bravo Summary</b> now starts at <b>Wed 7ᵗʰ, 11:30ᵖᵐ</b> and ends at <b>Thu 8ᵗʰ, 1:30ᵃᵐ</b> (was <s>Thu 8ᵗʰ, 12ᵃᵐ to Thu 8ᵗʰ, 1ᵃᵐ</s>), was moved from <s>Bravo Venue</s> to <b>New Location</b>, and its description was changed from <s>Bravo Description</s> to <b>New Description</b>.
 
 
 [edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -984,6 +984,57 @@ There are a couple events coming up:
 <b>Al</b>
 """
     assert len('There are a couple events coming up:\n\nAl') == 40
+
+
+def test_sanitize(daily_messages):  # pylint: disable=redefined-outer-name
+    """Verify entity escaping."""
+
+    daily_messages(True)
+
+    cal = loader.get('static:test_events')
+    cal.events['6fc2c510:alpha']['summary'] = 'Edited & <i> Summary'
+    cal.events['6fc2c510:alpha']['location'] = 'Edited & <i> Location, Rest of Location'
+
+    assert daily_messages() == """
+modulestestbot/-1002000002000:
+- 1800
+- - description: Alpha Description
+    end: 12600.0
+    local_id: 6fc2c510:alpha
+    location: Edited & <i> Location, Rest of Location
+    start: 9000.0
+    summary: Edited & <i> Summary
+  - description: Bravo Description
+    end: 608400
+    local_id: 6fc2c510:bravo
+    location: Bravo Venue, Rest of Bravo Location
+    start: 604800
+    summary: Bravo Summary
+- message_id: 12345
+- 'There are a couple events coming up:
+
+  <b>Edited &amp; &lt;i&gt; Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Edited+%26+%3Ci%3E+Location%2C+Rest+of+Location">Edited &amp; &lt;i&gt; Location</a>
+  <b>Bravo Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+- <a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>
+
+
+[chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
+Updated:
+• <s>Alpha Summary</s> is now called <b>Edited &amp; &lt;i&gt; Summary</b> and was moved from <s>Alpha Venue</s> to <b>Edited &amp; &lt;i&gt; Location</b>.
+
+
+[edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
+There are a couple events coming up:
+
+<b>Edited &amp; &lt;i&gt; Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Edited+%26+%3Ci%3E+Location%2C+Rest+of+Location">Edited &amp; &lt;i&gt; Location</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+[<a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>]
+"""
 
 
 @pytest.fixture

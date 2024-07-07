@@ -5,7 +5,7 @@ import html.parser
 import logging
 
 
-def cgi_escape(text):  # pylint: disable=missing-docstring
+def escape(text):  # pylint: disable=missing-docstring
     return text.replace('&', '&amp;').replace('<', '&lt;').replace('>',
                                                                    '&gt;').replace('"', '&quot;')
 
@@ -47,7 +47,7 @@ class _HTMLSanitizer(html.parser.HTMLParser):
             attr = self.coupled[tag]
             attrs = dict(attrs)
             if attrs.get(attr):
-                value = cgi_escape(attrs[attr])
+                value = escape(attrs[attr])
                 self.__pieces.append(f'<{tag} {attr}="{value}">')
             elif attr in attrs:
                 self.__pieces.append(f'<{tag} {attr}>')
@@ -87,7 +87,7 @@ class _HTMLSanitizer(html.parser.HTMLParser):
                     self.__remaining -= 1
 
     def handle_data(self, data):
-        self.__append(cgi_escape(data))
+        self.__append(escape(data))
 
     def handle_entityref(self, name):  # pragma: no cover
         if name in ('lt', 'gt', 'amp', 'quot'):
@@ -106,7 +106,7 @@ class _HTMLSanitizer(html.parser.HTMLParser):
                 codepoint = int(name[1:], 16)
             else:
                 codepoint = int(name)
-            self.__append(cgi_escape(chr(codepoint)))
+            self.__append(escape(chr(codepoint)))
         except (OverflowError, ValueError):
             self.__append(f'&amp;#{name};')
 

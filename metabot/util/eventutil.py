@@ -71,7 +71,8 @@ def format_event(bot, event, tzinfo, full=True, base=None):
         location_url = 'https://maps.google.com/maps?' + urllib.parse.urlencode({
             'q': event['location'].encode('utf-8'),
         })  # yapf: disable
-        message = '%s @ <a href="%s">%s</a>' % (message, location_url, html.escape(location_name))
+        message = '%s @ <a href="%s">%s</a>' % (message, html.escape(location_url),
+                                                html.escape(location_name))
         geo = format_geo(event['location'], event['start'])
         if geo:
             message = '%s\n\u26a0 %s' % (message, geo)

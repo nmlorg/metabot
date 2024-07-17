@@ -93,10 +93,9 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             _handle_alerts(bot, records, groupid, alerts)
             preambles = groupconf['daily'].get('text', '').splitlines()
             preamble = preambles and preambles[eventdt.toordinal() % len(preambles)] or ''
-            text = _format_daily_message(preamble, [
-                eventutil.format_event(bot, event, tzinfo, full=False, base=perioddt)
-                for event in events
-            ])
+            text = _generate_preamble(preamble, events)
+            if events:
+                text = f'{text}\n\n{eventutil.format_events(bot, events, tzinfo, base=perioddt)}'
 
             message = None
 
@@ -311,9 +310,12 @@ def _quick_diff(left, right):
     return left, right
 
 
-def _format_daily_message(preamble, events):
+def _generate_preamble(preamble, events):
     if not events:
         return preamble or 'No upcoming events!'
+
+    if preamble and preamble.endswith(':') and 'events' in preamble.lower():
+        return preamble
 
     if len(events) == 1:
         text = "There's an event coming up:"
@@ -323,9 +325,7 @@ def _format_daily_message(preamble, events):
         text = 'There are a few events coming up:'
     else:
         text = 'There are a bunch of events coming up:'
-    if preamble and preamble.endswith(':') and 'events' in preamble.lower():
-        text = preamble
-    elif preamble:
+    if preamble:
         if preamble[-1] in ('.', '?', '!'):
             preamble += ' '
         else:
@@ -336,7 +336,7 @@ def _format_daily_message(preamble, events):
         else:
             text = 'Also, ' + text
         text = preamble + text
-    return '%s\n\n%s' % (text, '\n'.join(events))
+    return text
 
 
 def _handle_alerts(bot, records, groupid, alerts):

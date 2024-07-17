@@ -53,8 +53,7 @@ def group(ctx, msg):
         url = eventutil.get_image(events[0], ctx.bot.config)
         if url:
             msg.add('photo:' + url)
-        msg.add('\n'.join(
-            eventutil.format_event(ctx.bot, event, tzinfo, full=False) for event in events))
+        msg.add(eventutil.format_events(ctx.bot, events, tzinfo))
 
 
 def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-locals

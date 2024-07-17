@@ -56,63 +56,35 @@ def conversation(build_conversation, monkeypatch):  # pylint: disable=missing-do
 # pylint: disable=line-too-long
 
 
-def test_format_daily_message():  # pylint: disable=missing-docstring
+def test_generate_preamble():  # pylint: disable=missing-docstring
     # yapf: disable - pylint: disable=protected-access
-    assert reminders._format_daily_message('', []) == (
+    assert reminders._generate_preamble('', []) == (
         'No upcoming events!')
-    assert reminders._format_daily_message('1 + 1 = 2!', []) == (
+    assert reminders._generate_preamble('1 + 1 = 2!', []) == (
         '1 + 1 = 2!')
 
-    assert reminders._format_daily_message('', ['EVENT1']) == (
-        "There's an event coming up:\n"
-        '\n'
-        'EVENT1')
-    assert reminders._format_daily_message('', ['EVENT1', 'EVENT2']) == (
-        "There are a couple events coming up:\n"
-        '\n'
-        'EVENT1\n'
-        'EVENT2')
-    assert reminders._format_daily_message('', ['EVENT1', 'EVENT2', 'EVENT3']) == (
-        "There are a few events coming up:\n"
-        '\n'
-        'EVENT1\n'
-        'EVENT2\n'
-        'EVENT3')
-    assert reminders._format_daily_message('', ['EVENT1', 'EVENT2', 'EVENT3', 'EVENT4']) == (
-        "There are a bunch of events coming up:\n"
-        '\n'
-        'EVENT1\n'
-        'EVENT2\n'
-        'EVENT3\n'
-        'EVENT4')
-    assert reminders._format_daily_message('', ['EVENT1', 'EVENT2', 'EVENT3', 'EVENT4', 'EVENT5']) == (
-        "There are a bunch of events coming up:\n"
-        '\n'
-        'EVENT1\n'
-        'EVENT2\n'
-        'EVENT3\n'
-        'EVENT4\n'
-        'EVENT5')
+    assert reminders._generate_preamble('', ['EVENT1']) == (
+        "There's an event coming up:")
+    assert reminders._generate_preamble('', ['EVENT1', 'EVENT2']) == (
+        "There are a couple events coming up:")
+    assert reminders._generate_preamble('', ['EVENT1', 'EVENT2', 'EVENT3']) == (
+        "There are a few events coming up:")
+    assert reminders._generate_preamble('', ['EVENT1', 'EVENT2', 'EVENT3', 'EVENT4']) == (
+        "There are a bunch of events coming up:")
+    assert reminders._generate_preamble('', ['EVENT1', 'EVENT2', 'EVENT3', 'EVENT4', 'EVENT5']) == (
+        "There are a bunch of events coming up:")
 
-    assert reminders._format_daily_message('1 + 1 = 2!', ['EVENT1']) == (
-        "1 + 1 = 2! Also, there's an event coming up:\n"
-        '\n'
-        'EVENT1')
+    assert reminders._generate_preamble('1 + 1 = 2!', ['EVENT1']) == (
+        "1 + 1 = 2! Also, there's an event coming up:")
 
-    assert reminders._format_daily_message('Visit @MYGROUP', ['EVENT1']) == (
-        "Visit @MYGROUP • Also, there's an event coming up:\n"
-        '\n'
-        'EVENT1')
+    assert reminders._generate_preamble('Visit @MYGROUP', ['EVENT1']) == (
+        "Visit @MYGROUP • Also, there's an event coming up:")
 
-    assert reminders._format_daily_message('I love events.', ['EVENT1']) == (
-        "I love events. Speaking of which, there's an event coming up:\n"
-        '\n'
-        'EVENT1')
+    assert reminders._generate_preamble('I love events.', ['EVENT1']) == (
+        "I love events. Speaking of which, there's an event coming up:")
 
-    assert reminders._format_daily_message('I love events:', ['EVENT1']) == (
-        "I love events:\n"
-        '\n'
-        'EVENT1')
+    assert reminders._generate_preamble('I love events:', ['EVENT1']) == (
+        "I love events:")
     # yapf: enable
 
 

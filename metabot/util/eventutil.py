@@ -81,6 +81,12 @@ def format_event(bot, event, tzinfo, full=True, base=None):
     return message
 
 
+def format_events(bot, events, tzinfo, base=None):
+    """Prepare a message containing human-friendly representations of the given events."""
+
+    return '\n'.join(format_event(bot, event, tzinfo, full=False, base=base) for event in events)
+
+
 def format_geo(address, now):
     """Build a string of weather exceptions for the given address as of the given time."""
 

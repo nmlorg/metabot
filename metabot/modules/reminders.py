@@ -58,6 +58,21 @@ class AnnouncementConf:  # pylint: disable=too-few-public-methods
     def __init__(self, groupconf):
         (self.calcodes, self.tzinfo, self.count, self.days, self.hour,
          self.dow) = eventutil.get_group_conf(groupconf)
+        self.preambles = groupconf['daily'].get('text', '').splitlines()
+
+    def get_events(self, bot, eventtime, base):
+        """Get (and format) events for the given time."""
+
+        events, alerts = eventutil.get_group_events(bot, self.calcodes, self.tzinfo, self.count,
+                                                    self.days, eventtime)
+        if self.preambles:
+            preamble = self.preambles[int(eventtime / (60 * 60 * 24)) % len(self.preambles)]
+        else:
+            preamble = ''
+        text = _generate_preamble(preamble, events)
+        if events:
+            text = f'{text}\n\n{eventutil.format_events(bot, events, self.tzinfo, base=base)}'
+        return events, alerts, text
 
 
 def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too-many-locals,too-many-statements
@@ -84,10 +99,8 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     not eventtime or startofhour > eventtime // 3600):
                 sendnew = True
                 eventtime = period
-                eventdt = perioddt
             elif eventtime:
                 sendnew = False
-                eventdt = datetime.datetime.fromtimestamp(eventtime, annconf.tzinfo)
             else:
                 continue
 
@@ -96,15 +109,8 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             bot.multibot = multibot
             bot._username = botuser  # pylint: disable=protected-access
 
-            events, alerts = eventutil.get_group_events(bot, annconf.calcodes, annconf.tzinfo,
-                                                        annconf.count, annconf.days, eventtime)
+            events, alerts, text = annconf.get_events(bot, eventtime, perioddt)
             _handle_alerts(bot, records, groupid, alerts)
-            preambles = groupconf['daily'].get('text', '').splitlines()
-            preamble = preambles and preambles[eventdt.toordinal() % len(preambles)] or ''
-            text = _generate_preamble(preamble, events)
-            if events:
-                eventstext = eventutil.format_events(bot, events, annconf.tzinfo, base=perioddt)
-                text = f'{text}\n\n{eventstext}'
 
             message = None
 

@@ -52,6 +52,14 @@ def modinit(multibot):  # pylint: disable=missing-docstring
     queue()
 
 
+class AnnouncementConf:  # pylint: disable=too-few-public-methods
+    """A group's announcement configuration."""
+
+    def __init__(self, groupconf):
+        (self.calcodes, self.tzinfo, self.count, self.days, self.hour,
+         self.dow) = eventutil.get_group_conf(groupconf)
+
+
 def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too-many-locals,too-many-statements
     now = time.time()
     # If running at 11:22:33.444, act as if we're running at exactly 11:20:00.000.
@@ -60,26 +68,26 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
 
     for botuser, botconf in multibot.conf['bots'].items():  # pylint: disable=too-many-nested-blocks
         for groupid, groupconf in botconf['issue37']['moderator'].items():
-            calcodes, tzinfo, count, days, hour, dow = eventutil.get_group_conf(groupconf)
-            if not tzinfo or not isinstance(hour, int):
+            annconf = AnnouncementConf(groupconf)
+            if not annconf.tzinfo or not isinstance(annconf.hour, int):
                 continue
 
-            nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
-            perioddt = datetime.datetime.fromtimestamp(period, tzinfo)
+            nowdt = datetime.datetime.fromtimestamp(now, annconf.tzinfo)
+            perioddt = datetime.datetime.fromtimestamp(period, annconf.tzinfo)
             key = (botuser, groupid)
             if key in records:
                 eventtime, lastevents, lastmessage, lasttext, lastsuffix = records[key]
             else:
                 eventtime = 0
 
-            if perioddt.hour == hour and not dow & 1 << perioddt.weekday() and (
+            if perioddt.hour == annconf.hour and not annconf.dow & 1 << perioddt.weekday() and (
                     not eventtime or startofhour > eventtime // 3600):
                 sendnew = True
                 eventtime = period
                 eventdt = perioddt
             elif eventtime:
                 sendnew = False
-                eventdt = datetime.datetime.fromtimestamp(eventtime, tzinfo)
+                eventdt = datetime.datetime.fromtimestamp(eventtime, annconf.tzinfo)
             else:
                 continue
 
@@ -88,14 +96,15 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             bot.multibot = multibot
             bot._username = botuser  # pylint: disable=protected-access
 
-            events, alerts = eventutil.get_group_events(bot, calcodes, tzinfo, count, days,
-                                                        eventtime)
+            events, alerts = eventutil.get_group_events(bot, annconf.calcodes, annconf.tzinfo,
+                                                        annconf.count, annconf.days, eventtime)
             _handle_alerts(bot, records, groupid, alerts)
             preambles = groupconf['daily'].get('text', '').splitlines()
             preamble = preambles and preambles[eventdt.toordinal() % len(preambles)] or ''
             text = _generate_preamble(preamble, events)
             if events:
-                text = f'{text}\n\n{eventutil.format_events(bot, events, tzinfo, base=perioddt)}'
+                eventstext = eventutil.format_events(bot, events, annconf.tzinfo, base=perioddt)
+                text = f'{text}\n\n{eventstext}'
 
             message = None
 
@@ -105,7 +114,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     message = reminder_send(bot, groupid, text, url)
                     suffix = ''
             else:
-                edits = diff_events(multibot, tzinfo, perioddt, lastevents, events)  # pylint: disable=possibly-used-before-assignment
+                edits = diff_events(multibot, annconf.tzinfo, perioddt, lastevents, events)  # pylint: disable=possibly-used-before-assignment
 
                 suffix = lastsuffix  # pylint: disable=possibly-used-before-assignment
                 if edits:

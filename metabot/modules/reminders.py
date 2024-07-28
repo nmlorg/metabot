@@ -61,7 +61,7 @@ class AnnouncementConf:  # pylint: disable=too-few-public-methods
          self.dow) = eventutil.get_group_conf(groupconf)
         self.preambles = groupconf['daily'].get('text', '').splitlines()
 
-    def get_events(self, bot, eventtime, base):
+    def get_events(self, bot, eventtime, base, *, countdown=True):
         """Get (and format) events for the given time."""
 
         events, alerts = eventutil.get_group_events(bot, self.calcodes, self.tzinfo, self.count,
@@ -72,7 +72,8 @@ class AnnouncementConf:  # pylint: disable=too-few-public-methods
             preamble = ''
         text = _generate_preamble(preamble, events)
         if events:
-            text = f'{text}\n\n{eventutil.format_events(bot, events, self.tzinfo, base=base)}'
+            ev = eventutil.format_events(bot, events, self.tzinfo, base=base, countdown=countdown)
+            text = f'{text}\n\n{ev}'
         return events, alerts, text
 
 
@@ -80,7 +81,7 @@ class Announcement(collections.namedtuple('Announcement', 'time events message t
     """The most recent announcement."""
 
 
-def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too-many-locals,too-many-statements
+def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too-many-locals
     now = time.time()
     # If running at 11:22:33.444, act as if we're running at exactly 11:20:00.000.
     period = int(now // PERIOD * PERIOD)
@@ -100,32 +101,28 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             else:
                 last = None
 
-            if perioddt.hour == annconf.hour and not annconf.dow & 1 << perioddt.weekday() and (
-                    not last or startofhour > last.time // 3600):
-                sendnew = True
-                eventtime = period
-            elif last:
-                sendnew = False
-                eventtime = last.time
-            else:
-                continue
-
             # See https://github.com/nmlorg/metabot/issues/26.
             bot = ntelebot.bot.Bot(botconf['issue37']['telegram']['token'])
             bot.multibot = multibot
             bot._username = botuser  # pylint: disable=protected-access
 
-            events, alerts, text = annconf.get_events(bot, eventtime, perioddt)
-            _handle_alerts(bot, records, groupid, alerts)
-
-            message = None
-
-            if sendnew:
+            if perioddt.hour == annconf.hour and not annconf.dow & 1 << perioddt.weekday() and (
+                    not last or startofhour > last.time // 3600):
+                events, alerts, text = annconf.get_events(bot, period, perioddt)
+                _handle_alerts(bot, records, groupid, alerts)
                 if events:
                     url = eventutil.get_image(events[0], botconf)
                     message = reminder_send(bot, groupid, text, url)
-                    suffix = ''
-            else:
+                    records[key] = (period, [event.copy() for event in events], message, text, '')
+                    if last:
+                        _, _, text = annconf.get_events(bot, last.time, perioddt, countdown=False)
+                        reminder_edit(bot, groupid, last.message['message_id'], text,
+                                      last.message.get('caption'))
+                    continue
+
+            if last:
+                events, alerts, text = annconf.get_events(bot, last.time, perioddt)
+                _handle_alerts(bot, records, groupid, alerts)
                 edits = diff_events(multibot, annconf.tzinfo, perioddt, last.events, events)
 
                 suffix = last.suffix
@@ -154,10 +151,8 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                         newtext = f'{newtext}\n\n[{suffix}]'
                     message = reminder_edit(bot, groupid, last.message['message_id'], newtext,
                                             last.message.get('caption'))
-
-            if message:
-                records[key] = (eventtime, [event.copy() for event in events], message, text,
-                                suffix)
+                    records[key] = (last.time, [event.copy() for event in events], message, text,
+                                    suffix)
 
 
 def reminder_send(bot, groupid, text, photo):

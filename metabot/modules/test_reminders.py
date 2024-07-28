@@ -39,10 +39,10 @@ def conversation(build_conversation, monkeypatch):  # pylint: disable=missing-do
         },
         '6fc2c510:charlie': {
             'description': 'Charlie Description',
-            'end': 60 * 60 * 24 * 7 + 1 + 60 * 60,
+            'end': 60 * 60 * 24 * 7 + 60 + 60 * 60,
             'local_id': '6fc2c510:charlie',
             'location': 'Charlie Venue, Rest of Charlie Location',
-            'start': 60 * 60 * 24 * 7 + 1,
+            'start': 60 * 60 * 24 * 7 + 60,
             'summary': 'Charlie Summary',
         },
     }
@@ -862,6 +862,82 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁶ ᵈᵃʸˢ Wed 7ᵗʰ, 11:30ᵖᵐ – 1:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Location">New Location</a>
 
 [<a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>]
+"""
+
+
+def test_daily_messages_replaced(daily_messages, monkeypatch):  # pylint: disable=redefined-outer-name
+    """Test what happens when an existing announcement is obsoleted the next day."""
+
+    monkeypatch.setattr('time.time', lambda: 4000)
+
+    assert daily_messages() == """
+modulestestbot/-1002000002000:
+- 3600
+- - description: Alpha Description
+    end: 12600.0
+    local_id: 6fc2c510:alpha
+    location: Alpha Venue, Rest of Alpha Location
+    start: 9000.0
+    summary: Alpha Summary
+  - description: Bravo Description
+    end: 608400
+    local_id: 6fc2c510:bravo
+    location: Bravo Venue, Rest of Bravo Location
+    start: 604800
+    summary: Bravo Summary
+- message_id: 12345
+- 'There are a couple events coming up:
+
+  <b>Alpha Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ¹ʰ³⁰ᵐ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+  <b>Bravo Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+- ''
+
+
+[chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML]
+There are a couple events coming up:
+
+<b>Alpha Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ¹ʰ³⁰ᵐ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+"""
+
+    monkeypatch.setattr('time.time', lambda: 4000 + 60 * 60 * 24)
+
+    assert daily_messages() == """
+modulestestbot/-1002000002000:
+- 90000
+- - description: Bravo Description
+    end: 608400
+    local_id: 6fc2c510:bravo
+    location: Bravo Venue, Rest of Bravo Location
+    start: 604800
+    summary: Bravo Summary
+  - description: Charlie Description
+    end: 608460
+    local_id: 6fc2c510:charlie
+    location: Charlie Venue, Rest of Charlie Location
+    start: 604860
+    summary: Charlie Summary
+- message_id: 12345
+- 'There are a couple events coming up:
+
+  <b>Bravo Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁶ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+  <b>Charlie Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">⁶ ᵈᵃʸˢ Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>'
+- ''
+
+
+[chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML]
+There are a couple events coming up:
+
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁶ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+<b>Charlie Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">⁶ ᵈᵃʸˢ Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>
 """
 
 

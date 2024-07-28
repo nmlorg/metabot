@@ -180,7 +180,7 @@ def range(start, end, base=None):  # pylint: disable=redefined-builtin
 
     if not base:
         base = _now_copy_tz(start)
-    text = '%s %s' % (howrecent(start, end, base=base), date(start, base=base))
+    text = date(start, base=base)
     if start == end:
         return text
     if isinstance(start, datetime.datetime):

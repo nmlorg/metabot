@@ -54,7 +54,7 @@ def get_group_events(bot, calcodes, tzinfo, count, days, now=None):  # pylint: d
             [alert for alertid, alert in sorted(alerts.items())])
 
 
-def format_event(bot, event, tzinfo, full=True, base=None):
+def format_event(bot, event, tzinfo, *, full=True, base=None, countdown=True):  # pylint: disable=too-many-arguments
     """Given a metabot.calendars.base.Calendar event, build a human-friendly representation."""
 
     message = '<b>%s</b>' % html.escape(event['summary'])
@@ -65,7 +65,7 @@ def format_event(bot, event, tzinfo, full=True, base=None):
             message = '%s [<a href="%s">tickets</a>]' % (message, url)
     message = '%s\n<a href="%s">%s</a>' % (
         message, bot.encode_url('/events %s %s' % (event['local_id'], tzinfo.zone)),
-        humanize_range(event['start'], event['end'], tzinfo, base=base))
+        humanize_range(event['start'], event['end'], tzinfo, base=base, countdown=countdown))
     if event['location']:
         location_name = event['location'].split(',', 1)[0]
         location_url = 'https://maps.google.com/maps?' + urllib.parse.urlencode({
@@ -81,10 +81,12 @@ def format_event(bot, event, tzinfo, full=True, base=None):
     return message
 
 
-def format_events(bot, events, tzinfo, base=None):
+def format_events(bot, events, tzinfo, *, base=None, countdown=True):
     """Prepare a message containing human-friendly representations of the given events."""
 
-    return '\n'.join(format_event(bot, event, tzinfo, full=False, base=base) for event in events)
+    return '\n'.join(
+        format_event(bot, event, tzinfo, full=False, base=base, countdown=countdown)
+        for event in events)
 
 
 def format_geo(address, now):
@@ -108,12 +110,15 @@ def format_geo(address, now):
         return ' \u2022 '.join(warnings)
 
 
-def humanize_range(start, end, tzinfo, base=None):
+def humanize_range(start, end, tzinfo, base=None, countdown=True):
     """Return the range between start and end as human-friendly text."""
 
-    return humanize.range(datetime.datetime.fromtimestamp(start, tzinfo),
-                          datetime.datetime.fromtimestamp(end, tzinfo),
-                          base=base)
+    startdt = datetime.datetime.fromtimestamp(start, tzinfo)
+    enddt = datetime.datetime.fromtimestamp(end, tzinfo)
+    text = humanize.range(startdt, enddt, base=base)
+    if countdown:
+        text = f'{humanize.howrecent(startdt, enddt, base=base)} {text}'
+    return text
 
 
 def get_image(event, botconf):

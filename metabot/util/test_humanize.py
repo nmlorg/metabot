@@ -139,11 +139,11 @@ def test_humanize_range(monkeypatch):
     next_month = datetime.date(2017, 12, 15)
     next_year = datetime.date(2018, 1, 15)
 
-    assert _test(start, start) == '⭐ ᴺᴼᵂ Wed 15ᵗʰ'
-    assert _test(start, next_day) == '⭐ ᴺᴼᵂ Wed 15–16ᵗʰ'
-    assert _test(start, next_week) == '⭐ ᴺᴼᵂ Wed 15–22ⁿᵈ'
-    assert _test(start, next_month) == '⭐ ᴺᴼᵂ Wed 15ᵗʰ – Fri, Dec 15ᵗʰ'
-    assert _test(start, next_year) == '⭐ ᴺᴼᵂ Wed 15ᵗʰ – Mon, Jan (2018) 15ᵗʰ'
+    assert _test(start, start) == 'Wed 15ᵗʰ'
+    assert _test(start, next_day) == 'Wed 15–16ᵗʰ'
+    assert _test(start, next_week) == 'Wed 15–22ⁿᵈ'
+    assert _test(start, next_month) == 'Wed 15ᵗʰ – Fri, Dec 15ᵗʰ'
+    assert _test(start, next_year) == 'Wed 15ᵗʰ – Mon, Jan (2018) 15ᵗʰ'
 
     start = datetime.datetime(2017, 11, 15, 6)
     start_ts = float(start.strftime('%s'))
@@ -156,10 +156,10 @@ def test_humanize_range(monkeypatch):
     next_month = datetime.datetime(2017, 12, 15, 6)
     next_year = datetime.datetime(2018, 1, 15, 6)
 
-    assert _test(start, next_min) == '⭐ ᴺᴼᵂ Wed 15ᵗʰ, 6–6:01ᵃᵐ'
-    assert _test(start, next_hour) == '⭐ ᴺᴼᵂ Wed 15ᵗʰ, 6–7ᵃᵐ'
-    assert _test(start, next_pm) == '⭐ ᴺᴼᵂ Wed 15ᵗʰ, 6ᵃᵐ – 6ᵖᵐ'
-    assert _test(start, hours_23) == '⭐ ᴺᴼᵂ Wed 15ᵗʰ, 6ᵃᵐ – 5ᵃᵐ'
-    assert _test(start, hours_25) == '⭐ ᴺᴼᵂ Wed 15ᵗʰ, 6ᵃᵐ – Thu 16ᵗʰ, 7ᵃᵐ'
-    assert _test(start, next_month) == '⭐ ᴺᴼᵂ Wed 15ᵗʰ, 6ᵃᵐ – Fri, Dec 15ᵗʰ, 6ᵃᵐ'
-    assert _test(start, next_year) == '⭐ ᴺᴼᵂ Wed 15ᵗʰ, 6ᵃᵐ – Mon, Jan (2018) 15ᵗʰ, 6ᵃᵐ'
+    assert _test(start, next_min) == 'Wed 15ᵗʰ, 6–6:01ᵃᵐ'
+    assert _test(start, next_hour) == 'Wed 15ᵗʰ, 6–7ᵃᵐ'
+    assert _test(start, next_pm) == 'Wed 15ᵗʰ, 6ᵃᵐ – 6ᵖᵐ'
+    assert _test(start, hours_23) == 'Wed 15ᵗʰ, 6ᵃᵐ – 5ᵃᵐ'
+    assert _test(start, hours_25) == 'Wed 15ᵗʰ, 6ᵃᵐ – Thu 16ᵗʰ, 7ᵃᵐ'
+    assert _test(start, next_month) == 'Wed 15ᵗʰ, 6ᵃᵐ – Fri, Dec 15ᵗʰ, 6ᵃᵐ'
+    assert _test(start, next_year) == 'Wed 15ᵗʰ, 6ᵃᵐ – Mon, Jan (2018) 15ᵗʰ, 6ᵃᵐ'

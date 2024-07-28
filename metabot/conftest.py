@@ -58,6 +58,7 @@ class BotConversation:  # pylint: disable=missing-docstring,too-few-public-metho
         username = self.multibot.add_bot('1234:test')
         self.bot = self.multibot._build_bot(username)  # pylint: disable=protected-access
         self.bot.config['issue37']['admin']['admins'] = [1000]
+        self.last_message_id = 12344
 
     def raw_inline(self, text, user_id=1000):
         """Simulate an inline query (@BOTNAME text)."""
@@ -111,7 +112,12 @@ class BotConversation:  # pylint: disable=missing-docstring,too-few-public-metho
             response = json.loads(request.body.decode('ascii'))
             response['method'] = method
             responses.append(response)
-            message = {'message_id': 12345}
+            if method.startswith('edit_'):
+                message_id = response['message_id']
+            else:
+                self.last_message_id += 1
+                message_id = self.last_message_id
+            message = {'message_id': message_id}
             if response.get('caption'):
                 message['caption'] = 'CAPTION'
             return {'ok': True, 'result': message}

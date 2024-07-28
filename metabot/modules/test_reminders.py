@@ -219,7 +219,7 @@ modulestestbot/-1002000002000:
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:31ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
-- <a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>
+- <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
@@ -235,7 +235,7 @@ There are a couple events coming up:
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>]
+[<a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>]
 """
 
     assert daily_messages() == """
@@ -260,7 +260,7 @@ modulestestbot/-1002000002000:
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:31ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
-- <a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>
+- <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 """
 
 
@@ -363,7 +363,7 @@ modulestestbot/-1002000002000:
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
-- <a href="https://t.me/c/2000002000/12345">Updated 2:30ᵃᵐ</a>
+- <a href="https://t.me/c/2000002000/12346">Updated 2:30ᵃᵐ</a>
 
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
@@ -379,7 +379,7 @@ There are a couple events coming up:
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated 2:30ᵃᵐ</a>]
+[<a href="https://t.me/c/2000002000/12346">Updated 2:30ᵃᵐ</a>]
 """
 
 
@@ -416,7 +416,7 @@ modulestestbot/-1002000002000:
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
-- <a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>
+- <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
@@ -432,7 +432,7 @@ There are a couple events coming up:
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>]
+[<a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>]
 """
 
 
@@ -478,7 +478,7 @@ modulestestbot/-1002000002000:
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>New Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">🔜 ³ ʰᵒᵘʳˢ Thu 1ˢᵗ, 3:30–4:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>'
-- <a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>
+- <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
@@ -495,7 +495,7 @@ There are a couple events coming up:
 <b>New Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">🔜 ³ ʰᵒᵘʳˢ Thu 1ˢᵗ, 3:30–4:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>]
+[<a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>]
 """
 
 
@@ -592,7 +592,7 @@ modulestestbot/-1002000002000:
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
-- <a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>
+- <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
@@ -608,7 +608,7 @@ There are a couple events coming up:
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>]
+[<a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>]
 """
 
     # But an initial announcement does (photo=...).
@@ -628,7 +628,7 @@ modulestestbot/-1002000002000:
     start: 604800
     summary: Bravo Summary
 - caption: CAPTION
-  message_id: 12345
+  message_id: 12347
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
@@ -665,7 +665,7 @@ modulestestbot/-1002000002000:
     start: 604800
     summary: Bravo Summary
 - caption: CAPTION
-  message_id: 12345
+  message_id: 12348
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
@@ -702,7 +702,7 @@ modulestestbot/-1002000002000:
     start: 604800
     summary: Bravo Summary
 - caption: CAPTION
-  message_id: 12345
+  message_id: 12349
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
@@ -740,22 +740,22 @@ modulestestbot/-1002000002000:
     start: 604800
     summary: Bravo Summary
 - caption: CAPTION
-  message_id: 12345
+  message_id: 12349
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
-- <a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>
+- <a href="https://t.me/c/2000002000/12350">Updated 12:33ᵃᵐ</a>
 
 
-[chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
+[chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12349]
 Updated:
 • The description of <b>Alpha Summary</b> was changed from <s>Board Games!</s> to <b>Fun Games!</b>.
 
 
-[edit_message_caption chat_id=-1002000002000 message_id=12345 parse_mode=HTML]
+[edit_message_caption chat_id=-1002000002000 message_id=12349 parse_mode=HTML]
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
@@ -763,7 +763,7 @@ There are a couple events coming up:
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>]
+[<a href="https://t.me/c/2000002000/12350">Updated 12:33ᵃᵐ</a>]
 """
 
 
@@ -790,7 +790,7 @@ modulestestbot/-1002000002000:
 
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>'
-- <a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>
+- <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
@@ -804,7 +804,7 @@ There's an event coming up:
 <b>Alpha Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>]
+[<a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>]
 """
 
 
@@ -844,7 +844,7 @@ modulestestbot/-1002000002000:
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ¹ʰ³⁰ᵐ Thu 1ˢᵗ, 2–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Location">New Location</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁶ ᵈᵃʸˢ Wed 7ᵗʰ, 11:30ᵖᵐ – 1:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Location">New Location</a>'
-- <a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>
+- <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
@@ -861,7 +861,7 @@ There are a couple events coming up:
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁶ ᵈᵃʸˢ Wed 7ᵗʰ, 11:30ᵖᵐ – 1:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Location">New Location</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>]
+[<a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>]
 """
 
 
@@ -921,7 +921,7 @@ modulestestbot/-1002000002000:
     location: Charlie Venue, Rest of Charlie Location
     start: 604860
     summary: Charlie Summary
-- message_id: 12345
+- message_id: 12346
 - 'There are a couple events coming up:
 
   <b>Bravo Summary</b>
@@ -1065,7 +1065,7 @@ modulestestbot/-1002000002000:
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Edited+%26+%3Ci%3E+Location%2C+Rest+of+Location">Edited &amp; &lt;i&gt; Location</a>
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
-- <a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>
+- <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
@@ -1081,7 +1081,7 @@ There are a couple events coming up:
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
-[<a href="https://t.me/c/2000002000/12345">Updated 12:33ᵃᵐ</a>]
+[<a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>]
 """
 
 
@@ -1159,7 +1159,7 @@ Area description
         'certainty': 'Observed',
     })
     assert handle_alerts(alerts) == """\
-[chat_id=-1001000001000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12345]
+[chat_id=-1001000001000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12346]
 <a href="https://alerts-v2.weather.gov/products/alert-id">Winter Storm Warning alert-id</a>
 
 Alert Description

@@ -1,5 +1,6 @@
 """Announce upcoming events once a day."""
 
+import collections
 import datetime
 import logging
 import operator
@@ -75,6 +76,10 @@ class AnnouncementConf:  # pylint: disable=too-few-public-methods
         return events, alerts, text
 
 
+class Announcement(collections.namedtuple('Announcement', 'time events message text suffix')):
+    """The most recent announcement."""
+
+
 def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too-many-locals,too-many-statements
     now = time.time()
     # If running at 11:22:33.444, act as if we're running at exactly 11:20:00.000.
@@ -91,16 +96,17 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             perioddt = datetime.datetime.fromtimestamp(period, annconf.tzinfo)
             key = (botuser, groupid)
             if key in records:
-                eventtime, lastevents, lastmessage, lasttext, lastsuffix = records[key]
+                last = Announcement(*records[key])
             else:
-                eventtime = 0
+                last = None
 
             if perioddt.hour == annconf.hour and not annconf.dow & 1 << perioddt.weekday() and (
-                    not eventtime or startofhour > eventtime // 3600):
+                    not last or startofhour > last.time // 3600):
                 sendnew = True
                 eventtime = period
-            elif eventtime:
+            elif last:
                 sendnew = False
+                eventtime = last.time
             else:
                 continue
 
@@ -120,15 +126,15 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     message = reminder_send(bot, groupid, text, url)
                     suffix = ''
             else:
-                edits = diff_events(multibot, annconf.tzinfo, perioddt, lastevents, events)  # pylint: disable=possibly-used-before-assignment
+                edits = diff_events(multibot, annconf.tzinfo, perioddt, last.events, events)
 
-                suffix = lastsuffix  # pylint: disable=possibly-used-before-assignment
+                suffix = last.suffix
                 if edits:
                     updtext = 'Updated:\n' + '\n'.join(edits)
                     try:
                         updmessage = bot.send_message(
                             chat_id=groupid,
-                            reply_to_message_id=lastmessage['message_id'],  # pylint: disable=possibly-used-before-assignment
+                            reply_to_message_id=last.message['message_id'],
                             text=_truncate(updtext, PLAIN_TEXT_LIMIT),
                             parse_mode='HTML',
                             disable_web_page_preview=True,
@@ -142,12 +148,12 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                             suffix = '<a href="https://t.me/c/%s/%s">%s</a>' % (
                                 -1000000000000 - groupidnum, updmessage['message_id'], suffix)
 
-                if text != lasttext or suffix != lastsuffix:  # pylint: disable=possibly-used-before-assignment
+                if text != last.text or suffix != last.suffix:
                     newtext = text
                     if suffix:
                         newtext = f'{newtext}\n\n[{suffix}]'
-                    message = reminder_edit(bot, groupid, lastmessage['message_id'], newtext,
-                                            lastmessage.get('caption'))
+                    message = reminder_edit(bot, groupid, last.message['message_id'], newtext,
+                                            last.message.get('caption'))
 
             if message:
                 records[key] = (eventtime, [event.copy() for event in events], message, text,

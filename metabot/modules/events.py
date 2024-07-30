@@ -33,27 +33,27 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
 def group(ctx, msg):
     """Handle /events in a group chat."""
 
-    group_id = '%s' % ctx.chat['id']
-    groupconf = ctx.bot.config['issue37']['moderator'][group_id]
-    calcodes, tzinfo, count, days, unused_hour, unused_dow = eventutil.get_group_conf(groupconf)
-    if not calcodes or not tzinfo:
+    group_id = f"{ctx.chat['id']}"
+    calconf = eventutil.CalendarConf(ctx.bot.config['issue37']['moderator'][group_id])
+    if not calconf.calcodes or not calconf.tzinfo:
         missing = []
-        if not calcodes:
+        if not calconf.calcodes:
             missing.append('choose one or more calendars')
-        if not tzinfo:
+        if not calconf.tzinfo:
             missing.append('set the time zone')
         return msg.add(
             "I'm not configured for this group! Ask a bot admin to go into the <b>moderator</b> "
             'module settings, group <b>%s</b>, and %s.', group_id, humanize.list(missing))
 
-    events, unused_alerts = eventutil.get_group_events(ctx.bot, calcodes, tzinfo, count, days)
+    events, unused_alerts = eventutil.get_group_events(ctx.bot, calconf.calcodes, calconf.tzinfo,
+                                                       calconf.count, calconf.days)
     if not events:
-        msg.add('No events in the next %s days!', days)
+        msg.add('No events in the next %s days!', calconf.days)
     else:
         url = eventutil.get_image(events[0], ctx.bot.config)
         if url:
             msg.add('photo:' + url)
-        msg.add(eventutil.format_events(ctx.bot, events, tzinfo))
+        msg.add(eventutil.format_events(ctx.bot, events, calconf.tzinfo))
 
 
 def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-locals

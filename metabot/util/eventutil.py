@@ -19,14 +19,15 @@ BAD_WEATHER_KEYWORDS = {
 }
 
 
-def get_group_conf(groupconf):
-    """Pull calendar configuration from a raw group conf."""
+class CalendarConf:  # pylint: disable=too-few-public-methods
+    """A group's calendar configuration."""
 
-    timezone = groupconf.get('timezone')
-    tzinfo = timezone and pytz.timezone(timezone)
-    return (groupconf.get('calendars', '').split(), tzinfo, groupconf.get('maxeventscount', 10),
-            groupconf.get('maxeventsdays',
-                          6), groupconf['daily'].get('hour'), groupconf['daily'].get('dow', 0))
+    def __init__(self, groupconf):
+        self.calcodes = groupconf.get('calendars', '').split()
+        self.count = groupconf.get('maxeventscount', 10)
+        self.days = groupconf.get('maxeventsdays', 6)
+        timezone = groupconf.get('timezone')
+        self.tzinfo = timezone and pytz.timezone(timezone)
 
 
 def get_group_events(bot, calcodes, tzinfo, count, days, now=None):  # pylint: disable=too-many-arguments,too-many-locals

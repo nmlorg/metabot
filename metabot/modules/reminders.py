@@ -66,8 +66,7 @@ class AnnouncementConf:  # pylint: disable=too-few-public-methods
         """Get (and format) events for the given time."""
 
         calconf = self.calconf
-        events, alerts = eventutil.get_group_events(bot, calconf.calcodes, calconf.tzinfo,
-                                                    calconf.count, calconf.days, eventtime)
+        events, alerts = calconf.get_events(bot, when=eventtime)
         if self.preambles:
             preamble = self.preambles[int(eventtime / (60 * 60 * 24)) % len(self.preambles)]
         else:

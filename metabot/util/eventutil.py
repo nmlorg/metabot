@@ -29,8 +29,13 @@ class CalendarConf:  # pylint: disable=too-few-public-methods
         timezone = groupconf.get('timezone')
         self.tzinfo = timezone and pytz.timezone(timezone)
 
+    def get_events(self, bot, *, when=None):
+        """Build lists of events and weather alerts for the given time (or now)."""
 
-def get_group_events(bot, calcodes, tzinfo, count, days, now=None):  # pylint: disable=too-many-arguments,too-many-locals
+        return _get_group_events(bot, self.calcodes, self.tzinfo, self.count, self.days, now=when)
+
+
+def _get_group_events(bot, calcodes, tzinfo, count, days, *, now=None):  # pylint: disable=too-many-arguments,too-many-locals
     """Build lists of events and weather alerts for the given calendar configuration."""
 
     calendar_view = bot.multibot.multical.view(calcodes)
@@ -111,7 +116,7 @@ def format_geo(address, now):
         return ' \u2022 '.join(warnings)
 
 
-def humanize_range(start, end, tzinfo, base=None, countdown=True):
+def humanize_range(start, end, tzinfo, *, base=None, countdown=True):
     """Return the range between start and end as human-friendly text."""
 
     startdt = datetime.datetime.fromtimestamp(start, tzinfo)

@@ -89,27 +89,6 @@ class _HTMLSanitizer(html.parser.HTMLParser):
     def handle_data(self, data):
         self.__append(escape(data))
 
-    def handle_entityref(self, name):  # pragma: no cover
-        if name in ('lt', 'gt', 'amp', 'quot'):
-            self.__append(f'&{name};')
-        else:
-            codepoint = html.entities.name2codepoint.get(name)
-            if codepoint:
-                self.__append(chr(codepoint))
-            else:
-                self.__append(f'&amp;{name};')
-
-    def handle_charref(self, name):  # pragma: no cover
-        name = name.lower()
-        try:
-            if name.startswith('x'):
-                codepoint = int(name[1:], 16)
-            else:
-                codepoint = int(name)
-            self.__append(escape(chr(codepoint)))
-        except (OverflowError, ValueError):
-            self.__append(f'&amp;#{name};')
-
     def error(self, message):  # pragma: no cover  pylint: disable=missing-function-docstring
         # Remove when support for Python below 3.10 is dropped.
         logging.error('HTML sanitizer error: %s', message)

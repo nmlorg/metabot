@@ -30,7 +30,7 @@ def test_sanitize():
 """
     assert html.sanitize(text) == text
     assert html.sanitize('a<br>b<div>c</div><p>d</p>') == 'a\nb\nc\nd'
-    assert html.sanitize('<a weird="true">text</a>') == '<a>text</a>'
+    assert html.sanitize('<code weird="true">text</code>') == '<code>text</code>'
 
     assert html.sanitize('<b>good</b> <bogus>bad</bogus>') == '<b>good</b> bad'
     assert html.sanitize('<b><bogus>nested</bogus></b>') == '<b>nested</b>'
@@ -116,3 +116,36 @@ def test_truncate():
     # but this would truncate to '&lt;2345<b>67</b>' because it counted '&lt;' as 4 instead of 1
     # while processing '&lt;2345':
     assert html.truncate('&lt;2345<b>678901234567890', 10) == '&lt;2345<b>67890</b>'
+
+
+def test_MessageEntity_cpp_quirks():  # pylint: disable=invalid-name
+    """Verify sync with https://github.com/tdlib/td/blob/master/td/telegram/MessageEntity.cpp."""
+
+    assert html.sanitize('<a foo=1 href=2 bar=3>b</a>') == '<a href="2">b</a>'
+    # Technically, '<a>https://example.com/</a>' would be considered valid, but I don't want to
+    # have to validate URLs.
+    assert html.sanitize('<a foo=1 bar=3>b</a>') == 'b'
+
+    assert html.sanitize('<SPAN CLASS="tg-spoiler">x</span>') == '<span class="tg-spoiler">x</span>'
+    assert html.sanitize('<span class="other">x</span>') == 'x'
+    assert html.sanitize('<span>x</span>') == 'x'
+
+    assert html.sanitize('<blockquote>quote</blockquote>') == '<blockquote>quote</blockquote>'
+    assert html.sanitize(
+        '<blockquote other=1>quote</blockquote>') == '<blockquote>quote</blockquote>'
+    assert html.sanitize(
+        '<blockquote expandable>quote</blockquote>') == '<blockquote expandable>quote</blockquote>'
+    assert html.sanitize('<blockquote expandable=true>quote</blockquote>'
+                        ) == '<blockquote expandable="true">quote</blockquote>'
+
+    assert html.sanitize('<tg-emoji>emoji</tg-emoji>') == 'emoji'
+    assert html.sanitize(
+        '<tg-emoji emoji-id=1>emoji</tg-emoji>') == '<tg-emoji emoji-id="1">emoji</tg-emoji>'
+    assert html.sanitize('<tg-emoji emoji-id=0>emoji</tg-emoji>') == 'emoji'
+    assert html.sanitize('<tg-emoji emoji-id=10000000000000000000>emoji</tg-emoji>') == 'emoji'
+    assert html.sanitize('<tg-emoji emoji-id=dummy>emoji</tg-emoji>') == 'emoji'
+
+    assert html.sanitize('<code>code</code>') == '<code>code</code>'
+    assert html.sanitize(
+        '<code class="language-python">code</code>') == '<code class="language-python">code</code>'
+    assert html.sanitize('<code class="other">code</code>') == '<code>code</code>'

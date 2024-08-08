@@ -34,27 +34,75 @@ class _HTMLSanitizer(html.parser.HTMLParser):
         'tg-emoji': 'emoji-id',
     }
 
-    def handle_starttag(self, tag, attrs):
+    def handle_starttag(self, tag, attrs):  # pylint: disable=too-many-branches,too-many-return-statements
         if self.__remaining is not None and not self.__remaining:
             return
         if tag in ('br', 'div', 'p'):
             self.__append('\n')
             return
-        if self.__strip or tag not in self.naked and tag not in self.coupled:
+        if self.__strip:
             return
-        self.__stack.append(tag)
-        if tag in self.coupled:
-            attr = self.coupled[tag]
-            attrs = dict(attrs)
-            if attrs.get(attr):
-                value = escape(attrs[attr])
-                self.__pieces.append(f'<{tag} {attr}="{value}">')
-            elif attr in attrs:
-                self.__pieces.append(f'<{tag} {attr}>')
-            else:
-                self.__pieces.append(f'<{tag}>')
-        else:
+        if tag in self.naked:
+            self.__stack.append(tag)
             self.__pieces.append(f'<{tag}>')
+            return
+        if tag not in self.coupled:
+            return
+
+        attrs = dict(attrs)
+        attribute_name = self.coupled[tag]
+        attribute_value = attrs.get(attribute_name, '')
+
+        # pylint: disable=line-too-long
+        # if (tag_name == "a" && attribute_name == Slice("href")) {
+        #   argument = std::move(attribute_value);
+        # } else if (tag_name == "code" && attribute_name == Slice("class") &&
+        #            begins_with(attribute_value, "language-")) {
+        #   argument = attribute_value.substr(9);
+        # } else if (tag_name == "span" && attribute_name == Slice("class") && begins_with(attribute_value, "tg-")) {
+        #   argument = attribute_value.substr(3);
+        # } else if (tag_name == "tg-emoji" && attribute_name == Slice("emoji-id")) {
+        #   argument = std::move(attribute_value);
+        # } else if (tag_name == "blockquote" && attribute_name == Slice("expandable")) {
+        #   argument = "1";
+        # }
+        argument = None
+        if tag == 'a':
+            argument = attribute_value
+        elif tag == 'code' and attribute_value.startswith('language-'):
+            argument = attribute_value[9:]
+        elif tag == 'span' and attribute_value.startswith('tg-'):
+            argument = attribute_value[3:]
+        elif tag == 'tg-emoji':
+            argument = attribute_value
+        elif tag == 'blockquote' and 'expandable' in attrs:
+            argument = '1'
+
+        # if (tag_name == "span" && argument != "spoiler") {
+        #   return Status::Error(400, PSLICE()
+        #                                 << "Tag \"span\" must have class \"tg-spoiler\" at byte offset " << begin_pos);
+        # }
+        if tag == 'span' and argument != 'spoiler':
+            return
+
+        # } else if (tag_name == "tg-emoji") {
+        #   auto r_document_id = to_integer_safe<int64>(nested_entities.back().argument);
+        #   if (r_document_id.is_error() || r_document_id.ok() == 0) {
+        #     return Status::Error(400, "Invalid custom emoji identifier specified");
+        #   }
+        if tag == 'tg-emoji' and (not argument.isdigit() or not 0 < int(argument) < 2**63):
+            return
+
+        if tag == 'a' and not argument:
+            return
+
+        self.__stack.append(tag)
+        if not argument:
+            self.__pieces.append(f'<{tag}>')
+        elif not attribute_value:
+            self.__pieces.append(f'<{tag} {attribute_name}>')
+        else:
+            self.__pieces.append(f'<{tag} {attribute_name}="{escape(attribute_value)}">')
 
     def handle_endtag(self, tag):
         while self.__stack:

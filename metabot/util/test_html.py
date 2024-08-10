@@ -149,3 +149,10 @@ def test_MessageEntity_cpp_quirks():  # pylint: disable=invalid-name
     assert html.sanitize(
         '<code class="language-python">code</code>') == '<code class="language-python">code</code>'
     assert html.sanitize('<code class="other">code</code>') == '<code>code</code>'
+
+
+def test_wellformed_close():
+    """Verify well-formed but Telegram-incompatible markup does not close other tags."""
+
+    assert html.sanitize(
+        'hi <code>there <span>friend</span> still') == 'hi <code>there friend still</code>'

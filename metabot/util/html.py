@@ -105,6 +105,9 @@ class _HTMLSanitizer(html.parser.HTMLParser):
             self.__pieces.append(f'<{tag} {attribute_name}="{escape(attribute_value)}">')
 
     def handle_endtag(self, tag):
+        if tag and tag not in self.__stack:
+            return
+
         while self.__stack:
             lasttag = self.__stack.pop()
             self.__pieces.append(f'</{lasttag}>')

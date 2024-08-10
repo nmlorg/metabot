@@ -119,11 +119,13 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                 if events:
                     url = eventutil.get_image(events[0], botconf)
                     message = reminder_send(bot, groupid, text, url)
-                    records[key] = (period, [event.copy() for event in events], message, text, '')
-                    if last:
-                        _, _, text = annconf.get_events(bot, last.time, perioddt, countdown=False)
-                        reminder_edit(bot, groupid, last.message['message_id'], text,
-                                      last.message.get('caption'))
+                    if message:
+                        records[key] = (period, [event.copy() for event in events], message, text,
+                                        '')
+                        if last:
+                            text = annconf.get_events(bot, last.time, perioddt, countdown=False)[2]
+                            reminder_edit(bot, groupid, last.message['message_id'], text,
+                                          last.message.get('caption'))
                     continue
 
             if last:
@@ -157,8 +159,9 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                         newtext = f'{newtext}\n\n[{suffix}]'
                     message = reminder_edit(bot, groupid, last.message['message_id'], newtext,
                                             last.message.get('caption'))
-                    records[key] = (last.time, [event.copy() for event in events], message, text,
-                                    suffix)
+                    if message:
+                        records[key] = (last.time, [event.copy() for event in events], message,
+                                        text, suffix)
 
 
 def reminder_send(bot, groupid, text, photo):

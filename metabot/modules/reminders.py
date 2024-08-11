@@ -124,8 +124,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                                         '')
                         if last:
                             text = annconf.get_events(bot, last.time, perioddt, countdown=False)[2]
-                            reminder_edit(bot, groupid, last.message['message_id'], text,
-                                          last.message.get('caption'))
+                            reminder_edit(bot, groupid, last.message, text)
                     continue
 
             if last:
@@ -157,8 +156,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     newtext = text
                     if suffix:
                         newtext = f'{newtext}\n\n[{suffix}]'
-                    message = reminder_edit(bot, groupid, last.message['message_id'], newtext,
-                                            last.message.get('caption'))
+                    message = reminder_edit(bot, groupid, last.message, newtext)
                     if message:
                         records[key] = (last.time, [event.copy() for event in events], message,
                                         text, suffix)
@@ -188,12 +186,13 @@ def reminder_send(bot, groupid, text, photo):
         logging.exception('While sending to %s:\n%s', groupid, text)
 
 
-def reminder_edit(bot, groupid, message_id, text, isphoto):
+def reminder_edit(bot, groupid, lastmessage, text):
     """Edit a photo caption/plain message."""
 
+    message_id = lastmessage['message_id']
     logging.info('Editing reminder %s/%s.', groupid, message_id)
     try:
-        if isphoto:
+        if lastmessage.get('caption'):
             return bot.edit_message_caption(chat_id=groupid,
                                             message_id=message_id,
                                             caption=_truncate(text, PHOTO_TEXT_LIMIT),
@@ -204,8 +203,11 @@ def reminder_edit(bot, groupid, message_id, text, isphoto):
                                      text=_truncate(text, PLAIN_TEXT_LIMIT),
                                      parse_mode='HTML',
                                      disable_web_page_preview=True)
+    except ntelebot.errors.Unmodified:
+        logging.exception('While editing %s/%s:\n%s', groupid, message_id, text)
+        return lastmessage  # See https://github.com/nmlorg/metabot/issues/108.
     except ntelebot.errors.Error:
-        logging.exception('While editing %s in %s:\n%s', message_id, groupid, text)
+        logging.exception('While editing %s/%s:\n%s', groupid, message_id, text)
 
 
 def _truncate(rawtext, length):

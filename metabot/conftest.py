@@ -117,7 +117,7 @@ class BotConversation:  # pylint: disable=missing-docstring,too-few-public-metho
             else:
                 self.last_message_id += 1
                 message_id = self.last_message_id
-            message = {'message_id': message_id}
+            message = {'chat': {'id': int(response['chat_id'])}, 'message_id': message_id}
             if response.get('caption'):
                 message['caption'] = 'CAPTION'
             return {'ok': True, 'result': message}

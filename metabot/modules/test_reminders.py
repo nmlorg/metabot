@@ -143,7 +143,9 @@ modulestestbot/-1002000002000:
     location: Bravo Venue, Rest of Bravo Location
     start: 604800
     summary: Bravo Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
@@ -177,7 +179,9 @@ modulestestbot/-1002000002000:
     location: Bravo Venue, Rest of Bravo Location
     start: 604800
     summary: Bravo Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
@@ -212,7 +216,9 @@ modulestestbot/-1002000002000:
     location: Bravo Venue, Rest of Bravo Location
     start: 604800
     summary: Bravo Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>Edited Summary</b>
@@ -253,7 +259,9 @@ modulestestbot/-1002000002000:
     location: Bravo Venue, Rest of Bravo Location
     start: 604800
     summary: Bravo Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>Edited Summary</b>
@@ -282,7 +290,9 @@ modulestestbot/-1002000002000:
     location: Bravo Venue, Rest of Bravo Location
     start: 604800
     summary: Bravo Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
@@ -319,7 +329,9 @@ modulestestbot/-1002000002000:
     location: Bravo Venue, Rest of Bravo Location
     start: 604800
     summary: Bravo Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
@@ -356,7 +368,9 @@ modulestestbot/-1002000002000:
     location: Bravo Venue, Rest of Bravo Location
     start: 604800
     summary: Bravo Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>Now Summary</b>
@@ -409,7 +423,9 @@ modulestestbot/-1002000002000:
     location: Bravo Venue, Rest of Bravo Location
     start: 604800
     summary: Bravo Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
@@ -471,7 +487,9 @@ modulestestbot/-1002000002000:
     location: New Venue, Rest of New Location
     start: 12600.0
     summary: New Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
@@ -523,7 +541,9 @@ modulestestbot/-1002000002000:
     location: Bravo Venue, Rest of Bravo Location
     start: 604800
     summary: Bravo Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
@@ -550,7 +570,9 @@ modulestestbot/-1002000002000:
     location: Bravo Venue, Rest of Bravo Location
     start: 604800
     summary: Bravo Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
@@ -585,7 +607,9 @@ modulestestbot/-1002000002000:
     location: Bravo Venue, Rest of Bravo Location
     start: 604800
     summary: Bravo Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
@@ -628,6 +652,8 @@ modulestestbot/-1002000002000:
     start: 604800
     summary: Bravo Summary
 - caption: CAPTION
+  chat:
+    id: -1002000002000
   message_id: 12347
 - 'There are a couple events coming up:
 
@@ -665,6 +691,8 @@ modulestestbot/-1002000002000:
     start: 604800
     summary: Bravo Summary
 - caption: CAPTION
+  chat:
+    id: -1002000002000
   message_id: 12348
 - 'There are a couple events coming up:
 
@@ -702,6 +730,8 @@ modulestestbot/-1002000002000:
     start: 604800
     summary: Bravo Summary
 - caption: CAPTION
+  chat:
+    id: -1002000002000
   message_id: 12349
 - 'There are a couple events coming up:
 
@@ -740,6 +770,8 @@ modulestestbot/-1002000002000:
     start: 604800
     summary: Bravo Summary
 - caption: CAPTION
+  chat:
+    id: -1002000002000
   message_id: 12349
 - 'There are a couple events coming up:
 
@@ -785,7 +817,9 @@ modulestestbot/-1002000002000:
     location: Alpha Venue, Rest of Alpha Location
     start: 9000.0
     summary: Alpha Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There''s an event coming up:
 
   <b>Alpha Summary</b>
@@ -837,7 +871,9 @@ modulestestbot/-1002000002000:
     location: New Location
     start: 603000
     summary: Bravo Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>New Summary</b>
@@ -885,7 +921,9 @@ modulestestbot/-1002000002000:
     location: Bravo Venue, Rest of Bravo Location
     start: 604800
     summary: Bravo Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
@@ -921,7 +959,9 @@ modulestestbot/-1002000002000:
     location: Charlie Venue, Rest of Charlie Location
     start: 604860
     summary: Charlie Summary
-- message_id: 12346
+- chat:
+    id: -1002000002000
+  message_id: 12346
 - 'There are a couple events coming up:
 
   <b>Bravo Summary</b>
@@ -1025,7 +1065,9 @@ modulestestbot/-1002000002000:
     location: Bravo Venue, Rest of Bravo Location
     start: 604800
     summary: Bravo Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>Alpha Summary</b>
@@ -1067,7 +1109,9 @@ modulestestbot/-1002000002000:
     location: Bravo Venue, Rest of Bravo Location
     start: 604800
     summary: Bravo Summary
-- message_id: 12345
+- chat:
+    id: -1002000002000
+  message_id: 12345
 - 'There are a couple events coming up:
 
   <b>Edited &amp; &lt;i&gt; Summary</b>

@@ -124,7 +124,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                                         '')
                         if last:
                             text = annconf.get_events(bot, last.time, perioddt, countdown=False)[2]
-                            reminder_edit(bot, groupid, last.message, text)
+                            reminder_edit(bot, last.message, text)
                     continue
 
             if last:
@@ -156,7 +156,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     newtext = text
                     if suffix:
                         newtext = f'{newtext}\n\n[{suffix}]'
-                    message = reminder_edit(bot, groupid, last.message, newtext)
+                    message = reminder_edit(bot, last.message, newtext)
                     if message:
                         records[key] = (last.time, [event.copy() for event in events], message,
                                         text, suffix)
@@ -186,9 +186,10 @@ def reminder_send(bot, groupid, text, photo):
         logging.exception('While sending to %s:\n%s', groupid, text)
 
 
-def reminder_edit(bot, groupid, lastmessage, text):
+def reminder_edit(bot, lastmessage, text):
     """Edit a photo caption/plain message."""
 
+    groupid = lastmessage['chat']['id']
     message_id = lastmessage['message_id']
     logging.info('Editing reminder %s/%s.', groupid, message_id)
     try:

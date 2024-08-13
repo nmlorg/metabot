@@ -164,17 +164,17 @@ def reminder_send(bot, groupid, text, photo):
     """Send a message with the given photo + caption, falling back to plain text."""
 
     logging.info('Sending reminder to %s.', groupid)
-    if photo:
-        try:
-            return bot.send_photo(chat_id=groupid,
-                                  photo=photo,
-                                  caption=text,
-                                  parse_mode='HTML',
-                                  disable_notification=True)
-        except ntelebot.errors.Error:  # See https://github.com/nmlorg/metabot/issues/76.
-            logging.exception('Downgrading to plain text:')
-
     try:
+        if photo:
+            try:
+                return bot.send_photo(chat_id=groupid,
+                                      photo=photo,
+                                      caption=text,
+                                      parse_mode='HTML',
+                                      disable_notification=True)
+            except ntelebot.errors.TooLong:  # See https://github.com/nmlorg/metabot/issues/76.
+                logging.info('Downgrading to plain text.')
+
         return bot.send_message(chat_id=groupid,
                                 text=_truncate(text, ntelebot.limits.message_text_length_max),
                                 parse_mode='HTML',

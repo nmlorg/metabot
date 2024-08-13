@@ -16,8 +16,6 @@ from metabot.util import humanize
 from metabot.util import pickleutil
 
 PERIOD = 60 * 10  # Run modinit.periodic every 10 minutes.
-PLAIN_TEXT_LIMIT = 4096
-PHOTO_TEXT_LIMIT = 1024
 
 
 def modinit(multibot):  # pylint: disable=missing-docstring
@@ -139,7 +137,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                         updmessage = bot.send_message(
                             chat_id=groupid,
                             reply_to_message_id=last.message['message_id'],
-                            text=_truncate(updtext, PLAIN_TEXT_LIMIT),
+                            text=_truncate(updtext, ntelebot.limits.message_text_length_max),
                             parse_mode='HTML',
                             disable_web_page_preview=True,
                             disable_notification=True)
@@ -178,7 +176,7 @@ def reminder_send(bot, groupid, text, photo):
 
     try:
         return bot.send_message(chat_id=groupid,
-                                text=_truncate(text, PLAIN_TEXT_LIMIT),
+                                text=_truncate(text, ntelebot.limits.message_text_length_max),
                                 parse_mode='HTML',
                                 disable_web_page_preview=True,
                                 disable_notification=True)
@@ -196,12 +194,13 @@ def reminder_edit(bot, lastmessage, text):
         if lastmessage.get('caption'):
             return bot.edit_message_caption(chat_id=groupid,
                                             message_id=message_id,
-                                            caption=_truncate(text, PHOTO_TEXT_LIMIT),
+                                            caption=_truncate(
+                                                text, ntelebot.limits.message_caption_length_max),
                                             parse_mode='HTML')
 
         return bot.edit_message_text(chat_id=groupid,
                                      message_id=message_id,
-                                     text=_truncate(text, PLAIN_TEXT_LIMIT),
+                                     text=_truncate(text, ntelebot.limits.message_text_length_max),
                                      parse_mode='HTML',
                                      disable_web_page_preview=True)
     except ntelebot.errors.Unmodified:
@@ -391,7 +390,8 @@ def _handle_alerts(bot, records, groupid, alerts):
         message = None
         try:
             message = bot.send_message(chat_id=groupid,
-                                       text=_truncate(text, PLAIN_TEXT_LIMIT),
+                                       text=_truncate(text,
+                                                      ntelebot.limits.message_text_length_max),
                                        parse_mode='HTML',
                                        disable_web_page_preview=True,
                                        disable_notification=True,

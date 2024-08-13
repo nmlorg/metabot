@@ -9,7 +9,7 @@ authors = [
 requires-python = '>=3.8'
 dependencies = [
     'googlemaps',
-    'ntelebot >= 0.4.2',
+    'ntelebot >= 0.4.3',
     'pytz',
     'PyYAML >= 5.1',
     'requests',

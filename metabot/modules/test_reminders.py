@@ -1048,7 +1048,7 @@ def test_quick_diff():
 def test_truncation(daily_messages, monkeypatch):  # pylint: disable=redefined-outer-name
     """Verify that message limits are correctly enforced."""
 
-    monkeypatch.setattr('metabot.modules.reminders.PLAIN_TEXT_LIMIT', 40)
+    monkeypatch.setattr('ntelebot.limits.message_text_length_max', 40)
 
     assert daily_messages(True) == """
 modulestestbot/-1002000002000:

@@ -5,7 +5,7 @@ import time
 import urllib.parse
 
 import googlemaps
-import requests
+import ntelebot
 
 from metabot.util import iso8601
 from metabot.util import pickleutil
@@ -44,7 +44,7 @@ def _weatherfetch(url):
     headers = {
         'user-agent': 'https://github.com/nmlorg/metabot',
     }
-    return requests.get(url, headers=headers, timeout=10).json()
+    return ntelebot.requests.get(url, headers=headers, timeout=10).json()
 
 
 def _weatherpoint(lat, lon):

@@ -4,7 +4,7 @@ import json
 import logging
 import re
 
-import requests
+import ntelebot
 
 
 def get_info(text):
@@ -20,13 +20,14 @@ def _brownpapertickets(text):
             '://(www.|m.|)(brownpapertickets.com|bpt.me)/event/([0-9]+)', text)
     }
     for event_id in sorted(events):
-        ret = re.search('>([0-9]+) tickets remaining',
-                        requests.get('https://m.bpt.me/event/' + event_id, timeout=10).text)
+        ret = re.search(
+            '>([0-9]+) tickets remaining',
+            ntelebot.requests.get(f'https://m.bpt.me/event/{event_id}', timeout=10).text)
         if ret:
             remaining = int(ret.groups()[0])
         else:
             remaining = 0
-        yield remaining, 'https://bpt.me/event/' + event_id
+        yield remaining, f'https://bpt.me/event/{event_id}'
 
 
 def _eventbrite(text):
@@ -34,16 +35,16 @@ def _eventbrite(text):
         event_id for _, event_id in re.findall('://www.eventbrite.com/e/([^/]+-)?([0-9]+)', text)
     }
     for event_id in sorted(events):
-        url = 'https://www.eventbrite.com/ajax/event/%s/ticket_classes/for_sale/' % event_id
+        url = f'https://www.eventbrite.com/ajax/event/{event_id}/ticket_classes/for_sale/'
         try:
-            data = requests.get(url,
-                                timeout=10,
-                                params={
-                                    'pos': 'online',
-                                },
-                                headers={
-                                    'x-requested-with': 'XMLHttpRequest',
-                                }).json()
+            data = ntelebot.requests.get(url,
+                                         timeout=10,
+                                         params={
+                                             'pos': 'online',
+                                         },
+                                         headers={
+                                             'x-requested-with': 'XMLHttpRequest',
+                                         }).json()
         except json.decoder.JSONDecodeError:
             logging.exception('Decoding %s:', url)
         else:

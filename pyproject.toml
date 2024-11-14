@@ -6,7 +6,7 @@ readme = 'README.md'
 authors = [
     {name = 'Daniel Reed', email = 'nmlorg@gmail.com'},
 ]
-requires-python = '>=3.8'
+requires-python = '>=3.9'
 dependencies = [
     'googlemaps',
     'ntelebot >= 0.4.4',

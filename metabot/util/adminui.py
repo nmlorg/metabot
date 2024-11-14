@@ -11,7 +11,7 @@ from metabot.util import tzutil
 class Frame:
     """The current position (and related state) within a hierarchical message."""
 
-    def __init__(self, ctx, msg, parent, field, desc, text):  # pylint: disable=too-many-arguments
+    def __init__(self, ctx, msg, parent, field, desc, text):  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self.ctx = ctx
         self.msg = msg
         self.parent = parent.get('issue37') or parent

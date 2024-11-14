@@ -40,6 +40,7 @@ class _SimplifyingDumper(yaml.emitter.Emitter, yaml.serializer.Serializer, _Simp
     # pylint: disable=too-many-arguments,too-many-locals
     def __init__(self,
                  stream,
+                 *,
                  default_style=None,
                  default_flow_style=False,
                  canonical=None,

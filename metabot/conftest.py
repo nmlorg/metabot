@@ -79,6 +79,7 @@ class BotConversation:  # pylint: disable=missing-docstring,too-few-public-metho
     # pylint: disable=too-many-arguments
     def raw_message(self,
                     text,
+                    *,
                     user_id=1000,
                     chat_type='private',
                     forward_date=None,

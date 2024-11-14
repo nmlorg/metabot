@@ -277,7 +277,7 @@ def diff_events(multibot, tzinfo, base, lastevents, events):  # pylint: disable=
     return edits
 
 
-def _diff_time(laststart, lastend, curstart, curend, tzinfo, base):  # pylint: disable=too-many-arguments,too-many-locals,too-many-return-statements
+def _diff_time(laststart, lastend, curstart, curend, tzinfo, base):  # pylint: disable=too-many-arguments,too-many-locals,too-many-positional-arguments,too-many-return-statements
     laststartdt = datetime.datetime.fromtimestamp(laststart, tzinfo)
     lastenddt = datetime.datetime.fromtimestamp(lastend, tzinfo)
     curstartdt = datetime.datetime.fromtimestamp(curstart, tzinfo)

@@ -74,7 +74,7 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
                 missing.append('choose one or more calendars')
             if not timezone:
                 missing.append('set your time zone')
-            msg.add('Please %s!', humanize.list(missing))
+            msg.add(f'Please {humanize.list(missing)}!')
             return msg.button('Settings', '/events set')
 
     calendar_view = ctx.bot.multibot.multical.view(calcodes.split())
@@ -87,17 +87,22 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
         msg.add('No upcoming events!')
     else:
         msg.add(eventutil.format_event(ctx.bot, event, tzinfo, full=True))
-    if ctx.user['id'] in ctx.bot.config['issue37']['admin']['admins']:
-        msg.button('Customize', '/events admin ' + event['local_id'])
+        eventid = event['local_id']
+
+        if ctx.user['id'] in ctx.bot.config['issue37']['admin']['admins']:
+            msg.button('Customize', f'/events admin {eventid}')
+
     buttons = [None, ('Settings', '/events set'), None]
     if prevev:
-        buttons[0] = ('Prev', '/events %s%s' % (prevev['local_id'], suffix))
+        previd = prevev['local_id']
+        buttons[0] = ('Prev', f'/events {previd}{suffix}')
     if suffix:
         buttons[1] = ('My Events', '/events')
     elif event and event['local_id'] != calendar_view.current_local_id:
         buttons[1] = ('Current', '/events')
     if nextev:
-        buttons[2] = ('Next', '/events %s%s' % (nextev['local_id'], suffix))
+        nextid = nextev['local_id']
+        buttons[2] = ('Next', f'/events {nextid}{suffix}')
     msg.buttons(buttons)
 
 
@@ -117,7 +122,7 @@ def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
         return ctx.reply_inline([],
                                 is_personal=True,
                                 cache_time=30,
-                                switch_pm_text='Click to %s!' % humanize.list(missing),
+                                switch_pm_text=f'Click to {humanize.list(missing)}!',
                                 switch_pm_parameter='L2V2ZW50cw')
 
     calendar_view = ctx.bot.multibot.multical.view(calcodes.split())

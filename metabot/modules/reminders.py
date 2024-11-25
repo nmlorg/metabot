@@ -163,23 +163,23 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
 def reminder_send(bot, groupid, text, photo):
     """Send a message with the given photo + caption, falling back to plain text."""
 
+    base = {
+        'chat_id': groupid,
+        'disable_notification': True,
+        'parse_mode': 'HTML',
+    }
+
     logging.info('Sending reminder to %s.', groupid)
     try:
         if photo:
             try:
-                return bot.send_photo(chat_id=groupid,
-                                      photo=photo,
-                                      caption=text,
-                                      parse_mode='HTML',
-                                      disable_notification=True)
+                return bot.send_photo(**base, photo=photo, caption=text)
             except ntelebot.errors.TooLong:  # See https://github.com/nmlorg/metabot/issues/76.
                 logging.info('Downgrading to plain text.')
 
-        return bot.send_message(chat_id=groupid,
+        return bot.send_message(**base,
                                 text=_truncate(text, ntelebot.limits.message_text_length_max),
-                                parse_mode='HTML',
-                                disable_web_page_preview=True,
-                                disable_notification=True)
+                                disable_web_page_preview=True)
     except ntelebot.errors.Error:
         logging.exception('While sending to %s:\n%s', groupid, text)
 
@@ -189,19 +189,21 @@ def reminder_edit(bot, lastmessage, text):
 
     groupid = lastmessage['chat']['id']
     message_id = lastmessage['message_id']
+    base = {
+        'chat_id': groupid,
+        'message_id': message_id,
+        'parse_mode': 'HTML',
+    }
+
     logging.info('Editing reminder %s/%s.', groupid, message_id)
     try:
         if lastmessage.get('caption'):
-            return bot.edit_message_caption(chat_id=groupid,
-                                            message_id=message_id,
+            return bot.edit_message_caption(**base,
                                             caption=_truncate(
-                                                text, ntelebot.limits.message_caption_length_max),
-                                            parse_mode='HTML')
+                                                text, ntelebot.limits.message_caption_length_max))
 
-        return bot.edit_message_text(chat_id=groupid,
-                                     message_id=message_id,
+        return bot.edit_message_text(**base,
                                      text=_truncate(text, ntelebot.limits.message_text_length_max),
-                                     parse_mode='HTML',
                                      disable_web_page_preview=True)
     except ntelebot.errors.Unmodified:
         logging.exception('While editing %s/%s:\n%s', groupid, message_id, text)

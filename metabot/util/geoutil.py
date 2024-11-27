@@ -91,26 +91,3 @@ def hourlyforecast(address, when):
         return
     return _hourlyforecast(geo[0]['geometry']['location']['lat'],
                            geo[0]['geometry']['location']['lng'], when)
-
-
-def _weatheralerts(lat, lon):
-    point = _weatherpoint(lat, lon)
-    if not point.get('properties'):
-        return
-    now = time.time()
-    url = 'alerts/active?zone=' + point['properties']['forecastZone'].rsplit('/', 1)[1]
-    last, ret = _SHORTCACHE.get(url) or (0, None)
-    if last < now - 10 * 60:
-        ret = [feature['properties'] for feature in _weatherfetch(url)['features']]
-        _SHORTCACHE[url] = (now, ret)
-    return ret
-
-
-def weatheralerts(address):
-    """Retrieve active NWS weather alerts for the given address."""
-
-    geo = geocode(address)
-    if not geo:
-        return
-    return _weatheralerts(geo[0]['geometry']['location']['lat'],
-                          geo[0]['geometry']['location']['lng'])

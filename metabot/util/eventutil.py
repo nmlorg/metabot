@@ -30,13 +30,13 @@ class CalendarConf:  # pylint: disable=too-few-public-methods
         self.tzinfo = timezone and pytz.timezone(timezone)
 
     def get_events(self, bot, *, when=None):
-        """Build lists of events and weather alerts for the given time (or now)."""
+        """Build lists of events for the given time (or now)."""
 
         return _get_group_events(bot, self.calcodes, self.tzinfo, self.count, self.days, now=when)
 
 
 def _get_group_events(bot, calcodes, tzinfo, count, days, *, now=None):  # pylint: disable=too-many-arguments,too-many-locals
-    """Build lists of events and weather alerts for the given calendar configuration."""
+    """Build lists of events for the given calendar configuration."""
 
     calendar_view = bot.multibot.multical.view(calcodes)
     if now is None:
@@ -44,20 +44,7 @@ def _get_group_events(bot, calcodes, tzinfo, count, days, *, now=None):  # pylin
     nowdt = datetime.datetime.fromtimestamp(now, tzinfo)
     midnight = nowdt.replace(hour=0, minute=0, second=0, microsecond=0)
     period = (midnight + datetime.timedelta(days=days + 1) - nowdt).total_seconds()
-    all_events = list(calendar_view.get_overlap(now, now + max(period, 60 * 60 * 24 * 100)))
-    alerts = {}
-    for event in all_events:
-        if event['location']:
-            try:
-                alertlist = geoutil.weatheralerts(event['location'])
-            except Exception:  # pylint: disable=broad-except
-                logging.exception('Ignoring:')
-            else:
-                for alert in alertlist or ():
-                    alerts[alert['id']] = alert
-    end = now + period
-    return ([event for event in all_events[:count] if event['start'] <= end],
-            [alert for alertid, alert in sorted(alerts.items())])
+    return list(calendar_view.get_overlap(now, now + period))[:count]
 
 
 def format_event(bot, event, tzinfo, *, full=True, base=None, countdown=True):  # pylint: disable=too-many-arguments

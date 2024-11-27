@@ -31,8 +31,7 @@ def modinit(multibot):  # pylint: disable=missing-docstring
         records = pickleutil.load(recordsfname) or {}
 
         for key, record in records.items():
-            botuser, unused_groupid = key
-            if botuser != 'alerts' and len(record) == 3:
+            if len(record) == 3:
                 records[key] += ('', '')
     else:
         recordsfname = None
@@ -64,7 +63,7 @@ class AnnouncementConf:  # pylint: disable=too-few-public-methods
         """Get (and format) events for the given time."""
 
         calconf = self.calconf
-        events, alerts = calconf.get_events(bot, when=eventtime)
+        events = calconf.get_events(bot, when=eventtime)
         if self.preambles:
             preamble = self.preambles[int(eventtime / (60 * 60 * 24)) % len(self.preambles)]
         else:
@@ -77,7 +76,7 @@ class AnnouncementConf:  # pylint: disable=too-few-public-methods
                                          base=base,
                                          countdown=countdown)
             text = f'{text}\n\n{ev}'
-        return events, alerts, text
+        return events, text
 
 
 class Announcement(collections.namedtuple('Announcement', 'time events message text suffix')):
@@ -112,8 +111,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
 
             if perioddt.hour == annconf.hour and not annconf.dow & 1 << perioddt.weekday() and (
                     not last or startofhour > last.time // 3600):
-                events, alerts, text = annconf.get_events(bot, period, perioddt)
-                _handle_alerts(bot, records, groupid, alerts)
+                events, text = annconf.get_events(bot, period, perioddt)
                 if events:
                     url = eventutil.get_image(events[0], botconf)
                     message = reminder_send(bot, groupid, text, url)
@@ -121,13 +119,12 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                         records[key] = (period, [event.copy() for event in events], message, text,
                                         '')
                         if last:
-                            text = annconf.get_events(bot, last.time, perioddt, countdown=False)[2]
+                            text = annconf.get_events(bot, last.time, perioddt, countdown=False)[1]
                             reminder_edit(bot, last.message, text)
                     continue
 
             if last:
-                events, alerts, text = annconf.get_events(bot, last.time, perioddt)
-                _handle_alerts(bot, records, groupid, alerts)
+                events, text = annconf.get_events(bot, last.time, perioddt)
                 edits = diff_events(multibot, calconf.tzinfo, perioddt, last.events, events)
 
                 suffix = last.suffix
@@ -366,67 +363,3 @@ def _generate_preamble(preamble, events):
             text = 'Also, ' + text
         text = preamble + text
     return text
-
-
-def _handle_alerts(bot, records, groupid, alerts):
-    # See https://github.com/nmlorg/metabot/issues/85.
-    alerts = [
-        alert for alert in alerts
-        if alert['urgency'] in ('Immediate', 'Expected') and alert['severity'] in (
-            'Extreme', 'Severe') and alert['certainty'] == 'Observed'
-    ]
-
-    text = _format_alerts(alerts)
-
-    kwargs = {}
-    key = ('alerts', groupid)
-    if key in records:
-        if not text:
-            records.pop(key)
-            return
-        lasttext, lastmessage = records[key]
-        if lasttext == text:
-            return
-        kwargs['reply_to_message_id'] = lastmessage['message_id']
-    if text:
-        message = None
-        try:
-            message = bot.send_message(chat_id=groupid,
-                                       text=_truncate(text,
-                                                      ntelebot.limits.message_text_length_max),
-                                       parse_mode='HTML',
-                                       disable_web_page_preview=True,
-                                       disable_notification=True,
-                                       **kwargs)
-        except ntelebot.errors.Error:
-            logging.exception('While sending to %s:\n%s', groupid, text)
-        if not message and kwargs:
-            try:
-                message = bot.send_message(chat_id=groupid,
-                                           text=text,
-                                           parse_mode='HTML',
-                                           disable_web_page_preview=True,
-                                           disable_notification=True)
-            except ntelebot.errors.Error:
-                logging.exception('While sending to %s:\n%s', groupid, text)
-        if message:
-            records[key] = (text, message)
-
-
-def _format_alerts(alerts):
-    if not alerts:
-        return ''
-    text = []
-    for alert in alerts:
-        text.append('<a href="https://alerts-v2.weather.gov/products/%s">%s %s</a>' %
-                    (alert['id'], alert['event'], alert['id']))
-        text.append('')
-        desc = '%s\n\n%s\n\n%s' % (alert['description'], alert['instruction'], alert['areaDesc'])
-        desc = re.sub(r'\s*\n\s*', ' ', re.sub(r'\s*\n\s*\n\s*', '\0',
-                                               desc)).replace('\0', '\n\n').strip()
-        if len(desc) > 250:
-            desc = desc[:249] + '\u2026'
-        text.append(desc)
-        text.append('')
-        text.append('')
-    return '\n'.join(text).strip()

@@ -124,7 +124,7 @@ class BotConversation:  # pylint: disable=missing-docstring,too-few-public-metho
             return {'ok': True, 'result': message}
 
         for method in ('edit_message_caption', 'edit_message_text', 'forward_message',
-                       'send_message', 'send_photo'):
+                       'pin_chat_message', 'send_message', 'send_photo', 'unpin_chat_message'):
             getattr(self.bot, method).respond(json=functools.partial(_handler, method))
         self.multibot.dispatcher(self.bot, update)
         return responses

@@ -901,7 +901,7 @@ There are a couple events coming up:
 """
 
 
-def test_daily_messages_replaced(daily_messages, monkeypatch):  # pylint: disable=redefined-outer-name
+def test_daily_messages_replaced(conversation, daily_messages, monkeypatch):  # pylint: disable=redefined-outer-name
     """Test what happens when an existing announcement is obsoleted the next day."""
 
     monkeypatch.setattr('time.time', lambda: 4000)
@@ -987,6 +987,115 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+"""
+
+    conversation.bot.config['issue37']['moderator']['-1002000002000']['daily']['pin'] = True
+    monkeypatch.setattr('time.time', lambda: 4000 + 60 * 60 * 24 * 2)
+
+    assert daily_messages() == """
+modulestestbot/-1002000002000:
+- 176400
+- - description: Bravo Description
+    end: 608400
+    local_id: 6fc2c510:bravo
+    location: Bravo Venue, Rest of Bravo Location
+    start: 604800
+    summary: Bravo Summary
+  - description: Charlie Description
+    end: 608460
+    local_id: 6fc2c510:charlie
+    location: Charlie Venue, Rest of Charlie Location
+    start: 604860
+    summary: Charlie Summary
+- chat:
+    id: -1002000002000
+  message_id: 12347
+  pinned: true
+- 'There are a couple events coming up:
+
+  <b>Bravo Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁵ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+  <b>Charlie Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">⁵ ᵈᵃʸˢ Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>'
+- ''
+
+
+[chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML]
+There are a couple events coming up:
+
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁵ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+<b>Charlie Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">⁵ ᵈᵃʸˢ Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>
+
+
+[pin_chat_message chat_id=-1002000002000 disable_notification=True message_id=12347]
+(EMPTY MESSAGE)
+
+
+[edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12346 parse_mode=HTML]
+There are a couple events coming up:
+
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+<b>Charlie Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>
+"""
+
+    monkeypatch.setattr('time.time', lambda: 4000 + 60 * 60 * 24 * 3)
+
+    assert daily_messages() == """
+modulestestbot/-1002000002000:
+- 262800
+- - description: Bravo Description
+    end: 608400
+    local_id: 6fc2c510:bravo
+    location: Bravo Venue, Rest of Bravo Location
+    start: 604800
+    summary: Bravo Summary
+  - description: Charlie Description
+    end: 608460
+    local_id: 6fc2c510:charlie
+    location: Charlie Venue, Rest of Charlie Location
+    start: 604860
+    summary: Charlie Summary
+- chat:
+    id: -1002000002000
+  message_id: 12349
+  pinned: true
+- 'There are a couple events coming up:
+
+  <b>Bravo Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁴ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+  <b>Charlie Summary</b>
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">⁴ ᵈᵃʸˢ Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>'
+- ''
+
+
+[chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML]
+There are a couple events coming up:
+
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁴ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+<b>Charlie Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">⁴ ᵈᵃʸˢ Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>
+
+
+[pin_chat_message chat_id=-1002000002000 disable_notification=True message_id=12349]
+(EMPTY MESSAGE)
+
+
+[edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12347 parse_mode=HTML]
+There are a couple events coming up:
+
+<b>Bravo Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+<b>Charlie Summary</b>
+<a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>
+
+
+[unpin_chat_message chat_id=-1002000002000 message_id=12347]
+(EMPTY MESSAGE)
 """
 
 

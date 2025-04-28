@@ -57,6 +57,7 @@ class AnnouncementConf:  # pylint: disable=too-few-public-methods
         self.calconf = calconf
         self.dow = dailyconf.get('dow', 0)
         self.hour = dailyconf.get('hour')
+        self.pin = dailyconf.get('pin', 0)
         self.preambles = dailyconf.get('text', '').splitlines()
 
     def get_events(self, bot, eventtime, base, *, countdown=True):
@@ -116,11 +117,31 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     url = eventutil.get_image(events[0], botconf)
                     message = reminder_send(bot, groupid, text, url)
                     if message:
+                        if annconf.pin:
+                            try:
+                                bot.pin_chat_message(chat_id=message['chat']['id'],
+                                                     message_id=message['message_id'],
+                                                     disable_notification=True)
+                                message['pinned'] = True
+                            except ntelebot.errors.Error:
+                                logging.exception('While pinning %s/%s:', message['chat']['id'],
+                                                  message['message_id'])
+
                         records[key] = (period, [event.copy() for event in events], message, text,
                                         '')
+
                         if last:
                             text = annconf.get_events(bot, last.time, perioddt, countdown=False)[1]
                             reminder_edit(bot, last.message, text)
+
+                            if last.message.get('pinned'):
+                                try:
+                                    bot.unpin_chat_message(chat_id=last.message['chat']['id'],
+                                                           message_id=last.message['message_id'])
+                                except ntelebot.errors.Error:
+                                    logging.exception('While unpinning %s/%s:',
+                                                      last.message['chat']['id'],
+                                                      last.message['message_id'])
                     continue
 
             if last:
@@ -195,13 +216,14 @@ def reminder_edit(bot, lastmessage, text):
     logging.info('Editing reminder %s/%s.', groupid, message_id)
     try:
         if lastmessage.get('caption'):
-            return bot.edit_message_caption(**base,
-                                            caption=_truncate(
-                                                text, ntelebot.limits.message_caption_length_max))
-
-        return bot.edit_message_text(**base,
-                                     text=_truncate(text, ntelebot.limits.message_text_length_max),
-                                     disable_web_page_preview=True)
+            truncated = _truncate(text, ntelebot.limits.message_caption_length_max)
+            message = bot.edit_message_caption(**base, caption=truncated)
+        else:
+            truncated = _truncate(text, ntelebot.limits.message_text_length_max)
+            message = bot.edit_message_text(**base, text=truncated, disable_web_page_preview=True)
+        if lastmessage.get('pinned'):
+            message['pinned'] = True
+        return message
     except ntelebot.errors.Unmodified:
         logging.exception('While editing %s/%s:\n%s', groupid, message_id, text)
         return lastmessage  # See https://github.com/nmlorg/metabot/issues/108.

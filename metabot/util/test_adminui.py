@@ -240,6 +240,7 @@ Bot Admin › modulestestbot › moderator › -1001000001000 › daily: <b>Choo
 Should I announce upcoming events once a day?
 [dow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 daily dow]
 [hour • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
+[pin (no) • Should the announcement be pinned? | /admin modulestestbot moderator -1001000001000 daily pin]
 [text • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 daily text]
 [Back | /admin modulestestbot moderator -1001000001000]
 """
@@ -265,6 +266,7 @@ Set <code>hour</code> to <code>8</code>.
 Should I announce upcoming events once a day?
 [dow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 daily dow]
 [hour (8) • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
+[pin (no) • Should the announcement be pinned? | /admin modulestestbot moderator -1001000001000 daily pin]
 [text • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 daily text]
 [Back | /admin modulestestbot moderator -1001000001000]
 """
@@ -292,6 +294,7 @@ Changed <code>hour</code> from <code>8</code> to <code>9</code>.
 Should I announce upcoming events once a day?
 [dow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 daily dow]
 [hour (9) • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
+[pin (no) • Should the announcement be pinned? | /admin modulestestbot moderator -1001000001000 daily pin]
 [text • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 daily text]
 [Back | /admin modulestestbot moderator -1001000001000]
 """
@@ -307,6 +310,7 @@ Unset <code>hour</code> (was <code>9</code>).
 Should I announce upcoming events once a day?
 [dow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 daily dow]
 [hour • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
+[pin (no) • Should the announcement be pinned? | /admin modulestestbot moderator -1001000001000 daily pin]
 [text • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 daily text]
 [Back | /admin modulestestbot moderator -1001000001000]
 """
@@ -322,6 +326,7 @@ Bot Admin › modulestestbot › moderator › -1001000001000 › daily: <b>Choo
 Should I announce upcoming events once a day?
 [dow • Which days of the week should I announce upcoming events on? | /admin modulestestbot moderator -1001000001000 daily dow]
 [hour • At what hour? | /admin modulestestbot moderator -1001000001000 daily hour]
+[pin (no) • Should the announcement be pinned? | /admin modulestestbot moderator -1001000001000 daily pin]
 [text • One or more messages (one per line) to use/cycle through for the daily announcement. | /admin modulestestbot moderator -1001000001000 daily text]
 [Back | /admin modulestestbot moderator -1001000001000]
 """

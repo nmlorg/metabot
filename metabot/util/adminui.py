@@ -111,6 +111,7 @@ def announcement(frame):
     menu = Menu(
         ('hour', integer, 'At what hour?'),
         ('dow', daysofweek, 'Which days of the week should I announce upcoming events on?'),
+        ('pin', bool, 'Should the announcement be pinned?'),
         ('text', freeform,
          'One or more messages (one per line) to use/cycle through for the daily announcement.'),
     )

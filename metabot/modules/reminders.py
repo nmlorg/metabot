@@ -69,7 +69,7 @@ class AnnouncementConf:  # pylint: disable=too-few-public-methods
             preamble = self.preambles[int(eventtime / (60 * 60 * 24)) % len(self.preambles)]
         else:
             preamble = ''
-        text = _generate_preamble(preamble, events)
+        text = _generate_preamble(preamble, events, bot=bot)
         if events:
             ev = eventutil.format_events(bot,
                                          events,
@@ -107,6 +107,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
 
             # See https://github.com/nmlorg/metabot/issues/26.
             bot = ntelebot.bot.Bot(botconf['issue37']['telegram']['token'])
+            bot.config = botconf
             bot.multibot = multibot
             bot._username = botuser  # pylint: disable=protected-access
 
@@ -358,7 +359,7 @@ def _quick_diff(left, right):
     return left, right
 
 
-def _generate_preamble(preamble, events):
+def _generate_preamble(preamble, events, *, bot=None):  # pylint: disable=too-many-branches
     if not events:
         return preamble or 'No upcoming events!'
 
@@ -373,6 +374,13 @@ def _generate_preamble(preamble, events):
         text = 'There are a few events coming up:'
     else:
         text = 'There are a bunch of events coming up:'
+
+    if bot:
+        for event in events:
+            if bot.config['issue37']['events']['rsvp'].get(event['local_id']):
+                text = f'{text[:-1]} \u2014 click the date/time to RSVP \U0001f642'
+                break
+
     if preamble:
         if preamble[-1] in ('.', '?', '!'):
             preamble += ' '
@@ -384,4 +392,5 @@ def _generate_preamble(preamble, events):
         else:
             text = 'Also, ' + text
         text = preamble + text
+
     return text

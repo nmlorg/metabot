@@ -47,17 +47,31 @@ def _get_group_events(bot, calcodes, tzinfo, count, days, *, now=None):  # pylin
     return list(calendar_view.get_overlap(now, now + period))[:count]
 
 
-def format_event(bot, event, tzinfo, *, full=True, base=None, countdown=True):  # pylint: disable=too-many-arguments
+def format_event(bot, event, tzinfo, *, full=True, base=None, countdown=True):  # pylint: disable=too-many-arguments,too-many-locals
     """Given a metabot.calendars.base.Calendar event, build a human-friendly representation."""
 
-    message = '<b>%s</b>' % html.escape(event['summary'])
+    rsvpconf = bot.config['issue37']['events']['rsvp'][event['local_id']]
+    attending = maybes = notes = 0
+    for otherrsvpconf in rsvpconf.values():
+        if (going := otherrsvpconf.get('going')) == '+':
+            attending += 1
+        elif going == '?':
+            maybes += 1
+        if otherrsvpconf.get('note'):
+            notes += 1
+    attending = attending and f'  \U0001f44d {attending}' or ''
+    maybes = maybes and f'  \U0001f914 {maybes}' or ''
+    attending += maybes
+    notes = notes and '\U0001f4dd  ' or ''
+
+    message = '<b>%s</b>%s' % (html.escape(event['summary']), attending)
     for count, url in tickets.get_info(event['description']):
         if count:
             message = '%s [<a href="%s">%i tickets remaining</a>]' % (message, url, count)
         else:
             message = '%s [<a href="%s">tickets</a>]' % (message, url)
-    message = '%s\n<a href="%s">%s</a>' % (
-        message, bot.encode_url('/events %s %s' % (event['local_id'], tzinfo.zone)),
+    message = '%s\n<a href="%s">%s%s</a>' % (
+        message, bot.encode_url('/events %s %s' % (event['local_id'], tzinfo.zone)), notes,
         humanize_range(event['start'], event['end'], tzinfo, base=base, countdown=countdown))
     if event['location']:
         location_name = event['location'].split(',', 1)[0]

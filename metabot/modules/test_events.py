@@ -156,7 +156,8 @@ Select a calendar to add or remove from the list below:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">⭐ ᴺᴼᵂ Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 
 Alpha Description
-[\xa0 | /stop] [Settings | /events set] [Next | /events 6fc2c510:bravo]
+[I'm going 👍 | /events 6fc2c510:alpha - going] [Maybe 🤔 | /events 6fc2c510:alpha - maybe] [Add note 📝 | /events 6fc2c510:alpha - note]
+[\xa0 | /stop] [Settings | /events set] [Next | /events 6fc2c510:bravo -]
 """
 
     assert conversation.message('/events 6fc2c510:bravo', user_id=2000) == """\
@@ -165,7 +166,8 @@ Alpha Description
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">¹ʷ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
 Bravo Description
-[Prev | /events 6fc2c510:alpha] [Current | /events] [Next | /events 6fc2c510:charlie]
+[I'm going 👍 | /events 6fc2c510:bravo - going] [Maybe 🤔 | /events 6fc2c510:bravo - maybe] [Add note 📝 | /events 6fc2c510:bravo - note]
+[Prev | /events 6fc2c510:alpha -] [Current | /events] [Next | /events 6fc2c510:charlie -]
 """
 
     monkeypatch.setattr('time.time', lambda: 2000000.)
@@ -330,8 +332,9 @@ def test_customize(conversation):  # pylint: disable=redefined-outer-name
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">⭐ ᴺᴼᵂ Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 
 Alpha Description
+[I'm going 👍 | /events 6fc2c510:alpha - going] [Maybe 🤔 | /events 6fc2c510:alpha - maybe] [Add note 📝 | /events 6fc2c510:alpha - note]
 [Customize | /events admin 6fc2c510:alpha]
-[\xa0 | /stop] [Settings | /events set] [Next | /events 6fc2c510:bravo]
+[\xa0 | /stop] [Settings | /events set] [Next | /events 6fc2c510:bravo -]
 """
 
     assert conversation.message('/events admin 6fc2c510:alpha') == """\

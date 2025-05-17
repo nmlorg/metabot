@@ -55,15 +55,17 @@ def group(ctx, msg):
         msg.add(eventutil.format_events(ctx.bot, events, calconf.tzinfo))
 
 
-def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-locals
+def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-locals,too-many-statements
     """Handle /events in a private chat."""
 
-    eventid, timezone = ctx.split(2)
+    eventid, timezone, action, text = ctx.split(4)
+    if timezone == '-':
+        timezone = ''
     if ':' in eventid and timezone:
-        suffix = ' ' + timezone
+        suffix = timezone
         calcodes = eventid.split(':', 1)[0]
     else:
-        suffix = ''
+        suffix = '-'
         user_id = '%s' % ctx.user['id']
         userconf = modconf['users'][user_id]
         calcodes = userconf.get('calendars')
@@ -82,12 +84,74 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
 
     prevev, event, nextev = calendar_view.get_event(eventid)
     if not event:
+        action = ''
         prevev, event, nextev = calendar_view.get_event()
     if not event:
         msg.add('No upcoming events!')
     else:
-        msg.add(eventutil.format_event(ctx.bot, event, tzinfo, full=True))
         eventid = event['local_id']
+        rsvpconf = modconf['rsvp'][eventid][ctx.user['id']]
+
+        if action == 'going':
+            rsvpconf['going'] = '+'
+        elif action == 'maybe':
+            rsvpconf['going'] = '?'
+        elif action == 'notgoing':
+            rsvpconf['going'] = None
+        elif action == 'note':
+            if text:
+                if text.lower() in ('-', 'none', 'off'):
+                    text = None
+                rsvpconf['note'] = text
+            else:
+                msg.path('/events', 'Events')
+                msg.path(eventid)
+                msg.path(suffix)
+                msg.path('note', 'Note')
+
+                msg.action = 'Type your note'
+                if (note := rsvpconf.get('note')):
+                    msg.add('Your note is currently <code>%s</code>.', note)
+                msg.add('Type your note, or type "off" to clear your existing note.')
+                return
+
+        msg.add(eventutil.format_event(ctx.bot, event, tzinfo, full=True))
+
+        attending = []
+        othernotes = []
+        for otheruser, otherrsvpconf in modconf['rsvp'][eventid].items():
+            userinfo = ctx.bot.multibot.conf['users'].get(otheruser)
+            userstr = userinfo and userinfo['name'] or f'user{otheruser}'
+            userstr = f'<a href="tg://user?id={otheruser}">{html.escape(userstr)}</a>'
+
+            if (note := otherrsvpconf.get('note')):
+                note = html.escape(note).replace('\n', ' ')
+                userstr = f'{userstr} \u2014 {note}'
+            if otherrsvpconf.get('going') == '+':
+                attending.append(userstr)
+            elif note:
+                othernotes.append(userstr)
+        if attending:
+            msg.add('<b>Attending:</b>\n\u2022 ' + '\n\u2022 '.join(attending))
+        if rsvpconf.get('going') == '?':
+            msg.add('(I have you down as a maybe \U0001f914.)')
+        if othernotes:
+            msg.add('<b>Notes:</b>\n\u2022 ' + '\n\u2022 '.join(othernotes))
+
+        base = f'/events {eventid} {suffix} '
+        buttons = [None, ('Maybe \U0001f914', base + 'maybe'), None]
+        if not (going := rsvpconf.get('going')):
+            buttons[0] = ("I'm going \U0001f44d", base + 'going')
+        elif going == '?':
+            buttons[0] = ('Definitely going \U0001f44d', base + 'going')
+            buttons[1] = ('Definitely not \U0001f641', base + 'notgoing')
+        else:
+            buttons[0] = ("I'm not going \U0001f641", base + 'notgoing')
+        if not rsvpconf.get('note'):
+            buttons[2] = ('Add note \U0001f4dd', base + 'note')
+        else:
+            buttons[2] = ('Edit note \U0001f4dd', base + 'note')
+        msg.buttons(buttons)
 
         if ctx.user['id'] in ctx.bot.config['issue37']['admin']['admins']:
             msg.button('Customize', f'/events admin {eventid}')
@@ -95,14 +159,14 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
     buttons = [None, ('Settings', '/events set'), None]
     if prevev:
         previd = prevev['local_id']
-        buttons[0] = ('Prev', f'/events {previd}{suffix}')
-    if suffix:
+        buttons[0] = ('Prev', f'/events {previd} {suffix}')
+    if suffix != '-':
         buttons[1] = ('My Events', '/events')
     elif event and event['local_id'] != calendar_view.current_local_id:
         buttons[1] = ('Current', '/events')
     if nextev:
         nextid = nextev['local_id']
-        buttons[2] = ('Next', f'/events {nextid}{suffix}')
+        buttons[2] = ('Next', f'/events {nextid} {suffix}')
     msg.buttons(buttons)
 
 

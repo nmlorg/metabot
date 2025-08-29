@@ -1,13 +1,14 @@
 """Create custom commands that just return fixed messages."""
 
 from metabot.util import adminui
+from metabot.util import html
 
 
 def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
     for command, data in modconf.items():
         if not data.get('text'):
             continue
-        message = data['text'].replace('\n', ' ')
+        message = html.sanitize(data['text'], strip=True).replace('\n', ' ')
         if len(message) > 30:
             message = message[:29] + '\u2026'
         sections['commands'].add('/%s \u2013 "%s"' % (command, message))

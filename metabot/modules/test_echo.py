@@ -19,12 +19,12 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
     assert conversation.message('/myecho') == ''
 
     conversation.bot.config['issue37']['echo']['myecho'] = {
-        'text': 'These are the rules: Have fun!',
+        'text': 'These are the <b>rules</b>: Have fun!',
     }
 
     assert conversation.message('/myecho') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-These are the rules: Have fun!
+These are the <b>rules</b>: Have fun!
 """
 
     conversation.bot.config['issue37']['echo']['about'] = {
@@ -93,10 +93,10 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
     """Test /help."""
 
     conversation.bot.config['issue37']['echo']['rules1'] = {
-        'text': 'These are the rules: Have fun!',
+        'text': 'These are the <b>rules</b>: Have fun!',
     }
     conversation.bot.config['issue37']['echo']['rules2'] = {
-        'text': 'These are the rules: Have fun!!',
+        'text': 'These are the <b>rules</b>: Have fun!!',
     }
 
     assert conversation.message('/help', user_id=2000) == """\

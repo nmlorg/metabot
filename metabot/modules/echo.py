@@ -8,10 +8,22 @@ def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
     for command, data in modconf.items():
         if not data.get('text'):
             continue
-        message = html.sanitize(data['text'], strip=True).replace('\n', ' ')
+        message = data['text']
+        if (message.startswith('document:') or message.startswith('photo:') or
+                message.startswith('sticker:')):
+            message = message.split(None, 1)
+            if len(message) == 2:
+                message = message[1]
+            else:
+                message = message[0].split(':', 1)[0]
+            section = 'media'
+        else:
+            section = 'text'
+
+        message = html.sanitize(message, strip=True).replace('\n', ' ')
         if len(message) > 30:
             message = message[:29] + '\u2026'
-        sections['commands'].add('/%s \u2013 "%s"' % (command, message))
+        sections[section].add(f'/{command} \u2013 {message}')
 
 
 def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring

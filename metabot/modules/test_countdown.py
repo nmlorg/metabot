@@ -44,7 +44,7 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('/help', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
-<b>Commands</b>
+<b>Countdowns</b>
 
 /count1 – Count up from 1534906800
 

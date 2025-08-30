@@ -10,9 +10,9 @@ def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
     now = time.time()
     for command, timestamp in modconf.items():
         if now > timestamp:
-            sections['commands'].add('/%s \u2013 Count up from %s' % (command, timestamp))
+            sections['countdowns'].add(f'/{command} \u2013 Count up from {timestamp}')
         else:
-            sections['commands'].add('/%s \u2013 Count down to %s' % (command, timestamp))
+            sections['countdowns'].add(f'/{command} \u2013 Count down to {timestamp}')
 
 
 def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring

@@ -27,6 +27,15 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
 These are the <b>rules</b>: Have fun!
 """
 
+    conversation.bot.config['issue37']['echo']['smile'] = {
+        'text': 'photo:CUTE-SMILING-ANIMAL Cute smiling animal.',
+    }
+
+    assert conversation.message('/smile') == """\
+[send_photo chat_id=1000 disable_web_page_preview=True parse_mode=HTML photo=CUTE-SMILING-ANIMAL]
+Cute smiling animal.
+"""
+
     conversation.bot.config['issue37']['echo']['about'] = {
         'text': ('First line.\n'
                  'Second line.\n'
@@ -98,14 +107,26 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
     conversation.bot.config['issue37']['echo']['rules2'] = {
         'text': 'These are the <b>rules</b>: Have fun!!',
     }
+    conversation.bot.config['issue37']['echo']['smile'] = {
+        'text': 'photo:CUTE-SMILING-ANIMAL Cute smiling animal.',
+    }
+    conversation.bot.config['issue37']['echo']['frown'] = {
+        'text': 'sticker:SAD-FROWNING-ANIMAL',
+    }
 
     assert conversation.message('/help', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
-<b>Commands</b>
+<b>Media</b>
 
-/rules1 – &quot;These are the rules: Have fun!&quot;
+/frown – sticker
 
-/rules2 – &quot;These are the rules: Have fun…&quot;
+/smile – Cute smiling animal.
+
+<b>Text</b>
+
+/rules1 – These are the rules: Have fun!
+
+/rules2 – These are the rules: Have fun…
 """
 
 

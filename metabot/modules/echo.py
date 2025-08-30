@@ -6,7 +6,7 @@ from metabot.util import html
 
 def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
     for command, data in modconf.items():
-        if not data.get('text'):
+        if not data.get('text') or data.get('hidden'):
             continue
         message = data['text']
         if (message.startswith('document:') or message.startswith('photo:') or
@@ -68,6 +68,7 @@ def admin(frame):
     adminui.Menu(
         ('text', adminui.freeform,
          'The message, sticker, or image to send in response to /%s.' % frame.field),
+        ('hidden', adminui.bool, 'Hide from /help?'),
         ('paginate', adminui.bool, 'For multiline messages, display just one line at a time?'),
         ('private', adminui.bool, 'Send the message in group chats, or just in private?'),
     ).handle(frame)

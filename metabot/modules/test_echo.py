@@ -107,12 +107,17 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
     conversation.bot.config['issue37']['echo']['rules2'] = {
         'text': 'These are the <b>rules</b>: Have fun!!',
     }
+    conversation.bot.config['issue37']['echo']['hiddentext'] = {
+        'text': 'This is hidden.',
+    }
     conversation.bot.config['issue37']['echo']['smile'] = {
         'text': 'photo:CUTE-SMILING-ANIMAL Cute smiling animal.',
     }
     conversation.bot.config['issue37']['echo']['frown'] = {
         'text': 'sticker:SAD-FROWNING-ANIMAL',
     }
+
+    conversation.message('/admin modulestestbot echo hiddentext hidden')
 
     assert conversation.message('/help', user_id=2000) == """\
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
@@ -144,6 +149,7 @@ Type the name of a command to add (like <code>rules</code>—don't include a sla
     assert conversation.message('EchoTest') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › echo › echotest: <b>Choose a field</b>
+[hidden (no) • Hide from /help? | /admin modulestestbot echo echotest hidden]
 [paginate (no) • For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
 [private (no) • Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
 [text • The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
@@ -165,6 +171,7 @@ Type your new value, or type "off" to disable/reset to default.
 Bot Admin › modulestestbot › echo › echotest: <b>Choose a field</b>
 
 Set <code>text</code> to <code>my message</code>.
+[hidden (no) • Hide from /help? | /admin modulestestbot echo echotest hidden]
 [paginate (no) • For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
 [private (no) • Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
 [text (my message) • The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
@@ -176,6 +183,7 @@ Set <code>text</code> to <code>my message</code>.
 Bot Admin › modulestestbot › echo › echotest: <b>Choose a field</b>
 
 Changed <code>text</code> from <code>my message</code> to <code>new message</code>.
+[hidden (no) • Hide from /help? | /admin modulestestbot echo echotest hidden]
 [paginate (no) • For multiline messages, display just one line at a time? | /admin modulestestbot echo echotest paginate]
 [private (no) • Send the message in group chats, or just in private? | /admin modulestestbot echo echotest private]
 [text (new messa…) • The message, sticker, or image to send in response to /echotest. | /admin modulestestbot echo echotest text]
@@ -196,6 +204,7 @@ Type the name of a command to add (like <code>rules</code>—don't include a sla
 Bot Admin › modulestestbot › echo › textless: <b>Choose a field</b>
 
 Enabled <code>paginate</code>.
+[hidden (no) • Hide from /help? | /admin modulestestbot echo textless hidden]
 [paginate (yes) • For multiline messages, display just one line at a time? | /admin modulestestbot echo textless paginate]
 [private (no) • Send the message in group chats, or just in private? | /admin modulestestbot echo textless private]
 [text • The message, sticker, or image to send in response to /textless. | /admin modulestestbot echo textless text]

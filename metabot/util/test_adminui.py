@@ -29,6 +29,7 @@ def test_bool(conversation):  # pylint: disable=redefined-outer-name
 Bot Admin › modulestestbot › echo › dummy: <b>Choose a field</b>
 
 Enabled <code>paginate</code>.
+[hidden (no) • Hide from /help? | /admin modulestestbot echo dummy hidden]
 [paginate (yes) • For multiline messages, display just one line at a time? | /admin modulestestbot echo dummy paginate]
 [private (no) • Send the message in group chats, or just in private? | /admin modulestestbot echo dummy private]
 [text • The message, sticker, or image to send in response to /dummy. | /admin modulestestbot echo dummy text]
@@ -42,6 +43,7 @@ Enabled <code>paginate</code>.
 Bot Admin › modulestestbot › echo › dummy: <b>Choose a field</b>
 
 Disabled <code>paginate</code>.
+[hidden (no) • Hide from /help? | /admin modulestestbot echo dummy hidden]
 [paginate (no) • For multiline messages, display just one line at a time? | /admin modulestestbot echo dummy paginate]
 [private (no) • Send the message in group chats, or just in private? | /admin modulestestbot echo dummy private]
 [text • The message, sticker, or image to send in response to /dummy. | /admin modulestestbot echo dummy text]

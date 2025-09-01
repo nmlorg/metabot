@@ -151,7 +151,9 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - ''
 
 
@@ -162,6 +164,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 """
 
     assert daily_messages() == """
@@ -187,7 +191,9 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - ''
 """
 
@@ -224,7 +230,9 @@ modulestestbot/-1002000002000:
   <b>Edited Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:31ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 
 
@@ -240,6 +248,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:31ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 
 [<a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>]
 """
@@ -267,7 +277,9 @@ modulestestbot/-1002000002000:
   <b>Edited Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:31ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 """
 
@@ -298,7 +310,9 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - ''
 
 
@@ -309,6 +323,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 """
 
     # See https://github.com/nmlorg/metabot/issues/97.
@@ -337,7 +353,9 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - ''
 
 
@@ -348,6 +366,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 """
 
     cal = loader.get('static:test_events')
@@ -376,7 +396,9 @@ modulestestbot/-1002000002000:
   <b>Now Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - <a href="https://t.me/c/2000002000/12346">Updated 2:30ᵃᵐ</a>
 
 
@@ -392,6 +414,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 
 [<a href="https://t.me/c/2000002000/12346">Updated 2:30ᵃᵐ</a>]
 """
@@ -431,7 +455,9 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 
 
@@ -447,6 +473,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 
 [<a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>]
 """
@@ -495,7 +523,9 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>New Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">🔜 ³ ʰᵒᵘʳˢ Thu 1ˢᵗ, 3:30–4:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">🔜 ³ ʰᵒᵘʳˢ Thu 1ˢᵗ, 3:30–4:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 
 
@@ -512,6 +542,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>New Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpuZXcgVVRD">🔜 ³ ʰᵒᵘʳˢ Thu 1ˢᵗ, 3:30–4:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Venue%2C+Rest+of+New+Location">New Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 
 [<a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>]
 """
@@ -549,7 +581,9 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - ''
 """
 
@@ -578,7 +612,9 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - ''
 """
 
@@ -615,7 +651,9 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 
 
@@ -631,6 +669,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 
 [<a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>]
 """
@@ -660,7 +700,9 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - ''
 
 
@@ -671,6 +713,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 """
 
     conversation.bot.config['issue37']['events']['series']['ha sum'] = 'SERIES ICON'
@@ -699,7 +743,9 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - ''
 
 
@@ -710,6 +756,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 """
 
     conversation.bot.config['issue37']['events']['events']['6fc2c510:alpha'] = 'EVENT ICON'
@@ -738,7 +786,9 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - ''
 
 
@@ -749,6 +799,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 """
 
     cal.events['6fc2c510:alpha']['description'] = 'Fun Games!'
@@ -778,7 +830,9 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - <a href="https://t.me/c/2000002000/12350">Updated 12:33ᵃᵐ</a>
 
 
@@ -794,6 +848,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 
 [<a href="https://t.me/c/2000002000/12350">Updated 12:33ᵃᵐ</a>]
 """
@@ -823,7 +879,9 @@ modulestestbot/-1002000002000:
 - 'There''s an event coming up:
 
   <b>Alpha Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 
 
@@ -837,6 +895,8 @@ There's an event coming up:
 
 <b>Alpha Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 
 [<a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>]
 """
@@ -879,7 +939,9 @@ modulestestbot/-1002000002000:
   <b>New Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ¹ʰ³⁰ᵐ Thu 1ˢᵗ, 2–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Location">New Location</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁶ ᵈᵃʸˢ Wed 7ᵗʰ, 11:30ᵖᵐ – 1:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Location">New Location</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁶ ᵈᵃʸˢ Wed 7ᵗʰ, 11:30ᵖᵐ – 1:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Location">New Location</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 
 
@@ -896,6 +958,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ¹ʰ³⁰ᵐ Thu 1ˢᵗ, 2–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Location">New Location</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁶ ᵈᵃʸˢ Wed 7ᵗʰ, 11:30ᵖᵐ – 1:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=New+Location">New Location</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 
 [<a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>]
 """
@@ -929,7 +993,9 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ¹ʰ³⁰ᵐ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - ''
 
 
@@ -940,6 +1006,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ¹ʰ³⁰ᵐ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 """
 
     monkeypatch.setattr('time.time', lambda: 4000 + 60 * 60 * 24)
@@ -967,7 +1035,9 @@ modulestestbot/-1002000002000:
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁶ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
   <b>Charlie Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">⁶ ᵈᵃʸˢ Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">⁶ ᵈᵃʸˢ Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - ''
 
 
@@ -978,6 +1048,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁶ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 <b>Charlie Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">⁶ ᵈᵃʸˢ Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 
 
 [edit_message_text chat_id=-1002000002000 disable_web_page_preview=True message_id=12345 parse_mode=HTML]
@@ -1016,7 +1088,9 @@ modulestestbot/-1002000002000:
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁵ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
   <b>Charlie Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">⁵ ᵈᵃʸˢ Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">⁵ ᵈᵃʸˢ Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - ''
 
 
@@ -1027,6 +1101,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁵ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 <b>Charlie Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">⁵ ᵈᵃʸˢ Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 
 
 [pin_chat_message chat_id=-1002000002000 disable_notification=True message_id=12347]
@@ -1068,7 +1144,9 @@ modulestestbot/-1002000002000:
   <b>Bravo Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁴ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
   <b>Charlie Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">⁴ ᵈᵃʸˢ Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">⁴ ᵈᵃʸˢ Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - ''
 
 
@@ -1079,6 +1157,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">⁴ ᵈᵃʸˢ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 <b>Charlie Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpjaGFybGllIFVUQw">⁴ ᵈᵃʸˢ Thu 8ᵗʰ, 12:01–1:01ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Charlie+Venue%2C+Rest+of+Charlie+Location">Charlie Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 
 
 [pin_chat_message chat_id=-1002000002000 disable_notification=True message_id=12349]
@@ -1182,7 +1262,9 @@ modulestestbot/-1002000002000:
   <b>Alpha Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - ''
 
 
@@ -1226,7 +1308,9 @@ modulestestbot/-1002000002000:
   <b>Edited &amp; &lt;i&gt; Summary</b>
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Edited+%26+%3Ci%3E+Location%2C+Rest+of+Location">Edited &amp; &lt;i&gt; Location</a>
   <b>Bravo Summary</b>
-  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>'
+  <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+  <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
 - <a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>
 
 
@@ -1242,6 +1326,8 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">🔜 ² ʰᵒᵘʳˢ Thu 1ˢᵗ, 2:30–3:30ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Edited+%26+%3Ci%3E+Location%2C+Rest+of+Location">Edited &amp; &lt;i&gt; Location</a>
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
+
+<i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 
 [<a href="https://t.me/c/2000002000/12346">Updated 12:33ᵃᵐ</a>]
 """

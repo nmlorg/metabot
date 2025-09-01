@@ -69,7 +69,7 @@ class AnnouncementConf:  # pylint: disable=too-few-public-methods
             preamble = self.preambles[int(eventtime / (60 * 60 * 24)) % len(self.preambles)]
         else:
             preamble = ''
-        text = _generate_preamble(preamble, events, bot=bot)
+        text = _generate_preamble(preamble, events)
         if events:
             ev = eventutil.format_events(bot,
                                          events,
@@ -77,6 +77,16 @@ class AnnouncementConf:  # pylint: disable=too-few-public-methods
                                          base=base,
                                          countdown=countdown)
             text = f'{text}\n\n{ev}'
+            if countdown:
+                text = f'{text}\n\n<i>Click the date/time for more details or to RSVP'
+                has_location = False
+                for event in events:
+                    if event['location']:
+                        has_location = True
+                        break
+                if has_location:
+                    text = f'{text}, or the location to pop open a map'
+                text = f'{text}.</i>'
         return events, text
 
 
@@ -359,7 +369,7 @@ def _quick_diff(left, right):
     return left, right
 
 
-def _generate_preamble(preamble, events, *, bot=None):  # pylint: disable=too-many-branches
+def _generate_preamble(preamble, events):
     if not events:
         return preamble or 'No upcoming events!'
 
@@ -374,12 +384,6 @@ def _generate_preamble(preamble, events, *, bot=None):  # pylint: disable=too-ma
         text = 'There are a few events coming up:'
     else:
         text = 'There are a bunch of events coming up:'
-
-    if bot:
-        for event in events:
-            if bot.config['issue37']['events']['rsvp'].get(event['local_id']):
-                text = f'{text[:-1]} \u2014 click the date/time to RSVP \U0001f642'
-                break
 
     if preamble:
         if preamble[-1] in ('.', '?', '!'):

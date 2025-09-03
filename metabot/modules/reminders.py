@@ -78,12 +78,16 @@ class AnnouncementConf:  # pylint: disable=too-few-public-methods
                                          countdown=countdown)
             text = f'{text}\n\n{ev}'
             if countdown:
-                text = f'{text}\n\n<i>Click the date/time for more details or to RSVP'
-                has_location = False
+                has_details = has_location = False
                 for event in events:
+                    if event['description']:
+                        has_details = True
                     if event['location']:
                         has_location = True
-                        break
+                text = f'{text}\n\n<i>Click the date/time'
+                if has_details:
+                    text = f'{text} for more details or'
+                text = f'{text} to RSVP'
                 if has_location:
                     text = f'{text}, or the location to pop open a map'
                 text = f'{text}.</i>'

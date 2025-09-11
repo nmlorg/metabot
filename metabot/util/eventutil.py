@@ -73,19 +73,30 @@ def format_event(bot, event, tzinfo, *, full=True, base=None, countdown=True):  
     message = '%s\n<a href="%s">%s%s</a>' % (
         message, bot.encode_url('/events %s %s' % (event['local_id'], tzinfo.zone)), notes,
         humanize_range(event['start'], event['end'], tzinfo, base=base, countdown=countdown))
-    if event['location']:
-        location_name = event['location'].split(',', 1)[0]
-        location_url = 'https://maps.google.com/maps?' + urllib.parse.urlencode({
-            'q': event['location'].encode('utf-8'),
-        })  # yapf: disable
+    if (loc := event['location']):
+        location_name = loc.split(',', 1)[0]
+        if (location_url := _fixurl(loc)):
+            geo = None
+        else:
+            location_url = 'https://maps.google.com/maps?' + urllib.parse.urlencode({
+                'q': loc.encode('utf-8'),
+            })  # yapf: disable
+            geo = format_geo(loc, event['start'])
         message = '%s @ <a href="%s">%s</a>' % (message, html.escape(location_url),
                                                 html.escape(location_name))
-        geo = format_geo(event['location'], event['start'])
         if geo:
             message = '%s\n\u26a0 %s' % (message, geo)
     if full and event['description']:
         message = '%s\n\n%s' % (message, html.sanitize(event['description']))
     return message
+
+
+def _fixurl(loc):
+    loc = loc.strip()
+    if loc.startswith('http://') or loc.startswith('https://'):
+        return loc
+    if ' ' not in loc and '.' in loc and ('/' not in loc or (loc.index('.') < loc.index('/'))):
+        return f'https://{loc}'
 
 
 def format_events(bot, events, tzinfo, *, base=None, countdown=True):

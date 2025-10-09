@@ -18,6 +18,20 @@ def _dont_mangle_callback_data(monkeypatch):
 
 
 @pytest.fixture(autouse=True)
+def _dont_mangle_invisible_links(monkeypatch):
+
+    def _encode(btn, meta):
+        text = ''
+        if btn:
+            text = f"{text}[btn {' '.join(map(repr, btn))}]\n"
+        if meta:
+            text = f"{text}[meta {' '.join(f'{k}={repr(v)}' for k, v in meta.items())}]\n"
+        return text
+
+    monkeypatch.setattr('ntelebot.invislink.encode', _encode)
+
+
+@pytest.fixture(autouse=True)
 def _disable_geoutil(monkeypatch):
     monkeypatch.setattr('metabot.util.geoutil._CLIENT', None)
 

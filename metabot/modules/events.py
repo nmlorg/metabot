@@ -1,5 +1,6 @@
 """Display recent and upcoming events."""
 
+import ntelebot
 import pytz
 
 from metabot.util import adminui
@@ -155,6 +156,24 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
 
         if ctx.user['id'] in ctx.bot.config['issue37']['admin']['admins']:
             msg.button('Customize', f'/events admin {eventid}')
+
+        image = eventutil.get_image(event, ctx.bot.config, always=True)
+        if ctx.reply_id:
+            image_message = ctx.bot.send_photo(chat_id=ctx.chat['id'], photo=image)
+            ctx.meta['image_message_id'] = image_message['message_id']
+            ctx.meta['image_url'] = image
+        elif (image_message_id :=
+              ctx.meta.get('image_message_id')) and image != ctx.meta.get('image_url'):
+            try:
+                ctx.bot.edit_message_media(chat_id=ctx.chat['id'],
+                                           message_id=image_message_id,
+                                           media={
+                                               'type': 'photo',
+                                               'media': image,
+                                           })
+            except ntelebot.errors.Unmodified:
+                pass
+            ctx.meta['image_url'] = image
 
     buttons = [None, ('Settings', '/events set'), None]
     if prevev:

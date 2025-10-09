@@ -1,6 +1,6 @@
 [project]
 name = 'metabot'
-version = '0.3.29'
+version = '0.3.30'
 description = 'Modularized, multi-account bot.'
 readme = 'README.md'
 authors = [
@@ -9,7 +9,7 @@ authors = [
 requires-python = '>=3.9'
 dependencies = [
     'googlemaps',
-    'ntelebot >= 0.4.4',
+    'ntelebot >= 0.4.5',
     'pytz',
     'PyYAML >= 5.1',
 ]

@@ -151,7 +151,12 @@ Select a calendar to add or remove from the list below:
     conversation.bot.config['issue37']['events']['users']['2000']['timezone'] = 'US/Pacific'
 
     assert conversation.message('/events', user_id=2000) == """\
+[send_photo chat_id=2000 photo=https://ssl.gstatic.com/calendar/images/eventillustrations/v1/img_planmyday_2x.jpg]
+(EMPTY MESSAGE)
+
+
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
+[meta image_message_id=12349 image_url='https://ssl.gstatic.com/calendar/images/eventillustrations/v1/img_planmyday_2x.jpg']
 <b>Alpha Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">⭐ ᴺᴼᵂ Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 
@@ -161,7 +166,12 @@ Alpha Description
 """
 
     assert conversation.message('/events 6fc2c510:bravo', user_id=2000) == """\
+[send_photo chat_id=2000 photo=https://ssl.gstatic.com/calendar/images/eventillustrations/v1/img_planmyday_2x.jpg]
+(EMPTY MESSAGE)
+
+
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
+[meta image_message_id=12351 image_url='https://ssl.gstatic.com/calendar/images/eventillustrations/v1/img_planmyday_2x.jpg']
 <b>Bravo Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVUy9QYWNpZmlj">¹ʷ Wed, Jan (1970) 7ᵗʰ, 4–5ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
@@ -327,7 +337,12 @@ def test_customize(conversation):  # pylint: disable=redefined-outer-name
     conversation.bot.config['issue37']['events']['users']['1000']['timezone'] = 'US/Pacific'
 
     assert conversation.message('/events') == """\
+[send_photo chat_id=1000 photo=https://ssl.gstatic.com/calendar/images/eventillustrations/v1/img_planmyday_2x.jpg]
+(EMPTY MESSAGE)
+
+
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
+[meta image_message_id=12345 image_url='https://ssl.gstatic.com/calendar/images/eventillustrations/v1/img_planmyday_2x.jpg']
 <b>Alpha Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">⭐ ᴺᴼᵂ Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 

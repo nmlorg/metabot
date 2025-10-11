@@ -21,8 +21,6 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
             return group(ctx, msg)
         if ctx.prefix == 'set':
             return settings(ctx, msg, modconf)
-        if ctx.prefix == 'admin':
-            return customize(ctx, msg, modconf)
         return private(ctx, msg, modconf)
 
     if ctx.type == 'inline_query' and ctx.prefix.lstrip('/') in ALIASES:
@@ -60,6 +58,8 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
     """Handle /events in a private chat."""
 
     eventid, timezone, action, text = ctx.split(4)
+    if timezone == 'admin' and ctx.user['id'] in ctx.bot.config['issue37']['admin']['admins']:
+        return customize(ctx, msg, modconf)
     if timezone == '-':
         timezone = ''
     if ':' in eventid and timezone:
@@ -155,24 +155,28 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
         msg.buttons(buttons)
 
         if ctx.user['id'] in ctx.bot.config['issue37']['admin']['admins']:
-            msg.button('Customize', f'/events admin {eventid}')
+            msg.button('Customize', f'/events {eventid} admin')
 
         image = eventutil.get_image(event, ctx.bot.config, always=True)
+        if ctx.edit_id:
+            if (image_message_id :=
+                    ctx.meta.get('image_message_id')) and image != ctx.meta.get('image_url'):
+                try:
+                    ctx.bot.edit_message_media(chat_id=ctx.chat['id'],
+                                               message_id=image_message_id,
+                                               media={
+                                                   'type': 'photo',
+                                                   'media': image,
+                                               })
+                except ntelebot.errors.Unmodified:
+                    pass
+                ctx.meta['image_url'] = image
+            else:
+                ctx.reply_id = ctx.edit_id
+                ctx.edit_id = None
         if ctx.reply_id:
             image_message = ctx.bot.send_photo(chat_id=ctx.chat['id'], photo=image)
             ctx.meta['image_message_id'] = image_message['message_id']
-            ctx.meta['image_url'] = image
-        elif (image_message_id :=
-              ctx.meta.get('image_message_id')) and image != ctx.meta.get('image_url'):
-            try:
-                ctx.bot.edit_message_media(chat_id=ctx.chat['id'],
-                                           message_id=image_message_id,
-                                           media={
-                                               'type': 'photo',
-                                               'media': image,
-                                           })
-            except ntelebot.errors.Unmodified:
-                pass
             ctx.meta['image_url'] = image
 
     buttons = [None, ('Settings', '/events set'), None]
@@ -264,11 +268,11 @@ def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
 def customize(ctx, msg, modconf):
     """Handle /events admin."""
 
-    _, eventid, field, text = ctx.split(4)
+    eventid, _, field, text = ctx.split(4)
 
     msg.path('/events', 'Events')
-    msg.path('admin', 'Customize')
     msg.path(eventid)
+    msg.path('admin', 'Customize')
 
     _, event, _ = ctx.bot.multibot.multical.get_event(eventid)
     if not event:

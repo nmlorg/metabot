@@ -331,7 +331,7 @@ Select a calendar to add or remove from the list below:
 
 
 def test_customize(conversation):  # pylint: disable=redefined-outer-name
-    """Test /events admin."""
+    """Test /events EVENTID admin."""
 
     conversation.bot.config['issue37']['events']['users']['1000']['calendars'] = '6fc2c510'
     conversation.bot.config['issue37']['events']['users']['1000']['timezone'] = 'US/Pacific'
@@ -348,52 +348,52 @@ def test_customize(conversation):  # pylint: disable=redefined-outer-name
 
 Alpha Description
 [I'm going 👍 | /events 6fc2c510:alpha - going] [Maybe 🤔 | /events 6fc2c510:alpha - maybe] [Add note 📝 | /events 6fc2c510:alpha - note]
-[Customize | /events admin 6fc2c510:alpha]
+[Customize | /events 6fc2c510:alpha admin]
 [\xa0 | /stop] [Settings | /events set] [Next | /events 6fc2c510:bravo -]
 """
 
-    assert conversation.message('/events admin 6fc2c510:alpha') == """\
+    assert conversation.message('/events 6fc2c510:alpha admin') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events › Customize › 6fc2c510:alpha: <b>Choose a field</b>
-[event • What banner image should be used for this specific event? | /events admin 6fc2c510:alpha event]
-[series • What banner image should be used for events with this title? | /events admin 6fc2c510:alpha series]
-[Back | /events admin]
+Events › 6fc2c510:alpha › Customize: <b>Choose a field</b>
+[event • What banner image should be used for this specific event? | /events 6fc2c510:alpha admin event]
+[series • What banner image should be used for events with this title? | /events 6fc2c510:alpha admin series]
+[Back | /events 6fc2c510:alpha]
 """
 
-    assert conversation.message('/events admin 6fc2c510:alpha series') == """\
+    assert conversation.message('/events 6fc2c510:alpha admin series') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events › Customize › 6fc2c510:alpha › series: <b>Send a new image for Alpha Summary</b>
+Events › 6fc2c510:alpha › Customize › series: <b>Send a new image for Alpha Summary</b>
 
 Send a new image, or type "off" to disable/reset to default.
-[Back | /events admin 6fc2c510:alpha]
+[Back | /events 6fc2c510:alpha admin]
 """
 
     assert conversation.message('https://SERIES-IMAGE') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events › Customize › 6fc2c510:alpha › series
+Events › 6fc2c510:alpha › Customize › series
 
 Set <code>Alpha Summary</code> to <code>https://SERIES-IMAGE</code>.
-[Back | /events admin 6fc2c510:alpha]
+[Back | /events 6fc2c510:alpha admin]
 """
 
     assert conversation.bot.config['issue37']['events']['series'] == {
         'Alpha Summary': 'https://SERIES-IMAGE',
     }
 
-    assert conversation.message('/events admin 6fc2c510:alpha event') == """\
+    assert conversation.message('/events 6fc2c510:alpha admin event') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events › Customize › 6fc2c510:alpha › event: <b>Send a new image for 6fc2c510:alpha</b>
+Events › 6fc2c510:alpha › Customize › event: <b>Send a new image for 6fc2c510:alpha</b>
 
 Send a new image, or type "off" to disable/reset to default.
-[Back | /events admin 6fc2c510:alpha]
+[Back | /events 6fc2c510:alpha admin]
 """
 
     assert conversation.message('https://EVENT-ICON') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
-Events › Customize › 6fc2c510:alpha › event
+Events › 6fc2c510:alpha › Customize › event
 
 Set <code>6fc2c510:alpha</code> to <code>https://EVENT-ICON</code>.
-[Back | /events admin 6fc2c510:alpha]
+[Back | /events 6fc2c510:alpha admin]
 """
 
     assert conversation.bot.config['issue37']['events']['events'] == {

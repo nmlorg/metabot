@@ -159,8 +159,10 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
 
         image = eventutil.get_image(event, ctx.bot.config, always=True)
         if ctx.edit_id:
-            if (image_message_id :=
-                    ctx.meta.get('image_message_id')) and image != ctx.meta.get('image_url'):
+            if not (image_message_id := ctx.meta.get('image_message_id')):
+                ctx.reply_id = ctx.edit_id
+                ctx.edit_id = None
+            elif image != ctx.meta.get('image_url'):
                 try:
                     ctx.bot.edit_message_media(chat_id=ctx.chat['id'],
                                                message_id=image_message_id,
@@ -171,9 +173,6 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
                 except ntelebot.errors.Unmodified:
                     pass
                 ctx.meta['image_url'] = image
-            else:
-                ctx.reply_id = ctx.edit_id
-                ctx.edit_id = None
         if ctx.reply_id:
             image_message = ctx.bot.send_photo(chat_id=ctx.chat['id'], photo=image)
             ctx.meta['image_message_id'] = image_message['message_id']

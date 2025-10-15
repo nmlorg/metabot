@@ -706,7 +706,7 @@ modulestestbot/-1002000002000:
 - ''
 
 
-[send_photo chat_id=-1002000002000 disable_notification=True parse_mode=HTML photo=https://ssl.gstatic.com/calendar/images/eventillustrations/v1/img_gamenight_2x.jpg]
+[send_media_group chat_id=-1002000002000 disable_notification=True media=[[media=https://ssl.gstatic.com/calendar/images/eventillustrations/v1/img_gamenight_2x.jpg parse_mode=HTML type=photo]]]
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
@@ -749,7 +749,7 @@ modulestestbot/-1002000002000:
 - ''
 
 
-[send_photo chat_id=-1002000002000 disable_notification=True parse_mode=HTML photo=SERIES ICON]
+[send_media_group chat_id=-1002000002000 disable_notification=True media=[[media=SERIES ICON parse_mode=HTML type=photo]]]
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
@@ -760,7 +760,8 @@ There are a couple events coming up:
 <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 """
 
-    conversation.bot.config['issue37']['events']['events']['6fc2c510:alpha'] = 'EVENT ICON'
+    conversation.bot.config['issue37']['events']['events']['6fc2c510:alpha'] = 'ALPHA ICON'
+    conversation.bot.config['issue37']['events']['events']['6fc2c510:bravo'] = 'BRAVO ICON'
 
     assert daily_messages(True) == """
 modulestestbot/-1002000002000:
@@ -792,7 +793,7 @@ modulestestbot/-1002000002000:
 - ''
 
 
-[send_photo chat_id=-1002000002000 disable_notification=True parse_mode=HTML photo=EVENT ICON]
+[send_media_group chat_id=-1002000002000 disable_notification=True media=[[media=ALPHA ICON parse_mode=HTML type=photo] [media=BRAVO ICON type=photo]]]
 There are a couple events coming up:
 
 <b>Alpha Summary</b>
@@ -804,6 +805,8 @@ There are a couple events coming up:
 """
 
     cal.events['6fc2c510:alpha']['description'] = 'Fun Games!'
+    conversation.bot.config['issue37']['events']['events']['6fc2c510:alpha'] = None
+    conversation.bot.config['issue37']['events']['events']['6fc2c510:bravo'] = None
 
     # Removing an icon trigger leaves the image in place.
     assert daily_messages() == """
@@ -833,7 +836,7 @@ modulestestbot/-1002000002000:
   <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 
   <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>'
-- <a href="https://t.me/c/2000002000/12350">Updated 12:33ᵃᵐ</a>
+- <a href="https://t.me/c/2000002000/12351">Updated 12:33ᵃᵐ</a>
 
 
 [chat_id=-1002000002000 disable_notification=True disable_web_page_preview=True parse_mode=HTML reply_to_message_id=12349]
@@ -851,7 +854,7 @@ There are a couple events coming up:
 
 <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 
-[<a href="https://t.me/c/2000002000/12350">Updated 12:33ᵃᵐ</a>]
+[<a href="https://t.me/c/2000002000/12351">Updated 12:33ᵃᵐ</a>]
 """
 
 

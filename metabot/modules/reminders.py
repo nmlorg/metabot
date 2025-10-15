@@ -129,8 +129,15 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     not last or startofhour > last.time // 3600):
                 events, text = annconf.get_events(bot, period, perioddt)
                 if events:
-                    url = eventutil.get_image(events[0], botconf)
-                    message = reminder_send(bot, groupid, text, url)
+                    images = []
+                    for event in events:
+                        image = eventutil.get_image(event, botconf, strict=True)
+                        if image and image not in images:
+                            images.append(image)
+                    if not images:
+                        if (image := eventutil.get_image(events[0], botconf)):
+                            images.append(image)
+                    message = reminder_send(bot, groupid, text, images)
                     if message:
                         if annconf.pin:
                             try:
@@ -193,25 +200,28 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                                         text, suffix)
 
 
-def reminder_send(bot, groupid, text, photo):
-    """Send a message with the given photo + caption, falling back to plain text."""
+def reminder_send(bot, groupid, text, images):
+    """Send a message with the given images + caption, falling back to plain text."""
 
     base = {
         'chat_id': groupid,
         'disable_notification': True,
-        'parse_mode': 'HTML',
     }
 
     logging.info('Sending reminder to %s.', groupid)
     try:
-        if photo:
+        if images:
+            media = [{'type': 'photo', 'media': image} for image in images]
+            media[0]['caption'] = text
+            media[0]['parse_mode'] = 'HTML'
             try:
-                return bot.send_photo(**base, photo=photo, caption=text)
+                return bot.send_media_group(**base, media=media)[0]
             except ntelebot.errors.TooLong:  # See https://github.com/nmlorg/metabot/issues/76.
                 logging.info('Downgrading to plain text.')
 
         return bot.send_message(**base,
                                 text=_truncate(text, ntelebot.limits.message_text_length_max),
+                                parse_mode='HTML',
                                 disable_web_page_preview=True)
     except ntelebot.errors.Error:
         logging.exception('While sending to %s:\n%s', groupid, text)

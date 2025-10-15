@@ -36,16 +36,28 @@ def _disable_geoutil(monkeypatch):
     monkeypatch.setattr('metabot.util.geoutil._CLIENT', None)
 
 
+def _format_dict(data):
+    if isinstance(data, dict):
+        data = [f'{field}={_format_dict(value)}' for field, value in sorted(data.items())]
+    if isinstance(data, list):
+        return f"[{' '.join(map(_format_dict, data))}]"
+    return data
+
+
 def _format_message(response):
     method = response.pop('method')
-    text = response.pop('text', None) or response.pop('caption', '(EMPTY MESSAGE)')
+    text = response.pop('text', None) or response.pop('caption', None)
+    if not text and (media := response.get('media')):
+        num_captions = sum('caption' in medium and 1 or 0 for medium in media)
+        if num_captions == 1:
+            text = media[0].pop('caption', None) or media[-1].pop('caption', None)
+    if not text:
+        text = '(EMPTY MESSAGE)'
     reply_markup = response.pop('reply_markup', None)
-    header = ' '.join('%s=%s' % (field, value) for field, value in sorted(response.items()))
+    header = _format_dict(response)
     if method != 'send_message':
-        method = f'{method} '
-    else:
-        method = ''
-    text = f'[{method}{header}]\n{text}\n'
+        header = f'[{method} {header[1:]}'
+    text = f'{header}\n{text}\n'
     if reply_markup:
         for row in reply_markup.pop('inline_keyboard', ()):
             text = '%s%s\n' % (text, ' '.join(
@@ -137,9 +149,24 @@ class BotConversation:  # pylint: disable=missing-docstring,too-few-public-metho
                 message['caption'] = 'CAPTION'
             return {'ok': True, 'result': message}
 
+        def _send_media_group(request, unused_context):
+            response = json.loads(request.body.decode('ascii'))
+            response['method'] = 'send_media_group'
+            responses.append(response)
+            messages = []
+            for media in response['media']:
+                self.last_message_id += 1
+                message_id = self.last_message_id
+                message = {'chat': {'id': int(response['chat_id'])}, 'message_id': message_id}
+                if media.get('caption'):
+                    message['caption'] = 'CAPTION'
+                messages.append(message)
+            return {'ok': True, 'result': messages}
+
         for method in ('edit_message_caption', 'edit_message_text', 'forward_message',
                        'pin_chat_message', 'send_message', 'send_photo', 'unpin_chat_message'):
             getattr(self.bot, method).respond(json=functools.partial(_handler, method))
+        self.bot.send_media_group.respond(json=_send_media_group)
         self.multibot.dispatcher(self.bot, update)
         return responses
 

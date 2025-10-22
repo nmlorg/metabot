@@ -119,11 +119,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             else:
                 last = None
 
-            # See https://github.com/nmlorg/metabot/issues/26.
-            bot = ntelebot.bot.Bot(botconf['issue37']['telegram']['token'])
-            bot.config = botconf
-            bot.multibot = multibot
-            bot._username = botuser  # pylint: disable=protected-access
+            bot = multibot.mgr.bot(botuser).bot_instance
 
             if perioddt.hour == annconf.hour and not annconf.dow & 1 << perioddt.weekday() and (
                     not last or startofhour > last.time // 3600):

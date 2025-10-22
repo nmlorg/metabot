@@ -82,7 +82,7 @@ class BotConversation:  # pylint: disable=missing-docstring,too-few-public-metho
             },
         })
         username = self.multibot.add_bot('1234:test')
-        self.bot = self.multibot._build_bot(username)  # pylint: disable=protected-access
+        self.bot = self.multibot.mgr.bot(username).bot_instance
         self.bot.config['issue37']['admin']['admins'] = [1000]
         self.last_message_id = 12344
 

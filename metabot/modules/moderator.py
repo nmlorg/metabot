@@ -17,10 +17,8 @@ def modinit(multibot):  # pylint: disable=missing-docstring
     def _hourly():
         try:
             checked = set()
-            for botconf in multibot.conf['bots'].values():
-                # See https://github.com/nmlorg/metabot/issues/26.
-                bot = ntelebot.bot.Bot(botconf['issue37']['telegram']['token'])
-                bot.multibot = multibot
+            for botuser, botconf in multibot.conf['bots'].items():
+                bot = multibot.mgr.bot(botuser).bot_instance
                 for groupid in botconf['issue37']['moderator']:
                     groupid = int(groupid)
                     if groupid in checked:

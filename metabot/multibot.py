@@ -6,6 +6,7 @@ import ntelebot
 
 from metabot import botconf
 from metabot import datasettings
+from metabot import manager
 from metabot.calendars import multicalendar
 from metabot.util import jsonutil
 from metabot.util import msgbuilder
@@ -19,6 +20,7 @@ class MultiBot:
         self.loop = ntelebot.loop.Loop()
         self.conf = botconf.BotConf(confdir)
         self.conf.finalize()
+        self.mgr = manager.Manager(self)
         self.multical = multicalendar.MultiCalendar()
         self.calendars = {}
         if confdir:
@@ -52,18 +54,10 @@ class MultiBot:
         self.conf.save()
         return username
 
-    def _build_bot(self, username):
-        bot_config = self.conf['bots'][username]
-        bot = ntelebot.bot.Bot(bot_config['issue37']['telegram']['token'])
-        bot.config = bot_config
-        bot.multibot = self
-        assert bot.username == username
-        return bot
-
     def run_bot(self, username):
         """Begin polling for updates for the previously configured bot."""
 
-        bot = self._build_bot(username)
+        bot = self.mgr.bot(username).bot_instance
         self.loop.add(bot, self.dispatcher)
         bot.config['issue37']['telegram']['running'] = True
         self.conf.save()

@@ -5,12 +5,10 @@ import ntelebot
 from metabot.util import dicttools
 
 
-class Manager:
+class Manager:  # pylint: disable=missing-function-docstring
     """Simple context manager."""
 
-    _bot = None
-
-    def __init__(self, root, **extra):
+    def __init__(self, root, *, bot_id=None, bot_username=None):
         if isinstance(root, Manager):
             self.__dict__.update(root.__dict__)
         else:
@@ -18,63 +16,55 @@ class Manager:
             self.multibot = root
             self._bot_instances = {}
 
-        self.__dict__.update(extra)
+        if bot_id:
+            self.bot_id = bot_id
+        if bot_username:
+            self.bot_username = bot_username
 
-    def bot(self, bot_id):
-        """Return a Manager with the given bot as its bot context."""
-
-        return Manager(self, _bot=_Bot(self, bot_id))
-
-    def __getattribute__(self, key):
-        for prefix in ('bot',):
-            if key.startswith(prefix + '_'):
-                return getattr(super().__getattribute__('_' + prefix), key[len(prefix) + 1:])
-        return super().__getattribute__(key)
-
-
-class _Bot:
-
-    def __init__(self, mgr, bot_id):
-        self._mgr = mgr
+    def _normalize_bot_id(self, bot_id):
         try:
             bot_id = int(bot_id)
         except ValueError:
             pass
         if isinstance(bot_id, int):
-            self.id = bot_id
-            if (bot := self._mgr._bot_instances.get(self.id)):
-                self.username = bot.username
+            if (bot := self._bot_instances.get(bot_id)):
+                bot_username = bot.username
             else:
-                for username, conf in self._mgr.multibot.conf['bots'].items():
+                for bot_username, conf in self.multibot.conf['bots'].items():
                     if int(conf['issue37']['telegram']['token'].split(':', 1)[0]) == bot_id:
-                        self.username = username
                         break
                 else:
                     raise KeyError(bot_id)
-        elif bot_id in self._mgr.multibot.conf['bots']:
-            self.username = bot_id
-            self.id = int(self.token.split(':', 1)[0])
+        elif bot_id in self.multibot.conf['bots']:
+            bot_username = bot_id
+            token = self.multibot.conf['bots'][bot_username]['issue37']['telegram']['token']
+            bot_id = int(token.split(':', 1)[0])
         else:
             raise KeyError(bot_id)
 
-    @property
-    def conf(self):  # pylint: disable=missing-function-docstring
-        return self._mgr.multibot.conf['bots'][self.username]['issue37']
+        return bot_id, bot_username
+
+    def bot(self, bot_id):
+        bot_id, bot_username = self._normalize_bot_id(bot_id)
+        return Manager(self, bot_id=bot_id, bot_username=bot_username)
 
     @property
-    def instance(self):
-        """The shared instance of ntelebot.bot.Bot(self.token)."""
+    def bot_conf(self):
+        return self.multibot.conf['bots'][self.bot_username]['issue37']
 
-        # pylint: disable=protected-access # https://github.com/pylint-dev/pylint/issues/4362
-        if (bot := self._mgr._bot_instances.get(self.id)):
+    @property
+    def bot_instance(self):
+        """The shared instance of ntelebot.bot.Bot(self.bot_token)."""
+
+        if (bot := self._bot_instances.get(self.bot_id)):
             return bot
 
-        self._mgr._bot_instances[self.id] = bot = ntelebot.bot.Bot(self.token)
-        bot._username = self.username
-        bot.multibot = self._mgr.multibot
+        self._bot_instances[self.bot_id] = bot = ntelebot.bot.Bot(self.bot_token)
+        bot._username = self.bot_username  # pylint: disable=protected-access
+        bot.multibot = self.multibot
         bot.config = bot.multibot.conf['bots'][bot.username]
         return bot
 
     @property
-    def token(self):  # pylint: disable=missing-function-docstring
-        return self.conf['telegram']['token']
+    def bot_token(self):
+        return self.bot_conf['telegram']['token']

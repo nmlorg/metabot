@@ -94,7 +94,7 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
         with multibot.conf.record_mutations(ctx):
             msg = msgbuilder.MessageBuilder()
 
-            ctx.botinfo = datasettings.DataSettings(bot.config['data'], bot.config['settings'])
+            mgr = multibot.mgr.bot(bot.username)
 
             if not ctx.user:
                 ctx.userinfo = None
@@ -108,17 +108,17 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
                         '%s %s' %
                         (ctx.user.get('first_name', ''), ctx.user.get('last_name', ''))).strip()
 
-            if not ctx.chat or ctx.chat['type'] not in ('channel', 'group', 'supergroup'):
-                ctx.groupinfo = None
-            else:
-                ctx.groupinfo = datasettings.DataSettings(multibot.conf['groups'][ctx.chat['id']],
-                                                          bot.config['groups'][ctx.chat['id']])
+            if ctx.chat and ctx.chat['type'] in ('channel', 'group', 'supergroup'):
+                mgr = mgr.chat(ctx.chat['id'])
+                groupinfo = multibot.conf['groups'][mgr.chat_id]
                 for k, val in ctx.chat.items():
                     if k != 'id':
-                        ctx.groupinfo.data[k] = val
+                        groupinfo[k] = val
 
                 if ctx.type == 'pin':
-                    ctx.groupinfo.data.pinned_message_id = ctx.data['message_id']
+                    groupinfo['pinned_message_id'] = ctx.data['message_id']
+
+            ctx.mgr = mgr
 
             for modname, module in multibot.modules.items():
                 modpredispatch = getattr(module, 'modpredispatch', None)

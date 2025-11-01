@@ -8,7 +8,7 @@ from metabot.util import dicttools
 class Manager:  # pylint: disable=missing-function-docstring
     """Simple context manager."""
 
-    def __init__(self, root, *, bot_id=None, bot_username=None):
+    def __init__(self, root, *, bot_id=None, bot_username=None, chat_id=None):
         if isinstance(root, Manager):
             self.__dict__.update(root.__dict__)
         else:
@@ -20,6 +20,8 @@ class Manager:  # pylint: disable=missing-function-docstring
             self.bot_id = bot_id
         if bot_username:
             self.bot_username = bot_username
+        if chat_id:
+            self.chat_id = chat_id
 
     def _normalize_bot_id(self, bot_id):
         try:
@@ -68,3 +70,22 @@ class Manager:  # pylint: disable=missing-function-docstring
     @property
     def bot_token(self):
         return self.bot_conf['telegram']['token']
+
+    def chat(self, chat_id):
+        return Manager(self, chat_id=int(chat_id))
+
+    @property
+    def chat_info(self):
+        return self.multibot.conf['groups'][self.chat_id]
+
+    @property
+    def chat_pinned_message_id(self):
+        return self.chat_info['pinned_message_id']
+
+    @property
+    def chat_title(self):
+        return self.chat_info['title']
+
+    @property
+    def chat_username(self):
+        return self.chat_info['username']

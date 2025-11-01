@@ -72,6 +72,7 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
 def join(ctx, msg, modconf):
     """Respond to new users joining a group chat."""
 
+    mgr = ctx.mgr
     greeting = modconf['%s' % ctx.chat['id']].get('greeting')
     if not greeting:
         return
@@ -79,14 +80,13 @@ def join(ctx, msg, modconf):
     if not users:
         return
 
-    if 'pinned message' in greeting and ctx.groupinfo.data.pinned_message_id:
-        if ctx.groupinfo.data.username:
-            url = 'https://t.me/%s/%s' % (ctx.groupinfo.data.username,
-                                          ctx.groupinfo.data.pinned_message_id)
+    if 'pinned message' in greeting and mgr.chat_pinned_message_id:
+        if mgr.chat_username:
+            url = f'https://t.me/{mgr.chat_username}/{mgr.chat_pinned_message_id}'
         elif -1002147483647 <= ctx.chat['id'] < -1000000000000:
             # See https://github.com/nmlorg/metabot/issues/43.
             url = 'https://t.me/c/%s/%s' % (-1000000000000 - ctx.chat['id'],
-                                            ctx.groupinfo.data.pinned_message_id)
+                                            mgr.chat_pinned_message_id)
         else:
             url = None  # pragma: no cover
         if url:
@@ -98,7 +98,7 @@ def join(ctx, msg, modconf):
         ]
         greeting = greeting.replace('new users', humanize.list(names))
 
-    greeting = greeting.replace('chat title', ctx.groupinfo.data.title)
+    greeting = greeting.replace('chat title', mgr.chat_title)
 
     msg.quiet = True
     msg.add(greeting)

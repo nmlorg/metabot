@@ -18,18 +18,17 @@ def modinit(multibot):  # pylint: disable=missing-docstring
         try:
             checked = set()
             for botuser, botconf in multibot.conf['bots'].items():
-                bot = multibot.mgr.bot(botuser).bot_instance
+                mgr = multibot.mgr.bot(botuser)
                 for groupid in botconf['issue37']['moderator']:
-                    groupid = int(groupid)
-                    if groupid in checked:
+                    mgr = mgr.chat(groupid)
+                    if mgr.chat_id in checked:
                         continue
-                    groupdata = multibot.conf['groups'][groupid]
                     try:
-                        data = bot.get_chat_administrators(chat_id=groupid)
+                        data = mgr.bot_instance.get_chat_administrators(chat_id=mgr.chat_id)
                     except ntelebot.errors.Error:
                         continue
-                    checked.add(groupid)
-                    groupdata['admins'] = sorted(member['user']['id'] for member in data)
+                    checked.add(mgr.chat_id)
+                    mgr.chat_info['admins'] = sorted(member['user']['id'] for member in data)
             log = multibot.conf.finalize()
             if log:
                 for path, (value, orig) in sorted(log.items()):
@@ -110,9 +109,9 @@ def admin(frame, botadmin=True):  # pylint: disable=too-many-arguments
     ctx, msg = frame.ctx, frame.msg
     menu = adminui.Menu()
     for group_id in frame.value:
-        groupdata = ctx.bot.multibot.conf['groups'][int(group_id)]
-        if botadmin or ctx.user['id'] in groupdata['admins']:
-            menu.add(group_id, desc=groupdata['title'])
+        mgr = ctx.mgr.chat(group_id)
+        if botadmin or mgr.is_chat_admin:
+            menu.add(group_id, desc=mgr.chat_title)
 
     if not menu.fields:
         if botadmin:

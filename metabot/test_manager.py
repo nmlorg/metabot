@@ -52,3 +52,86 @@ def test_simple():
 
     with pytest.raises(KeyError):
         mybot.mgr.bot(2222222222)
+
+
+def test_cross_context():
+    """Test things that access multiple contexts."""
+
+    mybot = multibot.MultiBot(())
+    assert mybot.conf == {
+        'bots': {},
+    }
+    mybot.conf['bots']['managertestbot']['issue37']['telegram']['token'] = '1111111111:BBBBBBBBBB'
+
+    mgr = mybot.mgr
+    with pytest.raises(AttributeError):
+        assert mgr.bot_id == 1111111111
+    with pytest.raises(AttributeError):
+        assert mgr.chat_id == 90000000000
+    with pytest.raises(AttributeError):
+        assert mgr.user_id == 1000
+    with pytest.raises(AttributeError):
+        assert not mgr.is_chat_admin
+
+    mgr = mgr.bot(1111111111)
+    assert mgr.bot_id == 1111111111
+    with pytest.raises(AttributeError):
+        assert mgr.chat_id == 90000000000
+    with pytest.raises(AttributeError):
+        assert mgr.user_id == 1000
+    with pytest.raises(AttributeError):
+        assert not mgr.is_chat_admin
+    assert mybot.conf == {
+        'bots': {
+            'managertestbot': {
+                'issue37': {
+                    'telegram': {
+                        'token': '1111111111:BBBBBBBBBB',
+                    },
+                },
+            },
+        },
+    }
+
+    mgr = mgr.user(1000)
+    assert mgr.bot_id == 1111111111
+    with pytest.raises(AttributeError):
+        assert mgr.chat_id == 90000000000
+    assert mgr.user_id == 1000
+    with pytest.raises(AttributeError):
+        assert not mgr.is_chat_admin
+    assert mybot.conf == {
+        'bots': {
+            'managertestbot': {
+                'issue37': {
+                    'telegram': {
+                        'token': '1111111111:BBBBBBBBBB',
+                    },
+                },
+            },
+        },
+        'groups': {},
+    }
+
+    mgr = mgr.chat(90000000000)
+    assert mgr.bot_id == 1111111111
+    assert mgr.chat_id == 90000000000
+    assert mgr.user_id == 1000
+    assert not mgr.is_chat_admin
+    assert mybot.conf == {
+        'bots': {
+            'managertestbot': {
+                'issue37': {
+                    'telegram': {
+                        'token': '1111111111:BBBBBBBBBB',
+                    },
+                },
+            },
+        },
+        'groups': {
+            90000000000: {},
+        },
+    }
+
+    mybot.conf['groups'][90000000000]['admins'] = [1000]
+    assert mgr.is_chat_admin

@@ -124,9 +124,9 @@ def admin(frame):  # pylint: disable=too-many-branches
 
     for admin_id in sorted(modconf['admins']):
         if admin_id != ctx.user['id']:
-            userinfo = ctx.bot.multibot.conf['users'].get(admin_id)
-            if userinfo:
-                userstr = '%s (%s)' % (userinfo['name'], admin_id)
+            mgr = ctx.mgr.user(admin_id)
+            if mgr.user_name:
+                userstr = f'{mgr.user_name} ({admin_id})'
             else:
-                userstr = '%s' % admin_id
-            msg.button('Remove ' + userstr, '%s' % admin_id)
+                userstr = admin_id
+            msg.button(f'Remove {userstr}', f'{admin_id}')

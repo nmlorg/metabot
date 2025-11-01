@@ -121,8 +121,7 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
         attending = []
         othernotes = []
         for otheruser, otherrsvpconf in modconf['rsvp'][eventid].items():
-            userinfo = ctx.bot.multibot.conf['users'].get(otheruser)
-            userstr = userinfo and userinfo['name'] or f'user{otheruser}'
+            userstr = ctx.mgr.user(otheruser).user_name or f'user{otheruser}'
             userstr = f'<a href="tg://user?id={otheruser}">{html.escape(userstr)}</a>'
 
             if (note := otherrsvpconf.get('note')):

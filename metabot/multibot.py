@@ -5,7 +5,6 @@ import logging
 import ntelebot
 
 from metabot import botconf
-from metabot import datasettings
 from metabot import manager
 from metabot.calendars import multicalendar
 from metabot.util import jsonutil
@@ -96,27 +95,23 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
 
             mgr = multibot.mgr.bot(bot.username)
 
-            if not ctx.user:
-                ctx.userinfo = None
-            else:
-                ctx.userinfo = datasettings.DataSettings(multibot.conf['users'][ctx.user['id']],
-                                                         bot.config['users'][ctx.user['id']])
+            if ctx.user:
+                mgr = mgr.user(ctx.user['id'])
                 for k, val in ctx.user.items():
                     if k not in ('first_name', 'id', 'last_name'):
-                        ctx.userinfo.data[k] = val
-                    ctx.userinfo.data.name = (
+                        mgr.user_info[k] = val
+                    mgr.user_info['name'] = (
                         '%s %s' %
                         (ctx.user.get('first_name', ''), ctx.user.get('last_name', ''))).strip()
 
             if ctx.chat and ctx.chat['type'] in ('channel', 'group', 'supergroup'):
                 mgr = mgr.chat(ctx.chat['id'])
-                groupinfo = multibot.conf['groups'][mgr.chat_id]
                 for k, val in ctx.chat.items():
                     if k != 'id':
-                        groupinfo[k] = val
+                        mgr.chat_info[k] = val
 
                 if ctx.type == 'pin':
-                    groupinfo['pinned_message_id'] = ctx.data['message_id']
+                    mgr.chat_info['pinned_message_id'] = ctx.data['message_id']
 
             ctx.mgr = mgr
 

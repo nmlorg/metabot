@@ -2,6 +2,7 @@
 
 import functools
 import json
+import zlib
 
 import ntelebot
 from ntelebot.conftest import _bot_mock  # pylint: disable=unused-import
@@ -75,16 +76,22 @@ class BotConversation:  # pylint: disable=missing-docstring,too-few-public-metho
             return ctx.command == 'dummymod' and ctx.reply_text('DUMMYMOD')
 
         self.multibot = multibot.MultiBot(set(modules) | {admin, dummymod, help})
-        ntelebot.bot.Bot('1234:test').getme.respond(json={
-            'ok': True,
-            'result': {
-                'username': 'modulestestbot'
-            },
-        })
-        username = self.multibot.add_bot('1234:test')
-        self.bot = self.multibot.mgr.bot(username).bot_instance
+        self.set_bot('modulestestbot')
         self.bot.config['issue37']['admin']['admins'] = [1000]
         self.last_message_id = 12344
+
+    def set_bot(self, botuser):
+        assert botuser not in self.multibot.conf['bots']
+        bot_id = 100000000 + zlib.crc32(botuser.encode('ascii'))
+        bot_token = f'{bot_id}:valid-for-{botuser}'
+        ntelebot.bot.Bot(bot_token).getme.respond(json={
+            'ok': True,
+            'result': {
+                'username': botuser,
+            },
+        })
+        assert self.multibot.add_bot(bot_token) == botuser
+        self.bot = self.multibot.mgr.bot(botuser).bot_instance
 
     def raw_inline(self, text, user_id=1000):
         """Simulate an inline query (@BOTNAME text)."""

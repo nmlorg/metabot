@@ -7,7 +7,11 @@ from metabot.modules import admin
 
 @pytest.fixture
 def conversation(build_conversation):  # pylint: disable=missing-docstring
-    return build_conversation(admin)
+    conv = build_conversation(admin)
+    conv.set_bot('otheradminbot')
+    conv.multibot.conf['bots']['otheradminbot']['issue37']['admin']['admins'] = [1000]
+    conv.set_bot('admintestbot')
+    return conv
 
 
 # pylint: disable=line-too-long
@@ -20,9 +24,9 @@ def test_invalid_user(conversation):  # pylint: disable=redefined-outer-name
 [chat_id=2000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin
 
-Hi! You aren't one of my admins. If you should be, ask a current admin to add you by opening a chat with me (@modulestestbot) and typing:
+Hi! You aren't one of my admins. If you should be, ask a current admin to add you by opening a chat with me (@admintestbot) and typing:
 
-<pre>/admin modulestestbot admin add 2000</pre>
+<pre>/admin admintestbot admin add 2000</pre>
 """
 
     assert conversation.message('/admin', user_id=2000) == error_message
@@ -44,6 +48,7 @@ This is a metabot! Check out https://github.com/nmlorg/metabot/issues to keep tr
 
 To configure your bot, choose its username:
 [modulestestbot | /admin modulestestbot]
+[otheradminbot | /admin otheradminbot]
 """
 
     assert conversation.message('/admin modulestestbot') == """\
@@ -67,7 +72,40 @@ def test_whoami(conversation):  # pylint: disable=redefined-outer-name
 def test_bootstrap(conversation):  # pylint: disable=redefined-outer-name
     """Test /_bootstrap."""
 
-    assert conversation.bot.config['issue37'].pop('admin') == {'admins': [1000]}
+    assert conversation.multibot.conf == {
+        'bots': {
+            'admintestbot': {
+                'issue37': {
+                    'telegram': {
+                        'running': False,
+                        'token': '3824022530:valid-for-admintestbot',
+                    },
+                },
+            },
+            'modulestestbot': {
+                'issue37': {
+                    'admin': {
+                        'admins': [1000],
+                    },
+                    'telegram': {
+                        'running': False,
+                        'token': '2190962040:valid-for-modulestestbot',
+                    },
+                },
+            },
+            'otheradminbot': {
+                'issue37': {
+                    'admin': {
+                        'admins': [1000],
+                    },
+                    'telegram': {
+                        'running': False,
+                        'token': '1784028448:valid-for-otheradminbot',
+                    },
+                },
+            },
+        },
+    }
     assert len(admin.BOOTSTRAP_TOKEN) == 32
     admin.BOOTSTRAP_TOKEN = 'bootstraptest'
 

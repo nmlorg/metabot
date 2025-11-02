@@ -55,6 +55,8 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
 def test_admin(conversation):  # pylint: disable=redefined-outer-name
     """Test /admin BOTNAME countdown."""
 
+    conversation.set_bot('admintestbot')
+
     assert conversation.message('/admin modulestestbot countdown') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › countdown: <b>Choose a command</b>

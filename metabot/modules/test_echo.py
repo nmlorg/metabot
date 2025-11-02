@@ -138,6 +138,8 @@ def test_help(conversation):  # pylint: disable=redefined-outer-name
 def test_admin(conversation):  # pylint: disable=redefined-outer-name
     """Test /admin BOTNAME echo."""
 
+    conversation.set_bot('admintestbot')
+
     assert conversation.message('/admin modulestestbot echo') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › echo: <b>Choose a command</b>

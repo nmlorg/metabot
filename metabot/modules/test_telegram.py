@@ -16,6 +16,8 @@ def conversation(build_conversation):  # pylint: disable=missing-docstring
 def test_admin(conversation):  # pylint: disable=redefined-outer-name
     """Test /admin BOTNAME telegram."""
 
+    conversation.set_bot('admintestbot')
+
     assert conversation.message('/admin modulestestbot telegram') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Bot Admin › modulestestbot › telegram: <b>Choose an action</b>

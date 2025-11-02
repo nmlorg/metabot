@@ -47,31 +47,31 @@ If you are creating a bot entirely from scratch, open a private chat with @BotFa
 Otherwise, open a private chat with @BotFather, type <code>/mybots</code>, select the bot account you want to use, select <code>API Token</code>, then copy the code and paste it here:
 """
 
-    ntelebot.bot.Bot('2345:invalid').getme.respond(json={
+    ntelebot.bot.Bot('2311604325:invalid').getme.respond(json={
         'description': 'Unauthorized',
         'error_code': 401,
         'ok': False,
     })
 
-    assert conversation.message('2345:invalid') == """\
+    assert conversation.message('2311604325:invalid') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Add a bot: <b>Paste a bot API Token</b>
 
-Woops, Telegram told me <code>2345:invalid</code> is unauthorized, meaning the code is either incomplete or out of date. If you generated it yourself, open a private chat with @BotFather, type <code>/mybots</code>, select the bot account you're trying to use, select <code>API Token</code>, then copy the code and paste it here. If you got the code from someone else, send them these instructions (including the token I used). If the code you got from BotFather isn't working, select <code>Revoke current token</code> to generate a new one, then paste that new one here:
+Woops, Telegram told me <code>2311604325:invalid</code> is unauthorized, meaning the code is either incomplete or out of date. If you generated it yourself, open a private chat with @BotFather, type <code>/mybots</code>, select the bot account you're trying to use, select <code>API Token</code>, then copy the code and paste it here. If you got the code from someone else, send them these instructions (including the token I used). If the code you got from BotFather isn't working, select <code>Revoke current token</code> to generate a new one, then paste that new one here:
 """
 
-    mockbot = ntelebot.bot.Bot('2345:valid')
+    mockbot = ntelebot.bot.Bot('2311604325:valid')
     mockbot.getme.respond(json={
         'ok': True,
         'result': {
             'first_name': 'Valid Bot',
-            'id': 1234,
+            'id': 2311604325,
             'username': 'validbot',
         }
     })
     mockbot.getupdates.respond(json={'description': 'Conflict', 'error_code': 409, 'ok': False})
 
-    assert conversation.message('2345:valid') == """\
+    assert conversation.message('2311604325:valid') == """\
 [chat_id=1000 parse_mode=HTML]
 Cool, that API Token is for <code>validbot</code>. Give me another moment...
 
@@ -86,13 +86,13 @@ Woops, it looks like this bot account is already in use. Make sure no other bot 
         'ok': True,
         'result': {
             'first_name': 'Valid Bot',
-            'id': 1234,
+            'id': 2311604325,
             'username': 'validbot',
         },
     })
     mockbot.getupdates.respond(json={'description': 'Not Found', 'error_code': 404, 'ok': False})
 
-    assert conversation.message('2345:valid') == """\
+    assert conversation.message('2311604325:valid') == """\
 [chat_id=1000 parse_mode=HTML]
 Cool, that API Token is for <code>validbot</code>. Give me another moment...
 
@@ -100,20 +100,20 @@ Cool, that API Token is for <code>validbot</code>. Give me another moment...
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Add a bot: <b>Paste a bot API Token</b>
 
-Woops, while trying to use <code>2345:valid</code> I got error 404 (<code>Not Found</code>).
+Woops, while trying to use <code>2311604325:valid</code> I got error 404 (<code>Not Found</code>).
 """
 
     mockbot.getme.respond(json={
         'ok': True,
         'result': {
             'first_name': 'Valid Bot',
-            'id': 1234,
+            'id': 2311604325,
             'username': 'validbot',
         },
     })
     mockbot.getupdates.respond(json={'ok': True, 'result': []})
 
-    assert conversation.message('2345:valid') == """\
+    assert conversation.message('2311604325:valid') == """\
 [chat_id=1000 parse_mode=HTML]
 Cool, that API Token is for <code>validbot</code>. Give me another moment...
 
@@ -132,7 +132,7 @@ Yay, I am now running <code>validbot</code> (<code>Valid Bot</code>). Open a pri
                 },
                 'telegram': {
                     'running': False,
-                    'token': '1234:test',
+                    'token': '2190962040:valid-for-modulestestbot',
                 },
             },
         },
@@ -143,7 +143,7 @@ Yay, I am now running <code>validbot</code> (<code>Valid Bot</code>). Open a pri
                 },
                 'telegram': {
                     'running': True,
-                    'token': '2345:valid',
+                    'token': '2311604325:valid',
                 },
             },
         },

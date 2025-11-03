@@ -53,7 +53,8 @@ def modinit(multibot):  # pylint: disable=missing-docstring
 class AnnouncementConf:  # pylint: disable=too-few-public-methods
     """A group's announcement configuration."""
 
-    def __init__(self, calconf, dailyconf):
+    def __init__(self, multibot, calconf, dailyconf):
+        self.multibot = multibot
         self.calconf = calconf
         self.dow = dailyconf.get('dow', 0)
         self.hour = dailyconf.get('hour')
@@ -64,7 +65,7 @@ class AnnouncementConf:  # pylint: disable=too-few-public-methods
         """Get (and format) events for the given time."""
 
         calconf = self.calconf
-        events = calconf.get_events(bot, when=eventtime)
+        events = calconf.get_events(self.multibot, when=eventtime)
         if self.preambles:
             preamble = self.preambles[int(eventtime / (60 * 60 * 24)) % len(self.preambles)]
         else:
@@ -107,7 +108,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
     for botuser, botconf in multibot.conf['bots'].items():  # pylint: disable=too-many-nested-blocks
         for groupid, groupconf in botconf['issue37']['moderator'].items():
             calconf = eventutil.CalendarConf(groupconf)
-            annconf = AnnouncementConf(calconf, groupconf['daily'])
+            annconf = AnnouncementConf(multibot, calconf, groupconf['daily'])
             if not calconf.tzinfo or not isinstance(annconf.hour, int):
                 continue
 

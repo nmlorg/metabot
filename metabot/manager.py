@@ -65,8 +65,7 @@ class Manager:  # pylint: disable=missing-function-docstring
 
         self._bot_instances[self.bot_id] = bot = ntelebot.bot.Bot(self.bot_token)
         bot._username = self.bot_username  # pylint: disable=protected-access
-        bot.multibot = self.multibot
-        bot.config = bot.multibot.conf['bots'][bot.username]
+        bot.config = self.multibot.conf['bots'][bot.username]
         return bot
 
     @property

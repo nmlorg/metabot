@@ -15,7 +15,7 @@ class MultiBot:
     """An ntelebot.loop.Loop that manages multiple bots."""
 
     def __init__(self, modules, confdir=None):
-        self.dispatcher = _MultiBotLoopDispatcher()
+        self.dispatcher = _MultiBotLoopDispatcher(self)
         self.loop = ntelebot.loop.Loop()
         self.conf = botconf.BotConf(confdir)
         self.conf.finalize()
@@ -82,13 +82,17 @@ class MultiBot:
 
 class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
 
+    def __init__(self, multibot):
+        super().__init__()
+        self.multibot = multibot
+
     def __call__(self, bot, update):  # pylint: disable=too-many-branches,too-many-locals
         logging.info('%s', _pretty_repr(update))
 
-        multibot = bot.multibot
         ctx = self.preprocessor(bot, update)
         if not ctx:
             return False
+        ctx.multibot = multibot = self.multibot
 
         with multibot.conf.record_mutations(ctx):
             msg = msgbuilder.MessageBuilder()

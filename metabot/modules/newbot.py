@@ -75,9 +75,9 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
             'Woops, while trying to use <code>%s</code> I got error %s (<code>%s</code>).', token,
             exc.error_code, exc.description)
 
-    username = ctx.bot.multibot.add_bot(token)
-    ctx.bot.multibot.conf['bots'][username]['issue37']['admin']['admins'] = [ctx.user['id']]
-    ctx.bot.multibot.run_bot(username)
+    username = ctx.multibot.add_bot(token)
+    ctx.multibot.conf['bots'][username]['issue37']['admin']['admins'] = [ctx.user['id']]
+    ctx.multibot.run_bot(username)
 
     msg.action = 'Configure your new bot'
     msg.add(

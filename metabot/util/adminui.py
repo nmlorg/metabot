@@ -139,7 +139,7 @@ def calendars(frame):
 
     calcodes = set(frame.get('').split())
 
-    if target and target not in ctx.bot.multibot.calendars:
+    if target and target not in ctx.multibot.calendars:
         msg.add('<code>%s</code> is not a calendar!', target)
     elif action == 'add' and target:
         if target in calcodes:
@@ -159,7 +159,7 @@ def calendars(frame):
     msg.action = 'Select a calendar'
     msg.add(frame.desc)
     msg.add('Select a calendar to add or remove from the list below:')
-    for calcode, calendar_info in sorted(ctx.bot.multibot.calendars.items(),
+    for calcode, calendar_info in sorted(ctx.multibot.calendars.items(),
                                          key=lambda pair: pair[1]['name']):
         if calcode not in calcodes:
             msg.button('Add %s' % calendar_info['name'], 'add %s' % calcode)

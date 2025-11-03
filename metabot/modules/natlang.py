@@ -50,7 +50,7 @@ def process_event(ctx, msg, query):  # pylint: disable=too-many-branches,too-man
     venues = set()
     local_id = None
     while not did_first or not did_cal or not did_summary or not did_venue:
-        _, event, nextev = ctx.bot.multibot.multical.get_event(local_id)
+        _, event, nextev = ctx.multibot.multical.get_event(local_id)
         if not event:
             break
         summary = event['summary'].lower()
@@ -69,7 +69,7 @@ def process_event(ctx, msg, query):  # pylint: disable=too-many-branches,too-man
             elif not did_cal:
                 did_cal = True
                 reasons.add('%s on the %s calendar' %
-                            (query['event'], ctx.bot.multibot.calendars[calcode]['name']))
+                            (query['event'], ctx.multibot.calendars[calcode]['name']))
             else:
                 if not did_summary and summary not in summaries:
                     did_summary = True

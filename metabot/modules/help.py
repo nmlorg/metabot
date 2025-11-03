@@ -18,7 +18,7 @@ def default(ctx, msg, modconf):  # pylint: disable=missing-docstring
 
     hidden = set(modconf.get('hidden', '').split())
 
-    for modname, module in ctx.bot.multibot.modules.items():
+    for modname, module in ctx.multibot.modules.items():
         if modname in hidden:
             continue
         modhelp = getattr(module, 'modhelp', None)
@@ -61,7 +61,7 @@ def admin(frame):  # pylint: disable=too-many-branches
         modconf.pop('hidden')
 
     modules = collections.defaultdict(lambda: collections.defaultdict(set))
-    for modname, module in ctx.bot.multibot.modules.items():
+    for modname, module in ctx.multibot.modules.items():
         modhelp = getattr(module, 'modhelp', None)
         if modhelp:
             modhelp(ctx, ctx.bot.config['issue37'][modname], modules[modname])

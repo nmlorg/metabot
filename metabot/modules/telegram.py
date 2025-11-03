@@ -12,13 +12,13 @@ def admin(frame):
         if not modconf['running']:
             msg.add('@%s is not currently running.', username)
         else:
-            ctx.bot.multibot.stop_bot(username)
+            ctx.multibot.stop_bot(username)
             msg.add('@%s is now offline.', username)
     elif frame.text == 'start':
         if modconf['running']:
             msg.add('@%s is already running.', username)
         else:
-            ctx.bot.multibot.run_bot(username)
+            ctx.multibot.run_bot(username)
             msg.add('@%s is now running.', username)
 
     if modconf['running']:

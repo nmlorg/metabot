@@ -44,7 +44,7 @@ def group(ctx, msg):
             "I'm not configured for this group! Ask a bot admin to go into the <b>moderator</b> "
             'module settings, group <b>%s</b>, and %s.', group_id, humanize.list(missing))
 
-    events = calconf.get_events(ctx.bot)
+    events = calconf.get_events(ctx.multibot)
     if not events:
         msg.add('No events in the next %s days!', calconf.days)
     else:
@@ -80,7 +80,7 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
             msg.add(f'Please {humanize.list(missing)}!')
             return msg.button('Settings', '/events set')
 
-    calendar_view = ctx.bot.multibot.multical.view(calcodes.split())
+    calendar_view = ctx.multibot.multical.view(calcodes.split())
     tzinfo = pytz.timezone(timezone)
 
     prevev, event, nextev = calendar_view.get_event(eventid)
@@ -210,7 +210,7 @@ def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
                                 switch_pm_text=f'Click to {humanize.list(missing)}!',
                                 switch_pm_parameter='L2V2ZW50cw')
 
-    calendar_view = ctx.bot.multibot.multical.view(calcodes.split())
+    calendar_view = ctx.multibot.multical.view(calcodes.split())
     tzinfo = pytz.timezone(timezone)
 
     terms = ctx.text.lower().split()[1:]
@@ -272,7 +272,7 @@ def customize(ctx, msg, modconf):
     msg.path(eventid)
     msg.path('admin', 'Customize')
 
-    _, event, _ = ctx.bot.multibot.multical.get_event(eventid)
+    _, event, _ = ctx.multibot.multical.get_event(eventid)
     if not event:
         return msg.add('Unknown event!')
 

@@ -8,7 +8,7 @@ BOOTSTRAP_TOKEN = uuid.uuid4().hex
 
 
 def modhelp(ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
-    bots = sorted(username for username, botconf in ctx.bot.multibot.conf['bots'].items()
+    bots = sorted(botuser for botuser, botconf in ctx.multibot.conf['bots'].items()
                   if ctx.user['id'] in botconf['issue37']['admin']['admins'])
 
     if bots:
@@ -30,11 +30,11 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
 def default(ctx, msg):  # pylint: disable=missing-docstring
     ctx.private = True
     msg.path('/admin', 'Bot Admin')
-    frame = adminui.Frame(ctx, msg, ctx.bot.multibot.conf, 'bots', None, ctx.text)
+    frame = adminui.Frame(ctx, msg, ctx.multibot.conf, 'bots', None, ctx.text)
     menu = adminui.Menu()
-    for username, botconf in frame.value.items():
+    for botuser, botconf in frame.value.items():
         if ctx.user['id'] in botconf['issue37']['admin']['admins']:
-            menu.add(username)
+            menu.add(botuser)
 
     if not menu.fields:
         return msg.add(
@@ -59,7 +59,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
     ctx.targetbotconf = frame.value
 
     menu = adminui.Menu()
-    for modname, module in ctx.bot.multibot.modules.items():
+    for modname, module in ctx.multibot.modules.items():
         if hasattr(module, 'admin'):
             menu.add(modname, module.admin, module.__doc__.splitlines()[0].rstrip('.'))
 

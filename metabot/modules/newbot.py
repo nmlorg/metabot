@@ -5,7 +5,7 @@ import logging
 import ntelebot
 
 
-def modhelp(unused_ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
+def modhelp(*, sections, **_):  # pylint: disable=missing-docstring
     sections['commands'].add('/newbot \u2013 Set up a new bot')
 
 

@@ -6,9 +6,9 @@ from metabot.util import adminui
 from metabot.util import humanize
 
 
-def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
+def modhelp(*, ctx, sections):  # pylint: disable=missing-docstring
     now = time.time()
-    for command, timestamp in modconf.items():
+    for command, timestamp in ctx.mgr.bot_conf['countdown'].items():
         if now > timestamp:
             sections['countdowns'].add(f'/{command} \u2013 Count up from {timestamp}')
         else:

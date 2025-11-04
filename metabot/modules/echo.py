@@ -4,8 +4,8 @@ from metabot.util import adminui
 from metabot.util import html
 
 
-def modhelp(unused_ctx, modconf, sections):  # pylint: disable=missing-docstring
-    for command, data in modconf.items():
+def modhelp(*, ctx, sections):  # pylint: disable=missing-docstring
+    for command, data in ctx.mgr.bot_conf['echo'].items():
         if not data.get('text') or data.get('hidden'):
             continue
         message = data['text']

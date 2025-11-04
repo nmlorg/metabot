@@ -16,7 +16,7 @@ def cgi_escape(text):  # pylint: disable=missing-docstring
 ALIASES = ('channel', 'channels', 'group', 'groups', 'room', 'rooms')
 
 
-def modhelp(unused_ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
+def modhelp(*, sections, **_):  # pylint: disable=missing-docstring
     sections['commands'].add('/groups \u2013 Find other group chats')
 
 

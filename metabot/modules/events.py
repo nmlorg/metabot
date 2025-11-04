@@ -11,7 +11,7 @@ from metabot.util import humanize
 ALIASES = ('calendar', 'event', 'events')
 
 
-def modhelp(unused_ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
+def modhelp(*, sections, **_):  # pylint: disable=missing-docstring
     sections['commands'].add('/events \u2013 Display recent and upcoming events')
 
 

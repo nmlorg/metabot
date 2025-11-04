@@ -7,7 +7,7 @@ from metabot.util import adminui
 BOOTSTRAP_TOKEN = uuid.uuid4().hex
 
 
-def modhelp(ctx, unused_modconf, sections):  # pylint: disable=missing-docstring
+def modhelp(*, ctx, sections):  # pylint: disable=missing-docstring
     bots = sorted(botuser for botuser, botconf in ctx.multibot.conf['bots'].items()
                   if ctx.user['id'] in botconf['issue37']['admin']['admins'])
 

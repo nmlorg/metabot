@@ -8,8 +8,9 @@ BOOTSTRAP_TOKEN = uuid.uuid4().hex
 
 
 def modhelp(*, ctx, sections):  # pylint: disable=missing-docstring
+    mgr = ctx.mgr
     bots = sorted(botuser for botuser, botconf in ctx.multibot.conf['bots'].items()
-                  if ctx.user['id'] in botconf['issue37']['admin']['admins'])
+                  if mgr.user_id in botconf['issue37']['admin']['admins'])
 
     if bots:
         sections['commands'].add('/admin \u2013 Manage the admin list')
@@ -28,12 +29,13 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
 
 
 def default(ctx, msg):  # pylint: disable=missing-docstring
+    mgr = ctx.mgr
     ctx.private = True
     msg.path('/admin', 'Bot Admin')
     frame = adminui.Frame(ctx, msg, ctx.multibot.conf, 'bots', None, ctx.text)
     menu = adminui.Menu()
     for botuser, botconf in frame.value.items():
-        if ctx.user['id'] in botconf['issue37']['admin']['admins']:
+        if mgr.user_id in botconf['issue37']['admin']['admins']:
             menu.add(botuser)
 
     if not menu.fields:
@@ -41,7 +43,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
             "Hi! You aren't one of my admins. If you should be, ask a current admin to add you by "
             'opening a chat with me (@%s) and typing:\n'
             '\n'
-            '<pre>/admin %s admin add %s</pre>', ctx.bot.username, ctx.bot.username, ctx.user['id'])
+            '<pre>/admin %s admin add %s</pre>', ctx.bot.username, ctx.bot.username, mgr.user_id)
 
     frame, handler = menu.select(frame)
     if not handler:
@@ -74,21 +76,24 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
 def whoami(ctx, msg):
     """Simply tell the user their userid (primarily to copy/paste into /admin BOTNAME admin)."""
 
-    msg.add('<code>%s</code>', ctx.user['id'])
+    mgr = ctx.mgr
+    msg.add('<code>%s</code>', mgr.user_id)
 
 
 def bootstrap(ctx, msg, modconf):
     """Add the user who sent the command to the current bot's admin list."""
 
+    mgr = ctx.mgr
     if ctx.text == BOOTSTRAP_TOKEN and not modconf['admins']:
-        modconf['admins'] = [ctx.user['id']]
-        msg.add('Added %s to the admin list.', ctx.user['id'])
+        modconf['admins'] = [mgr.user_id]
+        msg.add('Added %s to the admin list.', mgr.user_id)
 
 
 def admin(frame):  # pylint: disable=too-many-branches
     """Handle /admin BOTNAME admin (configure the admin module itself)."""
 
     ctx, msg, modconf = frame.ctx, frame.msg, frame.value
+    mgr = ctx.mgr
     if 'admins' not in modconf:  # pragma: no cover
         modconf['admins'] = []
 
@@ -108,7 +113,7 @@ def admin(frame):  # pylint: disable=too-many-branches
         msg.add("I'm not sure what <code>%s</code> is\u2014it's not a user id!", frame.text)
 
     if target in modconf['admins']:
-        if target == ctx.user['id']:
+        if target == mgr.user_id:
             msg.add("You can't remove yourself from the admin list.")
         else:
             modconf['admins'].remove(target)
@@ -123,10 +128,10 @@ def admin(frame):  # pylint: disable=too-many-branches
             'remove.')
 
     for admin_id in sorted(modconf['admins']):
-        if admin_id != ctx.user['id']:
-            mgr = ctx.mgr.user(admin_id)
-            if mgr.user_name:
-                userstr = f'{mgr.user_name} ({admin_id})'
+        if admin_id != mgr.user_id:
+            othermgr = mgr.user(admin_id)
+            if othermgr.user_name:
+                userstr = f'{othermgr.user_name} ({admin_id})'
             else:
                 userstr = admin_id
             msg.button(f'Remove {userstr}', f'{admin_id}')

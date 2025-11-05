@@ -17,6 +17,7 @@ def moddispatch(ctx, msg, unused_modconf):  # pylint: disable=missing-docstring
 
 
 def default(ctx, msg):  # pylint: disable=missing-docstring
+    mgr = ctx.mgr
     ctx.private = True
     msg.path('/newbot', 'Add a bot')
     msg.action = 'Paste a bot API Token'
@@ -76,7 +77,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
             exc.error_code, exc.description)
 
     username = ctx.multibot.add_bot(token)
-    ctx.multibot.conf['bots'][username]['issue37']['admin']['admins'] = [ctx.user['id']]
+    ctx.multibot.conf['bots'][username]['issue37']['admin']['admins'] = [mgr.user_id]
     ctx.multibot.run_bot(username)
 
     msg.action = 'Configure your new bot'

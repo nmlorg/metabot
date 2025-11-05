@@ -57,8 +57,9 @@ def group(ctx, msg):
 def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-locals,too-many-statements
     """Handle /events in a private chat."""
 
+    mgr = ctx.mgr
     eventid, timezone, action, text = ctx.split(4)
-    if timezone == 'admin' and ctx.user['id'] in ctx.bot.config['issue37']['admin']['admins']:
+    if timezone == 'admin' and mgr.user_id in ctx.bot.config['issue37']['admin']['admins']:
         return customize(ctx, msg, modconf)
     if timezone == '-':
         timezone = ''
@@ -67,7 +68,7 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
         calcodes = eventid.split(':', 1)[0]
     else:
         suffix = '-'
-        user_id = '%s' % ctx.user['id']
+        user_id = f'{mgr.user_id}'
         userconf = modconf['users'][user_id]
         calcodes = userconf.get('calendars')
         timezone = userconf.get('timezone')
@@ -91,7 +92,7 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
         msg.add('No upcoming events!')
     else:
         eventid = event['local_id']
-        rsvpconf = modconf['rsvp'][eventid][ctx.user['id']]
+        rsvpconf = modconf['rsvp'][eventid][mgr.user_id]
 
         if action == 'going':
             rsvpconf['going'] = '+'
@@ -121,7 +122,7 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
         attending = []
         othernotes = []
         for otheruser, otherrsvpconf in modconf['rsvp'][eventid].items():
-            userstr = ctx.mgr.user(otheruser).user_name or f'user{otheruser}'
+            userstr = mgr.user(otheruser).user_name or f'user{otheruser}'
             userstr = f'<a href="tg://user?id={otheruser}">{html.escape(userstr)}</a>'
 
             if (note := otherrsvpconf.get('note')):
@@ -153,7 +154,7 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
             buttons[2] = ('Edit note \U0001f4dd', base + 'note')
         msg.buttons(buttons)
 
-        if ctx.user['id'] in ctx.bot.config['issue37']['admin']['admins']:
+        if mgr.user_id in ctx.bot.config['issue37']['admin']['admins']:
             msg.button('Customize', f'/events {eventid} admin')
 
         image = eventutil.get_image(event, ctx.bot.config, always=True)
@@ -194,7 +195,8 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
 def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
     """Handle @BOTNAME events."""
 
-    user_id = '%s' % ctx.user['id']
+    mgr = ctx.mgr
+    user_id = f'{mgr.user_id}'
     userconf = modconf['users'][user_id]
     calcodes = userconf.get('calendars')
     timezone = userconf.get('timezone')
@@ -297,12 +299,13 @@ def customize(ctx, msg, modconf):
 def settings(ctx, msg, modconf):
     """Handle /events set."""
 
+    mgr = ctx.mgr
     _, text = ctx.split(2)
 
     msg.path('/events', 'Events')
     msg.path('set', 'Settings')
 
-    user_id = '%s' % ctx.user['id']
+    user_id = f'{mgr.user_id}'
     adminui.Menu(
         ('calendars', adminui.calendars, 'Which calendars do you want to see?'),
         ('timezone', adminui.timezone, 'What time zone are you in?'),

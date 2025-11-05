@@ -40,7 +40,7 @@ def process_event(ctx, msg, query):  # pylint: disable=too-many-branches,too-man
 
     mgr = ctx.mgr
     if ctx.chat['type'] == 'private':
-        conf = ctx.bot.config['issue37']['events']['users']['%s' % ctx.user['id']]
+        conf = ctx.bot.config['issue37']['events']['users'][f'{mgr.user_id}']
     else:
         conf = mgr.chat_conf
     calcodes = conf.get('calendars', '').split()

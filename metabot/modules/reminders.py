@@ -106,15 +106,15 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
     startofhour = now // 3600
 
     for botuser, botconf in multibot.conf['bots'].items():  # pylint: disable=too-many-nested-blocks
-        for groupid, groupconf in botconf['issue37']['moderator'].items():
-            calconf = eventutil.CalendarConf(groupconf)
-            annconf = AnnouncementConf(multibot, calconf, groupconf['daily'])
+        for mgr in multibot.mgr.bot(botuser).bot_active_groups:
+            calconf = eventutil.CalendarConf(mgr.chat_conf)
+            annconf = AnnouncementConf(multibot, calconf, mgr.chat_conf['daily'])
             if not calconf.tzinfo or not isinstance(annconf.hour, int):
                 continue
 
             nowdt = datetime.datetime.fromtimestamp(now, calconf.tzinfo)
             perioddt = datetime.datetime.fromtimestamp(period, calconf.tzinfo)
-            key = (botuser, groupid)
+            key = (botuser, f'{mgr.chat_id}')
             if key in records:
                 last = Announcement(*records[key])
             else:
@@ -134,7 +134,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     if not images:
                         if (image := eventutil.get_image(events[0], botconf)):
                             images.append(image)
-                    message = reminder_send(bot, groupid, text, images)
+                    message = reminder_send(bot, mgr.chat_id, text, images)
                     if message:
                         if annconf.pin:
                             try:
@@ -172,20 +172,19 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     updtext = 'Updated:\n' + '\n'.join(edits)
                     try:
                         updmessage = bot.send_message(
-                            chat_id=groupid,
+                            chat_id=mgr.chat_id,
                             reply_to_message_id=last.message['message_id'],
                             text=_truncate(updtext, ntelebot.limits.message_text_length_max),
                             parse_mode='HTML',
                             disable_web_page_preview=True,
                             disable_notification=True)
                     except ntelebot.errors.Error:
-                        logging.exception('While sending to %s:\n%s', groupid, updtext)
+                        logging.exception('While sending to %s:\n%s', mgr.chat_id, updtext)
                     else:
                         suffix = 'Updated ' + humanize.time(nowdt)
-                        groupidnum = int(groupid)
-                        if -1002147483647 <= groupidnum < -1000000000000:
+                        if -1002147483647 <= mgr.chat_id < -1000000000000:
                             suffix = '<a href="https://t.me/c/%s/%s">%s</a>' % (
-                                -1000000000000 - groupidnum, updmessage['message_id'], suffix)
+                                -1000000000000 - mgr.chat_id, updmessage['message_id'], suffix)
 
                 if text != last.text or suffix != last.suffix:
                     newtext = text

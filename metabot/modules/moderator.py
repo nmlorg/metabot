@@ -17,10 +17,8 @@ def modinit(multibot):  # pylint: disable=missing-docstring
     def _hourly():
         try:
             checked = set()
-            for botuser, botconf in multibot.conf['bots'].items():
-                mgr = multibot.mgr.bot(botuser)
-                for groupid in botconf['issue37']['moderator']:
-                    mgr = mgr.chat(groupid)
+            for botuser in multibot.conf['bots']:
+                for mgr in multibot.mgr.bot(botuser).bot_active_groups:
                     if mgr.chat_id in checked:
                         continue
                     try:
@@ -47,10 +45,10 @@ def modpredispatch(ctx, unused_msg, unused_modconf):  # pylint: disable=missing-
         mgr.chat_conf['title'] = mgr.chat_title  # This duplication just ensures chat_conf exists.
 
         if ctx.type == 'message':
-            for target_group_id, target_groupconf in ctx.bot.config['issue37']['moderator'].items():
-                if target_groupconf['forward']['from'] == ctx.chat['id']:
-                    ctx.forward(int(target_group_id),
-                                disable_notification=not target_groupconf['forward']['notify'])
+            for targetmgr in mgr.bot_active_groups:
+                if targetmgr.chat_conf['forward']['from'] == mgr.chat_id:
+                    ctx.forward(targetmgr.chat_id,
+                                disable_notification=not targetmgr.chat_conf['forward']['notify'])
 
 
 def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring

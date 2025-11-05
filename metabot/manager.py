@@ -53,6 +53,11 @@ class Manager:  # pylint: disable=missing-function-docstring
         return Manager(self, bot_id=bot_id, bot_username=bot_username)
 
     @property
+    def bot_active_groups(self):
+        for chat_id in self.bot_conf.get('moderator', ()):
+            yield self.chat(chat_id)
+
+    @property
     def bot_conf(self):
         return self.multibot.conf['bots'][self.bot_username]['issue37']
 

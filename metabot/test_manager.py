@@ -69,6 +69,8 @@ def test_cross_context():
     with pytest.raises(AttributeError):
         assert mgr.chat_id == 90000000000
     with pytest.raises(AttributeError):
+        assert mgr.chat_conf == {}
+    with pytest.raises(AttributeError):
         assert mgr.user_id == 1000
     with pytest.raises(AttributeError):
         assert not mgr.is_chat_admin
@@ -78,6 +80,8 @@ def test_cross_context():
     with pytest.raises(AttributeError):
         assert mgr.chat_id == 90000000000
     with pytest.raises(AttributeError):
+        assert mgr.chat_conf == {}
+    with pytest.raises(AttributeError):
         assert mgr.user_id == 1000
     with pytest.raises(AttributeError):
         assert not mgr.is_chat_admin
@@ -85,6 +89,7 @@ def test_cross_context():
         'bots': {
             'managertestbot': {
                 'issue37': {
+                    'moderator': {},
                     'telegram': {
                         'token': '1111111111:BBBBBBBBBB',
                     },
@@ -97,6 +102,8 @@ def test_cross_context():
     assert mgr.bot_id == 1111111111
     with pytest.raises(AttributeError):
         assert mgr.chat_id == 90000000000
+    with pytest.raises(AttributeError):
+        assert mgr.chat_conf == {}
     assert mgr.user_id == 1000
     with pytest.raises(AttributeError):
         assert not mgr.is_chat_admin
@@ -104,6 +111,7 @@ def test_cross_context():
         'bots': {
             'managertestbot': {
                 'issue37': {
+                    'moderator': {},
                     'telegram': {
                         'token': '1111111111:BBBBBBBBBB',
                     },
@@ -116,12 +124,16 @@ def test_cross_context():
     mgr = mgr.chat(90000000000)
     assert mgr.bot_id == 1111111111
     assert mgr.chat_id == 90000000000
+    assert mgr.chat_conf == {}
     assert mgr.user_id == 1000
     assert not mgr.is_chat_admin
     assert mybot.conf == {
         'bots': {
             'managertestbot': {
                 'issue37': {
+                    'moderator': {
+                        '90000000000': {},
+                    },
                     'telegram': {
                         'token': '1111111111:BBBBBBBBBB',
                     },

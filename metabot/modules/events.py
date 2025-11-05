@@ -32,8 +32,8 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
 def group(ctx, msg):
     """Handle /events in a group chat."""
 
-    group_id = f"{ctx.chat['id']}"
-    calconf = eventutil.CalendarConf(ctx.bot.config['issue37']['moderator'][group_id])
+    mgr = ctx.mgr
+    calconf = eventutil.CalendarConf(mgr.chat_conf)
     if not calconf.calcodes or not calconf.tzinfo:
         missing = []
         if not calconf.calcodes:
@@ -42,7 +42,7 @@ def group(ctx, msg):
             missing.append('set the time zone')
         return msg.add(
             "I'm not configured for this group! Ask a bot admin to go into the <b>moderator</b> "
-            'module settings, group <b>%s</b>, and %s.', group_id, humanize.list(missing))
+            'module settings, group <b>%s</b>, and %s.', mgr.chat_id, humanize.list(missing))
 
     events = calconf.get_events(ctx.multibot)
     if not events:

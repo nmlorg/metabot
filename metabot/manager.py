@@ -80,6 +80,10 @@ class Manager:  # pylint: disable=missing-function-docstring
         return self.chat_info.get('admins', ())
 
     @property
+    def chat_conf(self):
+        return self.bot_conf['moderator'][f'{self.chat_id}']
+
+    @property
     def chat_info(self):
         return self.multibot.conf['groups'][self.chat_id]
 

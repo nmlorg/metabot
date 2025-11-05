@@ -38,10 +38,11 @@ def process(ctx, msg):
 def process_event(ctx, msg, query):  # pylint: disable=too-many-branches,too-many-locals
     """Process queries of the form "When is the next XXX?"."""
 
+    mgr = ctx.mgr
     if ctx.chat['type'] == 'private':
         conf = ctx.bot.config['issue37']['events']['users']['%s' % ctx.user['id']]
     else:
-        conf = ctx.bot.config['issue37']['moderator']['%s' % ctx.chat['id']]
+        conf = mgr.chat_conf
     calcodes = conf.get('calendars', '').split()
     timezone = pytz.timezone(conf.get('timezone', 'UTC'))
 

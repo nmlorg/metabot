@@ -22,7 +22,7 @@ def modinit(multibot):  # pylint: disable=missing-docstring
                     if mgr.chat_id in checked:
                         continue
                     try:
-                        data = mgr.bot_instance.get_chat_administrators(chat_id=mgr.chat_id)
+                        data = mgr.bot_api.get_chat_administrators(chat_id=mgr.chat_id)
                     except ntelebot.errors.Error:
                         continue
                     checked.add(mgr.chat_id)

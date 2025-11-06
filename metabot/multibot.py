@@ -56,7 +56,7 @@ class MultiBot:
     def run_bot(self, username):
         """Begin polling for updates for the previously configured bot."""
 
-        bot = self.mgr.bot(username).bot_instance
+        bot = self.mgr.bot(username).bot_api
         self.loop.add(bot, self.dispatcher)
         bot.config['issue37']['telegram']['running'] = True
         self.conf.save()

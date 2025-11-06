@@ -42,7 +42,7 @@ def test_simple():
     assert mybot.mgr.bot('1111111111').bot_username == 'managertestbot'
     assert mybot.mgr._bot_instances == {}  # pylint: disable=protected-access
 
-    bot = mybot.mgr.bot(1111111111).bot_instance
+    bot = mybot.mgr.bot(1111111111).bot_api
     assert isinstance(bot, ntelebot.bot.Bot)
     assert mybot.mgr._bot_instances == {1111111111: bot}  # pylint: disable=protected-access
     assert mybot.mgr.bot(1111111111).bot_username == 'managertestbot'

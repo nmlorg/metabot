@@ -120,7 +120,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
             else:
                 last = None
 
-            bot = multibot.mgr.bot(botuser).bot_instance
+            bot = multibot.mgr.bot(botuser).bot_api
 
             if perioddt.hour == annconf.hour and not annconf.dow & 1 << perioddt.weekday() and (
                     not last or startofhour > last.time // 3600):

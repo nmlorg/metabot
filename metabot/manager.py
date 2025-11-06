@@ -58,11 +58,7 @@ class Manager:  # pylint: disable=missing-function-docstring
             yield self.chat(chat_id)
 
     @property
-    def bot_conf(self):
-        return self.multibot.conf['bots'][self.bot_username]['issue37']
-
-    @property
-    def bot_instance(self):
+    def bot_api(self):
         """The shared instance of ntelebot.bot.Bot(self.bot_token)."""
 
         if (bot := self._bot_instances.get(self.bot_id)):
@@ -72,6 +68,10 @@ class Manager:  # pylint: disable=missing-function-docstring
         bot._username = self.bot_username  # pylint: disable=protected-access
         bot.config = self.multibot.conf['bots'][bot.username]
         return bot
+
+    @property
+    def bot_conf(self):
+        return self.multibot.conf['bots'][self.bot_username]['issue37']
 
     @property
     def bot_token(self):

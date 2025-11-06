@@ -20,7 +20,10 @@ def modhelp(*, sections, **_):  # pylint: disable=missing-docstring
     sections['commands'].add('/groups \u2013 Find other group chats')
 
 
-def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
+def moddispatch(*, ctx, msg):  # pylint: disable=missing-docstring
+    mgr = ctx.mgr
+    modconf = mgr.bot_conf['groups']
+
     if ctx.type in ('message', 'callback_query') and ctx.command in ALIASES:
         return default(ctx, msg, modconf)
 

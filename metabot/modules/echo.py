@@ -26,7 +26,9 @@ def modhelp(*, ctx, sections):  # pylint: disable=missing-docstring
         sections[section].add(f'/{command} \u2013 {message}')
 
 
-def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
+def moddispatch(*, ctx, msg):  # pylint: disable=missing-docstring
+    mgr = ctx.mgr
+    modconf = mgr.bot_conf['echo']
     if (ctx.type in ('message', 'callback_query') and ctx.command in modconf and
             modconf[ctx.command].get('text')):
         return echo(ctx, msg, modconf[ctx.command])

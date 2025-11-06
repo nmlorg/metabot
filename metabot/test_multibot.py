@@ -72,7 +72,8 @@ def test_module():
     class _DummyMod:  # pylint: disable=too-few-public-methods
 
         @staticmethod
-        def moddispatch(ctx, unused_msg, unused_modconf):  # pylint: disable=missing-docstring
+        def moddispatch(*, ctx, msg):  # pylint: disable=missing-docstring
+            del msg
             results.append(ctx.text)
             mybot.stop()
             event.set()

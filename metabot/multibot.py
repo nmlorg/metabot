@@ -119,16 +119,14 @@ class _MultiBotLoopDispatcher(ntelebot.dispatch.LoopDispatcher):
 
             ctx.mgr = mgr
 
-            for modname, module in multibot.modules.items():
-                modpredispatch = getattr(module, 'modpredispatch', None)
-                if modpredispatch:
-                    modpredispatch(ctx, msg, bot.config['issue37'][modname])
+            for module in multibot.modules.values():
+                if (modpredispatch := getattr(module, 'modpredispatch', None)):
+                    modpredispatch(ctx=ctx, msg=msg)
 
             ret = False
-            for modname, module in multibot.modules.items():
-                moddispatch = getattr(module, 'moddispatch', None)
-                if moddispatch:
-                    ret = moddispatch(ctx, msg, bot.config['issue37'][modname])
+            for module in multibot.modules.values():
+                if (moddispatch := getattr(module, 'moddispatch', None)):
+                    ret = moddispatch(ctx=ctx, msg=msg)
                     if ret is not False:
                         break
 

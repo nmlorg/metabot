@@ -9,7 +9,7 @@ def modhelp(*, sections, **_):  # pylint: disable=missing-docstring
     sections['commands'].add('/newbot \u2013 Set up a new bot')
 
 
-def moddispatch(ctx, msg, unused_modconf):  # pylint: disable=missing-docstring
+def moddispatch(*, ctx, msg):  # pylint: disable=missing-docstring
     if ctx.type in ('message', 'callback_query') and ctx.command == 'newbot':
         return default(ctx, msg)
 

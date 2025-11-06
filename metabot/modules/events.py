@@ -15,7 +15,10 @@ def modhelp(*, sections, **_):  # pylint: disable=missing-docstring
     sections['commands'].add('/events \u2013 Display recent and upcoming events')
 
 
-def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
+def moddispatch(*, ctx, msg):  # pylint: disable=missing-docstring
+    mgr = ctx.mgr
+    modconf = mgr.bot_conf['events']
+
     if ctx.type in ('message', 'callback_query') and ctx.command in ALIASES:
         if ctx.chat['type'] != 'private':
             return group(ctx, msg)

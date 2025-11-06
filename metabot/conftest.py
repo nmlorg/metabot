@@ -72,7 +72,7 @@ class BotConversation:  # pylint: disable=missing-docstring,too-few-public-metho
 
     def __init__(self, *modules):
 
-        def dummymod(ctx):  # pylint: disable=missing-docstring,unused-argument
+        def dummymod(ctx):  # pylint: disable=missing-docstring
             return ctx.command == 'dummymod' and ctx.reply_text('DUMMYMOD')
 
         self.multibot = multibot.MultiBot(set(modules) | {admin, dummymod, help})

@@ -8,7 +8,7 @@ import pytz
 from metabot.util import eventutil
 
 
-def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring,unused-argument
+def moddispatch(*, ctx, msg):  # pylint: disable=missing-docstring
     if ctx.type == 'message' and not ctx.command:
         return process(ctx, msg)
 

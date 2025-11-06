@@ -16,14 +16,14 @@ def modhelp(*, ctx, sections):  # pylint: disable=missing-docstring
         sections['commands'].add('/admin \u2013 Manage the admin list')
 
 
-def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
+def moddispatch(*, ctx, msg):  # pylint: disable=missing-docstring
     if ctx.type in ('message', 'callback_query'):
         if ctx.command == 'admin':
             return default(ctx, msg)
         if ctx.command == 'whoami':
             return whoami(ctx, msg)
         if ctx.command == '_bootstrap':
-            return bootstrap(ctx, msg, modconf)
+            return bootstrap(ctx, msg)
 
     return False
 
@@ -80,10 +80,11 @@ def whoami(ctx, msg):
     msg.add('<code>%s</code>', mgr.user_id)
 
 
-def bootstrap(ctx, msg, modconf):
+def bootstrap(ctx, msg):
     """Add the user who sent the command to the current bot's admin list."""
 
     mgr = ctx.mgr
+    modconf = mgr.bot_conf['admin']
     if ctx.text == BOOTSTRAP_TOKEN and not modconf['admins']:
         modconf['admins'] = [mgr.user_id]
         msg.add('Added %s to the admin list.', mgr.user_id)

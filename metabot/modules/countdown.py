@@ -15,7 +15,9 @@ def modhelp(*, ctx, sections):  # pylint: disable=missing-docstring
             sections['countdowns'].add(f'/{command} \u2013 Count down to {timestamp}')
 
 
-def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
+def moddispatch(*, ctx, msg):  # pylint: disable=missing-docstring
+    mgr = ctx.mgr
+    modconf = mgr.bot_conf['countdown']
     if ctx.type in ('message', 'callback_query') and ctx.command in modconf:
         return countdown(msg, modconf[ctx.command])
 

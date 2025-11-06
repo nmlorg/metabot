@@ -39,7 +39,8 @@ def modinit(multibot):  # pylint: disable=missing-docstring
     _queue()
 
 
-def modpredispatch(ctx, unused_msg, unused_modconf):  # pylint: disable=missing-docstring
+def modpredispatch(*, ctx, msg):  # pylint: disable=missing-docstring
+    del msg
     mgr = ctx.mgr
     if ctx.chat and ctx.chat['type'] in ('channel', 'group', 'supergroup'):
         mgr.chat_conf['title'] = mgr.chat_title  # This duplication just ensures chat_conf exists.
@@ -51,9 +52,9 @@ def modpredispatch(ctx, unused_msg, unused_modconf):  # pylint: disable=missing-
                                 disable_notification=not targetmgr.chat_conf['forward']['notify'])
 
 
-def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
+def moddispatch(*, ctx, msg):  # pylint: disable=missing-docstring
     if ctx.type == 'join':
-        join(ctx, msg, modconf)
+        join(ctx, msg)
 
     if ctx.type in ('message', 'callback_query') and ctx.command == 'mod':
         ctx.private = True
@@ -65,12 +66,11 @@ def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
     return False
 
 
-def join(ctx, msg, modconf):
+def join(ctx, msg):
     """Respond to new users joining a group chat."""
 
     mgr = ctx.mgr
-    greeting = modconf['%s' % ctx.chat['id']].get('greeting')
-    if not greeting:
+    if not (greeting := mgr.chat_conf.get('greeting')):
         return
     users = [user for user in ctx.data if not user['is_bot']]
     if not users:

@@ -5,18 +5,19 @@ import collections
 ALIASES = ('command', 'commands', 'help', 'start')
 
 
-def moddispatch(ctx, msg, modconf):  # pylint: disable=missing-docstring
+def moddispatch(*, ctx, msg):  # pylint: disable=missing-docstring
     if ctx.type in ('message', 'callback_query') and ctx.command in ALIASES:
-        return default(ctx, msg, modconf)
+        return default(ctx, msg)
 
     return False
 
 
-def default(ctx, msg, modconf):  # pylint: disable=missing-docstring
+def default(ctx, msg):  # pylint: disable=missing-docstring
+    mgr = ctx.mgr
     ctx.private = True
     sections = collections.defaultdict(set)
 
-    hidden = set(modconf.get('hidden', '').split())
+    hidden = set(mgr.bot_conf['help'].get('hidden', '').split())
 
     for modname, module in ctx.multibot.modules.items():
         if modname in hidden:

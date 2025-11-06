@@ -108,6 +108,10 @@ class Manager:  # pylint: disable=missing-function-docstring
         return Manager(self, user_id=int(user_id))
 
     @property
+    def user_conf(self):
+        return self.bot_conf['events']['users'][f'{self.user_id}']
+
+    @property
     def user_info(self):
         return self.multibot.conf['users'][self.user_id]
 

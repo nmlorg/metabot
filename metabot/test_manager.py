@@ -54,7 +54,7 @@ def test_simple():
         mybot.mgr.bot(2222222222)
 
 
-def test_cross_context():
+def test_cross_context():  # pylint: disable=too-many-statements
     """Test things that access multiple contexts."""
 
     mybot = multibot.MultiBot(())
@@ -73,6 +73,8 @@ def test_cross_context():
     with pytest.raises(AttributeError):
         assert mgr.user_id == 1000
     with pytest.raises(AttributeError):
+        assert mgr.user_conf == {}
+    with pytest.raises(AttributeError):
         assert not mgr.is_chat_admin
 
     mgr = mgr.bot(1111111111)
@@ -84,11 +86,16 @@ def test_cross_context():
     with pytest.raises(AttributeError):
         assert mgr.user_id == 1000
     with pytest.raises(AttributeError):
+        assert mgr.user_conf == {}
+    with pytest.raises(AttributeError):
         assert not mgr.is_chat_admin
     assert mybot.conf == {
         'bots': {
             'managertestbot': {
                 'issue37': {
+                    'events': {
+                        'users': {},
+                    },
                     'moderator': {},
                     'telegram': {
                         'token': '1111111111:BBBBBBBBBB',
@@ -105,12 +112,18 @@ def test_cross_context():
     with pytest.raises(AttributeError):
         assert mgr.chat_conf == {}
     assert mgr.user_id == 1000
+    assert mgr.user_conf == {}
     with pytest.raises(AttributeError):
         assert not mgr.is_chat_admin
     assert mybot.conf == {
         'bots': {
             'managertestbot': {
                 'issue37': {
+                    'events': {
+                        'users': {
+                            '1000': {},
+                        },
+                    },
                     'moderator': {},
                     'telegram': {
                         'token': '1111111111:BBBBBBBBBB',
@@ -126,11 +139,17 @@ def test_cross_context():
     assert mgr.chat_id == 90000000000
     assert mgr.chat_conf == {}
     assert mgr.user_id == 1000
+    assert mgr.user_conf == {}
     assert not mgr.is_chat_admin
     assert mybot.conf == {
         'bots': {
             'managertestbot': {
                 'issue37': {
+                    'events': {
+                        'users': {
+                            '1000': {},
+                        },
+                    },
                     'moderator': {
                         '90000000000': {},
                     },

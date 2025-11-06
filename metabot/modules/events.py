@@ -27,7 +27,7 @@ def moddispatch(*, ctx, msg):  # pylint: disable=missing-docstring
         return private(ctx, msg, modconf)
 
     if ctx.type == 'inline_query' and ctx.prefix.lstrip('/') in ALIASES:
-        return inline(ctx, modconf)
+        return inline(ctx)
 
     return False
 
@@ -71,10 +71,8 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
         calcodes = eventid.split(':', 1)[0]
     else:
         suffix = '-'
-        user_id = f'{mgr.user_id}'
-        userconf = modconf['users'][user_id]
-        calcodes = userconf.get('calendars')
-        timezone = userconf.get('timezone')
+        calcodes = mgr.user_conf.get('calendars')
+        timezone = mgr.user_conf.get('timezone')
         if not calcodes or not timezone:
             missing = []
             if not calcodes:
@@ -195,14 +193,12 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
     msg.buttons(buttons)
 
 
-def inline(ctx, modconf):  # pylint: disable=too-many-branches,too-many-locals
+def inline(ctx):  # pylint: disable=too-many-branches,too-many-locals
     """Handle @BOTNAME events."""
 
     mgr = ctx.mgr
-    user_id = f'{mgr.user_id}'
-    userconf = modconf['users'][user_id]
-    calcodes = userconf.get('calendars')
-    timezone = userconf.get('timezone')
+    calcodes = mgr.user_conf.get('calendars')
+    timezone = mgr.user_conf.get('timezone')
     if not calcodes or not timezone:
         missing = []
         if not calcodes:

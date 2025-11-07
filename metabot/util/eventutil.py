@@ -47,10 +47,10 @@ def _get_events(multibot, calcodes, tzinfo, count, days, *, now=None):  # pylint
     return list(calendar_view.get_overlap(now, now + period))[:count]
 
 
-def format_event(bot, event, tzinfo, *, full=True, base=None, countdown=True):  # pylint: disable=too-many-arguments,too-many-locals
+def format_event(mgr, event, tzinfo, *, full=True, base=None, countdown=True):  # pylint: disable=too-many-arguments,too-many-locals
     """Given a metabot.calendars.base.Calendar event, build a human-friendly representation."""
 
-    rsvpconf = bot.config['issue37']['events']['rsvp'][event['local_id']]
+    rsvpconf = mgr.bot_conf['events']['rsvp'][event['local_id']]
     attending = maybes = notes = 0
     for otherrsvpconf in rsvpconf.values():
         if (going := otherrsvpconf.get('going')) == '+':
@@ -71,7 +71,7 @@ def format_event(bot, event, tzinfo, *, full=True, base=None, countdown=True):  
         else:
             message = '%s [<a href="%s">tickets</a>]' % (message, url)
     message = '%s\n<a href="%s">%s%s</a>' % (
-        message, bot.encode_url('/events %s %s' % (event['local_id'], tzinfo.zone)), notes,
+        message, mgr.bot_api.encode_url('/events %s %s' % (event['local_id'], tzinfo.zone)), notes,
         humanize_range(event['start'], event['end'], tzinfo, base=base, countdown=countdown))
     if (loc := event['location']):
         location_name = loc.split(',', 1)[0]
@@ -99,11 +99,11 @@ def _fixurl(loc):
         return f'https://{loc}'
 
 
-def format_events(bot, events, tzinfo, *, base=None, countdown=True):
+def format_events(mgr, events, tzinfo, *, base=None, countdown=True):
     """Prepare a message containing human-friendly representations of the given events."""
 
     return '\n'.join(
-        format_event(bot, event, tzinfo, full=False, base=base, countdown=countdown)
+        format_event(mgr, event, tzinfo, full=False, base=base, countdown=countdown)
         for event in events)
 
 
@@ -139,10 +139,10 @@ def humanize_range(start, end, tzinfo, *, base=None, countdown=True):
     return text
 
 
-def get_image(event, botconf, *, strict=False, always=False):
+def get_image(mgr, event, *, strict=False, always=False):
     """Choose the best image for a given event and botconf."""
 
-    eventconf = botconf['issue37']['events']
+    eventconf = mgr.bot_conf['events']
     eventimage = eventconf['events'].get(event['local_id'])
     if eventimage:
         return eventimage

@@ -91,7 +91,8 @@ class BotConversation:  # pylint: disable=missing-docstring,too-few-public-metho
             },
         })
         assert self.multibot.add_bot(bot_token) == botuser
-        self.bot = self.multibot.mgr.bot(botuser).bot_api
+        self.mgr = self.multibot.mgr.bot(botuser)
+        self.bot = self.mgr.bot_api
 
     def raw_inline(self, text, user_id=1000):
         """Simulate an inline query (@BOTNAME text)."""

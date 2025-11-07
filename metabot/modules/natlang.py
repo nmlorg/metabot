@@ -81,7 +81,7 @@ def process_event(ctx, msg, query):  # pylint: disable=too-many-branches,too-man
 
             if reasons:
                 msg.add('<i>The next %s is:</i>', ' / '.join(sorted(reasons)))
-                msg.add(eventutil.format_event(ctx.bot, event, timezone, full=False))
+                msg.add(eventutil.format_event(mgr, event, timezone, full=False))
                 summaries.add(summary)
                 venues.add(venue)
 

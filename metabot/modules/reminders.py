@@ -53,26 +53,25 @@ def modinit(multibot):  # pylint: disable=missing-docstring
 class AnnouncementConf:  # pylint: disable=too-few-public-methods
     """A group's announcement configuration."""
 
-    def __init__(self, multibot, calconf, dailyconf):
-        self.multibot = multibot
+    def __init__(self, calconf, dailyconf):
         self.calconf = calconf
         self.dow = dailyconf.get('dow', 0)
         self.hour = dailyconf.get('hour')
         self.pin = dailyconf.get('pin', 0)
         self.preambles = dailyconf.get('text', '').splitlines()
 
-    def get_events(self, bot, eventtime, base, *, countdown=True):
+    def get_events(self, mgr, eventtime, base, *, countdown=True):
         """Get (and format) events for the given time."""
 
         calconf = self.calconf
-        events = calconf.get_events(self.multibot, when=eventtime)
+        events = calconf.get_events(mgr.multibot, when=eventtime)
         if self.preambles:
             preamble = self.preambles[int(eventtime / (60 * 60 * 24)) % len(self.preambles)]
         else:
             preamble = ''
         text = _generate_preamble(preamble, events)
         if events:
-            ev = eventutil.format_events(bot,
+            ev = eventutil.format_events(mgr,
                                          events,
                                          calconf.tzinfo,
                                          base=base,
@@ -105,10 +104,10 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
     period = int(now // PERIOD * PERIOD)
     startofhour = now // 3600
 
-    for botuser, botconf in multibot.conf['bots'].items():  # pylint: disable=too-many-nested-blocks
+    for botuser in multibot.conf['bots']:  # pylint: disable=too-many-nested-blocks
         for mgr in multibot.mgr.bot(botuser).bot_active_groups:
             calconf = eventutil.CalendarConf(mgr.chat_conf)
-            annconf = AnnouncementConf(multibot, calconf, mgr.chat_conf['daily'])
+            annconf = AnnouncementConf(calconf, mgr.chat_conf['daily'])
             if not calconf.tzinfo or not isinstance(annconf.hour, int):
                 continue
 
@@ -124,15 +123,15 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
 
             if perioddt.hour == annconf.hour and not annconf.dow & 1 << perioddt.weekday() and (
                     not last or startofhour > last.time // 3600):
-                events, text = annconf.get_events(bot, period, perioddt)
+                events, text = annconf.get_events(mgr, period, perioddt)
                 if events:
                     images = []
                     for event in events:
-                        image = eventutil.get_image(event, botconf, strict=True)
+                        image = eventutil.get_image(mgr, event, strict=True)
                         if image and image not in images:
                             images.append(image)
                     if not images:
-                        if (image := eventutil.get_image(events[0], botconf)):
+                        if (image := eventutil.get_image(mgr, events[0])):
                             images.append(image)
                     message = reminder_send(bot, mgr.chat_id, text, images)
                     if message:
@@ -150,7 +149,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                                         '')
 
                         if last:
-                            text = annconf.get_events(bot, last.time, perioddt, countdown=False)[1]
+                            text = annconf.get_events(mgr, last.time, perioddt, countdown=False)[1]
                             reminder_edit(bot, last.message, text)
 
                             if last.message.get('pinned'):
@@ -164,7 +163,7 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
                     continue
 
             if last:
-                events, text = annconf.get_events(bot, last.time, perioddt)
+                events, text = annconf.get_events(mgr, last.time, perioddt)
                 edits = diff_events(multibot, calconf.tzinfo, perioddt, last.events, events)
 
                 suffix = last.suffix

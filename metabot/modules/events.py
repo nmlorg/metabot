@@ -51,10 +51,10 @@ def group(ctx, msg):
     if not events:
         msg.add('No events in the next %s days!', calconf.days)
     else:
-        url = eventutil.get_image(events[0], ctx.bot.config)
+        url = eventutil.get_image(mgr, events[0])
         if url:
             msg.add('photo:' + url)
-        msg.add(eventutil.format_events(ctx.bot, events, calconf.tzinfo))
+        msg.add(eventutil.format_events(mgr, events, calconf.tzinfo))
 
 
 def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-locals,too-many-statements
@@ -118,7 +118,7 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
                 msg.add('Type your note, or type "off" to clear your existing note.')
                 return
 
-        msg.add(eventutil.format_event(ctx.bot, event, tzinfo, full=True))
+        msg.add(eventutil.format_event(mgr, event, tzinfo, full=True))
 
         attending = []
         othernotes = []
@@ -158,7 +158,7 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
         if mgr.user_id in ctx.bot.config['issue37']['admin']['admins']:
             msg.button('Customize', f'/events {eventid} admin')
 
-        image = eventutil.get_image(event, ctx.bot.config, always=True)
+        image = eventutil.get_image(mgr, event, always=True)
         if ctx.edit_id:
             if not (image_message_id := ctx.meta.get('image_message_id')):
                 ctx.reply_id = ctx.edit_id
@@ -247,7 +247,7 @@ def inline(ctx):  # pylint: disable=too-many-branches,too-many-locals
                 'description': description,
                 'input_message_content': {
                     'disable_web_page_preview': True,
-                    'message_text': eventutil.format_event(ctx.bot, event, tzinfo, full=full),
+                    'message_text': eventutil.format_event(mgr, event, tzinfo, full=full),
                     'parse_mode': 'HTML',
                 },
                 'id': event['local_id'],

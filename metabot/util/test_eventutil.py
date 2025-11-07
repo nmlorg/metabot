@@ -23,7 +23,7 @@ def test_basic(build_conversation):
     base = datetime.datetime.fromtimestamp(1000, tz=tzinfo)
 
     def gen():
-        return f'\n{eventutil.format_event(conv.bot, event, tzinfo, base=base)}\n'
+        return f'\n{eventutil.format_event(conv.mgr, event, tzinfo, base=base)}\n'
 
     assert gen() == """
 <b>SUMMARY</b>

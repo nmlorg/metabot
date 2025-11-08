@@ -73,7 +73,7 @@ Select a calendar to add or remove from the list below:
 [Back | /admin modulestestbot moderator -1001000001000]
 """
 
-    conversation.bot.config['issue37']['moderator']['-1001000001000']['timezone'] = 'US/Pacific'
+    conversation.mgr.bot_conf['moderator']['-1001000001000']['timezone'] = 'US/Pacific'
 
     assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
@@ -81,7 +81,7 @@ Select a calendar to add or remove from the list below:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">⭐ ᴺᴼᵂ Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 """
 
-    conversation.bot.config['issue37']['moderator']['-1001000001000']['timezone'] = 'UTC'
+    conversation.mgr.bot_conf['moderator']['-1001000001000']['timezone'] = 'UTC'
 
     assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
@@ -91,7 +91,7 @@ Select a calendar to add or remove from the list below:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">¹ʷ Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 """
 
-    conversation.bot.config['issue37']['moderator']['-1001000001000']['maxeventscount'] = 1
+    conversation.mgr.bot_conf['moderator']['-1001000001000']['maxeventscount'] = 1
 
     assert conversation.message('/events', chat_type='supergroup') == """\
 [chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
@@ -148,7 +148,7 @@ Select a calendar to add or remove from the list below:
 [Back | /events set]
 """
 
-    conversation.bot.config['issue37']['events']['users']['2000']['timezone'] = 'US/Pacific'
+    conversation.mgr.bot_conf['events']['users']['2000']['timezone'] = 'US/Pacific'
 
     assert conversation.message('/events', user_id=2000) == """\
 [send_photo chat_id=2000 photo=https://ssl.gstatic.com/calendar/images/eventillustrations/v1/img_planmyday_2x.jpg]
@@ -216,7 +216,7 @@ Select a calendar to add or remove from the list below:
 [Back | /events set]
 """
 
-    conversation.bot.config['issue37']['events']['users']['1000']['timezone'] = 'US/Pacific'
+    conversation.mgr.bot_conf['events']['users']['1000']['timezone'] = 'US/Pacific'
 
     assert conversation.raw_inline('events') == [
         {
@@ -333,8 +333,8 @@ Select a calendar to add or remove from the list below:
 def test_customize(conversation):  # pylint: disable=redefined-outer-name
     """Test /events EVENTID admin."""
 
-    conversation.bot.config['issue37']['events']['users']['1000']['calendars'] = '6fc2c510'
-    conversation.bot.config['issue37']['events']['users']['1000']['timezone'] = 'US/Pacific'
+    conversation.mgr.bot_conf['events']['users']['1000']['calendars'] = '6fc2c510'
+    conversation.mgr.bot_conf['events']['users']['1000']['timezone'] = 'US/Pacific'
 
     assert conversation.message('/events') == """\
 [send_photo chat_id=1000 photo=https://ssl.gstatic.com/calendar/images/eventillustrations/v1/img_planmyday_2x.jpg]
@@ -376,7 +376,7 @@ Set <code>Alpha Summary</code> to <code>https://SERIES-IMAGE</code>.
 [Back | /events 6fc2c510:alpha admin]
 """
 
-    assert conversation.bot.config['issue37']['events']['series'] == {
+    assert conversation.mgr.bot_conf['events']['series'] == {
         'Alpha Summary': 'https://SERIES-IMAGE',
     }
 
@@ -396,7 +396,7 @@ Set <code>6fc2c510:alpha</code> to <code>https://EVENT-ICON</code>.
 [Back | /events 6fc2c510:alpha admin]
 """
 
-    assert conversation.bot.config['issue37']['events']['events'] == {
+    assert conversation.mgr.bot_conf['events']['events'] == {
         '6fc2c510:alpha': 'https://EVENT-ICON',
     }
 

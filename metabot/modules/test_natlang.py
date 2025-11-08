@@ -67,7 +67,7 @@ def test_simple(conversation, monkeypatch):  # pylint: disable=redefined-outer-n
     conversation.multibot.multical.add('static:my_cal')
     conversation.multibot.calendars['fc2d5e05'] = {'name': 'My Group'}
 
-    conversation.bot.config['issue37']['events']['users']['1000']['calendars'] = 'fc2d5e05'
+    conversation.mgr.bot_conf['events']['users']['1000']['calendars'] = 'fc2d5e05'
 
     assert conversation.message('When is the next sock hop?') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]

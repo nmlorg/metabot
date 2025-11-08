@@ -99,9 +99,9 @@ def daily_messages(conversation):  # pylint: disable=missing-docstring,redefined
         replies.clear()
         if initial:
             records.clear()
-            conversation.bot.config['issue37']['moderator']['-1002000002000']['daily']['hour'] = 0
+            conversation.mgr.bot_conf['moderator']['-1002000002000']['daily']['hour'] = 0
         else:
-            conversation.bot.config['issue37']['moderator']['-1002000002000']['daily']['hour'] = 1
+            conversation.mgr.bot_conf['moderator']['-1002000002000']['daily']['hour'] = 1
         reminders._daily_messages(conversation.multibot, records)  # pylint: disable=protected-access
         outrecords = {'/'.join(key): record for key, record in records.items()}
         text = outrecords and yaml.safe_dump(outrecords, width=float('inf'),
@@ -114,7 +114,7 @@ def daily_messages(conversation):  # pylint: disable=missing-docstring,redefined
 
     assert _daily_messages(True) == ''
 
-    conversation.bot.config['issue37']['moderator']['-1002000002000'] = {
+    conversation.mgr.bot_conf['moderator']['-1002000002000'] = {
         'calendars': '6fc2c510',
         'daily': {
             'hour': 0,
@@ -717,7 +717,7 @@ There are a couple events coming up:
 <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 """
 
-    conversation.bot.config['issue37']['events']['series']['ha sum'] = 'SERIES ICON'
+    conversation.mgr.bot_conf['events']['series']['ha sum'] = 'SERIES ICON'
 
     assert daily_messages(True) == """
 modulestestbot/-1002000002000:
@@ -760,8 +760,8 @@ There are a couple events coming up:
 <i>Click the date/time for more details or to RSVP, or the location to pop open a map.</i>
 """
 
-    conversation.bot.config['issue37']['events']['events']['6fc2c510:alpha'] = 'ALPHA ICON'
-    conversation.bot.config['issue37']['events']['events']['6fc2c510:bravo'] = 'BRAVO ICON'
+    conversation.mgr.bot_conf['events']['events']['6fc2c510:alpha'] = 'ALPHA ICON'
+    conversation.mgr.bot_conf['events']['events']['6fc2c510:bravo'] = 'BRAVO ICON'
 
     assert daily_messages(True) == """
 modulestestbot/-1002000002000:
@@ -805,8 +805,8 @@ There are a couple events coming up:
 """
 
     cal.events['6fc2c510:alpha']['description'] = 'Fun Games!'
-    conversation.bot.config['issue37']['events']['events']['6fc2c510:alpha'] = None
-    conversation.bot.config['issue37']['events']['events']['6fc2c510:bravo'] = None
+    conversation.mgr.bot_conf['events']['events']['6fc2c510:alpha'] = None
+    conversation.mgr.bot_conf['events']['events']['6fc2c510:bravo'] = None
 
     # Removing an icon trigger leaves the image in place.
     assert daily_messages() == """
@@ -865,7 +865,7 @@ def test_daily_messages_geometry(conversation, daily_messages):  # pylint: disab
 
     cal = loader.get('static:test_events')
     cal.events['6fc2c510:alpha']['description'] = 'Trigger'
-    conversation.bot.config['issue37']['moderator']['-1002000002000']['maxeventscount'] = 1
+    conversation.mgr.bot_conf['moderator']['-1002000002000']['maxeventscount'] = 1
 
     assert daily_messages() == """
 modulestestbot/-1002000002000:
@@ -1064,7 +1064,7 @@ There are a couple events coming up:
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDpicmF2byBVVEM">Thu 8ᵗʰ, 12–1ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Bravo+Venue%2C+Rest+of+Bravo+Location">Bravo Venue</a>
 """
 
-    conversation.bot.config['issue37']['moderator']['-1002000002000']['daily']['pin'] = True
+    conversation.mgr.bot_conf['moderator']['-1002000002000']['daily']['pin'] = True
     monkeypatch.setattr('time.time', lambda: 4000 + 60 * 60 * 24 * 2)
 
     assert daily_messages() == """

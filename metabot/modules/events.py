@@ -62,7 +62,7 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
 
     mgr = ctx.mgr
     eventid, timezone, action, text = ctx.split(4)
-    if timezone == 'admin' and mgr.user_id in ctx.bot.config['issue37']['admin']['admins']:
+    if timezone == 'admin' and mgr.user_id in ctx.mgr.bot_conf['admin']['admins']:
         return customize(ctx, msg, modconf)
     if timezone == '-':
         timezone = ''
@@ -155,7 +155,7 @@ def private(ctx, msg, modconf):  # pylint: disable=too-many-branches,too-many-lo
             buttons[2] = ('Edit note \U0001f4dd', base + 'note')
         msg.buttons(buttons)
 
-        if mgr.user_id in ctx.bot.config['issue37']['admin']['admins']:
+        if mgr.user_id in ctx.mgr.bot_conf['admin']['admins']:
             msg.button('Customize', f'/events {eventid} admin')
 
         image = eventutil.get_image(mgr, event, always=True)

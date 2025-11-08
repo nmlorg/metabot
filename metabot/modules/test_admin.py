@@ -110,22 +110,22 @@ def test_bootstrap(conversation):  # pylint: disable=redefined-outer-name
     admin.BOOTSTRAP_TOKEN = 'bootstraptest'
 
     assert conversation.message('/_bootstrap') == ''
-    assert conversation.bot.config['issue37'].get('admin') is None
+    assert conversation.mgr.bot_conf.get('admin') is None
 
     assert conversation.message('/_bootstrap bogus') == ''
-    assert conversation.bot.config['issue37'].get('admin') is None
+    assert conversation.mgr.bot_conf.get('admin') is None
 
     assert conversation.message('/_bootstrap bootstraptest') == """\
 [chat_id=1000 disable_web_page_preview=True parse_mode=HTML]
 Added 1000 to the admin list.
 """
-    assert conversation.bot.config['issue37'].get('admin') == {'admins': [1000]}
+    assert conversation.mgr.bot_conf.get('admin') == {'admins': [1000]}
 
     assert conversation.message('/_bootstrap bootstraptest') == ''
-    assert conversation.bot.config['issue37'].get('admin') == {'admins': [1000]}
+    assert conversation.mgr.bot_conf.get('admin') == {'admins': [1000]}
 
     assert conversation.message('/_bootstrap bootstraptest', user_id=2000) == ''
-    assert conversation.bot.config['issue37'].get('admin') == {'admins': [1000]}
+    assert conversation.mgr.bot_conf.get('admin') == {'admins': [1000]}
 
 
 def test_admins(conversation):  # pylint: disable=redefined-outer-name

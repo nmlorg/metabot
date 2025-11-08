@@ -18,8 +18,7 @@ def test_forward(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('Test Forward', chat_type='channel') == ''
 
-    conversation.bot.config['issue37']['moderator']['-1002000002000']['forward'][
-        'from'] = -1001000001000
+    conversation.mgr.bot_conf['moderator']['-1002000002000']['forward']['from'] = -1001000001000
 
     assert conversation.message('Test Forward', chat_type='channel') == """\
 [forward_message chat_id=-1002000002000 disable_notification=True from_chat_id=-1001000001000 message_id=2000]
@@ -30,7 +29,7 @@ def test_forward(conversation):  # pylint: disable=redefined-outer-name
 def test_mod(conversation):  # pylint: disable=redefined-outer-name
     """Test /mod."""
 
-    modconf = conversation.bot.config['issue37']['moderator']
+    modconf = conversation.mgr.bot_conf['moderator']
     groupdata = conversation.multibot.conf['groups']
     modconf['-1001000001000']['title'] = groupdata[-1001000001000]['title'] = 'Mod Test'
     modconf['-1002000002000']['title'] = groupdata[-1002000002000]['title'] = 'Hidden Group'

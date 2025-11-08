@@ -18,7 +18,7 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
 
     assert conversation.message('/myecho') == ''
 
-    conversation.bot.config['issue37']['echo']['myecho'] = {
+    conversation.mgr.bot_conf['echo']['myecho'] = {
         'text': 'These are the <b>rules</b>: Have fun!',
     }
 
@@ -27,7 +27,7 @@ def test_echo(conversation):  # pylint: disable=redefined-outer-name
 These are the <b>rules</b>: Have fun!
 """
 
-    conversation.bot.config['issue37']['echo']['smile'] = {
+    conversation.mgr.bot_conf['echo']['smile'] = {
         'text': 'photo:CUTE-SMILING-ANIMAL Cute smiling animal.',
     }
 
@@ -36,7 +36,7 @@ These are the <b>rules</b>: Have fun!
 Cute smiling animal.
 """
 
-    conversation.bot.config['issue37']['echo']['about'] = {
+    conversation.mgr.bot_conf['echo']['about'] = {
         'text': ('First line.\n'
                  'Second line.\n'
                  ' \n'
@@ -51,7 +51,7 @@ Second line.
 Last line.
 """
 
-    conversation.bot.config['issue37']['echo']['about'] = {
+    conversation.mgr.bot_conf['echo']['about'] = {
         'text': ('First line.\n'
                  'Second line.\n'
                  ' \n'
@@ -101,19 +101,19 @@ First line.
 def test_help(conversation):  # pylint: disable=redefined-outer-name
     """Test /help."""
 
-    conversation.bot.config['issue37']['echo']['rules1'] = {
+    conversation.mgr.bot_conf['echo']['rules1'] = {
         'text': 'These are the <b>rules</b>: Have fun!',
     }
-    conversation.bot.config['issue37']['echo']['rules2'] = {
+    conversation.mgr.bot_conf['echo']['rules2'] = {
         'text': 'These are the <b>rules</b>: Have fun!!',
     }
-    conversation.bot.config['issue37']['echo']['hiddentext'] = {
+    conversation.mgr.bot_conf['echo']['hiddentext'] = {
         'text': 'This is hidden.',
     }
-    conversation.bot.config['issue37']['echo']['smile'] = {
+    conversation.mgr.bot_conf['echo']['smile'] = {
         'text': 'photo:CUTE-SMILING-ANIMAL Cute smiling animal.',
     }
-    conversation.bot.config['issue37']['echo']['frown'] = {
+    conversation.mgr.bot_conf['echo']['frown'] = {
         'text': 'sticker:SAD-FROWNING-ANIMAL',
     }
 

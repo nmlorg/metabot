@@ -56,17 +56,17 @@ class MultiBot:
     def run_bot(self, username):
         """Begin polling for updates for the previously configured bot."""
 
-        bot = self.mgr.bot(username).bot_api
-        self.loop.add(bot, self.dispatcher)
-        bot.config['issue37']['telegram']['running'] = True
+        mgr = self.mgr.bot(username)
+        self.loop.add(mgr.bot_api, self.dispatcher)
+        mgr.bot_conf['telegram']['running'] = True
         self.conf.save()
 
     def stop_bot(self, username):
         """Stop polling for updates for the referenced bot."""
 
-        bot_config = self.conf['bots'][username]
-        self.loop.remove(bot_config['issue37']['telegram']['token'])
-        bot_config['issue37']['telegram']['running'] = False
+        mgr = self.mgr.bot(username)
+        self.loop.remove(mgr.bot_token)
+        mgr.bot_conf['telegram']['running'] = False
         self.conf.save()
 
     def run(self):

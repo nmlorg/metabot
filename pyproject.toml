@@ -6,7 +6,7 @@ readme = 'README.md'
 authors = [
     {name = 'Daniel Reed', email = 'nmlorg@gmail.com'},
 ]
-requires-python = '>=3.9'
+requires-python = '>=3.10'  # https://github.com/pylint-dev/pylint/pull/10405
 dependencies = [
     'googlemaps',
     'ntelebot >= 0.4.5',  # https://github.com/nmlorg/metabot/issues/114

@@ -14,9 +14,9 @@ from metabot.util import pickleutil
 try:
     _CLIENT_KEY = next(open('config/google_maps_apikey')).strip()
 except IOError:
-    _CLIENT = None  # pylint: disable=invalid-name
+    _CLIENT = None
 else:
-    _CLIENT = googlemaps.Client(key=_CLIENT_KEY)  # pylint: disable=invalid-name # https://github.com/pylint-dev/pylint/issues/10652
+    _CLIENT = googlemaps.Client(key=_CLIENT_KEY)
 _CACHEFILE = 'config/geoutil.pickle'
 _CACHE = pickleutil.load(_CACHEFILE) or {}
 _SHORTCACHE = {}

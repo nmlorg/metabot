@@ -9,14 +9,14 @@ authors = [
 requires-python = '>=3.9'
 dependencies = [
     'googlemaps',
-    'ntelebot >= 0.4.5',
+    'ntelebot >= 0.4.5',  # https://github.com/nmlorg/metabot/issues/114
     'pytz',
-    'PyYAML >= 5.1',
+    'PyYAML >= 5.1',  # https://github.com/nmlorg/metabot/issues/40
 ]
 
 [project.optional-dependencies]
 dev = [
-    'pylint',
+    'pylint >= 4.0.4',  # https://github.com/pylint-dev/pylint/issues/10745
     'pytest-cov',
     'pytest',
     'requests-mock',

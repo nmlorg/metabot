@@ -104,8 +104,8 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
     period = int(now // PERIOD * PERIOD)
     startofhour = now // 3600
 
-    for botuser in multibot.conf['bots']:  # pylint: disable=too-many-nested-blocks
-        for mgr in multibot.mgr.bot(botuser).bot_active_groups:
+    for mgr in multibot.mgr.running_bots:  # pylint: disable=too-many-nested-blocks
+        for mgr in mgr.bot_active_groups:
             calconf = eventutil.CalendarConf(mgr.chat_conf)
             annconf = AnnouncementConf(calconf, mgr.chat_conf['daily'])
             if not calconf.tzinfo or not isinstance(annconf.hour, int):
@@ -113,13 +113,13 @@ def _daily_messages(multibot, records):  # pylint: disable=too-many-branches,too
 
             nowdt = datetime.datetime.fromtimestamp(now, calconf.tzinfo)
             perioddt = datetime.datetime.fromtimestamp(period, calconf.tzinfo)
-            key = (botuser, f'{mgr.chat_id}')
+            key = (mgr.bot_username, f'{mgr.chat_id}')
             if key in records:
                 last = Announcement(*records[key])
             else:
                 last = None
 
-            bot = multibot.mgr.bot(botuser).bot_api
+            bot = mgr.bot_api
 
             if perioddt.hour == annconf.hour and not annconf.dow & 1 << perioddt.weekday() and (
                     not last or startofhour > last.time // 3600):

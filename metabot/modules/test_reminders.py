@@ -114,6 +114,7 @@ def daily_messages(conversation):  # pylint: disable=missing-docstring,redefined
 
     assert _daily_messages(True) == ''
 
+    conversation.mgr.bot_conf['telegram']['running'] = True  # Activate mgr.running_bots.
     conversation.mgr.bot_conf['moderator']['-1002000002000'] = {
         'calendars': '6fc2c510',
         'daily': {

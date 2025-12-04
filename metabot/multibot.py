@@ -34,9 +34,8 @@ class MultiBot:
             if modinit:
                 modinit(self)
 
-        for username, bot_config in self.conf['bots'].items():
-            if bot_config['issue37']['telegram']['running']:
-                self.run_bot(username)
+        for mgr in self.mgr.running_bots:
+            self.run_bot(mgr.bot_username)
 
     def add_bot(self, token):
         """Begin polling bot_config.token, dispatching updates through bot_config.modules."""

@@ -48,6 +48,12 @@ class Manager:  # pylint: disable=missing-function-docstring
 
         return bot_id, bot_username
 
+    @property
+    def running_bots(self):
+        for botuser in self.multibot.conf['bots']:
+            if (mgr := self.bot(botuser)).bot_running:
+                yield mgr
+
     def bot(self, bot_id):
         bot_id, bot_username = self._normalize_bot_id(bot_id)
         return Manager(self, bot_id=bot_id, bot_username=bot_username)
@@ -72,6 +78,10 @@ class Manager:  # pylint: disable=missing-function-docstring
     @property
     def bot_conf(self):
         return self.multibot.conf['bots'][self.bot_username]['issue37']
+
+    @property
+    def bot_running(self):
+        return bool(self.bot_conf['telegram'].get('running'))
 
     @property
     def bot_token(self):

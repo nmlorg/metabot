@@ -17,8 +17,8 @@ def modinit(multibot):  # pylint: disable=missing-docstring
     def _hourly():
         try:
             checked = set()
-            for botuser in multibot.conf['bots']:
-                for mgr in multibot.mgr.bot(botuser).bot_active_groups:
+            for mgr in multibot.mgr.running_bots:
+                for mgr in mgr.bot_active_groups:
                     if mgr.chat_id in checked:
                         continue
                     try:

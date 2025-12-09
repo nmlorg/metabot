@@ -52,9 +52,14 @@ class Manager:  # pylint: disable=missing-function-docstring
         return bot_id, bot_username
 
     @property
-    def running_bots(self):
+    def all_bots(self):
         for botuser in self.multibot.conf['bots']:
-            if (mgr := self.bot(botuser)).bot_running:
+            yield self.bot(botuser)
+
+    @property
+    def running_bots(self):
+        for mgr in self.all_bots:
+            if mgr.bot_running:
                 yield mgr
 
     def bot(self, bot_id):

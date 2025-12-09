@@ -39,8 +39,8 @@ def main():  # pylint: disable=missing-docstring
                 print('Woops, that generated: %r', exc)
             else:
                 mybot.run_bot(username)
-    unconfigured = sorted(username for username, botconf in mybot.conf['bots'].items()
-                          if not botconf['issue37']['admin'].get('admins'))
+    unconfigured = sorted(
+        mgr.bot_username for mgr in mybot.mgr.all_bots if not mgr.bot_conf['admin'].get('admins'))
     if unconfigured:
         print()
         print('To configure %s, open a chat with:' % humanize.list(unconfigured))

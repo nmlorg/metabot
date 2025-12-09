@@ -8,12 +8,10 @@ BOOTSTRAP_TOKEN = uuid.uuid4().hex
 
 
 def modhelp(*, ctx, sections):  # pylint: disable=missing-docstring
-    mgr = ctx.mgr
-    bots = sorted(botuser for botuser, botconf in ctx.multibot.conf['bots'].items()
-                  if mgr.user_id in botconf['issue37']['admin']['admins'])
-
-    if bots:
-        sections['commands'].add('/admin \u2013 Manage the admin list')
+    for mgr in ctx.mgr.all_bots:
+        if mgr.user_id in mgr.bot_conf['admin']['admins']:
+            sections['commands'].add('/admin \u2013 Manage the admin list')
+            break
 
 
 def moddispatch(*, ctx, msg):  # pylint: disable=missing-docstring
@@ -34,9 +32,9 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
     msg.path('/admin', 'Bot Admin')
     frame = adminui.Frame(ctx, msg, ctx.multibot.conf, 'bots', None, ctx.text)
     menu = adminui.Menu()
-    for botuser, botconf in frame.value.items():
-        if mgr.user_id in botconf['issue37']['admin']['admins']:
-            menu.add(botuser)
+    for botmgr in mgr.all_bots:
+        if mgr.user_id in botmgr.bot_conf['admin']['admins']:
+            menu.add(botmgr.bot_username)
 
     if not menu.fields:
         return msg.add(

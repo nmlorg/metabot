@@ -71,6 +71,8 @@ def test_cross_context():  # pylint: disable=too-many-statements
     with pytest.raises(AttributeError):
         assert mgr.chat_conf == {}
     with pytest.raises(AttributeError):
+        assert mgr.chat_pinned_message_id is None
+    with pytest.raises(AttributeError):
         assert mgr.user_id == 1000
     with pytest.raises(AttributeError):
         assert mgr.user_conf == {}
@@ -83,6 +85,8 @@ def test_cross_context():  # pylint: disable=too-many-statements
         assert mgr.chat_id == 90000000000
     with pytest.raises(AttributeError):
         assert mgr.chat_conf == {}
+    with pytest.raises(AttributeError):
+        assert mgr.chat_pinned_message_id is None
     with pytest.raises(AttributeError):
         assert mgr.user_id == 1000
     with pytest.raises(AttributeError):
@@ -103,6 +107,7 @@ def test_cross_context():  # pylint: disable=too-many-statements
                 },
             },
         },
+        'groups': {},
     }
 
     mgr = mgr.user(1000)
@@ -111,6 +116,8 @@ def test_cross_context():  # pylint: disable=too-many-statements
         assert mgr.chat_id == 90000000000
     with pytest.raises(AttributeError):
         assert mgr.chat_conf == {}
+    with pytest.raises(AttributeError):
+        assert mgr.chat_pinned_message_id is None
     assert mgr.user_id == 1000
     assert mgr.user_conf == {}
     with pytest.raises(AttributeError):
@@ -138,6 +145,7 @@ def test_cross_context():  # pylint: disable=too-many-statements
     assert mgr.bot_id == 1111111111
     assert mgr.chat_id == 90000000000
     assert mgr.chat_conf == {}
+    assert mgr.chat_pinned_message_id is None
     assert mgr.user_id == 1000
     assert mgr.user_conf == {}
     assert not mgr.is_chat_admin
@@ -160,9 +168,39 @@ def test_cross_context():  # pylint: disable=too-many-statements
             },
         },
         'groups': {
-            90000000000: {},
+            90000000000: {
+                'admins': [],
+            },
         },
     }
 
-    mybot.conf['groups'][90000000000]['admins'] = [1000]
-    assert mgr.is_chat_admin
+    mgr.is_chat_admin = True
+    assert mybot.conf == {
+        'bots': {
+            'managertestbot': {
+                'issue37': {
+                    'events': {
+                        'users': {
+                            '1000': {},
+                        },
+                    },
+                    'moderator': {
+                        '90000000000': {},
+                    },
+                    'telegram': {
+                        'token': '1111111111:BBBBBBBBBB',
+                    },
+                },
+            },
+        },
+        'groups': {
+            90000000000: {
+                'admins': [1000],
+            },
+        },
+    }
+
+    with pytest.raises(TypeError):
+        mgr.chat_pinned_message_id = 'test'
+    mgr.chat_pinned_message_id = 5
+    mgr.chat_pinned_message_id = None

@@ -3,6 +3,9 @@
 import ntelebot
 
 from metabot.util import dicttools
+from metabot.util import mandb
+
+F = mandb.Field
 
 
 class Manager:  # pylint: disable=missing-function-docstring
@@ -75,64 +78,26 @@ class Manager:  # pylint: disable=missing-function-docstring
         bot.config = self.multibot.conf['bots'][bot.username]
         return bot
 
-    @property
-    def bot_conf(self):
-        return self.multibot.conf['bots'][self.bot_username]['issue37']
-
-    @property
-    def bot_running(self):
-        return bool(self.bot_conf['telegram'].get('running'))
-
-    @property
-    def bot_token(self):
-        return self.bot_conf['telegram']['token']
+    bot_conf = F(lambda self: self.multibot.conf['bots'][self.bot_username], 'issue37', dict)
+    bot_running = F(lambda self: self.bot_conf['telegram'], 'running', bool)
+    bot_token = F(lambda self: self.bot_conf['telegram'], 'token', str)
 
     def chat(self, chat_id):
         return Manager(self, chat_id=int(chat_id))
 
-    @property
-    def chat_admins(self):
-        return self.chat_info.get('admins', ())
-
-    @property
-    def chat_conf(self):
-        return self.bot_conf['moderator'][f'{self.chat_id}']
-
-    @property
-    def chat_info(self):
-        return self.multibot.conf['groups'][self.chat_id]
-
-    @property
-    def chat_pinned_message_id(self):
-        return self.chat_info.get('pinned_message_id')
-
-    @property
-    def chat_title(self):
-        return self.chat_info.get('title')
-
-    @property
-    def chat_username(self):
-        return self.chat_info.get('username')
+    chat_admins = F(lambda self: self.chat_info, 'admins', list)
+    chat_conf = F(lambda self: self.bot_conf['moderator'], lambda self: f'{self.chat_id}', dict)
+    chat_info = F(lambda self: self.multibot.conf['groups'], lambda self: self.chat_id, dict)
+    chat_pinned_message_id = F(lambda self: self.chat_info, 'pinned_message_id', int)
+    chat_title = F(lambda self: self.chat_info, 'title', str)
+    chat_username = F(lambda self: self.chat_info, 'username', str)
 
     def user(self, user_id):
         return Manager(self, user_id=int(user_id))
 
-    @property
-    def user_conf(self):
-        return self.bot_conf['events']['users'][f'{self.user_id}']
-
-    @property
-    def user_info(self):
-        return self.multibot.conf['users'][self.user_id]
-
-    @property
-    def user_name(self):
-        return self.user_info.get('name')
-
-    @property
-    def user_username(self):
-        return self.user_info.get('username')
-
-    @property
-    def is_chat_admin(self):
-        return self.user_id in self.chat_admins
+    user_conf = F(lambda self: self.bot_conf['events']['users'], lambda self: f'{self.user_id}',
+                  dict)
+    user_info = F(lambda self: self.multibot.conf['users'], lambda self: self.user_id, dict)
+    user_name = F(lambda self: self.user_info, 'name', str)
+    user_username = F(lambda self: self.user_info, 'username', str)
+    is_chat_admin = F(lambda self: self.chat_admins, lambda self: self.user_id, bool)

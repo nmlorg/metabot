@@ -77,7 +77,7 @@ class BotConversation:  # pylint: disable=missing-docstring,too-few-public-metho
 
         self.multibot = multibot.MultiBot(set(modules) | {admin, dummymod, help})
         self.set_bot('modulestestbot')
-        self.mgr.bot_conf['admin']['admins'] = [1000]
+        self.mgr.bot_admins = [1000]
         self.last_message_id = 12344
 
     def set_bot(self, botuser):

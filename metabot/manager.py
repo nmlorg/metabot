@@ -83,6 +83,7 @@ class Manager:  # pylint: disable=missing-function-docstring
         bot.config = self.multibot.conf['bots'][bot.username]
         return bot
 
+    bot_admins = F(lambda self: self.bot_conf['admin'], 'admins', list)
     bot_conf = F(lambda self: self.multibot.conf['bots'][self.bot_username], 'issue37', dict)
     bot_running = F(lambda self: self.bot_conf['telegram'], 'running', bool)
     bot_token = F(lambda self: self.bot_conf['telegram'], 'token', str)
@@ -105,4 +106,5 @@ class Manager:  # pylint: disable=missing-function-docstring
     user_info = F(lambda self: self.multibot.conf['users'], lambda self: self.user_id, dict)
     user_name = F(lambda self: self.user_info, 'name', str)
     user_username = F(lambda self: self.user_info, 'username', str)
+    is_bot_admin = F(lambda self: self.bot_admins, lambda self: self.user_id, bool)
     is_chat_admin = F(lambda self: self.chat_admins, lambda self: self.user_id, bool)

@@ -26,7 +26,7 @@ def modinit(multibot):  # pylint: disable=missing-docstring
                     except ntelebot.errors.Error:
                         continue
                     checked.add(mgr.chat_id)
-                    mgr.chat_info['admins'] = sorted(member['user']['id'] for member in data)
+                    mgr.chat_admins = sorted(member['user']['id'] for member in data)
             log = multibot.conf.finalize()
             if log:
                 for path, (value, orig) in sorted(log.items()):

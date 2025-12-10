@@ -9,7 +9,7 @@ BOOTSTRAP_TOKEN = uuid.uuid4().hex
 
 def modhelp(*, ctx, sections):  # pylint: disable=missing-docstring
     for mgr in ctx.mgr.all_bots:
-        if mgr.user_id in mgr.bot_conf['admin']['admins']:
+        if mgr.is_bot_admin:
             sections['commands'].add('/admin \u2013 Manage the admin list')
             break
 
@@ -33,7 +33,7 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
     frame = adminui.Frame(ctx, msg, ctx.multibot.conf, 'bots', None, ctx.text)
     menu = adminui.Menu()
     for botmgr in mgr.all_bots:
-        if mgr.user_id in botmgr.bot_conf['admin']['admins']:
+        if botmgr.is_bot_admin:
             menu.add(botmgr.bot_username)
 
     if not menu.fields:
@@ -82,9 +82,8 @@ def bootstrap(ctx, msg):
     """Add the user who sent the command to the current bot's admin list."""
 
     mgr = ctx.mgr
-    modconf = mgr.bot_conf['admin']
-    if ctx.text == BOOTSTRAP_TOKEN and not modconf['admins']:
-        modconf['admins'] = [mgr.user_id]
+    if ctx.text == BOOTSTRAP_TOKEN and not mgr.bot_admins:
+        mgr.is_bot_admin = True
         msg.add('Added %s to the admin list.', mgr.user_id)
 
 

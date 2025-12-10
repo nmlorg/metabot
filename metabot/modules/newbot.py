@@ -76,12 +76,11 @@ def default(ctx, msg):  # pylint: disable=missing-docstring
             'Woops, while trying to use <code>%s</code> I got error %s (<code>%s</code>).', token,
             exc.error_code, exc.description)
 
-    username = ctx.multibot.add_bot(token)
-    ctx.multibot.conf['bots'][username]['issue37']['admin']['admins'] = [mgr.user_id]
-    ctx.multibot.run_bot(username)
+    botuser = ctx.multibot.add_bot(token)
+    mgr.bot(botuser).is_bot_admin = True
+    ctx.multibot.run_bot(botuser)
 
     msg.action = 'Configure your new bot'
     msg.add(
         'Yay, I am now running <code>%s</code> (<code>%s</code>). Open a private chat with @%s and '
-        'type <code>/admin</code> to continue setup.', bot_info['username'], bot_info['first_name'],
-        bot_info['username'])
+        'type <code>/admin</code> to continue setup.', botuser, bot_info['first_name'], botuser)

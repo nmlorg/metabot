@@ -56,7 +56,7 @@ class MessageBuilder:
             if callback_data:
                 path.append(callback_data)
             callback_data = ' '.join(path)
-        return {'text': cgi_escape(text), 'callback_data': callback_data}
+        return {'text': text, 'callback_data': callback_data}
 
     def button(self, text, callback_data):
         """Add a row to the keyboard with single callback button."""

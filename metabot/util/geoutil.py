@@ -41,7 +41,7 @@ def _init():
     # Schema update: Remove after 2026-12-17.
     if (weatherpoints := _CACHE.get('weatherpoint')):
         for v in weatherpoints.values():
-            if v.get('properties'):
+            if v and v.get('properties'):
                 logging.info('Resetting weatherpoint cache.')
                 _CACHE.pop('weatherpoint')
                 break

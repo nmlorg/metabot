@@ -38,6 +38,14 @@ def _periodic():
 
 
 def _init():
+    # Schema update: Remove after 2026-12-17.
+    if (weatherpoints := _CACHE.get('weatherpoint')):
+        for v in weatherpoints.values():
+            if v.get('properties'):
+                logging.info('Resetting weatherpoint cache.')
+                _CACHE.pop('weatherpoint')
+                break
+
     thr = threading.Thread(target=_periodic)
     thr.daemon = True
     thr.start()
@@ -48,20 +56,20 @@ _init()
 
 def _cachedfetch(url, *, live=True):
     now = time.time()
-    last_request, last_check, forecast = _SHORTCACHE.get(url) or (0, 0, None)
+    last_request, last_check, data = _SHORTCACHE.get(url) or (0, 0, None)
     if live:
         last_request = now
     elif last_check <= now - _SHORTCACHE_AGE:
         try:
-            forecast = _weatherfetch(url)
+            data = _weatherfetch(url)
         except (ntelebot.requests.ConnectionError, ntelebot.requests.ReadTimeout):
             logging.info('Timeout fetching %r.', url)
         except Exception:  # pylint: disable=broad-except
             logging.exception('While fetching %r:', url)
         else:
             last_check = now
-    _SHORTCACHE[url] = (last_request, last_check, forecast)
-    return forecast
+    _SHORTCACHE[url] = (last_request, last_check, data)
+    return data
 
 
 def _save():
@@ -87,7 +95,7 @@ def _weatherfetch(url):
     headers = {
         'user-agent': 'https://github.com/nmlorg/metabot',
     }
-    return ntelebot.requests.get(url, headers=headers, timeout=10).json()
+    return ntelebot.requests.get(url, headers=headers, timeout=10).json().get('properties')
 
 
 def _weatherpoint(lat, lon):
@@ -120,14 +128,13 @@ def hourlyforecast(address, when):
     lat = geo[0]['geometry']['location']['lat']
     lon = geo[0]['geometry']['location']['lng']
 
-    if not (point := _weatherpoint(lat, lon)):
-        return
-    url = point['properties']['forecastHourly']
-
-    if not (forecasts := _cachedfetch(url)):
+    if not (point := _weatherpoint(lat, lon)) or not (url := point.get('forecastHourly')):
         return
 
-    for period in forecasts['properties']['periods']:
+    if not (forecasts := _cachedfetch(url)) or not (periods := forecasts.get('periods')):
+        return
+
+    for period in periods:
         start = iso8601.totimestamp(period['startTime'])
         end = iso8601.totimestamp(period['endTime'])
         if start <= when < end:

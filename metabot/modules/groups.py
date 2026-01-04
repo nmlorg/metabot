@@ -7,12 +7,6 @@ import re
 
 import ntelebot
 
-
-def cgi_escape(text):  # pylint: disable=missing-docstring
-    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>',
-                                                                   '&gt;').replace('"', '&quot;')
-
-
 ALIASES = ('channel', 'channels', 'group', 'groups', 'room', 'rooms')
 
 
@@ -58,10 +52,10 @@ def default(ctx, msg, modconf):
 
     for group in sorted(groups_by_location[location], key=lambda group: group['name']):
         invite_link = group['invite_link'] or 'https://t.me/' + group['username']
-        message = '<a href="%s">%s</a>' % (invite_link, cgi_escape(group['name']))
+        message = '<a href="%s">%s</a>' % (invite_link, html.escape(group['name']))
         if group['desc']:
             message = '%s\n%s' % (message,
-                                  re.sub('\\s*\n\\s*', ' \u2022 ', cgi_escape(group['desc'])))
+                                  re.sub('\\s*\n\\s*', ' \u2022 ', html.escape(group['desc'])))
         msg.add(message)
 
 
@@ -79,7 +73,7 @@ def inline(ctx, modconf):
                     break
             else:
                 invite_link = group['invite_link'] or 'https://t.me/' + group['username']
-                message = '<a href="%s">%s</a>' % (invite_link, cgi_escape(group['name']))
+                message = '<a href="%s">%s</a>' % (invite_link, html.escape(group['name']))
                 if group['desc']:
                     message = '%s\n%s' % (message, group['desc'])
                     title = '%s \u2022 %s' % (group['name'], group['username'] or

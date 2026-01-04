@@ -1,9 +1,6 @@
 """Quick template for metabot's custom message style."""
 
-
-def cgi_escape(text):  # pylint: disable=missing-docstring
-    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>',
-                                                                   '&gt;').replace('"', '&quot;')
+from metabot.util import html
 
 
 class MessageBuilder:
@@ -39,7 +36,7 @@ class MessageBuilder:
         """Add line to the message body, interpolating HTML-escaped args if provided."""
 
         if args:
-            line %= tuple(cgi_escape(str(arg)) for arg in args)
+            line %= tuple(html.escape(str(arg)) for arg in args)
         self._lines.append(line)
 
     def _make_button(self, data):
@@ -71,11 +68,11 @@ class MessageBuilder:
     def reply(self, ctx):
         """Build the message and pipe it through ctx.reply_html."""
 
-        first_line = cgi_escape(' \u203a '.join(self._title))
+        first_line = html.escape(' \u203a '.join(self._title))
         if first_line and self.action:
             first_line += ': '
         if self.action:
-            first_line = '%s<b>%s</b>' % (first_line, cgi_escape(self.action))
+            first_line = '%s<b>%s</b>' % (first_line, html.escape(self.action))
         lines = first_line and [first_line] + self._lines or self._lines
         if len(self._path) > 1:
             self.button('Back', '..')

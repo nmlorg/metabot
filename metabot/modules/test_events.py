@@ -55,7 +55,7 @@ def test_group(conversation, monkeypatch):  # pylint: disable=redefined-outer-na
     assert conversation.message('/notevents') == ''
 
     assert conversation.message('/events', chat_type='supergroup') == """\
-[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
+[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_parameters=[allow_sending_without_reply=True chat_id=-1001000001000 message_id=2000]]
 I'm not configured for this group! Ask a bot admin to go into the <b>moderator</b> module settings, group <b>-1001000001000</b>, and choose one or more calendars and set the time zone.
 """
 
@@ -76,7 +76,7 @@ Select a calendar to add or remove from the list below:
     conversation.mgr.bot_conf['moderator']['-1001000001000']['timezone'] = 'US/Pacific'
 
     assert conversation.message('/events', chat_type='supergroup') == """\
-[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
+[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_parameters=[allow_sending_without_reply=True chat_id=-1001000001000 message_id=2000]]
 <b>Alpha Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVUy9QYWNpZmlj">⭐ ᴺᴼᵂ Wed 31ˢᵗ, 4:16–4:33ᵖᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 """
@@ -84,7 +84,7 @@ Select a calendar to add or remove from the list below:
     conversation.mgr.bot_conf['moderator']['-1001000001000']['timezone'] = 'UTC'
 
     assert conversation.message('/events', chat_type='supergroup') == """\
-[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
+[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_parameters=[allow_sending_without_reply=True chat_id=-1001000001000 message_id=2000]]
 <b>Alpha Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 <b>Bravo Summary</b>
@@ -94,7 +94,7 @@ Select a calendar to add or remove from the list below:
     conversation.mgr.bot_conf['moderator']['-1001000001000']['maxeventscount'] = 1
 
     assert conversation.message('/events', chat_type='supergroup') == """\
-[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
+[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_parameters=[allow_sending_without_reply=True chat_id=-1001000001000 message_id=2000]]
 <b>Alpha Summary</b>
 <a href="https://t.me/modulestestbot?start=L2V2ZW50cyA2ZmMyYzUxMDphbHBoYSBVVEM">⭐ ᴺᴼᵂ Thu 1ˢᵗ, 12:16–12:33ᵃᵐ</a> @ <a href="https://maps.google.com/maps?q=Alpha+Venue%2C+Rest+of+Alpha+Location">Alpha Venue</a>
 """
@@ -102,7 +102,7 @@ Select a calendar to add or remove from the list below:
     monkeypatch.setattr('time.time', lambda: 2000000.)
 
     assert conversation.message('/events', chat_type='supergroup') == """\
-[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_to_message_id=2000]
+[chat_id=-1001000001000 disable_web_page_preview=True parse_mode=HTML reply_parameters=[allow_sending_without_reply=True chat_id=-1001000001000 message_id=2000]]
 No events in the next 6 days!
 """
 

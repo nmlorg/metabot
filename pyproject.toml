@@ -9,7 +9,7 @@ authors = [
 requires-python = '>=3.10'  # https://github.com/pylint-dev/pylint/pull/10405
 dependencies = [
     'googlemaps',
-    'ntelebot >= 0.4.5',  # https://github.com/nmlorg/metabot/issues/114
+    'ntelebot >= 0.4.6',  # https://github.com/nmlorg/ntelebot/commit/98ffaa7
     'pytz',
     'PyYAML >= 5.1',  # https://github.com/nmlorg/metabot/issues/40
 ]

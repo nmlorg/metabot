@@ -173,7 +173,11 @@ Set <code>greeting</code> to <code>Welcome to chat title, new users! &lt;b&gt;In
             'disable_web_page_preview': True,
             'method': 'send_message',
             'parse_mode': 'HTML',
-            'reply_to_message_id': 5000,
+            'reply_parameters': {
+                'allow_sending_without_reply': True,
+                'chat_id': -1001000001000,
+                'message_id': 5000,
+            },
             'text': 'Welcome to My Group, <a href="tg://user?id=3000">User 3000</a>! <b>Initial</b> pinned message.',
         },
     ]  # yapf: disable
@@ -199,7 +203,11 @@ Set <code>greeting</code> to <code>Welcome to chat title, new users! &lt;b&gt;In
             'disable_web_page_preview': True,
             'method': 'send_message',
             'parse_mode': 'HTML',
-            'reply_to_message_id': 5000,
+            'reply_parameters': {
+                'allow_sending_without_reply': True,
+                'chat_id': -1001000001000,
+                'message_id': 5000,
+            },
             'text': 'Welcome to My Group, <a href="tg://user?id=3000">User 3000</a>! <b>Initial</b> <a href="https://t.me/c/1000001000/6000">pinned message</a>.',
         },
     ]  # yapf: disable
@@ -217,7 +225,11 @@ Set <code>greeting</code> to <code>Welcome to chat title, new users! &lt;b&gt;In
             'disable_web_page_preview': True,
             'method': 'send_message',
             'parse_mode': 'HTML',
-            'reply_to_message_id': 5000,
+            'reply_parameters': {
+                'allow_sending_without_reply': True,
+                'chat_id': -1001000001000,
+                'message_id': 5000,
+            },
             'text': 'Welcome to My Group, <a href="tg://user?id=3000">User 3000</a>! <b>Initial</b> <a href="https://t.me/mygroup/6000">pinned message</a>.',
         },
     ]  # yapf: disable

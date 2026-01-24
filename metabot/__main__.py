@@ -1,5 +1,6 @@
 """Modularized, multi-account bot."""
 
+import argparse
 import logging
 
 from metabot.modules import admin
@@ -9,8 +10,13 @@ from metabot.util import modutil
 
 
 def main():  # pylint: disable=missing-docstring
-    logging.basicConfig(format='%(asctime)s %(levelname)s %(filename)s:%(lineno)s] %(message)s',
-                        level=logging.INFO)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-v', '--verbose', action='store_true')
+    args = parser.parse_args()
+
+    logging.basicConfig(
+        format='%(asctime)s %(levelname)s %(threadName)s %(filename)s:%(lineno)s] %(message)s',
+        level=args.verbose and logging.DEBUG or logging.INFO)
 
     mybot = multibot.MultiBot(modutil.load_modules('metabot.modules'), confdir='config')
     if not mybot.conf['bots']:

@@ -46,9 +46,7 @@ def _init():
                 _CACHE.pop('weatherpoint')
                 break
 
-    thr = threading.Thread(target=_periodic)
-    thr.daemon = True
-    thr.start()
+    threading.Thread(target=_periodic, daemon=True, name='geoutil').start()
 
 
 _init()

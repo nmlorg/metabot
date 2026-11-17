@@ -50,6 +50,22 @@ verbosity_assertions = 2
 [tool.setuptools.packages.find]
 include = ['metabot', 'metabot.*']
 
+[tool.tox]
+env_list = ['py310', 'py311', 'py312', 'py313', 'py314', 'py315']
+skip_missing_interpreters = true
+
+[tool.tox.env_run_base]
+extras = ['dev']
+deps = [
+    '../ntelebot',
+    'yapf',
+]
+commands = [
+    ['yapf', '-i', '-r', 'metabot'],
+    ['python', '-B', '-m', 'pytest'],
+    ['pylint', 'metabot'],
+]
+
 [tool.yapf]
 based_on_style = 'google'
 column_limit = 100

@@ -5,7 +5,6 @@ import json
 import zlib
 
 import ntelebot
-from ntelebot.conftest import _bot_mock  # pylint: disable=unused-import
 import pytest
 
 from metabot.modules import admin
